@@ -1,0 +1,37 @@
+# visit https://github.com/mojombo/jekyll/wiki/Configuration for more settings
+
+paginate: 10 # pagination based on number of posts
+paginate_path: "page:num"
+exclude: ["README.md"] # files to exclude
+excerpt_separator: ""
+
+markdown: kramdown
+kramdown:
+  syntax_highlighter: coderay
+  input: GFM
+
+
+defaults:
+  -
+    scope:
+      path: "" # empty string for all files
+    values:
+      title: Adam.Blog()
+
+description: Adam Presley's blog
+author:
+  name: Adam Presley
+  email: adam@adampresley.com
+  github: adampresley
+  twitter: adampresley
+  pinterest:
+  linkedin: adampresley
+  bio: I'm bringin' nerdy back.
+  email_md5: 7e126aff2b58607e09a1c0d363a8d7da
+
+rss_path: feed.xml
+categories_path:
+tags_path: tags.html
+
+BASE_PATH:
+
