@@ -12,9 +12,9 @@ I got a ticket the other day questioning why my Sublime Text [View In Browser](h
 
 To do this in Sublime's API turned out to be very simple.
 
-```python
+{% highlight python %}
 if self.view.is_dirty():
     self.view.window().run_command("save")
-```
+{% endhighlight %}
 
 The *view* object gives my plugin insight into the current view, or file being worked on. Sublime provides a nice method named **is_dirty()** which will tell me if the current view has any pending modifications. If it does I perform the save command. If not the rest of the plugin runs and your file is opened in your browser of choice.
