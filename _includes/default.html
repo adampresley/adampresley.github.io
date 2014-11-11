@@ -94,7 +94,10 @@
 		{{ content }}
 
 		<footer>
-			<div id="disqus_thread"></div>
+			{% if page.comments %}
+				<div id="disqus_thread"></div>
+			{% endif %}
+
 			<gcse:search></gcse:search>
 			<hr/>
 			<p>
