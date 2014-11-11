@@ -33,55 +33,56 @@ and if you do, tell it to find the next match. If it finds a new match
 you can retrieve information about what the start and end positions of
 the match are, and more. So let's see that in action.  
   
-    :::cfm
-    <cfset haystack = "Hello. My name is Adam. It is nice to meet you. How are you? This is an example of a regex "&
-    "that finds something specific as a string to start, then followed by 100 or so characters. How many "&
-    "will we have? I am a giant noob who is writing lengthy text to try and see if we've hit our "&
-    "something specific threshold. Now we should have two matches." />
+{% highlight coldfusion %}
+<cfset haystack = "Hello. My name is Adam. It is nice to meet you. How are you? This is an example of a regex "&
+"that finds something specific as a string to start, then followed by 100 or so characters. How many "&
+"will we have? I am a giant noob who is writing lengthy text to try and see if we've hit our "&
+"something specific threshold. Now we should have two matches." />
 
-    <!---
-        Create the pattern. The compiled pattern
-        needs to be case insensitive, and dot matches
-        all.
+<!---
+    Create the pattern. The compiled pattern
+    needs to be case insensitive, and dot matches
+    all.
 
-        See: http://72.5.124.55/javase/6/docs/api/java/util/regex/Pattern.html
-    --->
-    <cfset patternObj = createObject("java", "java.util.regex.Pattern") />
-    <cfset matchStart = "something\sspecific" />
+    See: http://72.5.124.55/javase/6/docs/api/java/util/regex/Pattern.html
+--->
+<cfset patternObj = createObject("java", "java.util.regex.Pattern") />
+<cfset matchStart = "something\sspecific" />
 
-    <cfset pattern = patternObj.compile(
-        "(#matchStart#.{1,100})",
-        bitor(patternObj.CASE_INSENSITIVE, patternObj.DOTALL)
-    ) />
+<cfset pattern = patternObj.compile(
+    "(#matchStart#.{1,100})",
+    bitor(patternObj.CASE_INSENSITIVE, patternObj.DOTALL)
+) />
 
-    <!---
-        Get a matcher object to match our pattern against 
-        our input.
-    --->
-    <cfset matcher = pattern.matcher(haystack) />
+<!---
+    Get a matcher object to match our pattern against 
+    our input.
+--->
+<cfset matcher = pattern.matcher(haystack) />
 
-    <!---
-        Continue matching till we have no more matches.
-        When we find a match get the start, end, and value
-        of the match.
-    --->
-    <cfset local = [] />
-    <cfset index = 1 />
+<!---
+    Continue matching till we have no more matches.
+    When we find a match get the start, end, and value
+    of the match.
+--->
+<cfset local = [] />
+<cfset index = 1 />
 
-    <cfloop condition="!matcher.hitEnd()">
-        <cfif matcher.find()>
-            <cfset local[index] = {
-                start = matcher.start(),
-                end = matcher.end(),
-                value = haystack.subsequence(matcher.start(), matcher.end())
-            } />
+<cfloop condition="!matcher.hitEnd()">
+    <cfif matcher.find()>
+        <cfset local[index] = {
+            start = matcher.start(),
+            end = matcher.end(),
+            value = haystack.subsequence(matcher.start(), matcher.end())
+        } />
 
-            <cfset index++ />
-        </cfif>
-    </cfloop>
+        <cfset index++ />
+    </cfif>
+</cfloop>
 
-    <cfdump var="#local#" />
-  
+<cfdump var="#local#" />
+{% endhighlight %}
+
 As you can see at the beginning I am simply setting up a large string
 with our data to search against. From here we create a pattern object,
 followed by what our starting match criteria is. So the variable

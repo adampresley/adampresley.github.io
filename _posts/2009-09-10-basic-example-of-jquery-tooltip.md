@@ -45,40 +45,66 @@ house a structure to demonstrate what we are doing. Please note that
 this structure is not sound, nor normalized, and it is for demonstration
 purposes only.  
 
-	:::sql  
-	create table promo
-	(
-		promoId int unsigned not null AUTO_INCREMENT primary key,  
-		promoName varchar(50) not null,  
-		dateStart datetime,  
-		dateEnd datetime  
-	) engine=MyISAM;
+{% highlight sql %}
+create table promo
+(
+	promoId int unsigned not null AUTO_INCREMENT primary key,  
+	promoName varchar(50) not null,  
+	dateStart datetime,  
+	dateEnd datetime  
+) engine=MyISAM;
 
-	create table promoItems
-	(
-		promoItemId int unsigned not null auto_increment primary key,  
-		promoId int unsigned not null,  
-		appliesTo varchar(50) not null default 'cart',
-		discountAmt decimal(10, 2),  
-		discountType varchar(25) not null default 'percent',  
-		categoryId int unsigned not null default 0
-	) engine=MyISAM;
+create table promoItems
+(
+	promoItemId int unsigned not null auto_increment primary key,  
+	promoId int unsigned not null,  
+	appliesTo varchar(50) not null default 'cart',
+	discountAmt decimal(10, 2),  
+	discountType varchar(25) not null default 'percent',  
+	categoryId int unsigned not null default 0
+) engine=MyISAM;
 
-	insert into promo (promoName, dateStart, dateEnd) values
-	('Crazy Christmas Promo', '2009-12-01 00:00:00', '2009-12-30 00:00:00');  
+insert into promo (promoName, dateStart, dateEnd) values
+('Crazy Christmas Promo', '2009-12-01 00:00:00', '2009-12-30 00:00:00');  
 
-	insert into promoItems (promoId, appliesTo, discountAmt, discountType, categoryId) values
-	(1, 'category', 10, 'percent', 1),  
-	(1, 'category', 12, 'percent', 2),  
-	(1, 'cart', 10, 'percent', 0);
-  
+insert into promoItems (promoId, appliesTo, discountAmt, discountType, categoryId) values
+(1, 'category', 10, 'percent', 1),  
+(1, 'category', 12, 'percent', 2),  
+(1, 'cart', 10, 'percent', 0);
+{% endhighlight %}
+
 With this structure we have a series of promotion items that describe
 what the item applies to (cart or category), and how much discount is
 applied. This table links back to a promotion that carries a name and
 effective date range. Simple enough. A query against it would look
 something like this.  
 
-	:::sql
+{% highlight sql %}
+SELECT
+	p.promoId   
+	, p.promoName   
+	, p.dateStart   
+	, p.dateEnd   
+	, pi.promoItemId      
+	, pi.appliesTo
+	, pi.discountAmt   
+	, pi.discountType   
+	, pi.categoryId   
+
+FROM promoItems AS pi
+	LEFT JOIN promo AS p ON p.promoId=pi.promoId   
+
+ORDER BY
+	p.promoId,   
+	pi.appliesTo
+{% endhighlight %}
+
+Cool. Let's take a look at some HTML and CF that will use this query to
+display the promotion, and craft a string that tells us what items this
+promotion applies to.  
+  
+{% highlight coldfusion %}
+<cfquery name="qryPromo" datasource="coldfusion">
 	SELECT
 		p.promoId   
 		, p.promoName   
@@ -96,64 +122,41 @@ something like this.
 	ORDER BY
 		p.promoId,   
 		pi.appliesTo
+</cfquery>
 
-Cool. Let's take a look at some HTML and CF that will use this query to
-display the promotion, and craft a string that tells us what items this
-promotion applies to.  
-  
-	:::cfm
-	<cfquery name="qryPromo" datasource="coldfusion">
-		SELECT
-			p.promoId   
-			, p.promoName   
-			, p.dateStart   
-			, p.dateEnd   
-			, pi.promoItemId      
-			, pi.appliesTo
-			, pi.discountAmt   
-			, pi.discountType   
-			, pi.categoryId   
+<html>
+<head>
+	<script language="javascript" src="jquery.tooltip.min.js"></script>
+	<script language="javascript" src="jquery.js"></script>
+	<link href="jquery.tooltip.css" type="text/css" rel="stylesheet" />
+</head>
 
-		FROM promoItems AS pi
-			LEFT JOIN promo AS p ON p.promoId=pi.promoId   
+<body>
+	<table>
+		<tr>
+			<th>Promo Name</th>
+			<th>Start Date</th>
+			<th>End Date</th>
+		<tr>
+		<cfoutput query="qryPromo" group="promoId">
+			<cfset title = "Promotion applies to: <ol>" />
 
-		ORDER BY
-			p.promoId,   
-			pi.appliesTo
-	</cfquery>
-
-	<html>
-	<head>
-		<script language="javascript" src="jquery.tooltip.min.js"></script>
-		<script language="javascript" src="jquery.js"></script>
-		<link href="jquery.tooltip.css" type="text/css" rel="stylesheet" />
-	</head>
-
-	<body>
-		<table>
-			<tr>
-				<th>Promo Name</th>
-				<th>Start Date</th>
-				<th>End Date</th>
-			<tr>
-			<cfoutput query="qryPromo" group="promoId">
-				<cfset title = "Promotion applies to: <ol>" />
-
-				<cfoutput group="appliesTo">
-					<cfset title &= "<li>#qryPromo.appliesTo#</li>" />
-				</cfoutput>
-
-				<cfset title &= "</ol>" />
-
-				<tr>
-					<td title="#title#">#qryPromo.promoName#</td>
-					<td>#dateFormat(qryPromo.dateStart, "mm/dd/yyyy")#</td>
-					<td>#dateFormat(qryPromo.dateEnd, "mm/dd/yyyy")#</td>
-				</tr>
+			<cfoutput group="appliesTo">
+				<cfset title &= "<li>#qryPromo.appliesTo#</li>" />
 			</cfoutput>
-		</table>
-	</body>
-	</html>
+
+			<cfset title &= "</ol>" />
+
+			<tr>
+				<td title="#title#">#qryPromo.promoName#</td>
+				<td>#dateFormat(qryPromo.dateStart, "mm/dd/yyyy")#</td>
+				<td>#dateFormat(qryPromo.dateEnd, "mm/dd/yyyy")#</td>
+			</tr>
+		</cfoutput>
+	</table>
+</body>
+</html>
+{% endhighlight %}
 
 The first thing to note is that we are
 including the tooltip script, but we are not quite using it yet. The
@@ -169,75 +172,77 @@ tooltip in place. Basically we want to display a tooltip that tells us
 what items this promotion applies to when we hover over the promotion
 name. Are you ready? Are you sure?  
   
-	:::javascript
-	<script language="javascript">
-		$(document).ready(function() {
-			$('td').tooltip();
-		});
-	</script>
-  
+{% highlight javascript %}
+<script language="javascript">
+	$(document).ready(function() {
+		$('td').tooltip();
+	});
+</script>
+{% endhighlight %}
+
 Wait... don't blink! You might miss it. Yes, that was it. Grab all TD
 tags and run the tooltip method. This will apply the tooltip to any TD
 with a title attribute. Man I love me some jQuery!  
   
 Here is the code sample as a whole. Enjoy, and happy coding!  
   
-	:::cfm
-	<cfquery name="qryPromo" datasource="coldfusion">
-		SELECT
-			p.promoId   
-			, p.promoName   
-			, p.dateStart   
-			, p.dateEnd   
-			, pi.promoItemId      
-			, pi.appliesTo
-			, pi.discountAmt   
-			, pi.discountType   
-			, pi.categoryId   
+{% highlight coldfusion %}
+<cfquery name="qryPromo" datasource="coldfusion">
+	SELECT
+		p.promoId   
+		, p.promoName   
+		, p.dateStart   
+		, p.dateEnd   
+		, pi.promoItemId      
+		, pi.appliesTo
+		, pi.discountAmt   
+		, pi.discountType   
+		, pi.categoryId   
 
-		FROM promoItems AS pi
-			LEFT JOIN promo AS p ON p.promoId=pi.promoId   
+	FROM promoItems AS pi
+		LEFT JOIN promo AS p ON p.promoId=pi.promoId   
 
-		ORDER BY
-			p.promoId,   
-			pi.appliesTo
-	</cfquery>
+	ORDER BY
+		p.promoId,   
+		pi.appliesTo
+</cfquery>
 
-	<html>
-	<head>
-		<script language="javascript" src="jquery.tooltip.min.js"></script>
-		<script language="javascript" src="jquery.js"></script>
-		<link href="jquery.tooltip.css" type="text/css" rel="stylesheet" />
-	</head>
+<html>
+<head>
+	<script language="javascript" src="jquery.tooltip.min.js"></script>
+	<script language="javascript" src="jquery.js"></script>
+	<link href="jquery.tooltip.css" type="text/css" rel="stylesheet" />
+</head>
 
-	<body>
-		<table>
-			<tr>
-				<th>Promo Name</th>
-				<th>Start Date</th>
-				<th>End Date</th>
-			<tr>
-			<cfoutput query="qryPromo" group="promoId">
-				<cfset title = "Promotion applies to: <ol>" />
+<body>
+	<table>
+		<tr>
+			<th>Promo Name</th>
+			<th>Start Date</th>
+			<th>End Date</th>
+		<tr>
+		<cfoutput query="qryPromo" group="promoId">
+			<cfset title = "Promotion applies to: <ol>" />
 
-				<cfoutput group="appliesTo">
-					<cfset title &= "<li>#qryPromo.appliesTo#</li>" />
-				</cfoutput>
-
-				<cfset title &= "</ol>" />
-
-				<tr>
-					<td title="#title#">#qryPromo.promoName#</td>
-					<td>#dateFormat(qryPromo.dateStart, "mm/dd/yyyy")#</td>
-					<td>#dateFormat(qryPromo.dateEnd, "mm/dd/yyyy")#</td>
-				</tr>
+			<cfoutput group="appliesTo">
+				<cfset title &= "<li>#qryPromo.appliesTo#</li>" />
 			</cfoutput>
-		</table>
-	</body>
 
-	<script language="javascript">
-		$(document).ready(function() {
-			$('td').tooltip();
-		});
-	</script>
-	</html>
+			<cfset title &= "</ol>" />
+
+			<tr>
+				<td title="#title#">#qryPromo.promoName#</td>
+				<td>#dateFormat(qryPromo.dateStart, "mm/dd/yyyy")#</td>
+				<td>#dateFormat(qryPromo.dateEnd, "mm/dd/yyyy")#</td>
+			</tr>
+		</cfoutput>
+	</table>
+</body>
+
+<script language="javascript">
+	$(document).ready(function() {
+		$('td').tooltip();
+	});
+</script>
+</html>
+{% endhighlight %}

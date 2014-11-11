@@ -16,9 +16,10 @@ world. Both functions support the abililty to have placeholders, which
 when evaluated, are replaced with the value in a comma-delimited list in
 the appropriate position. For example:  
 
-    :::php
-    printf("My name is %s. I am %i years old", $name, $age);
-  
+{% highlight php %}
+printf("My name is %s. I am %i years old", $name, $age);
+{% endhighlight %}
+
 This code, given that **$name** equals "Adam", and **$age** equals
 "30" will output "My name is Adam. I am 30 years old". A nifty feature.  
   
@@ -26,8 +27,9 @@ Below is a bit of code that provides a class that will take a given
 input SQL string, an array of arguments, and spit out a parsed SQL
 string. An example of usage would look like so:  
 
-    :::php
-    $userId = 30;$parser = new SqlScriptParser("SELECT name, email, active FROM users WHERE userId=%i", array($userId));$result = $parser->Parse();
+{% highlight php %}
+$userId = 30;$parser = new SqlScriptParser("SELECT name, email, active FROM users WHERE userId=%i", array($userId));$result = $parser->Parse();
+{% endhighlight %}
 
 The resulting string would look like:  
   

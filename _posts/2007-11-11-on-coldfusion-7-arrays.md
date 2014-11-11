@@ -22,42 +22,42 @@ much different than Mr. Nadel's code, but a few lines shorter and if I
 had to guess, the Java method to copy the data to the new array is
 likely more efficient than a manual copy.  
 
-    :::coldfusion
-    <!-------------------------------------------------
-        ColdFusion array, which is actually a Vector.
-    -------------------------------------------------->
-    <cfset arrValue = ArrayNew(1)>
+{% highlight coldfusion %}
+<!-------------------------------------------------
+    ColdFusion array, which is actually a Vector.
+-------------------------------------------------->
+<cfset arrValue = ArrayNew(1)>
 
-    <cfset arrValue[1] = "What's up hot stuff?" />
-    <cfset arrvalue[2] = "You come here a lot?" />
-    <cfset arrValue[3] = "You from out of town?" />
-    <cfset arrValue[4] = "Want a little of this?" />
-    <cfset arrValue[5] = "How 'bout a little of that?" />
+<cfset arrValue[1] = "What's up hot stuff?" />
+<cfset arrvalue[2] = "You come here a lot?" />
+<cfset arrValue[3] = "You from out of town?" />
+<cfset arrValue[4] = "Want a little of this?" />
+<cfset arrValue[5] = "How 'bout a little of that?" />
 
-    <!-----------------------------------------------------------------
-    Need to get the class of a string, and create our java array.
-    ------------------------------------------------------------------>
-    <cfset stringClass = createObject("java", "java.lang.String").getClass() />
-    <cfset arrJavaValue = createObject("java", "java.lang.reflect.Array").newInstance(stringClass, arrayLen(arrValue)) />
+<!-----------------------------------------------------------------
+Need to get the class of a string, and create our java array.
+------------------------------------------------------------------>
+<cfset stringClass = createObject("java", "java.lang.String").getClass() />
+<cfset arrJavaValue = createObject("java", "java.lang.reflect.Array").newInstance(stringClass, arrayLen(arrValue)) />
 
-    <cfset arrValue.copyInto(arrJavaValue) />
+<cfset arrValue.copyInto(arrJavaValue) />
 
-    <cfdump var="#arrValue#" />
+<cfdump var="#arrValue#" />
 
-    <cfoutput>
+<cfoutput>
 
-    <p>
-    #arrValue.GetClass().GetName()#
-    #arrValue.GetClass().GetSuperClass().GetName()#
-    #arrValue.GetClass().GetSuperClass().GetSuperClass().GetName()#
-    #arrValue.GetClass().GetSuperClass().GetSuperClass().GetSuperClass().GetName()#
-    #arrValue.GetClass().GetSuperClass().GetSuperClass().GetSuperClass().GetSuperClass().GetName()#
-    </p>
-    <h4>
-    Java String Array Class Hierarchy
-    </h4>
-    <p>
-    #arrJavaValue.GetClass().GetName()#
-    </p>
-    </cfoutput>
-
+<p>
+#arrValue.GetClass().GetName()#
+#arrValue.GetClass().GetSuperClass().GetName()#
+#arrValue.GetClass().GetSuperClass().GetSuperClass().GetName()#
+#arrValue.GetClass().GetSuperClass().GetSuperClass().GetSuperClass().GetName()#
+#arrValue.GetClass().GetSuperClass().GetSuperClass().GetSuperClass().GetSuperClass().GetName()#
+</p>
+<h4>
+Java String Array Class Hierarchy
+</h4>
+<p>
+#arrJavaValue.GetClass().GetName()#
+</p>
+</cfoutput>
+{% endhighlight %}

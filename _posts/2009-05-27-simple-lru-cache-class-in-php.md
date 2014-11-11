@@ -49,30 +49,31 @@ items in slots 0 through 3 down into slots 1 through 4. From here you
 then insert the new item into slot 0. Let's take a look at how that
 works.
 
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	public function put($key, $element) {
-		$this->__evict();
-		$this->__container[0] = $this->__createNode($key, $element);
-	}
+public function put($key, $element) {
+	$this->__evict();
+	$this->__container[0] = $this->__createNode($key, $element);
+}
 
-	private function __evict() {
-		$index = 0;
-		$newPosition = 0;
+private function __evict() {
+	$index = 0;
+	$newPosition = 0;
 
-		array_pop($this->__container); // Drop off the element in the last slot.
-		array_unshift($this->__container, ""); // Shift every element down one, and insert blank at the top.
-	}
+	array_pop($this->__container); // Drop off the element in the last slot.
+	array_unshift($this->__container, ""); // Shift every element down one, and insert blank at the top.
+}
 
-	private function __createNode($key, $element) {
-		return array(
-			"key" => $key,
-			"element" => $element
-		);
-	}
+private function __createNode($key, $element) {
+	return array(
+		"key" => $key,
+		"element" => $element
+	);
+}
 
-	?>
+?>
+{% endhighlight %}
 
 Ok, that was easy enough. Now let's talk about the **get** operation.
 **Get** starts with taking a single argument called *key*. It then
@@ -82,37 +83,38 @@ argument key. If we have a match we want to MOVE this node to the
 **top** of the array since it is the most recently used node. Once this
 is done we return the node. Here's what that looks like.
 
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	public function get($key) {
-		$index = 0;
-		$node = "";
+public function get($key) {
+	$index = 0;
+	$node = "";
 
-		for ($index = 0; $index < $this->__maxElements; $index++) {
-			$node = $this->__container[$index];
+	for ($index = 0; $index < $this->__maxElements; $index++) {
+		$node = $this->__container[$index];
 
-			if (is_array($node)) {
-				if ($node["key"] === $key) {
-					$this->__moveToHead($index);
-					$this->__stats["cacheHits"]++;
-					return $node["element"];
-				}
+		if (is_array($node)) {
+			if ($node["key"] === $key) {
+				$this->__moveToHead($index);
+				$this->__stats["cacheHits"]++;
+				return $node["element"];
 			}
 		}
-
-		$this->__stats["cacheMisses"]++;
-		return false;
 	}
 
-	private function __moveToHead($index) {
-		if ($index == 0) return;
+	$this->__stats["cacheMisses"]++;
+	return false;
+}
 
-		$element = array_splice($this->__container, $index, 1);
-		array_unshift($this->__container, $element[0]);
-	}
+private function __moveToHead($index) {
+	if ($index == 0) return;
 
-	?>
+	$element = array_splice($this->__container, $index, 1);
+	array_unshift($this->__container, $element[0]);
+}
+
+?>
+{% endhighlight %}
 
 Using this class is pretty easy, so here is a simple test that provides
 a series of data items, and a comma-delimited pattern of indexes to
@@ -121,43 +123,44 @@ part of a program that is being asked for some data, and it attempts to
 get the data from the cache. If it does not have it the code then puts
 the data into the cache.
 
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	require_once("LRUCache.php");
+require_once("LRUCache.php");
 
-	$lru = new LRUCache(5);
+$lru = new LRUCache(5);
 
-	$db = array(
-		"This is item 0",
-		"This is item 1",
-		"This is item 2",
-		"This is item 3",
-		"This is item 4",
-		"This is item 5"
-	);
+$db = array(
+	"This is item 0",
+	"This is item 1",
+	"This is item 2",
+	"This is item 3",
+	"This is item 4",
+	"This is item 5"
+);
 
-	$testPattern = "0,2,4,1,0,5,3,1,5,3,0,1,5,2,5,1,4";
+$testPattern = "0,2,4,1,0,5,3,1,5,3,0,1,5,2,5,1,4";
 
-	// Implement test pattern.
-	foreach (explode(",", $testPattern) as $index) {
-		$item = $lru->get($index);
+// Implement test pattern.
+foreach (explode(",", $testPattern) as $index) {
+	$item = $lru->get($index);
 
-		if ($item !== false) {
-			printf("Cache hit. - %s\n", $item);
-		} else {
-			printf("Cache miss for key %s. Adding %s to cache.\n", $index, $db[$index]);
-			$lru->put($index, $db[$index]);
-		}
+	if ($item !== false) {
+		printf("Cache hit. - %s\n", $item);
+	} else {
+		printf("Cache miss for key %s. Adding %s to cache.\n", $index, $db[$index]);
+		$lru->put($index, $db[$index]);
 	}
+}
 
-	printf("");
-	$stats = $lru->getCacheStats();
+printf("");
+$stats = $lru->getCacheStats();
 
-	printf("Hits: %s", $stats["cacheHits"]);
-	printf("Misses: %s", $stats["cacheMisses"]);
+printf("Hits: %s", $stats["cacheHits"]);
+printf("Misses: %s", $stats["cacheMisses"]);
 
-	?>
+?>
+{% endhighlight %}
 
 Go ahead, mess with the test pattern and see how many cache hits vs
 cache misses there are. Kinda neat.

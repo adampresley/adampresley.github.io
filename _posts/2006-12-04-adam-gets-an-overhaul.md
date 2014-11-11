@@ -29,7 +29,7 @@ prior to calling, or JUMPING in assembly, your function call.
 Ok, so I've got a better example of the language structure, as well as a
 sample breakdown of the lexical analysis output tree.  
 
-```text  
+{% highlight text %}
 create source Employees  
 begin  
 "excel" -\> type  
@@ -37,9 +37,9 @@ begin
 "Sheet1" -\> sheet  
 "FirstName != ''" -\> criteria  
 end  
-```
+{% endhighlight %}
 
-```text  
+{% highlight text %}
 COMMAND : CREATE SOURCE  
 PARAMETER : Employees  
 IDENTIFIER : BEGIN  
@@ -56,7 +56,7 @@ STRING : "FirstName != ''"
 DELIMITER : -\> (assignment)  
 IDENTIFIER : criteria  
 IDENTIFIER : END  
-```
+{% endhighlight %}
  
 This would open up an excel sheet as a data source. The objective here
 is to make the language as "descriptive" as possible. Stay tuned for

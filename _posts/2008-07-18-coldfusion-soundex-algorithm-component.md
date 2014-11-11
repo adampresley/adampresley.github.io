@@ -21,21 +21,22 @@ matches. Without going into detail about the component implementation, here's an
 example of how it is used. Let's say that you take an input, and want to
 show words that may be like what was entered.  
   
-	:::cfm
-	<!---
-		Instantiate the soundex component, and a structure for
-		storage.
-	--->
-	<h1>ColdFusion Soundex Function</h1>
+{% highlight coldfusion %}
+<!---
+	Instantiate the soundex component, and a structure for
+	storage.
+--->
+<h1>ColdFusion Soundex Function</h1>
 
-	The word: <strong>#s.word#</strong>
-	The threshold: <strong>#s.threshold#</strong>
+The word: <strong>#s.word#</strong>
+The threshold: <strong>#s.threshold#</strong>
 
-	Did you mean? 
-	<ul>
-		<li><strong>#s.result[index].candidate#</strong></li>
-	</ul>
-  
+Did you mean? 
+<ul>
+	<li><strong>#s.result[index].candidate#</strong></li>
+</ul>
+{% endhighlight %}
+
 In this example we instantiate the soundex component and add a series of
 words to the dictionary. Behind the scenes the soundex for each word is
 calculated and stored. We then define a structure to hold our word,

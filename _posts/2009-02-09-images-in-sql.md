@@ -14,40 +14,41 @@ files. Here is a bit of code that will do this. In this code sample I am
 assuming domain authenticated SQL login. The table name here will be
 called **Photos** and the column names **id**, **type**, and **photo**.  
   
-    :::c#
-    SqlConnection connection;
-    SqlCommand command;
-    SqlDataReader reader;
+{% highlight csharp %}
+SqlConnection connection;
+SqlCommand command;
+SqlDataReader reader;
+ 
+string outputDirectory = "C:\\TestLocation";
+PictureBox pic = new PictureBox();
+ 
+using (connection = new SqlConnection("data source=MyServer;initial catalog=Database;persist security info=True;packet size=4096;Trusted_Connection=True")) {
+    connection.Open();
+ 
+    command = new SqlCommand("SELECT id, type, photo FROM Photos", connection);
+    command.CommandType = CommandType.Text;
+    command.CommandTimeout = 3000;
      
-    string outputDirectory = "C:\\TestLocation";
-    PictureBox pic = new PictureBox();
+    reader = command.ExecuteReader();
+ 
+    while (reader.Read()) {
+       try {
+          byte[] rawBytes = (byte[]) reader["photo"];
+          MemoryStream memStream = new MemoryStream();
+          memStream.Write(rawBytes, 0, rawBytes.Length);
      
-    using (connection = new SqlConnection("data source=MyServer;initial catalog=Database;persist security info=True;packet size=4096;Trusted_Connection=True")) {
-        connection.Open();
+          string filename = outputDirectory + "\\image-" + reader["id"].ToString() + "-" + reader["type"].ToString() + ".jpg";
      
-        command = new SqlCommand("SELECT id, type, photo FROM Photos", connection);
-        command.CommandType = CommandType.Text;
-        command.CommandTimeout = 3000;
-         
-        reader = command.ExecuteReader();
+          pic.Image = Image.FromStream(memStream);
+          pic.Image.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
      
-        while (reader.Read()) {
-           try {
-              byte[] rawBytes = (byte[]) reader["photo"];
-              MemoryStream memStream = new MemoryStream();
-              memStream.Write(rawBytes, 0, rawBytes.Length);
-         
-              string filename = outputDirectory + "\\image-" + reader["id"].ToString() + "-" + reader["type"].ToString() + ".jpg";
-         
-              pic.Image = Image.FromStream(memStream);
-              pic.Image.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
-         
-              memStream.Close();
-           }
-           catch (Exception ex) {
-           }
-        }
+          memStream.Close();
+       }
+       catch (Exception ex) {
+       }
     }
-  
+}
+{% endhighlight %}
+
 This C# code will loop over a record set and save the images stored in
 the table as JPEG files. Happy coding!

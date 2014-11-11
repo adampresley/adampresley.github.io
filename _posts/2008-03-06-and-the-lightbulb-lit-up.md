@@ -22,55 +22,56 @@ As an example of drawing a basic cube, colored all pretty and green.
 
 ![OpenGL Cubes](http://s3.amazonaws.com/www.adampresley.com/posts/openglblocksscreenie.jpg)
 
-	:::c++
-	glBegin(GL_QUADS);
+{% highlight c++ %}
+glBegin(GL_QUADS);
 
-	// Front face
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.2f, -0.5f, 0.5f);
-	glVertex3f(1.2f, -0.5f, 0.5f);
-	glVertex3f(1.2f, 0.5f, 0.5f);
-	glVertex3f(-1.2f, 0.5f, 0.5f);
+// Front face
+glNormal3f(0.0f, 0.0f, 1.0f);
+glColor3f(0.0f, 1.0f, 0.0f);
+glVertex3f(-1.2f, -0.5f, 0.5f);
+glVertex3f(1.2f, -0.5f, 0.5f);
+glVertex3f(1.2f, 0.5f, 0.5f);
+glVertex3f(-1.2f, 0.5f, 0.5f);
 
-	// Back face
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.2f, -0.5f, -0.5f);
-	glVertex3f(-1.2f, 0.5f, -0.5f);
-	glVertex3f(1.2f, 0.5f, -0.5f);
-	glVertex3f(1.2f, -0.5f, -0.5f);
+// Back face
+glNormal3f(0.0f, 0.0f, -1.0f);
+glColor3f(0.0f, 1.0f, 0.0f);
+glVertex3f(-1.2f, -0.5f, -0.5f);
+glVertex3f(-1.2f, 0.5f, -0.5f);
+glVertex3f(1.2f, 0.5f, -0.5f);
+glVertex3f(1.2f, -0.5f, -0.5f);
 
-	// Top face
-	glNormal3f(0.0f, 1.0f, 0.0f);
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.2f, 0.5f, -0.5f);
-	glVertex3f(-1.2f, 0.5f, 0.5f);
-	glVertex3f(1.2f, 0.5f, 0.5f);
-	glVertex3f(1.2f, 0.5f, -0.5f);
+// Top face
+glNormal3f(0.0f, 1.0f, 0.0f);
+glColor3f(0.0f, 1.0f, 0.0f);
+glVertex3f(-1.2f, 0.5f, -0.5f);
+glVertex3f(-1.2f, 0.5f, 0.5f);
+glVertex3f(1.2f, 0.5f, 0.5f);
+glVertex3f(1.2f, 0.5f, -0.5f);
 
-	// Bottom face
-	glNormal3f(0.0f, -1.0f, 0.0f);
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.2f, -0.5f, -0.5f);
-	glVertex3f(1.2f, -0.5f, -0.5f);
-	glVertex3f(1.2f, -0.5f, 0.5f);
-	glVertex3f(-1.2f, -0.5f, 0.5f);
+// Bottom face
+glNormal3f(0.0f, -1.0f, 0.0f);
+glColor3f(0.0f, 1.0f, 0.0f);
+glVertex3f(-1.2f, -0.5f, -0.5f);
+glVertex3f(1.2f, -0.5f, -0.5f);
+glVertex3f(1.2f, -0.5f, 0.5f);
+glVertex3f(-1.2f, -0.5f, 0.5f);
 
-	// Right face
-	glNormal3f(1.0f, 0.0f, 0.0f);
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(1.2f, -0.5f, -0.5f);
-	glVertex3f(1.2f, -0.5f, 0.5f);
-	glVertex3f(1.2f, 0.5f, 0.5f);
-	glVertex3f(1.2f, 0.5f, -0.5f);
+// Right face
+glNormal3f(1.0f, 0.0f, 0.0f);
+glColor3f(0.0f, 1.0f, 0.0f);
+glVertex3f(1.2f, -0.5f, -0.5f);
+glVertex3f(1.2f, -0.5f, 0.5f);
+glVertex3f(1.2f, 0.5f, 0.5f);
+glVertex3f(1.2f, 0.5f, -0.5f);
 
-	// Left face
-	glNormal3f(-1.0f, 0.0f, 0.0f);
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.2f, -0.5f, -0.5f);
-	glVertex3f(-1.2f, -0.5f, 0.5f);
-	glVertex3f(-1.2f, 0.5f, 0.5f);
-	glVertex3f(-1.2f, 0.5f, -0.5f);
+// Left face
+glNormal3f(-1.0f, 0.0f, 0.0f);
+glColor3f(0.0f, 1.0f, 0.0f);
+glVertex3f(-1.2f, -0.5f, -0.5f);
+glVertex3f(-1.2f, -0.5f, 0.5f);
+glVertex3f(-1.2f, 0.5f, 0.5f);
+glVertex3f(-1.2f, 0.5f, -0.5f);
 
-	glEnd();
+glEnd();
+{% endhighlight %}

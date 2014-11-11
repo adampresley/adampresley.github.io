@@ -28,7 +28,7 @@ into your project classpath settings in NetBeans. Once you have done
 this, here is how you can connect to and read records from a table in
 Microsoft SQL Server 2000.  
 
-```java
+{% highlight java %}
 DriverManager.registerDriver(new SQLServerDriver());
 Connection connection = DriverManager.getConnection("jdbc:microsoft:sqlserver://localhost:1433;databaseName=MyDb", "userName", "password");
 
@@ -43,7 +43,7 @@ while (table.next()) {
 table.close();
 qry.close();
 connection.close();
-```
+{% endhighlight %}
 
 Obviously you will need to import the correct packages and such, but you
 get the idea.

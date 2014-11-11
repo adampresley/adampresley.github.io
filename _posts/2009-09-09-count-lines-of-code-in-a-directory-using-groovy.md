@@ -14,20 +14,21 @@ impressive, or course! So here we make use of Groovy's very powerful
 extensions to the Java File object, and its ability to easily iterate.
 Take a look.  
 
-	:::groovy
-	lineCount = 0;
+{% highlight groovy %}
+lineCount = 0;
 
-	new File("C:\\code\\someProject").eachDirRecurse {
-		dir ->
+new File("C:\\code\\someProject").eachDirRecurse {
+	dir ->
 
-		dir.eachFileMatch(~/.*\.(cfm|cfc|js)/) {
-			file ->
+	dir.eachFileMatch(~/.*\.(cfm|cfc|js)/) {
+		file ->
 
-			file.eachLine { lineCount++; }
-		}
+		file.eachLine { lineCount++; }
 	}
+}
 
-	println "Line count = " + lineCount;
+println "Line count = " + lineCount;
+{% endhighlight %}
 
 What's neat about this snippet is how beautifully simple it is. Right
 out of the box we create a new File object against a directory, and

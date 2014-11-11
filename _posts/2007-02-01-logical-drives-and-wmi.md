@@ -18,7 +18,7 @@ Using the *System.Management* namespace we can access the
 to get information about our device. Here is an example of getting
 information about your **C:\\** drive.
 
-```csharp
+{% highlight csharp %}
 ManagementObject wmi;
 string serialNumber, name, freeSpace;
 
@@ -27,7 +27,7 @@ wmi = new ManagementObject("Win32_LogicalDisk.DeviceID=\"C:\"");
 serialNumber = wmi["VolumeSerialNumber"].ToString();
 name = wmi["Name"].ToString();
 freeSpace = wmi["FreeSpace"].ToString();
-```
+{% endhighlight %}
 
 For more information on what data can be queried on a logical device see
 <http://msdn2.microsoft.com/en-us/library/aa394173.aspx>

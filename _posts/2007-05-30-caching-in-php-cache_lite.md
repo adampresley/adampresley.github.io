@@ -35,66 +35,68 @@ and then go to the customer table for each cluster to find the
 information you want. Well, perhaps there is a better way. In this
 example I am using an imaginary XML file which would look like this:  
   
-	:::xml
-	<customer>
-	   <customername>customerA</customerName>
-	   <server>DB100</server>
-	   <active>1</active>
-	</customer>
+{% hightlight xml %}
+<customer>
+   <customername>customerA</customerName>
+   <server>DB100</server>
+   <active>1</active>
+</customer>
+{% endhighlight %}
 
 With this information we can then go the customer table on the database
 server that each customer is on to retrieve additional information.  
 
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	require_once("Cache/Lite.php");
+require_once("Cache/Lite.php");
 
-	$cacheId = "UniqueCacheId";
-	$cacheXmlGroup = "xmlGroup";
-	$cacheCustomerGroup = "customerGroup";
+$cacheId = "UniqueCacheId";
+$cacheXmlGroup = "xmlGroup";
+$cacheCustomerGroup = "customerGroup";
 
-	$cacheOptions = array(
-	   "lifeTime" => 3600,
-	   "automaticSerialization" => true
-	);
+$cacheOptions = array(
+   "lifeTime" => 3600,
+   "automaticSerialization" => true
+);
 
-	$cache = new Cache_Lite($cacheOptions);
+$cache = new Cache_Lite($cacheOptions);
 
-	//--------------------------------------------------------------
-	// Read the XML master customer file. If the data is already in the
-	// cache use that.
-	//--------------------------------------------------------------
-	if ($cacheData = $cache->get($cacheId, $cacheXmlGroup))
-	   $xmlCustomerList = $cacheData;
-	else {
-	   $xmlCustomerList = simplexml_load_file("customerXmlFile.xml");
-	   $cache->save($xmlCustomerList, $cacheId, $cacheXmlGroup);
-	}
+//--------------------------------------------------------------
+// Read the XML master customer file. If the data is already in the
+// cache use that.
+//--------------------------------------------------------------
+if ($cacheData = $cache->get($cacheId, $cacheXmlGroup))
+   $xmlCustomerList = $cacheData;
+else {
+   $xmlCustomerList = simplexml_load_file("customerXmlFile.xml");
+   $cache->save($xmlCustomerList, $cacheId, $cacheXmlGroup);
+}
 
-	//----------------------------------------------------------------------------
-	// Get the detail information from the database server/cluster this customer is on.
-	// Assume we are already connected to each cluster database, and get all the
-	// data. We'll pretend we have an array of mysql connections. If this data
-	// is already cached, use that.
-	//----------------------------------------------------------------------------
-	if ($cacheData = $cache->get($cacheId, $cacheCustomerGroup))
-	   $customerArray = $cacheData;
-	else {
-	   foreach ($connectionArray as $connection) {
-	      $qry = mysql_query("SELECT * FROM customers", $connection);
+//----------------------------------------------------------------------------
+// Get the detail information from the database server/cluster this customer is on.
+// Assume we are already connected to each cluster database, and get all the
+// data. We'll pretend we have an array of mysql connections. If this data
+// is already cached, use that.
+//----------------------------------------------------------------------------
+if ($cacheData = $cache->get($cacheId, $cacheCustomerGroup))
+   $customerArray = $cacheData;
+else {
+   foreach ($connectionArray as $connection) {
+      $qry = mysql_query("SELECT * FROM customers", $connection);
 
-	      while ($row = mysql_fetch_object($qry)) {
-	         $customerArray[$row->customerName]["additionalInfo1"] = $row->additionalInfo1;
-	         $customerArray[$row->customerName]["additionalInfo2"] = $row->additionalInfo2;
-	      }
-	   }
+      while ($row = mysql_fetch_object($qry)) {
+         $customerArray[$row->customerName]["additionalInfo1"] = $row->additionalInfo1;
+         $customerArray[$row->customerName]["additionalInfo2"] = $row->additionalInfo2;
+      }
+   }
 
-	   $cache->save($customerArray, $cacheId, $cacheCustomerGroup);
-	}
+   $cache->save($customerArray, $cacheId, $cacheCustomerGroup);
+}
 
-	?>
-	
+?>
+{% endhighlight %}
+
 In this example we are loading two pieces of data. The first is an XML
 file with a master customer list, containing all customers across
 multiple clusters. Each cluster has a database server with a customer

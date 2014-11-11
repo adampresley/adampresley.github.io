@@ -31,7 +31,7 @@ Here is an example of an idea I was tossing around for mapping columns
 in a data source to a target, and a few going through **transformers**,
 or filters.  
 
-```txt
+{% highlight text %}
 source.differentId -\> adamImport.employee.employeeId  
 source.first\_name -\> adamImport.employee.firstName  
 source.phoneNumber -\> /[\^0-9]/ "" -\> /([0-9]{3})([0-9]{3})([0-9]{4})/
@@ -46,7 +46,7 @@ if lengthof input != 9 then return ""
   
 /([0-9]{3})([0-9]{2})([0-9]{4})/ "\$1-\$2-\$3" -\> input  
 end  
-```
+{% endhighlight %}
 
 The above imaginary code describes **how** the data is transformed and
 moved. There are issues with this idea however that would have to be

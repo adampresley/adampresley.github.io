@@ -26,39 +26,41 @@ Now lets do some code. First lets create a component called
 switches between character sets to give the smallest possible encoding.
 It will look like so.
 
-	:::coldfusion
-	<cfcomponent>
-		<cffunction name="getCode128" returntype="any" access="public" output="true">
-			<cfargument name="data" type="string" required="true" />
+{% highlight coldfusion %}
+<cfcomponent>
+	<cffunction name="getCode128" returntype="any" access="public" output="true">
+		<cfargument name="data" type="string" required="true" />
 
-			<cfsetting showdebugoutput="false">
+		<cfsetting showdebugoutput="false">
 
-			<cfscript>
-				outStream = createObject("java", "java.io.ByteArrayOutputStream").init();
+		<cfscript>
+			outStream = createObject("java", "java.io.ByteArrayOutputStream").init();
 
-				//-----------------------------------------------------------
-				// Create the barcode, and draw it to a buffered image class.
-				//-----------------------------------------------------------
-				barcode = createObject("java", "net.sourceforge.barbecue.BarcodeFactory").createCode128("#arguments.data#");
-				bufferedImage = createObject("java", "net.sourceforge.barbecue.BarcodeImageHandler").writeJPEG(barcode, outStream);
-			</cfscript>
+			//-----------------------------------------------------------
+			// Create the barcode, and draw it to a buffered image class.
+			//-----------------------------------------------------------
+			barcode = createObject("java", "net.sourceforge.barbecue.BarcodeFactory").createCode128("#arguments.data#");
+			bufferedImage = createObject("java", "net.sourceforge.barbecue.BarcodeImageHandler").writeJPEG(barcode, outStream);
+		</cfscript>
 
-			<!--- Return the information as streaming bytes of type image/jpeg --->
-			<cfset getPageContext().getOut().clearBuffer()><cfcontent type="image/jpeg" variable="#outStream.toByteArray()#"><cfreturn>
-		</cffunction>
-	</cfcomponent>
+		<!--- Return the information as streaming bytes of type image/jpeg --->
+		<cfset getPageContext().getOut().clearBuffer()><cfcontent type="image/jpeg" variable="#outStream.toByteArray()#"><cfreturn>
+	</cffunction>
+</cfcomponent>
+{% endhighlight %}
 
 The code is pretty well documented so it should be pretty clear what we
 are doing here. Now, to use it we will simply create an instance of our
 new component, and call the **getCode128()** function as the source to an
 image tag in HTML. Like so.
 
-	:::coldfusion
-	<cfoutput>
+{% highlight coldfusion %}
+<cfoutput>
 
-	<cfset o = createObject("component", "barcode")>
-	<img src="#o.getCode128('My First Barcode')#" />
+<cfset o = createObject("component", "barcode")>
+<img src="#o.getCode128('My First Barcode')#" />
 
-	</cfoutput>
+</cfoutput>
+{% endhighlight %}
 
 So there you have it. Give it a go! It was fun!

@@ -49,46 +49,47 @@ can dump it to a page and see what it looks like. From there I wanted to
 deserialize it BACK to the SESSION scope. Let's take a look at this code
 and the resulting page.  
   
-    :::cfm
-    <cfset session.key1="value1">
-    <cfset session.key2="value2">
-    <cfset session.key3="value3">
-    <cfset session.somethingcomplex="arrayNew(1)">
-     <cfset session.somethingcomplex[1]="array1">
-     <cfset session.somethingcomplex[2]="array2">
-     <cfset session.somethingcomplex[3]="array3">
-     
-    <cfset session.another="structNew()">
-     <cfset session.another.hey1="hey1">
-     <cfset session.another.hey2="hey2">
+{% highlight coldfusion %}
+<cfset session.key1="value1">
+<cfset session.key2="value2">
+<cfset session.key3="value3">
+<cfset session.somethingcomplex="arrayNew(1)">
+ <cfset session.somethingcomplex[1]="array1">
+ <cfset session.somethingcomplex[2]="array2">
+ <cfset session.somethingcomplex[3]="array3">
+ 
+<cfset session.another="structNew()">
+ <cfset session.another.hey1="hey1">
+ <cfset session.another.hey2="hey2">
 
-    <cfoutput>
-     
+<cfoutput>
+ 
 
-    <cfset "java.io.bytearrayoutputstream").init()="" outbytestream="createObject(&quot;java&quot;,">
-    <cfset "java.io.objectoutputstream").init(outbytestream)="" oos="createObject(&quot;java&quot;,">
+<cfset "java.io.bytearrayoutputstream").init()="" outbytestream="createObject(&quot;java&quot;,">
+<cfset "java.io.objectoutputstream").init(outbytestream)="" oos="createObject(&quot;java&quot;,">
 
-    <cfset oos.writeobject(session)="">
-    <cfset oos.close()="">
-
-
-    <cfset serialized="outByteStream.toByteArray()">
-
-    <strong>SESSION as a byte array (#outByteStream.size()# bytes).</strong>
-    <cfdump expand="false" var="#serialized#">
+<cfset oos.writeobject(session)="">
+<cfset oos.close()="">
 
 
+<cfset serialized="outByteStream.toByteArray()">
+
+<strong>SESSION as a byte array (#outByteStream.size()# bytes).</strong>
+<cfdump expand="false" var="#serialized#">
 
 
-    <cfset "java.io.bytearrayinputstream").init(serialized)="" inbytestream="createObject(&quot;java&quot;,">
-    <cfset "java.io.objectinputstream").init(inbytestream)="" ois="createObject(&quot;java&quot;,">
-
-    <cfset deserialze="ois.readObject()">
-    <cfset deserialze)="" structappend(session,="">
 
 
-    <strong>Restored SESSION scope: </strong>
-    <cfdump expand="false" var="#SESSION#">
+<cfset "java.io.bytearrayinputstream").init(serialized)="" inbytestream="createObject(&quot;java&quot;,">
+<cfset "java.io.objectinputstream").init(inbytestream)="" ois="createObject(&quot;java&quot;,">
+
+<cfset deserialze="ois.readObject()">
+<cfset deserialze)="" structappend(session,="">
+
+
+<strong>Restored SESSION scope: </strong>
+<cfdump expand="false" var="#SESSION#">
+{% endhighlight %}
 
 As you can see in the first dump we have a binary representation of the
 SESSION object. And the second dump is quite promising with one

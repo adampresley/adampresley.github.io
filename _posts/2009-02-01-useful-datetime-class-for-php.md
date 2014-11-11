@@ -51,13 +51,14 @@ It is smart enough to take these various types of input and split them
 into their appropriate parts. The end result is an array of its parts.
 For example.
 
-	:::php
-	$date = "02/01/2009";
-	$split = date_parse($date);
+{% highlight php %}
+$date = "02/01/2009";
+$split = date_parse($date);
 
-	// $split["month"] = "02"
-	// $split["day"] = "01"
-	// $split["year"] = "2009"
+// $split["month"] = "02"
+// $split["day"] = "01"
+// $split["year"] = "2009"
+{% endhighlight %}
 
 As we can see the date has been split up into each of its parts. We can
 then take these parts and pass them to **mktime** to build the value

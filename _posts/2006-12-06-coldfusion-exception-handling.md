@@ -14,7 +14,7 @@ greatly intrigued by the fact that you could throw exceptions based off
 Java classes derived from the *RuntimeException*class. That would look
 something like this.  
 
-```cfm
+{% highlight coldfusion %}
 <cfset illegalArgument = CreateObject("java", "java.lang.IllegalArgumentException").init("Bad argument dude!")>
 
 <cftry>
@@ -25,7 +25,7 @@ something like this.
 	<cfdump var="#CFCATCH#">
 </cfcatch>
 </cftry>
-```
+{% endhighlight %}
 
 This code instantiates an object of type *IllegalArgumentException* and
 throws an error upon a test condition failure (albeit a false one). This
@@ -40,7 +40,7 @@ wanted to create a custom error class in Java to be thrown on this
 condition. Here is what the java class, and the code to use it would
 look like.  
   
-```java
+{% highlight java %}
 import java.lang.RuntimeException;
 import java.lang.String;
 
@@ -48,11 +48,11 @@ public class myPhoneNumberFormatException extends RuntimeException {
 	public myPhoneNumberFormatException() { super(); }
 	public myPhoneNumberFormatException(String message) { super(message); }
 }
-```
+{% endhighlight %}
 
 To use it...  
 
-```cfm
+{% highlight coldfusion %}
 <cfset phoneNumberFormatException = CreateObject("java", "myPhoneNumberFormatException").init("Invalid phone number format!")>
 
 <cftry>
@@ -64,7 +64,7 @@ To use it...
 	<cfdump var="#CFCATCH#">
 </cfcatch>
 </cftry>
-```
+{% endhighlight %}
 
 After going through all this, though, I began to question if there was
 any added benefit into diving into the Java side versus just using a

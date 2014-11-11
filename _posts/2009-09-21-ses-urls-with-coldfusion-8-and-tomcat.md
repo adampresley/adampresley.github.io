@@ -24,10 +24,11 @@ However, they are not supported by Tomcat, and I did go through the
 trouble of trying. To make my Coldbox application work I ended up adding
 the following mapping:
 
-	:::xml
-	<servlet-mapping id="coldfusion_mapping_6">
-		<servlet-name>CfmServlet</servlet-name>
-		<url-pattern>/index.cfm/*</url-pattern>
-	</servlet-mapping>
+{% highlight xml %}
+<servlet-mapping id="coldfusion_mapping_6">
+	<servlet-name>CfmServlet</servlet-name>
+	<url-pattern>/index.cfm/*</url-pattern>
+</servlet-mapping>
+{% endhighlight %}
 
 Restart the context, and we are in great shape! Happy coding!

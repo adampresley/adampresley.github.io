@@ -37,181 +37,182 @@ traverse the structure tree and return an array of structures that
 contain the key, value, and the structure path to get to the values that
 match your regular expression search. Here is such a piece of code.  
   
-    :::java
-    package com.adampresley;
+{% highlight java %}
+package com.adampresley;
 
-    import java.util.*;
-    import java.lang.*;
-    import java.util.regex.*;
-    import coldfusion.util.*;
+import java.util.*;
+import java.lang.*;
+import java.util.regex.*;
+import coldfusion.util.*;
 
-    public class reStructTools extends Object {
-        private Vector<fasthashtable> __searchValuesResult;
-        private Vector<fasthashtable> __searchKeysResult;
+public class reStructTools extends Object {
+    private Vector<fasthashtable> __searchValuesResult;
+    private Vector<fasthashtable> __searchKeysResult;
 
-        /**
-         * Constructor.
-         * @author Adam Presley
-         */
-        public reStructTools() {
+    /**
+     * Constructor.
+     * @author Adam Presley
+     */
+    public reStructTools() {
 
-        }
+    }
 
-        /**
-         * Searches a structure for values that match the regular expression pattern.
-         * @author Adam Presley
-         * @param input ColdFusion structure to search.
-         * @param searchPattern Regular expression search pattern.
-         * @return Vector<fasthashtable>
-         */
-        public Vector<fasthashtable> searchValues(FastHashtable input, String searchPattern) {
-            Pattern p = Pattern.compile(searchPattern);
+    /**
+     * Searches a structure for values that match the regular expression pattern.
+     * @author Adam Presley
+     * @param input ColdFusion structure to search.
+     * @param searchPattern Regular expression search pattern.
+     * @return Vector<fasthashtable>
+     */
+    public Vector<fasthashtable> searchValues(FastHashtable input, String searchPattern) {
+        Pattern p = Pattern.compile(searchPattern);
 
-            this.__searchValuesResult = new Vector<fasthashtable>();
-            this.__searchValues(input, p, "");
+        this.__searchValuesResult = new Vector<fasthashtable>();
+        this.__searchValues(input, p, "");
 
-            return this.__searchValuesResult;
-        }
+        return this.__searchValuesResult;
+    }
 
-        /**
-         * Searches a structure for keys whose name matches the regular expression pattern.
-         * @author Adam Presley
-         * @param input ColdFusion structure to search.
-         * @param searchPattern Regular expression search pattern.
-         * @return Vector<fasthashtable>
-         */
-        public Vector<fasthashtable> searchKeys(FastHashtable input, String searchPattern) {
-            Pattern p = Pattern.compile(searchPattern);
+    /**
+     * Searches a structure for keys whose name matches the regular expression pattern.
+     * @author Adam Presley
+     * @param input ColdFusion structure to search.
+     * @param searchPattern Regular expression search pattern.
+     * @return Vector<fasthashtable>
+     */
+    public Vector<fasthashtable> searchKeys(FastHashtable input, String searchPattern) {
+        Pattern p = Pattern.compile(searchPattern);
 
-            this.__searchKeysResult = new Vector<fasthashtable>();
-            this.__searchKeys(input, p, "");
+        this.__searchKeysResult = new Vector<fasthashtable>();
+        this.__searchKeys(input, p, "");
 
-            return this.__searchKeysResult;
-        }
+        return this.__searchKeysResult;
+    }
 
-        @SuppressWarnings("unchecked")
-        private void __searchValues(FastHashtable input, Pattern searchPattern, String startKey) {
-            Enumeration<string> keys = (Enumeration<string>) input.keys();
-            String key = "";
-            String currentKey = "[\"" + startKey + "\"]";
+    @SuppressWarnings("unchecked")
+    private void __searchValues(FastHashtable input, Pattern searchPattern, String startKey) {
+        Enumeration<string> keys = (Enumeration<string>) input.keys();
+        String key = "";
+        String currentKey = "[\"" + startKey + "\"]";
 
-            Object value = null;
-            Object arrayValue = null;
-            Matcher m = null;
+        Object value = null;
+        Object arrayValue = null;
+        Matcher m = null;
 
-            int index = 0;
-            int count = 0;
+        int index = 0;
+        int count = 0;
 
-            FastHashtable info = null;
+        FastHashtable info = null;
 
-            while (keys.hasMoreElements()) {
-                key = keys.nextElement();
-                value = input.get(key);
+        while (keys.hasMoreElements()) {
+            key = keys.nextElement();
+            value = input.get(key);
 
-                currentKey = startKey + "[\"" + key + "\"]";
+            currentKey = startKey + "[\"" + key + "\"]";
 
-                // 
-                // If we have a structure in our value, call back and search.
-                //
-                if (value.getClass().getName() == "coldfusion.runtime.Struct" || value.getClass().getName() == "coldfusion.util.FastHashtable") {
-                    this.__searchValues((FastHashtable) value, searchPattern, currentKey);
-                }
+            // 
+            // If we have a structure in our value, call back and search.
+            //
+            if (value.getClass().getName() == "coldfusion.runtime.Struct" || value.getClass().getName() == "coldfusion.util.FastHashtable") {
+                this.__searchValues((FastHashtable) value, searchPattern, currentKey);
+            }
 
-                //
-                // If our value is an array, iterate and search.
-                //
-                if (value.getClass().getName() == "coldfusion.runtime.Array") {
-                    count = ((Vector<object>) value).size();
+            //
+            // If our value is an array, iterate and search.
+            //
+            if (value.getClass().getName() == "coldfusion.runtime.Array") {
+                count = ((Vector<object>) value).size();
 
-                    for (index = 0; index < count; index++) {
-                        arrayValue = ((Vector<object>) value).get(index);
+                for (index = 0; index < count; index++) {
+                    arrayValue = ((Vector<object>) value).get(index);
 
-                        if (arrayValue.getClass().getName() == "coldfusion.runtime.Struct" || arrayValue.getClass().getName() == "coldfusion.util.FastHashtable") {
-                            String tempKey = currentKey + "[" + (index + 1) + "]";
-                            this.__searchValues((FastHashtable) arrayValue, searchPattern, tempKey); 
-                        }
-                    }
-                }
-
-                //
-                // Match the pattern.
-                //
-                if (value.getClass().getName() == "java.lang.String" || value.getClass().getName() == "java.lang.Double" || value.getClass().getName() == "java.lang.Integer") {
-                    m = searchPattern.matcher(value.toString());
-
-                    if (m.matches()) {
-                        info = new FastHashtable();
-
-                        info.put("key", key);
-                        info.put("value", value);
-                        info.put("path", currentKey);
-
-                        this.__searchValuesResult.add(info);
+                    if (arrayValue.getClass().getName() == "coldfusion.runtime.Struct" || arrayValue.getClass().getName() == "coldfusion.util.FastHashtable") {
+                        String tempKey = currentKey + "[" + (index + 1) + "]";
+                        this.__searchValues((FastHashtable) arrayValue, searchPattern, tempKey); 
                     }
                 }
             }
-        }
 
-        @SuppressWarnings("unchecked")
-        private void __searchKeys(FastHashtable input, Pattern searchPattern, String startKey) {
-            Enumeration<string> keys = (Enumeration<string>) input.keys();
-            String key = "";
-            String currentKey = "[\"" + startKey + "\"]";
-
-            Object value = null;
-            Object arrayValue = null;
-            Matcher m = null;
-
-            int index = 0;
-            int count = 0;
-
-            FastHashtable info = null;
-
-            while (keys.hasMoreElements()) {
-                key = keys.nextElement();
-                value = input.get(key);
-
-                currentKey = startKey + "[\"" + key + "\"]";
-
-                // 
-                // If we have a structure in our value, call back and search.
-                //
-                if (value.getClass().getName() == "coldfusion.runtime.Struct" || value.getClass().getName() == "coldfusion.util.FastHashtable") {
-                    this.__searchKeys((FastHashtable) value, searchPattern, currentKey);
-                }
-
-                //
-                // If our value is an array, iterate and search.
-                //
-                if (value.getClass().getName() == "coldfusion.runtime.Array") {
-                    count = ((Vector<object>) value).size();
-
-                    for (index = 0; index < count; index++) {
-                        arrayValue = ((Vector<object>) value).get(index);
-
-                        if (arrayValue.getClass().getName() == "coldfusion.runtime.Struct" || arrayValue.getClass().getName() == "coldfusion.util.FastHashtable") {
-                            String tempKey = currentKey + "[" + (index + 1) + "]";
-                            this.__searchKeys((FastHashtable) arrayValue, searchPattern, tempKey); 
-                        }
-                    }
-                }
-
-                //
-                // Match the pattern.
-                //
-                m = searchPattern.matcher(key);
+            //
+            // Match the pattern.
+            //
+            if (value.getClass().getName() == "java.lang.String" || value.getClass().getName() == "java.lang.Double" || value.getClass().getName() == "java.lang.Integer") {
+                m = searchPattern.matcher(value.toString());
 
                 if (m.matches()) {
                     info = new FastHashtable();
 
                     info.put("key", key);
+                    info.put("value", value);
                     info.put("path", currentKey);
 
-                    this.__searchKeysResult.add(info);
+                    this.__searchValuesResult.add(info);
                 }
             }
         }
     }
+
+    @SuppressWarnings("unchecked")
+    private void __searchKeys(FastHashtable input, Pattern searchPattern, String startKey) {
+        Enumeration<string> keys = (Enumeration<string>) input.keys();
+        String key = "";
+        String currentKey = "[\"" + startKey + "\"]";
+
+        Object value = null;
+        Object arrayValue = null;
+        Matcher m = null;
+
+        int index = 0;
+        int count = 0;
+
+        FastHashtable info = null;
+
+        while (keys.hasMoreElements()) {
+            key = keys.nextElement();
+            value = input.get(key);
+
+            currentKey = startKey + "[\"" + key + "\"]";
+
+            // 
+            // If we have a structure in our value, call back and search.
+            //
+            if (value.getClass().getName() == "coldfusion.runtime.Struct" || value.getClass().getName() == "coldfusion.util.FastHashtable") {
+                this.__searchKeys((FastHashtable) value, searchPattern, currentKey);
+            }
+
+            //
+            // If our value is an array, iterate and search.
+            //
+            if (value.getClass().getName() == "coldfusion.runtime.Array") {
+                count = ((Vector<object>) value).size();
+
+                for (index = 0; index < count; index++) {
+                    arrayValue = ((Vector<object>) value).get(index);
+
+                    if (arrayValue.getClass().getName() == "coldfusion.runtime.Struct" || arrayValue.getClass().getName() == "coldfusion.util.FastHashtable") {
+                        String tempKey = currentKey + "[" + (index + 1) + "]";
+                        this.__searchKeys((FastHashtable) arrayValue, searchPattern, tempKey); 
+                    }
+                }
+            }
+
+            //
+            // Match the pattern.
+            //
+            m = searchPattern.matcher(key);
+
+            if (m.matches()) {
+                info = new FastHashtable();
+
+                info.put("key", key);
+                info.put("path", currentKey);
+
+                this.__searchKeysResult.add(info);
+            }
+        }
+    }
+}
+{% endhighlight %}
 
 The real worker here is the method **__searchValues**. Basically it
 starts by getting all of the structure's keys and iterates over them. To
@@ -233,236 +234,237 @@ For a test case I put together code that creates a structure exactly
 like Mr. Nadel's, and executes the Java based search method, and his CF
 based search method, timing each one. Below you will find the code for this test.  
 
-    :::cfm
-    <cfsetting requesttimeout="300">
+{% highlight coldfusion %}
+<cfsetting requesttimeout="300">
+
+<!---
+    Ben Nadel's reStructFindValue method.
+--->
+<cffunction
+    name="reStructFindValue"
+    access="public"
+    returntype="array"
+    output="false"
+    hint="I search for patterns within a given ">
+
+    <!--- Define arguments. --->
+    <cfargument
+        name="target"
+        type="any"
+        required="true"
+        hint="I am the target struct being searched."
+        />
+
+    <cfargument
+        name="pattern"
+        type="string"
+        required="true"
+        hint="I am the pattern being searched."
+        />
+
+    <cfargument
+        name="scope"
+        type="string"
+        required="false"
+        default="one"
+        hint="I am the scope of the search: one or all."
+        />
+
+    <cfargument
+        name="path"
+        type="string"
+        required="false"
+        default=""
+        hint="The path to the current target (for recursive calling). ** NOTE: This is used internally for recursion - this is NOT an expected argument to be passed in by the user."
+        />
+
+    <!--- Define the local scope. --->
+    <cfset var local = {} />
+
+    <!--- Create an array --->
+    <cfset local.results = [] />
 
     <!---
-        Ben Nadel's reStructFindValue method.
+        Loop over target.
+        NOTE: This uses a ColdFusion custom tag that unifies
+        the interface for looping over both structure and
+        arrays.
+        http://www.bennadel.com/go/each-iteration
     --->
-    <cffunction
-        name="reStructFindValue"
-        access="public"
-        returntype="array"
-        output="false"
-        hint="I search for patterns within a given ">
+    <cf_each
+        item="local.item"
+        collection="#arguments.target#">
 
-        <!--- Define arguments. --->
-        <cfargument
-            name="target"
-            type="any"
-            required="true"
-            hint="I am the target struct being searched."
-            />
+        <!--- Create a variable to store the base path. --->
+        <cfset local.path = arguments.path />
 
-        <cfargument
-            name="pattern"
-            type="string"
-            required="true"
-            hint="I am the pattern being searched."
-            />
+        <!--- Add the current key to the path. --->
+        <cfset local.path &= "[ ""#local.item.key#"" ]" />
 
-        <cfargument
-            name="scope"
-            type="string"
-            required="false"
-            default="one"
-            hint="I am the scope of the search: one or all."
-            />
-
-        <cfargument
-            name="path"
-            type="string"
-            required="false"
-            default=""
-            hint="The path to the current target (for recursive calling). ** NOTE: This is used internally for recursion - this is NOT an expected argument to be passed in by the user."
-            />
-
-        <!--- Define the local scope. --->
-        <cfset var local = {} />
-
-        <!--- Create an array --->
-        <cfset local.results = [] />
+        <!--- Get a handle on the new target. --->
+        <cfset local.target = local.item.value />
 
         <!---
-            Loop over target.
-            NOTE: This uses a ColdFusion custom tag that unifies
-            the interface for looping over both structure and
-            arrays.
-            http://www.bennadel.com/go/each-iteration
+            Check to see if this new target is a string (or
+            if it is another complex object that we need to
+            iterate over).
         --->
-        <cf_each
-            item="local.item"
-            collection="#arguments.target#">
+        <cfif isSimpleValue( local.target )>
 
-            <!--- Create a variable to store the base path. --->
-            <cfset local.path = arguments.path />
-
-            <!--- Add the current key to the path. --->
-            <cfset local.path &= "[ ""#local.item.key#"" ]" />
-
-            <!--- Get a handle on the new target. --->
-            <cfset local.target = local.item.value />
+        <!---
+            Check it for the pattern match on the target
+            value. For now, we are going to be using
+            ColdFusion's Match() method which means a sub
+            set of regular expression usage. Furthermore,
+            we are going to use NoCASE for each of coding.
+        --->
+        <cfif arrayLen( reMatchNoCase( arguments.pattern, local.target ) )>
 
             <!---
-                Check to see if this new target is a string (or
-                if it is another complex object that we need to
-                iterate over).
+                The regular expression patther was found at
+                least once in the target value. This is a
+                valid match. Add it to the results.
             --->
-            <cfif isSimpleValue( local.target )>
+            <cfset local.result = {
+                key = local.item.key,
+                owner = arguments.target,
+                path = local.path
+            } />
+
+            <!--- Add this result to the current results. --->
+            <cfset arrayAppend( local.results, local.result ) />
+
+        </cfif>
+
+        <!---
+            Make sure this complex nested target is one that
+            we can actually iterate over (all others will be
+            skipped).
+        --->
+        <cfelseif (
+            isStruct( local.target ) ||
+            isArray( local.target )
+        )>
 
             <!---
-                Check it for the pattern match on the target
-                value. For now, we are going to be using
-                ColdFusion's Match() method which means a sub
-                set of regular expression usage. Furthermore,
-                we are going to use NoCASE for each of coding.
+                The nested taret is not a simple value. Therefore,
+                we need to perform a depth-first, recusive search
+                of it for our matching pattern.
             --->
-            <cfif arrayLen( reMatchNoCase( arguments.pattern, local.target ) )>
+            <cfset local.childResults = reStructFindValue(
+                local.target,
+                arguments.pattern,
+                arguments.scope,
+                local.path
+            ) />
 
-                <!---
-                    The regular expression patther was found at
-                    least once in the target value. This is a
-                    valid match. Add it to the results.
-                --->
-                <cfset local.result = {
-                    key = local.item.key,
-                    owner = arguments.target,
-                    path = local.path
-                } />
+            <!---
+                Add the results from our nested search to the
+                current results collection.
+            --->
+            <cfloop
+                index="local.childResult"
+                array="#local.childResults#">
 
                 <!--- Add this result to the current results. --->
-                <cfset arrayAppend( local.results, local.result ) />
+                <cfset arrayAppend( local.results, local.childResult ) />
 
-            </cfif>
+            </cfloop>
 
-            <!---
-                Make sure this complex nested target is one that
-                we can actually iterate over (all others will be
-                skipped).
-            --->
-            <cfelseif (
-                isStruct( local.target ) ||
-                isArray( local.target )
-            )>
+        </cfif>
 
-                <!---
-                    The nested taret is not a simple value. Therefore,
-                    we need to perform a depth-first, recusive search
-                    of it for our matching pattern.
-                --->
-                <cfset local.childResults = reStructFindValue(
-                    local.target,
-                    arguments.pattern,
-                    arguments.scope,
-                    local.path
-                ) />
 
-                <!---
-                    Add the results from our nested search to the
-                    current results collection.
-                --->
-                <cfloop
-                    index="local.childResult"
-                    array="#local.childResults#">
-
-                    <!--- Add this result to the current results. --->
-                    <cfset arrayAppend( local.results, local.childResult ) />
-
-                </cfloop>
-
-            </cfif>
-
+        <!---
+            At the end of a single iteration, let's check to see
+            if we were only searching for one target. If we are,
+            AND we found it, we can simply return the single
+            element rather than continuing on with our recursion.
+        --->
+        <cfif (
+            (arguments.scope eq "one") &&
+            arrayLen( local.results )
+        )>
 
             <!---
-                At the end of a single iteration, let's check to see
-                if we were only searching for one target. If we are,
-                AND we found it, we can simply return the single
-                element rather than continuing on with our recursion.
+            We found at least one item - trim the results
+            set in case the last iteration found more than
+            one.
             --->
-            <cfif (
-                (arguments.scope eq "one") &&
-                arrayLen( local.results )
-            )>
+            <cfset local.trimmedResults = [ local.results[ 1 ] ] />
 
-                <!---
-                We found at least one item - trim the results
-                set in case the last iteration found more than
-                one.
-                --->
-                <cfset local.trimmedResults = [ local.results[ 1 ] ] />
+            <!--- Return the trimmed result set. --->
+            <cfreturn local.trimmedResults />
 
-                <!--- Return the trimmed result set. --->
-                <cfreturn local.trimmedResults />
+        </cfif>
 
-            </cfif>
-
-        </cf_each>
+    </cf_each>
 
 
-        <!--- Return the found results. --->
-        <cfreturn local.results />
-    </cffunction>
+    <!--- Return the found results. --->
+    <cfreturn local.results />
+</cffunction>
 
-    <cftimer label="Getting Structure Setup" type="inline">
-        <cfset myData = {
-            hotGirls = [
-                {
-                    name = "Tricia",
-                    hair = "Brunette"
-                },
-                {
-                    name = "Kim",
-                    hair = "Blonde"
-                }
-            ],
-            athleticGirls = [
-                {
-                    name = "Tricia",
-                    hair = "Brunette"
-                },
-                {
-                    name = "Jen",
-                    hair = "Black"
-                }
-            ]
-        } />
+<cftimer label="Getting Structure Setup" type="inline">
+    <cfset myData = {
+        hotGirls = [
+            {
+                name = "Tricia",
+                hair = "Brunette"
+            },
+            {
+                name = "Kim",
+                hair = "Blonde"
+            }
+        ],
+        athleticGirls = [
+            {
+                name = "Tricia",
+                hair = "Brunette"
+            },
+            {
+                name = "Jen",
+                hair = "Black"
+            }
+        ]
+    } />
 
-        <strong>Original Structure:</strong>
-        <cfdump var="#myData#" expand="true" />
+    <strong>Original Structure:</strong>
+    <cfdump var="#myData#" expand="true" />
 
-    </cftimer>
+</cftimer>
 
 
 
 
 
-    <cfoutput>
+<cfoutput>
 
-    <!---
-        Test the speed of searching values using ReStructTools
-    --->
-    <cftimer label="ReStructTools" type="inline">
-        <cfset structTools = createObject("java", "com.adampresley.reStructTools").init() />
+<!---
+    Test the speed of searching values using ReStructTools
+--->
+<cftimer label="ReStructTools" type="inline">
+    <cfset structTools = createObject("java", "com.adampresley.reStructTools").init() />
 
-        <cfset pattern1 = "(?i)brunette|brown|black" />
-        <cfset result1 = structTools.searchValues(myData, pattern1) />
+    <cfset pattern1 = "(?i)brunette|brown|black" />
+    <cfset result1 = structTools.searchValues(myData, pattern1) />
 
-        <strong>Find Values: #pattern1#</strong>
-        <cfdump var="#result1#" expand="false" />
-    </cftimer>
+    <strong>Find Values: #pattern1#</strong>
+    <cfdump var="#result1#" expand="false" />
+</cftimer>
 
 
-    <!---
-        Test the speed of searching values using reStructFindValue
-    --->
-    <cftimer label="Ben Nadel's reStructFindValue" type="inline">
-        <cfset pattern1 = "brunette|brown|black" />
-        <cfset result2 = reStructFindValue(myData, pattern1, "all") />
+<!---
+    Test the speed of searching values using reStructFindValue
+--->
+<cftimer label="Ben Nadel's reStructFindValue" type="inline">
+    <cfset pattern1 = "brunette|brown|black" />
+    <cfset result2 = reStructFindValue(myData, pattern1, "all") />
 
-        <strong>Find Values: #pattern1#</strong>
-        <cfdump var="#result2#" expand="false" />
-    </cftimer>
+    <strong>Find Values: #pattern1#</strong>
+    <cfdump var="#result2#" expand="false" />
+</cftimer>
 
-    </cfoutput>
+</cfoutput>
+{% endhighlight %}
   
 Happy coding!

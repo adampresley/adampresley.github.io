@@ -24,7 +24,7 @@ Turns out that the primitive wrapper classes have a property called
 exactly what I needed. So, here is an example of creating a function
 pointer to *FindNoCase*.  
   
-```coldfusion
+{% highlight coldfusion %}
 <cfset stringFunc = createObject("java", "coldfusion.runtime.StringFunc")>
 <cfset stringClass = createObject("java", "java.lang.String")>
 <cfset integerClass = createObject("java", "java.lang.Integer")>
@@ -63,6 +63,6 @@ result = #result#
 
 
 </cfoutput>
-```
+{% endhighlight %}
 
 And voila! It works!

@@ -24,11 +24,12 @@ order of business to get this started is to enable CLR integration in
 your SQL Server instance. By default this is disabled, so two simple
 statements will do the trick to turn it on.
 
-	:::sql
-	sp_configure 'clr enabled', 1;
-	GO
-	reconfigure
-	GO
+{% highlight sql %}
+sp_configure 'clr enabled', 1;
+GO
+reconfigure
+GO
+{% endhighlight %}
 
 Now that you have CLR integration turned on let's get to the fun stuff.
 Code. Fire up your C# environment ladies! Now, if you are like me, and
@@ -48,13 +49,14 @@ From here we will need a few references for our project. Those are:
 System, System.Data.SqlTypes, System.Security.Cryptography, System.Text,
 System.IO, and Microsoft.SqlServer.Server. That will look like this.
 
-	:::c#
-	using System;
-	using System.IO;
-	using System.Text;
-	using System.Data.SqlTypes;
-	using Microsoft.SqlServer.Server;
-	using System.Security.Cryptography;
+{% highlight csharp %}
+using System;
+using System.IO;
+using System.Text;
+using System.Data.SqlTypes;
+using Microsoft.SqlServer.Server;
+using System.Security.Cryptography;
+{% endhighlight %}
 
 SQL Server expects a class defined as **partial**, and a series of
 methods that are **public static**, and have the attribute
@@ -68,27 +70,28 @@ Each function that we wish to expose will contain the SqlFunction
 attribute as described above, will be public, and also be marked as
 static. Here are what they look like.
 
-	:::c#
-	[SqlFunction()]
-	public static string Encrypt(string Input, string Password, string Salt) {
-		if (Input == null || Input.Length <= 0) return "";
+{% highlight csharp %}
+[SqlFunction()]
+public static string Encrypt(string Input, string Password, string Salt) {
+	if (Input == null || Input.Length <= 0) return "";
 
-		Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
-		ICryptoTransform transformer = __createEncryptor(keyGen);
-		byte[] transformed = __transform(Encoding.Default.GetBytes(Input), transformer);
+	Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
+	ICryptoTransform transformer = __createEncryptor(keyGen);
+	byte[] transformed = __transform(Encoding.Default.GetBytes(Input), transformer);
 
-		return Convert.ToBase64String(transformed);
-	}
+	return Convert.ToBase64String(transformed);
+}
 
-	[SqlFunction()]
-	public static string Decrypt(string Input, string Password, string Salt) {
-		if (Input == null || Input.Length <= 0) return "";
-		Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
-		ICryptoTransform transformer = __createDecryptor(keyGen);
-		byte[] transformed = __transform(Convert.FromBase64String(Input), transformer);
+[SqlFunction()]
+public static string Decrypt(string Input, string Password, string Salt) {
+	if (Input == null || Input.Length <= 0) return "";
+	Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
+	ICryptoTransform transformer = __createDecryptor(keyGen);
+	byte[] transformed = __transform(Convert.FromBase64String(Input), transformer);
 
-		return Encoding.Default.GetString(transformed);
-	}
+	return Encoding.Default.GetString(transformed);
+}
+{% endhighlight %}
 
 Clearly these methods are higher level and depend on other methods to do
 the actual dirty work, but they are the methods that will be exposed to
@@ -106,21 +109,23 @@ As seen in the code above there are four primary methods used to perform
 these actions: **__createKeyGen**, **__createEncryptor**,
 **__createDecryptor**, and **__transform**. Let's look at each.
 
-	:::c#
-	private static Rfc2898DeriveBytes __createKeyGen(string Password, string Salt) {
-		return new Rfc2898DeriveBytes(Password, Encoding.Default.GetBytes(Salt));
-	}
+{% highlight csharp %}
+private static Rfc2898DeriveBytes __createKeyGen(string Password, string Salt) {
+	return new Rfc2898DeriveBytes(Password, Encoding.Default.GetBytes(Salt));
+}
+{% endhighlight %}
 
 The **__createKeyGen** method takes a password and salt values to
 create a key generator object based on the RFC 2989 specification. This
 will be used by the encryptor and decryptor to generate the key and
 initialization vector (IV).
 
-	:::c#
-	private static ICryptoTransform __createEncryptor(Rfc2898DeriveBytes KeyGen) {
-		TripleDES provider = TripleDES.Create();
-		return provider.CreateEncryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
-	}
+{% highlight csharp %}
+private static ICryptoTransform __createEncryptor(Rfc2898DeriveBytes KeyGen) {
+	TripleDES provider = TripleDES.Create();
+	return provider.CreateEncryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
+}
+{% endhighlight %}
 
 The **__createEncryptor** method creates an object used to encrypt
 values based on the encryption provider, which in this case is
@@ -131,30 +136,32 @@ generate a 128-bit (16 bytes) key and IV.
 The same applies to the **__createDecryptor** method, except that we
 create an object that decrypts instead of encrypts.
 
-	:::c#
-	private static ICryptoTransform __createDecryptor(Rfc2898DeriveBytes KeyGen) {
-		TripleDES provider = TripleDES.Create();
-		return provider.CreateDecryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
-	}
+{% highlight csharp %}
+private static ICryptoTransform __createDecryptor(Rfc2898DeriveBytes KeyGen) {
+	TripleDES provider = TripleDES.Create();
+	return provider.CreateDecryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
+}
+{% endhighlight %}
 
 Now comes the fun part. Time to perform encryption or decryption.
 
-	:::c#
-	private static byte[] __transform(byte[] Input, ICryptoTransform Transformer) {
-		MemoryStream ms = new MemoryStream();
-		byte[] result;
+{% highlight csharp %}
+private static byte[] __transform(byte[] Input, ICryptoTransform Transformer) {
+	MemoryStream ms = new MemoryStream();
+	byte[] result;
 
-		CryptoStream writer = new CryptoStream(ms, Transformer, CryptoStreamMode.Write);
-		writer.Write(Input, 0, Input.Length);
-		writer.FlushFinalBlock();
+	CryptoStream writer = new CryptoStream(ms, Transformer, CryptoStreamMode.Write);
+	writer.Write(Input, 0, Input.Length);
+	writer.FlushFinalBlock();
 
-		ms.Position = 0;
-		result = ms.ToArray();
+	ms.Position = 0;
+	result = ms.ToArray();
 
-		ms.Close();
-		writer.Close();
-		return result;
-	}
+	ms.Close();
+	writer.Close();
+	return result;
+}
+{% endhighlight %}
 
 This method takes a byte array for the input, and an encryptor or
 decryptor (thus the ICryptoTransform interface argument). Right out of
@@ -195,94 +202,97 @@ function. For the sake of this bit of code let's assume the name of the
 assembly is "MyCrypto", and the name of the class is "Crypto". This can
 be done like so.
 
-	:::sql
-	CREATE FUNCTION Encrypt(@Input nvarchar(255), @Password nvarchar(255), @Salt nvarchar(255)) RETURNS nvarchar(255)
-	EXTERNAL NAME MyCrypto.Crypto.Encrypt;
+{% highlight sql %}
+CREATE FUNCTION Encrypt(@Input nvarchar(255), @Password nvarchar(255), @Salt nvarchar(255)) RETURNS nvarchar(255)
+EXTERNAL NAME MyCrypto.Crypto.Encrypt;
 
-	CREATE FUNCTION Encrypt(@Input nvarchar(255), @Password nvarchar(255), @Salt nvarchar(255)) RETURNS nvarchar(255)
-	EXTERNAL NAME MyCrypto.Crypto.Decrypt;
+CREATE FUNCTION Encrypt(@Input nvarchar(255), @Password nvarchar(255), @Salt nvarchar(255)) RETURNS nvarchar(255)
+EXTERNAL NAME MyCrypto.Crypto.Decrypt;
+{% endhighlight %}
 
 This bit of SQL will create SQL Server functions that reference the .NET
 assembly. To use this function would look something like this.
 
-	:::sql
-	SELECT dbo.Encrypt('some important value', 'myPassword', 'salt is nice') AS encryptedValue;
+{% highlight sql %}
+SELECT dbo.Encrypt('some important value', 'myPassword', 'salt is nice') AS encryptedValue;
+{% endhighlight %}
 
 And there you have it. A cool, powerful feature, and not hard to do!
 Happy coding!
 
-	:::c#
-	using System;
-	using System.IO;
-	using System.Text;
-	using System.Data.SqlTypes;
-	using Microsoft.SqlServer.Server;
-	using System.Security.Cryptography;
+{% highlight csharp %}
+using System;
+using System.IO;
+using System.Text;
+using System.Data.SqlTypes;
+using Microsoft.SqlServer.Server;
+using System.Security.Cryptography;
 
-	public partial class Crypto {
-		[SqlFunction()]
-		public static string Encrypt(string Input, string Password, string Salt) {
-			if (Input == null || Input.Length <= 0) return "";
+public partial class Crypto {
+	[SqlFunction()]
+	public static string Encrypt(string Input, string Password, string Salt) {
+		if (Input == null || Input.Length <= 0) return "";
 
-			Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
-			ICryptoTransform transformer = __createEncryptor(keyGen);
-			byte[] transformed = __transform(Encoding.Default.GetBytes(Input), transformer);
+		Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
+		ICryptoTransform transformer = __createEncryptor(keyGen);
+		byte[] transformed = __transform(Encoding.Default.GetBytes(Input), transformer);
 
-			return Convert.ToBase64String(transformed);
-		}
-
-		[SqlFunction()]
-		public static string Decrypt(string Input, string Password, string Salt) {
-			if (Input == null || Input.Length <= 0) return "";
-
-			Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
-			ICryptoTransform transformer = __createDecryptor(keyGen);
-			byte[] transformed = __transform(Convert.FromBase64String(Input), transformer);
-
-			return Encoding.Default.GetString(transformed);
-		}
-
-		[SqlFunction()]
-		public static string Hash(string Input) {
-			if (Input == null || Input.Length <= 0) return "";
-
-			StringBuilder result = new StringBuilder();
-			SHA1 provider = SHA1.Create();
-			byte[] __result = provider.ComputeHash(Encoding.Default.GetBytes(Input));
-
-			foreach (Byte b in __result)
-				result.Append(String.Format("{0:x2}", b));
-
-			return result.ToString();
-		}
-
-		private static Rfc2898DeriveBytes __createKeyGen(string Password, string Salt) {
-			return new Rfc2898DeriveBytes(Password, Encoding.Default.GetBytes(Salt));
-		}
-
-		private static ICryptoTransform __createEncryptor(Rfc2898DeriveBytes KeyGen) {
-			TripleDES provider = TripleDES.Create();
-			return provider.CreateEncryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
-		}
-
-		private static ICryptoTransform __createDecryptor(Rfc2898DeriveBytes KeyGen) {
-			TripleDES provider = TripleDES.Create();
-			return provider.CreateDecryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
-		}
-
-		private static byte[] __transform(byte[] Input, ICryptoTransform Transformer) {
-			MemoryStream ms = new MemoryStream();
-			byte[] result;
-
-			CryptoStream writer = new CryptoStream(ms, Transformer, CryptoStreamMode.Write);
-			writer.Write(Input, 0, Input.Length);
-			writer.FlushFinalBlock();
-
-			ms.Position = 0;
-			result = ms.ToArray();
-
-			ms.Close();
-			writer.Close();
-			return result;
-		}
+		return Convert.ToBase64String(transformed);
 	}
+
+	[SqlFunction()]
+	public static string Decrypt(string Input, string Password, string Salt) {
+		if (Input == null || Input.Length <= 0) return "";
+
+		Rfc2898DeriveBytes keyGen = __createKeyGen(Password, Salt);
+		ICryptoTransform transformer = __createDecryptor(keyGen);
+		byte[] transformed = __transform(Convert.FromBase64String(Input), transformer);
+
+		return Encoding.Default.GetString(transformed);
+	}
+
+	[SqlFunction()]
+	public static string Hash(string Input) {
+		if (Input == null || Input.Length <= 0) return "";
+
+		StringBuilder result = new StringBuilder();
+		SHA1 provider = SHA1.Create();
+		byte[] __result = provider.ComputeHash(Encoding.Default.GetBytes(Input));
+
+		foreach (Byte b in __result)
+			result.Append(String.Format("{0:x2}", b));
+
+		return result.ToString();
+	}
+
+	private static Rfc2898DeriveBytes __createKeyGen(string Password, string Salt) {
+		return new Rfc2898DeriveBytes(Password, Encoding.Default.GetBytes(Salt));
+	}
+
+	private static ICryptoTransform __createEncryptor(Rfc2898DeriveBytes KeyGen) {
+		TripleDES provider = TripleDES.Create();
+		return provider.CreateEncryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
+	}
+
+	private static ICryptoTransform __createDecryptor(Rfc2898DeriveBytes KeyGen) {
+		TripleDES provider = TripleDES.Create();
+		return provider.CreateDecryptor(KeyGen.GetBytes(16), KeyGen.GetBytes(16));
+	}
+
+	private static byte[] __transform(byte[] Input, ICryptoTransform Transformer) {
+		MemoryStream ms = new MemoryStream();
+		byte[] result;
+
+		CryptoStream writer = new CryptoStream(ms, Transformer, CryptoStreamMode.Write);
+		writer.Write(Input, 0, Input.Length);
+		writer.FlushFinalBlock();
+
+		ms.Position = 0;
+		result = ms.ToArray();
+
+		ms.Close();
+		writer.Close();
+		return result;
+	}
+}
+{% endhighlight %}

@@ -14,23 +14,25 @@ to your query, **especially** columns that are only added on a dynamic
 condition, it can be easy to mangle up your commas. Here's an example of
 a common type of query I deal with at work on a regular basis.  
 
-    :::sql
-    SELECT
-        column1,
-        column2,
-        column3
-    FROM table1
+{% highlight sql %}
+SELECT
+    column1,
+    column2,
+    column3
+FROM table1
+{% endhighlight %}
 
 Now if I am asked to add a column based on some condition it could look
 like this.  
   
-    :::coldfusion
-    SELECT
-        column1,
-        column2,
-        column3
-        <cfif someCondition EQ true>, column4</cfif>
-    FROM table1
+{% highlight coldfusion %}
+SELECT
+    column1,
+    column2,
+    column3
+    <cfif someCondition EQ true>, column4</cfif>
+FROM table1
+{% endhighlight %}
 
 So over time I've come around to the SQL syntax where you put commas
 **before** your column name, making this kind of problem less of an
@@ -44,9 +46,10 @@ powerful regex editors (Boxer, for example). It doesn't catch the last
 column, and will double up on commas that already at the beginning of
 the column. Like I said, not perfect, but helpful nonetheless.  
   
-    :::regex
-    (\s*)([a-z0-9\._\(\)\s',]+)(?=,),
-  
+{% highlight regex %}
+(\s*)([a-z0-9\._\(\)\s',]+)(?=,),
+{% endhighlight %}
+
 Use this regex as your search condition, and the replace text is "**\$1,
 \$2**", without quotes.  
   

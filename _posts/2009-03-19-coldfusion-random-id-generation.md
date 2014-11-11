@@ -16,9 +16,10 @@ At first I started with a UUID using the following code, but it occured
 to me that for my audience that string was a bit long, so I wanted
 something a little smaller.  
 
-	:::cfm
-	<cfset key = createObject("java", "java.util.UUID").randomUUID().toString() />
-  
+{% highlight coldfusion %}
+<cfset key = createObject("java", "java.util.UUID").randomUUID().toString() />
+{% endhighlight %}
+
 The objective here is to create a function that we can use to generate a
 fixed-length psudo-random set of digits to use a key to give to users.
 We will make that length definable for better flexibility.  
@@ -27,8 +28,9 @@ The first order of business is to define what characters will make up
 our random key. For this function we are creating we will use the
 alphabet and numbers.  
 
-	:::cfm
-	<cfset var chars = "abcdefghijklmnopqrstuvwxyz1234567890" />
+{% highlight coldfusion %}
+<cfset var chars = "abcdefghijklmnopqrstuvwxyz1234567890" />
+{% endhighlight %}
 
 From here we will initialize Java's Random class to generate random
 numbers for us. We will use this while creating our digits to determine
@@ -37,29 +39,31 @@ initialize a StringBuffer for faster string creation. Once we have what
 we need, we will loop and append a series of random digits until we have
 reached the specified length. Let's take a look.  
 
-	:::cfm
-	<cfcomponent name="RandomId">
+{% highlight coldfusion %}
+<cfcomponent name="RandomId">
 
-		<cffunction name="generate" returntype="string" access="public" output="false">
-			<cfargument name="numCharacters" type="numeric" required="false" default="8" />
+	<cffunction name="generate" returntype="string" access="public" output="false">
+		<cfargument name="numCharacters" type="numeric" required="false" default="8" />
 
-			<cfset var chars = "abcdefghijklmnopqrstuvwxyz1234567890" />
-			<cfset var random = createObject("java", "java.util.Random").init() />
-			<cfset var result = createObject("java", "java.lang.StringBuffer").init(javaCast("int", arguments.numCharacters)) />
-			<cfset var index = 0 />
+		<cfset var chars = "abcdefghijklmnopqrstuvwxyz1234567890" />
+		<cfset var random = createObject("java", "java.util.Random").init() />
+		<cfset var result = createObject("java", "java.lang.StringBuffer").init(javaCast("int", arguments.numCharacters)) />
+		<cfset var index = 0 />
 
-			<cfloop from="1" to="#arguments.numCharacters#" index="index">
-			<cfset result.append(chars.charAt(random.nextInt(chars.length()))) />
-			</cfloop>
+		<cfloop from="1" to="#arguments.numCharacters#" index="index">
+		<cfset result.append(chars.charAt(random.nextInt(chars.length()))) />
+		</cfloop>
 
-			<cfreturn result.toString() />
-		</cffunction>
+		<cfreturn result.toString() />
+	</cffunction>
 
-	</cfcomponent>
+</cfcomponent>
+{% endhighlight %}
 
 The usage of this component is similar to the method above:  
 
-	:::cfm
-	<cfset key = createObject("component", "RandomId").generate() />
+{% highlight coldfusion %}
+<cfset key = createObject("component", "RandomId").generate() />
+{% endhighlight %}
 
 Happy coding!

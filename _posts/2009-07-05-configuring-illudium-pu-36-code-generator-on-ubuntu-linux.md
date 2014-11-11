@@ -22,21 +22,22 @@ Apache config files and setup the virtual host entry, as well as an
 entry in **/etc/hosts** so I can reference the site as
 **http://cfcgenerator.dev**.  
   
-	:::apache
-	<virtualhost *:80>
-		ServerAdmin webmaster@codegenerator.dev
-		ServerAlias cfcgenerator.dev
-		DocumentRoot "/home/psykoprogrammer/code/coldfusion/cfcgenerator"
-		ServerName cfcgenerator.dev
+{% highlight apache %}
+<virtualhost *:80>
+	ServerAdmin webmaster@codegenerator.dev
+	ServerAlias cfcgenerator.dev
+	DocumentRoot "/home/psykoprogrammer/code/coldfusion/cfcgenerator"
+	ServerName cfcgenerator.dev
 
-		<directory "/home/psykoprogrammer/code/coldfusion/cfcgenerator">
-		Options Indexes FollowSymLinks
-		AllowOverride FileInfo
-		Order allow,deny
-		Allow from all
-		</Directory>
-	</VirtualHost>
-  
+	<directory "/home/psykoprogrammer/code/coldfusion/cfcgenerator">
+	Options Indexes FollowSymLinks
+	AllowOverride FileInfo
+	Order allow,deny
+	Allow from all
+	</Directory>
+</VirtualHost>
+{% endhighlight %}
+
 From here I tried to browse to my new site once I restarted CF and
 Apache. No love. Just a crazy blank screen. After a lot of googling I
 came across forum entries suggesting that I needed to install Adobe's

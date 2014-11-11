@@ -24,45 +24,49 @@ objects.
 
 For the first pass at this I use a simple **each** iteration like so:
 
-	:::groovy
-	def pretendCommandLineArg = "/home/psykoprogrammer/Documents/test.xls,/home/psykoprogrammer/Documents/ClearConnectUserGuide.docx"
-	def fileList = []
+{% highlight groovy %}
+def pretendCommandLineArg = "/home/psykoprogrammer/Documents/test.xls,/home/psykoprogrammer/Documents/ClearConnectUserGuide.docx"
+def fileList = []
 
-	pretendCommandLineArg.split(",").each {
-		fileList << new File(it)
-	}
+pretendCommandLineArg.split(",").each {
+	fileList << new File(it)
+}
 
-	fileList.each {
-		println "File Name: ${it.getName()}, Path: ${it.getCanonicalPath()}"
-	}
+fileList.each {
+	println "File Name: ${it.getName()}, Path: ${it.getCanonicalPath()}"
+}
+{% endhighlight %}
 
 And that worked just fine. Then it occured to me that I could add a
 metaClass enhancement to my already growing list of metaClass
 enhancements that can convert a string to a File object. That's simple
 enough to do.
 
-	:::groovy
-	String.metaClass.toFile { basePath = "" ->
-		new File("${basePath}${delegate}")
-	}
+{% highlight groovy %}
+String.metaClass.toFile { basePath = "" ->
+	new File("${basePath}${delegate}")
+}
+{% endhighlight %}
 
 With that enhancement to the String class I can now do something like
 this:
 
-	:::groovy
-	"/home/adampresley/filea.txt".toFile()
-	"filea.txt".toFile("/home/adampresley/")
+{% highlight groovy %}
+"/home/adampresley/filea.txt".toFile()
+"filea.txt".toFile("/home/adampresley/")
+{% endhighlight %}
 
 That's pretty neat, but what about the fact I have a command line
 argument with a list of files delimited by a comma? Simple.
 
-	:::groovy
-	def pretendCommandLineArg = "/home/adampresley/test.xls,/home/adampresley/testfile.txt"
-	def fileList = pretendCommandLineArg.split(",")*.toFile()
+{% highlight groovy %}
+def pretendCommandLineArg = "/home/adampresley/test.xls,/home/adampresley/testfile.txt"
+def fileList = pretendCommandLineArg.split(",")*.toFile()
 
-	fileList.each {
-		println "File Name: ${it.getName()}, Path: ${it.getCanonicalPath()}"
-	}
+fileList.each {
+	println "File Name: ${it.getName()}, Path: ${it.getCanonicalPath()}"
+}
+{% endhighlight %}
 
 By using the spread operator I can apply my new **toFile()** String
 method to each String in the Collection! Pretty cool eh? Although not

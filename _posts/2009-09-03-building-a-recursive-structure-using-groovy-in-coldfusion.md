@@ -11,16 +11,17 @@ slug: building-a-recursive-structure-using-groovy-in-coldfusion
 Last night I worked on a particular problem where I had a database table
 that represented a hierarchy of product types that looks like this.  
   
-	:::sql
-	CREATE TABLE `producttype` (
-		`ptype_ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-		`ptype_IDParent` int(10) unsigned NOT NULL DEFAULT '0',
-		`ptype_Name` varchar(50) NOT NULL,
-		`ptype_ViewOrder` int(10) unsigned NOT NULL,
-		`ptype_DateCreated` datetime DEFAULT NULL,
-		`ptype_DateModified` datetime DEFAULT NULL,
-		PRIMARY KEY (`ptype_ID`)
-	) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1  ROW_FORMAT=COMPACT;
+{% highlight sql %}
+CREATE TABLE `producttype` (
+	`ptype_ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	`ptype_IDParent` int(10) unsigned NOT NULL DEFAULT '0',
+	`ptype_Name` varchar(50) NOT NULL,
+	`ptype_ViewOrder` int(10) unsigned NOT NULL,
+	`ptype_DateCreated` datetime DEFAULT NULL,
+	`ptype_DateModified` datetime DEFAULT NULL,
+	PRIMARY KEY (`ptype_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1  ROW_FORMAT=COMPACT;
+{% endhighlight %}
 
 With this MySQL table I needed to turn the recordset into a hierarchy of
 structures in ColdFusion. I've certainly done this before, so this time
@@ -36,22 +37,23 @@ group the structures together accordingly. We will also declare a
 structure in the arguments scope to place our resulting structure into,
 and call it *result*.  
   
-	:::cfm
-	<cfquery name="arguments.qryProductTypes" datasource="masterconfig">
-		SELECT
-			  pt.ptype_id
-			, pt.ptype_idParent
-			, pt.ptype_name
-			, pt.ptype_viewOrder
-			, pt.ptype_dateCreated
-			, pt.ptype_dateModified
-			, (SELECT COUNT(ptype_id) FROM producttype WHERE producttype.ptype_idParent=pt.ptype_id) AS childCount
+{% highlight coldfusion %}
+<cfquery name="arguments.qryProductTypes" datasource="masterconfig">
+	SELECT
+		  pt.ptype_id
+		, pt.ptype_idParent
+		, pt.ptype_name
+		, pt.ptype_viewOrder
+		, pt.ptype_dateCreated
+		, pt.ptype_dateModified
+		, (SELECT COUNT(ptype_id) FROM producttype WHERE producttype.ptype_idParent=pt.ptype_id) AS childCount
 
-		FROM producttype AS pt
-		ORDER BY
-			pt.ptype_idParent ASC,
-			pt.ptype_viewOrder ASC
-	</cfquery>
+	FROM producttype AS pt
+	ORDER BY
+		pt.ptype_idParent ASC,
+		pt.ptype_viewOrder ASC
+</cfquery>
+{% endhighlight %}
 
 This query pulls all of the data like any other query. The most notable
 part of it is the subquery that pulls a count of children for each row.
@@ -64,75 +66,76 @@ and return an array of record indexes that match a criteria. The next
 function will is actually responsible for building the tree structure.
 Here is that code.  
   
-	:::cfm
-	<cfoutput>
-	<g:script args="#arguments#">
+{% highlight coldfusion %}
+<cfoutput>
+<g:script args="#arguments#">
 
-		/**
-		 * Searches a query object for a specific value.
-		 *
-		 * @author Adam Presley
-		 * @param column Name of the column to search
-		 * @param searchValue The value to search for
-		 * @returns Array of matched query record indexes
-		 */
-		def searchQuery(String column, String searchValue) {
-			def searchResult = []
-			def match = false
-			def more = true
-			String value = ""
+	/**
+	 * Searches a query object for a specific value.
+	 *
+	 * @author Adam Presley
+	 * @param column Name of the column to search
+	 * @param searchValue The value to search for
+	 * @returns Array of matched query record indexes
+	 */
+	def searchQuery(String column, String searchValue) {
+		def searchResult = []
+		def match = false
+		def more = true
+		String value = ""
 
-			arguments.qryProductTypes.first();
-			while (more) {
-				value = arguments.qryProductTypes.getString(column)
-				if (arguments.qryProductTypes.wasNull()) value = ""
-				if (value.toString() == searchValue.toString()) searchResult << arguments.qryProductTypes.getCurrentrow()
+		arguments.qryProductTypes.first();
+		while (more) {
+			value = arguments.qryProductTypes.getString(column)
+			if (arguments.qryProductTypes.wasNull()) value = ""
+			if (value.toString() == searchValue.toString()) searchResult << arguments.qryProductTypes.getCurrentrow()
 
-				more = arguments.qryProductTypes.next()
-			}
-
-			return searchResult;
+			more = arguments.qryProductTypes.next()
 		}
 
-		/**
-		 * Builds a tree-structure for the product types.
-		 *
-		 * @author Adam Presley
-		 * @param parentId Number of the parent ID to start with
-		 * @param key The structure key to start with
-		 */
-		def buildTree(int parentId, String key) {
-			def matches = searchQuery("PTYPE_IDPARENT", parentId.toString())
-			String currentKey = ""
+		return searchResult;
+	}
 
-			matches.each {
-				index ->
+	/**
+	 * Builds a tree-structure for the product types.
+	 *
+	 * @author Adam Presley
+	 * @param parentId Number of the parent ID to start with
+	 * @param key The structure key to start with
+	 */
+	def buildTree(int parentId, String key) {
+		def matches = searchQuery("PTYPE_IDPARENT", parentId.toString())
+		String currentKey = ""
 
-				match = [
-					PTYPE_ID: variables.qry3.getAt("PTYPE_ID", index),
-					PTYPE_NAME: variables.qry3.getAt("PTYPE_NAME", index),
-					CHILDCOUNT: variables.qry3.getAt("CHILDCOUNT", index),
-					PTYPE_VIEWORDER: variables.qry3.getAt("PTYPE_VIEWORDER", index),
-					PTYPE_DATECREATED: variables.qry3.getAt("PTYPE_DATECREATED", index),
-					PTYPE_DATEMODIFIED: variables.qry3.getAt("PTYPE_DATEMODIFIED", index)
-				]
+		matches.each {
+			index ->
 
-				if (key.length())
-					currentKey = key + "[\"" + match.get("PTYPE_ID") + "\"]"
-				else
-					currentKey = "[\"" + match.get("PTYPE_ID") + "\"]"
+			match = [
+				PTYPE_ID: variables.qry3.getAt("PTYPE_ID", index),
+				PTYPE_NAME: variables.qry3.getAt("PTYPE_NAME", index),
+				CHILDCOUNT: variables.qry3.getAt("CHILDCOUNT", index),
+				PTYPE_VIEWORDER: variables.qry3.getAt("PTYPE_VIEWORDER", index),
+				PTYPE_DATECREATED: variables.qry3.getAt("PTYPE_DATECREATED", index),
+				PTYPE_DATEMODIFIED: variables.qry3.getAt("PTYPE_DATEMODIFIED", index)
+			]
 
-				evaluate("arguments.result" + currentKey + " = (railo.runtime.type.StructImpl) match")
-				if ((int) match.get("CHILDCOUNT") > 0) {
-					buildTree((int) match.get("PTYPE_ID"), currentKey)
-				}
+			if (key.length())
+				currentKey = key + "[\"" + match.get("PTYPE_ID") + "\"]"
+			else
+				currentKey = "[\"" + match.get("PTYPE_ID") + "\"]"
+
+			evaluate("arguments.result" + currentKey + " = (railo.runtime.type.StructImpl) match")
+			if ((int) match.get("CHILDCOUNT") > 0) {
+				buildTree((int) match.get("PTYPE_ID"), currentKey)
 			}
 		}
+	}
 
-		buildTree(0, "");
+	buildTree(0, "");
 
-	</g:script>
-	</cfoutput>
+</g:script>
+</cfoutput>
+{% endhighlight %}
 
 Let's take a look at the **searchQuery** method first. This method takes
 an argument for a column name, and one for the value to search for.
@@ -182,102 +185,103 @@ And that's about it! Happy coding you groovy peeps!
   
 (Full code here)  
 
-	:::cfm
-	<cffunction name="BuildProductTypeTree" returntype="any" access="public" output="true">
-		<cfimport prefix="g" taglib="../../groovyEngine" />
+{% highlight coldfusion %}
+<cffunction name="BuildProductTypeTree" returntype="any" access="public" output="true">
+	<cfimport prefix="g" taglib="../../groovyEngine" />
 
-		<cfquery name="arguments.qryProductTypes" datasource="masterconfig">
-			SELECT
-				  pt.ptype_id
-				, pt.ptype_idParent
-				, pt.ptype_name
-				, pt.ptype_viewOrder
-				, pt.ptype_dateCreated
-				, pt.ptype_dateModified
-				, (SELECT COUNT(ptype_id) FROM producttype WHERE producttype.ptype_idParent=pt.ptype_id) AS childCount
+	<cfquery name="arguments.qryProductTypes" datasource="masterconfig">
+		SELECT
+			  pt.ptype_id
+			, pt.ptype_idParent
+			, pt.ptype_name
+			, pt.ptype_viewOrder
+			, pt.ptype_dateCreated
+			, pt.ptype_dateModified
+			, (SELECT COUNT(ptype_id) FROM producttype WHERE producttype.ptype_idParent=pt.ptype_id) AS childCount
 
-			FROM producttype AS pt
-			ORDER BY
-				pt.ptype_idParent ASC,
-				pt.ptype_viewOrder ASC
-		</cfquery>
+		FROM producttype AS pt
+		ORDER BY
+			pt.ptype_idParent ASC,
+			pt.ptype_viewOrder ASC
+	</cfquery>
 
-		<cfset arguments.result = {} />
+	<cfset arguments.result = {} />
 
-		<cfoutput>
-		<g:script args="#arguments#">
+	<cfoutput>
+	<g:script args="#arguments#">
 
-			/**
-			 * Searches a query object for a specific value.
-			 *
-			 * @author Adam Presley
-			 * @param column Name of the column to search
-			 * @param searchValue The value to search for
-			 * @returns Array of matched query record indexes
-			 */
-			def searchQuery(String column, String searchValue) {
-				def searchResult = []
-				def match = false
-				def more = true
-				String value = ""
+		/**
+		 * Searches a query object for a specific value.
+		 *
+		 * @author Adam Presley
+		 * @param column Name of the column to search
+		 * @param searchValue The value to search for
+		 * @returns Array of matched query record indexes
+		 */
+		def searchQuery(String column, String searchValue) {
+			def searchResult = []
+			def match = false
+			def more = true
+			String value = ""
 
-				arguments.qryProductTypes.first()
-				while (more) {
-					value = arguments.qryProductTypes.getString(column)
-					if (arguments.qryProductTypes.wasNull()) value = ""
-					if (value.toString() == searchValue.toString()) searchResult << arguments.qryProductTypes.getCurrentrow()
+			arguments.qryProductTypes.first()
+			while (more) {
+				value = arguments.qryProductTypes.getString(column)
+				if (arguments.qryProductTypes.wasNull()) value = ""
+				if (value.toString() == searchValue.toString()) searchResult << arguments.qryProductTypes.getCurrentrow()
 
-					more = arguments.qryProductTypes.next()
-				}
-
-				return searchResult;
+				more = arguments.qryProductTypes.next()
 			}
 
-			/**
-			 * Builds a tree-structure for the product types.
-			 *
-			 * @author Adam Presley
-			 * @param parentId Number of the parent ID to start with
-			 * @param key The structure key to start with
-			 */
-			def buildTree(int parentId, String key) {
-				def matches = searchQuery("PTYPE_IDPARENT", parentId.toString())
-				String currentKey = ""
+			return searchResult;
+		}
 
-				matches.each {
-					index ->
+		/**
+		 * Builds a tree-structure for the product types.
+		 *
+		 * @author Adam Presley
+		 * @param parentId Number of the parent ID to start with
+		 * @param key The structure key to start with
+		 */
+		def buildTree(int parentId, String key) {
+			def matches = searchQuery("PTYPE_IDPARENT", parentId.toString())
+			String currentKey = ""
 
-					match = [
-						PTYPE_ID: arguments.qryProductTypes.getAt("PTYPE_ID", index),
-						PTYPE_NAME: arguments.qryProductTypes.getAt("PTYPE_NAME", index),
-						CHILDCOUNT: arguments.qryProductTypes.getAt("CHILDCOUNT", index),
-						PTYPE_VIEWORDER: arguments.qryProductTypes.getAt("PTYPE_VIEWORDER", index),
-						PTYPE_DATECREATED: arguments.qryProductTypes.getAt("PTYPE_DATECREATED", index),
-						PTYPE_DATEMODIFIED: arguments.qryProductTypes.getAt("PTYPE_DATEMODIFIED", index)
-					]
+			matches.each {
+				index ->
 
-					if (key.length())
-						currentKey = key + "[\"" + match.get("PTYPE_ID") + "\"]"
-					else
-						currentKey = "[\"" + match.get("PTYPE_ID") + "\"]"
+				match = [
+					PTYPE_ID: arguments.qryProductTypes.getAt("PTYPE_ID", index),
+					PTYPE_NAME: arguments.qryProductTypes.getAt("PTYPE_NAME", index),
+					CHILDCOUNT: arguments.qryProductTypes.getAt("CHILDCOUNT", index),
+					PTYPE_VIEWORDER: arguments.qryProductTypes.getAt("PTYPE_VIEWORDER", index),
+					PTYPE_DATECREATED: arguments.qryProductTypes.getAt("PTYPE_DATECREATED", index),
+					PTYPE_DATEMODIFIED: arguments.qryProductTypes.getAt("PTYPE_DATEMODIFIED", index)
+				]
 
-					if (server.containsKey("railo"))
-						evaluate("arguments.result" + currentKey + " = (railo.runtime.type.StructImpl) match")
-					else
-						evaluate("arguments.result" + currentKey + " = (coldfusion.runtime.Struct) match")
+				if (key.length())
+					currentKey = key + "[\"" + match.get("PTYPE_ID") + "\"]"
+				else
+					currentKey = "[\"" + match.get("PTYPE_ID") + "\"]"
 
-					if ((int) match.get("CHILDCOUNT") > 0) {
-						buildTree((int) match.get("PTYPE_ID"), currentKey)
-					}
+				if (server.containsKey("railo"))
+					evaluate("arguments.result" + currentKey + " = (railo.runtime.type.StructImpl) match")
+				else
+					evaluate("arguments.result" + currentKey + " = (coldfusion.runtime.Struct) match")
+
+				if ((int) match.get("CHILDCOUNT") > 0) {
+					buildTree((int) match.get("PTYPE_ID"), currentKey)
 				}
 			}
+		}
 
-			buildTree(0, "")
+		buildTree(0, "")
 
-		</g:script>
-		</cfoutput>
+	</g:script>
+	</cfoutput>
 
-		<cfreturn arguments.result />
-	</cffunction>
+	<cfreturn arguments.result />
+</cffunction>
 
-	<cfset result = BuildProductTypeTree() />
+<cfset result = BuildProductTypeTree() />
+{% endhighlight %}

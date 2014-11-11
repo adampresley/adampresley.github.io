@@ -15,30 +15,31 @@ create a ColdFusion page which tries to communicate with our SMTP
 server, and spit out **200 OK** if it is available. So here's one
 approach.
 
-	:::coldfusion
-	<cfsetting showdebugoutput="false">
+{% highlight coldfusion %}
+<cfsetting showdebugoutput="false">
 
-	<cfscript>
+<cfscript>
+	success = 0;
+
+	try {
+		socket = createObject("java", "java.net.Socket").init(
+			javacast("string", "mailserver.address.com"),
+			25
+		);
+		socket.close();
+
+		success = 1;
+	} catch(Any ex) {
 		success = 0;
+	}
+</cfscript>
 
-		try {
-			socket = createObject("java", "java.net.Socket").init(
-				javacast("string", "mailserver.address.com"),
-				25
-			);
-			socket.close();
-
-			success = 1;
-		} catch(Any ex) {
-			success = 0;
-		}
-	</cfscript>
-
-	<cfif success>
-		<cfset getPageContext().getOut().clearBuffer() />200 OK<cfabort />
-	<cfelse>
-		<cfset getPageContext().getOut().clearBuffer() />404 Not Found<cfabort />
-	</cfif>
+<cfif success>
+	<cfset getPageContext().getOut().clearBuffer() />200 OK<cfabort />
+<cfelse>
+	<cfset getPageContext().getOut().clearBuffer() />404 Not Found<cfabort />
+</cfif>
+{% endhighlight %}
 
 This code simple attempts to establish a socket connection to the mail
 server on port 25, and if successful, spits out **200 OK**, otherwise it

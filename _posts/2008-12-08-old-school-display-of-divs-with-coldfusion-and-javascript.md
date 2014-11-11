@@ -42,77 +42,78 @@ the old-hacky way.
   
 And that's the gist. Here's the code.  
 
-    :::coldfusion
-    <cfquery name="qryElements" datasource="#application.dsn#">
-        SELECT elementId, elementName FROM elements
-    </cfquery>
+{% highlight coldfusion %}
+<cfquery name="qryElements" datasource="#application.dsn#">
+    SELECT elementId, elementName FROM elements
+</cfquery>
 
-    <cfquery name="qryMappedElements" datasource="#application.dsn#">
-        SELECT elementId FROM elements WHERE mappedId IS NOT NULL
-    </cfquery>
+<cfquery name="qryMappedElements" datasource="#application.dsn#">
+    SELECT elementId FROM elements WHERE mappedId IS NOT NULL
+</cfquery>
 
-    <html>
-    <head>
+<html>
+<head>
 
-    <script language="javascript">
-        var mappedElements = [
-            <cfoutput query="qryMappedElements">#qryMappedElements.elementId#<cfif qryMappedElements.currentRow LT qryMappedElements.recordCount>,</cfif></cfoutput>
-        ];
+<script language="javascript">
+    var mappedElements = [
+        <cfoutput query="qryMappedElements">#qryMappedElements.elementId#<cfif qryMappedElements.currentRow LT qryMappedElements.recordCount>,</cfif></cfoutput>
+    ];
 
-        // This prototype is provided by the Mozilla foundation and
-        // is distributed under the MIT license.
-        // http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
-        // This is to support IE
-        if (!Array.prototype.indexOf) {
-            Array.prototype.indexOf = function(elt /*, from*/) {
-                var len = this.length;
+    // This prototype is provided by the Mozilla foundation and
+    // is distributed under the MIT license.
+    // http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
+    // This is to support IE
+    if (!Array.prototype.indexOf) {
+        Array.prototype.indexOf = function(elt /*, from*/) {
+            var len = this.length;
 
-                var from = Number(arguments[1]) || 0;
-                from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-                if (from < 0) {
-                    from += len;
-                }
-
-                for (; from < len; from++) {
-                    if (from in this &amp;&amp; this[from] === elt) return from;
-                }
-
-                return -1;
-            };
-        }
-
-        function showHideMyDivy(obj) {
-            var selectedIndex = -1; var displayFlag = false;
-            var myDivyEl = document.getElementById('myDivy');
-            var index = 0;
-
-            for (index = 0; index < obj.options.length; index++) {
-                var option = obj.options[index];
-
-                selectedIndex = (option.selected &amp;&amp; mappedElements.indexOf(Number(option.value))) ? mappedElements.indexOf(Number(option.value)) : -1;
-                if (selectedIndex > -1) {
-                    displayFlag = true;
-                    break;
-                }
+            var from = Number(arguments[1]) || 0;
+            from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+            if (from < 0) {
+                from += len;
             }
 
-            myDivyEl.style.display = (displayFlag) ? 'block' : 'none';
+            for (; from < len; from++) {
+                if (from in this &amp;&amp; this[from] === elt) return from;
+            }
+
+            return -1;
+        };
+    }
+
+    function showHideMyDivy(obj) {
+        var selectedIndex = -1; var displayFlag = false;
+        var myDivyEl = document.getElementById('myDivy');
+        var index = 0;
+
+        for (index = 0; index < obj.options.length; index++) {
+            var option = obj.options[index];
+
+            selectedIndex = (option.selected &amp;&amp; mappedElements.indexOf(Number(option.value))) ? mappedElements.indexOf(Number(option.value)) : -1;
+            if (selectedIndex > -1) {
+                displayFlag = true;
+                break;
+            }
         }
 
-    </script>
-    </head>
+        myDivyEl.style.display = (displayFlag) ? 'block' : 'none';
+    }
 
-    <body>
-        <select name="selecty" id="selecty" onchange="showHideMyDivy(this);" multiple>
-            <cfoutput query="qryElements">
-                <option value="#qryElements.elementId#">#qryElements.elementName#</option>
-            </cfoutput>
-        </select>
+</script>
+</head>
 
-        <div id="myDivy" style="display: none;">A cool div</div>
+<body>
+    <select name="selecty" id="selecty" onchange="showHideMyDivy(this);" multiple>
+        <cfoutput query="qryElements">
+            <option value="#qryElements.elementId#">#qryElements.elementName#</option>
+        </cfoutput>
+    </select>
 
-    </body>
-    </html>
+    <div id="myDivy" style="display: none;">A cool div</div>
+
+</body>
+</html>
+{% endhighlight %}
 
 No, it's not super-sexy AJAX, but it does get the job done, and
 sometimes, when working with legacy applications, that's just the way it

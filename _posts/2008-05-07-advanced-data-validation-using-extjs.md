@@ -22,31 +22,32 @@ So here is an excerpt of the form definitions. I have the first password
 box, and a second for confirmation. Notice the "vtype" is set to
 "password". This is key.  
   
-	:::javascript
-	{
-		fieldLabel: 'Password',
-		id: 'password',
-		name: 'password',
-		allowBlank: false,
-		xtype: 'textfield',
-		inputType: 'password',
-		vtype: 'password',
-		width: 200,
-		maxLength: 64
-	},
-	{
-		fieldLabel: 'Confirm',
-		id: 'passwordConfirm',
-		name: 'passwordConfirm',
-		xtype: 'textfield',
-		inputType: 'password',
-		vtype: 'password',
-		allowBlank: false,
-		width: 200,
-		maxLength: 64,
-		initialPasswordField: 'password'
-	}
-  
+{% highlight javascript %}
+{
+	fieldLabel: 'Password',
+	id: 'password',
+	name: 'password',
+	allowBlank: false,
+	xtype: 'textfield',
+	inputType: 'password',
+	vtype: 'password',
+	width: 200,
+	maxLength: 64
+},
+{
+	fieldLabel: 'Confirm',
+	id: 'passwordConfirm',
+	name: 'passwordConfirm',
+	xtype: 'textfield',
+	inputType: 'password',
+	vtype: 'password',
+	allowBlank: false,
+	width: 200,
+	maxLength: 64,
+	initialPasswordField: 'password'
+}
+{% endhighlight %}
+
 Now, prior to this you need to define the behavior for the password
 validation. This is done by vtypes. In ExtJs a vtype is basically an
 object with custom data validation functions that return true or false
@@ -54,23 +55,24 @@ upon success of validation. They also include a message to display in a
 QuickTip when a data validation error occurs. Here is the code I used to
 validate the passwords according to the rules mentioned above.  
   
-	:::javascript
-	Ext.apply(Ext.form.VTypes, {
-		password: function(value, field) {
-			if (field.initialPasswordField) {
-				var pwd = Ext.getCmp(field.initialPasswordField);
-				this.passwordText = 'Confirmation does not match your intial password entry.';
-				return (value == pwd.getValue());
-			}
+{% highlight javascript %}
+Ext.apply(Ext.form.VTypes, {
+	password: function(value, field) {
+		if (field.initialPasswordField) {
+			var pwd = Ext.getCmp(field.initialPasswordField);
+			this.passwordText = 'Confirmation does not match your intial password entry.';
+			return (value == pwd.getValue());
+		}
 
-			this.passwordText = 'Passwords must be at least 5 characters, containing either a number, or a valid special character (!@#$%^&*()-_=+)';
-			var hasSpecial = value.match(/[0-9!@#\$%\^&\*\(\)\-_=\+]+/i);
-			var hasLength = (value.length >= 5);
-			return (hasSpecial && hasLength);
-		},
-		passwordText: 'Passwords must be at least 5 characters, containing either a number, or a valid special character (!@#$%^&*()-_=+)'
-	});
-  
+		this.passwordText = 'Passwords must be at least 5 characters, containing either a number, or a valid special character (!@#$%^&*()-_=+)';
+		var hasSpecial = value.match(/[0-9!@#\$%\^&\*\(\)\-_=\+]+/i);
+		var hasLength = (value.length >= 5);
+		return (hasSpecial && hasLength);
+	},
+	passwordText: 'Passwords must be at least 5 characters, containing either a number, or a valid special character (!@#$%^&*()-_=+)'
+});
+{% endhighlight %}
+
 If you aren't familiar with Ext.apply this is a function that takes two
 objects and combines them. And here is no exception. We are combining a
 new object with **OUR** definition of the password validation with the

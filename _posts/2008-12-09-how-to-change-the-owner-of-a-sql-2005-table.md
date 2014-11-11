@@ -14,14 +14,16 @@ happens sometimes, though I cannot always remember how, but changing the
 owner of a table is pretty easy. Just execute the following script,
 making sure you are logged in as "sa".  
 
-    :::sql
-    exec sp_changeObjectOwner 'originalObjectOwnerAndName', 'newOwner';
-  
+{% highlight sql %}
+exec sp_changeObjectOwner 'originalObjectOwnerAndName', 'newOwner';
+{% endhighlight %}
+
 For example, if the object name is "MyTable1", and is owned by
 "DOMAIN1\User1", and you wish it to simply be "dbo", then you would do
 the following:  
 
-    :::sql
-    exec sp_changeObjectOwner 'DOMAIN1\User1.MyTable1', 'dbo';
-  
+{% highlight sql %} 
+exec sp_changeObjectOwner 'DOMAIN1\User1.MyTable1', 'dbo';
+{% endhighlight %}
+
 Pretty simple.

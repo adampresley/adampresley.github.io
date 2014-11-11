@@ -18,25 +18,26 @@ list, insert them in random order, and you will see the output result
 comes out in alphabetical (natural) order. The order is maintained based
 on the KEY, by the way. So, without further ado, here is an example.
 
-	:::coldfusion
-	<cfscript>
-		treeMap = createObject("java", "java.util.TreeMap").init();
+{% highlight coldfusion %}
+<cfscript>
+	treeMap = createObject("java", "java.util.TreeMap").init();
 
-		writeOutput("Inserting the following employees in this order: Donny, Adam, Kujo, Johnny.");
+	writeOutput("Inserting the following employees in this order: Donny, Adam, Kujo, Johnny.");
 
-		treeMap.put("Donny", "President");
-		treeMap.put("Adam", "Engineer");
-		treeMap.put("Kujo", "Director");
-		treeMap.put("Johnny", "Support");
+	treeMap.put("Donny", "President");
+	treeMap.put("Adam", "Engineer");
+	treeMap.put("Kujo", "Director");
+	treeMap.put("Johnny", "Support");
 
-		writeOutput("Now show the contents of this tree in key order.");
+	writeOutput("Now show the contents of this tree in key order.");
 
-		iter = treeMap.keySet().iterator();
-		while (iter.hasNext()) {
-			key = iter.next();
-			writeOutput("Key: #key# Value: #treeMap.get(key)#");
-		}
-	</cfscript>
+	iter = treeMap.keySet().iterator();
+	while (iter.hasNext()) {
+		key = iter.next();
+		writeOutput("Key: #key# Value: #treeMap.get(key)#");
+	}
+</cfscript>
+{% endhighlight %}
 
 In this example we instantiate the TreeMap class first. We then insert
 the employees Donny, Adam, Kujo, and Johnny, making the value of these

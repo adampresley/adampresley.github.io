@@ -25,46 +25,47 @@ to use the *add_filter* function to register my function to handle the
 filter hook "*the_title*". This hook alters the title of posts and
 pages before they go out to the browser. Now, here's the code.
 
-    :::php
-    <?php
+{% highlight php %}
+<?php
 
-    /*
-       Plugin Name: Hide "Private" In Title
-       Plugin URI: http://blog.adampresley.com/?page_id=124
-       Description: Removes the word "private:" from the beginning of blog entry and page titles.
-       Version: 1.0
-       Author: Adam Presley
-       Author URI: http://www.adampresley.com
+/*
+   Plugin Name: Hide "Private" In Title
+   Plugin URI: http://blog.adampresley.com/?page_id=124
+   Description: Removes the word "private:" from the beginning of blog entry and page titles.
+   Version: 1.0
+   Author: Adam Presley
+   Author URI: http://www.adampresley.com
 
-       Copyright 2007  Adam Presley  (email : psykoprogrammer@yahoo.com)
+   Copyright 2007  Adam Presley  (email : psykoprogrammer@yahoo.com)
 
-       This program is free software; you can redistribute it and/or modify
-       it under the terms of the GNU General Public License as published by
-       the Free Software Foundation; either version 2 of the License, or
-       (at your option) any later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-       This program is distributed in the hope that it will be useful,
-       but WITHOUT ANY WARRANTY; without even the implied warranty of
-       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-       GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-       You should have received a copy of the GNU General Public License
-       along with this program; if not, write to the Free Software
-       Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-    */
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-    //--------------------------------------------------------------------------
-    // Name: filter_hidePrivateInTitle
-    // Auth: Adam Presley
-    // Desc: Removes the word "private:" from blog and page titles.
-    //--------------------------------------------------------------------------
-    function filter_hidePrivateInTitle($content) {
-       return preg_replace('/^(private:\s*)/i', "", $content);
-    }
+//--------------------------------------------------------------------------
+// Name: filter_hidePrivateInTitle
+// Auth: Adam Presley
+// Desc: Removes the word "private:" from blog and page titles.
+//--------------------------------------------------------------------------
+function filter_hidePrivateInTitle($content) {
+   return preg_replace('/^(private:\s*)/i', "", $content);
+}
 
-    //---------------------------
-    // Add the hook to WordPress.
-    //---------------------------
-    add_filter('the_title', 'filter_hidePrivateInTitle');
+//---------------------------
+// Add the hook to WordPress.
+//---------------------------
+add_filter('the_title', 'filter_hidePrivateInTitle');
 
-    ?>
+?>
+{% endhighlight %}

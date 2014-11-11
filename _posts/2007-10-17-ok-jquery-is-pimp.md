@@ -15,9 +15,10 @@ us say that I have a form with a bunch of text boxes that I want to
 clear. Let's say that the id of the form is *frmSearch*. Here's how that
 could be done in jQuery.  
   
-    :::javascript
-    $("#frmSearch :text").val("");
-  
+{% highlight javascript %}
+$("#frmSearch :text").val("");
+{% endhighlight %}
+
 How cool is that? Yes, one line. Here's what that does. The dollar sign
 (*$*) is the shortcut for the jQuery class. Inside the parenthesis we
 say to match an element who's ID is *frmSearch*. Then the *:text* tells
