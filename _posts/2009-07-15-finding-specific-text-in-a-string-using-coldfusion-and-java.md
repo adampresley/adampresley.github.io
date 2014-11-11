@@ -33,7 +33,7 @@ and if you do, tell it to find the next match. If it finds a new match
 you can retrieve information about what the start and end positions of
 the match are, and more. So let's see that in action.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfset haystack = "Hello. My name is Adam. It is nice to meet you. How are you? This is an example of a regex "&
 "that finds something specific as a string to start, then followed by 100 or so characters. How many "&
 "will we have? I am a giant noob who is writing lengthy text to try and see if we've hit our "&

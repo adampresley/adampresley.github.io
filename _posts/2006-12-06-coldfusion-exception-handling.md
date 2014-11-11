@@ -14,7 +14,7 @@ greatly intrigued by the fact that you could throw exceptions based off
 Java classes derived from the *RuntimeException*class. That would look
 something like this.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfset illegalArgument = CreateObject("java", "java.lang.IllegalArgumentException").init("Bad argument dude!")>
 
 <cftry>
@@ -52,7 +52,7 @@ public class myPhoneNumberFormatException extends RuntimeException {
 
 To use it...  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfset phoneNumberFormatException = CreateObject("java", "myPhoneNumberFormatException").init("Invalid phone number format!")>
 
 <cftry>

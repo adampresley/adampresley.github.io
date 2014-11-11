@@ -14,7 +14,7 @@ custom tag which handles the hard part of running embedded Groovy
 scripts in ColdFusion. For those that haven't seen it, here is a small 
 taste of what a groovy script could look like in a ColdFusion function.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfcomponent>
 
 	<cffunction name="Transform" returntype="any" access="public" output="false">
@@ -64,7 +64,7 @@ bind to it. So, in the code below, which is Barney's code with my
 additions, see lines 9, 44-46, and line 94. The changes are there and
 you will see them if you compare your original script.cfm to this one.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfsilent>
 <cffunction name="bootstrapGroovyFromJavaLoader" access="private" output="false" returntype="any">
 	<cfset var cp = listToArray(getDirectoryFromPath(getCurrentTemplatePath()) & "groovy-all-1.6.0.jar") />

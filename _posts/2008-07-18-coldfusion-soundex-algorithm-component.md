@@ -21,7 +21,7 @@ matches. Without going into detail about the component implementation, here's an
 example of how it is used. Let's say that you take an input, and want to
 show words that may be like what was entered.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <!---
 	Instantiate the soundex component, and a structure for
 	storage.

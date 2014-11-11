@@ -37,7 +37,7 @@ group the structures together accordingly. We will also declare a
 structure in the arguments scope to place our resulting structure into,
 and call it *result*.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfquery name="arguments.qryProductTypes" datasource="masterconfig">
 	SELECT
 		  pt.ptype_id
@@ -66,7 +66,7 @@ and return an array of record indexes that match a criteria. The next
 function will is actually responsible for building the tree structure.
 Here is that code.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfoutput>
 <g:script args="#arguments#">
 
@@ -185,7 +185,7 @@ And that's about it! Happy coding you groovy peeps!
   
 (Full code here)  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cffunction name="BuildProductTypeTree" returntype="any" access="public" output="true">
 	<cfimport prefix="g" taglib="../../groovyEngine" />
 

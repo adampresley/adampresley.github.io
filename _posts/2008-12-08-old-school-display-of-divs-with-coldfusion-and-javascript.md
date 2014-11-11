@@ -42,7 +42,7 @@ the old-hacky way.
   
 And that's the gist. Here's the code.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfquery name="qryElements" datasource="#application.dsn#">
     SELECT elementId, elementName FROM elements
 </cfquery>

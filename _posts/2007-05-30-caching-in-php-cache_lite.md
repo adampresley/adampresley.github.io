@@ -35,7 +35,7 @@ and then go to the customer table for each cluster to find the
 information you want. Well, perhaps there is a better way. In this
 example I am using an imaginary XML file which would look like this:  
   
-{% hightlight xml %}
+{% highlight xml %}
 <customer>
    <customername>customerA</customerName>
    <server>DB100</server>

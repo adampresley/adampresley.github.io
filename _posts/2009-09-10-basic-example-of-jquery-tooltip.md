@@ -103,7 +103,7 @@ Cool. Let's take a look at some HTML and CF that will use this query to
 display the promotion, and craft a string that tells us what items this
 promotion applies to.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfquery name="qryPromo" datasource="coldfusion">
 	SELECT
 		p.promoId   
@@ -186,7 +186,7 @@ with a title attribute. Man I love me some jQuery!
   
 Here is the code sample as a whole. Enjoy, and happy coding!  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfquery name="qryPromo" datasource="coldfusion">
 	SELECT
 		p.promoId   

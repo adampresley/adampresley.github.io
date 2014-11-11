@@ -14,7 +14,7 @@ applications even easier. There are a couple of annoyances, however,
 that still persist, and simply drive me nuts. Take the following query
 as an example.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 SELECTs.state_id, s.stateName, s.stateAbbrevFROM states AS sORDER BY s.state
 {% endhighlight %}
 
@@ -46,7 +46,7 @@ arguments collection](|filename|/cfgroovy2-and-arguments-scope-in-functions) we 
 underlying [ResultSet](http://java.sun.com/j2se/1.5.0/docs/api/java/sql/ResultSet.html) Java object to get the column names as they
 were sent to the SQL server, preserving case. Check it out.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 def result = []
 def metadata = arguments.query.getMetaData()
 def numCols = metadata.getColumnCount()

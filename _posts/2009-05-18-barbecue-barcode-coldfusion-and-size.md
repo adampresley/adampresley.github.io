@@ -44,7 +44,7 @@ So here is an updated component that allows you to specify the bar
 width, height, barcode resolution (for non-screen output, such as a
 printer), and output format (gif, png, jpeg).
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfcomponent name="Barcode" displayname="BBQ Barcode" output="false">
 
 	<cffunction name="getBarcode" returntype="any" access="remote" output="true">
@@ -125,7 +125,7 @@ printer), and output format (gif, png, jpeg).
 
 And usage similar to before:
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfoutput>
 
 <p>

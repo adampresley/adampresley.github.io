@@ -16,7 +16,7 @@ At first I started with a UUID using the following code, but it occured
 to me that for my audience that string was a bit long, so I wanted
 something a little smaller.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfset key = createObject("java", "java.util.UUID").randomUUID().toString() />
 {% endhighlight %}
 
@@ -28,7 +28,7 @@ The first order of business is to define what characters will make up
 our random key. For this function we are creating we will use the
 alphabet and numbers.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfset var chars = "abcdefghijklmnopqrstuvwxyz1234567890" />
 {% endhighlight %}
 
@@ -39,7 +39,7 @@ initialize a StringBuffer for faster string creation. Once we have what
 we need, we will loop and append a series of random digits until we have
 reached the specified length. Let's take a look.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfcomponent name="RandomId">
 
 	<cffunction name="generate" returntype="string" access="public" output="false">
@@ -62,7 +62,7 @@ reached the specified length. Let's take a look.
 
 The usage of this component is similar to the method above:  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfset key = createObject("component", "RandomId").generate() />
 {% endhighlight %}
 

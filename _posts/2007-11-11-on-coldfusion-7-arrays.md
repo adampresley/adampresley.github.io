@@ -22,7 +22,7 @@ much different than Mr. Nadel's code, but a few lines shorter and if I
 had to guess, the Java method to copy the data to the new array is
 likely more efficient than a manual copy.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <!-------------------------------------------------
     ColdFusion array, which is actually a Vector.
 -------------------------------------------------->

@@ -15,7 +15,7 @@ create a ColdFusion page which tries to communicate with our SMTP
 server, and spit out **200 OK** if it is available. So here's one
 approach.
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfsetting showdebugoutput="false">
 
 <cfscript>

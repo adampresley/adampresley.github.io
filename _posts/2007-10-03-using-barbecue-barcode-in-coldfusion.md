@@ -26,7 +26,7 @@ Now lets do some code. First lets create a component called
 switches between character sets to give the smallest possible encoding.
 It will look like so.
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfcomponent>
 	<cffunction name="getCode128" returntype="any" access="public" output="true">
 		<cfargument name="data" type="string" required="true" />
@@ -54,7 +54,7 @@ are doing here. Now, to use it we will simply create an instance of our
 new component, and call the **getCode128()** function as the source to an
 image tag in HTML. Like so.
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfoutput>
 
 <cfset o = createObject("component", "barcode")>

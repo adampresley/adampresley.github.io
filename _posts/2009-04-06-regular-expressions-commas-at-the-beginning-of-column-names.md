@@ -25,7 +25,7 @@ FROM table1
 Now if I am asked to add a column based on some condition it could look
 like this.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 SELECT
     column1,
     column2,
@@ -46,7 +46,7 @@ powerful regex editors (Boxer, for example). It doesn't catch the last
 column, and will double up on commas that already at the beginning of
 the column. Like I said, not perfect, but helpful nonetheless.  
   
-{% highlight regex %}
+{% highlight text %}
 (\s*)([a-z0-9\._\(\)\s',]+)(?=,),
 {% endhighlight %}
 

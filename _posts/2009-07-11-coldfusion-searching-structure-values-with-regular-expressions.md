@@ -234,7 +234,7 @@ For a test case I put together code that creates a structure exactly
 like Mr. Nadel's, and executes the Java based search method, and his CF
 based search method, timing each one. Below you will find the code for this test.  
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfsetting requesttimeout="300">
 
 <!---

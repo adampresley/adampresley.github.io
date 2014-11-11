@@ -18,7 +18,7 @@ list, insert them in random order, and you will see the output result
 comes out in alphabetical (natural) order. The order is maintained based
 on the KEY, by the way. So, without further ado, here is an example.
 
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfscript>
 	treeMap = createObject("java", "java.util.TreeMap").init();
 

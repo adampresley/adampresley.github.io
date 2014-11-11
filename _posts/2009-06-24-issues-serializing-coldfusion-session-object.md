@@ -49,7 +49,7 @@ can dump it to a page and see what it looks like. From there I wanted to
 deserialize it BACK to the SESSION scope. Let's take a look at this code
 and the resulting page.  
   
-{% highlight coldfusion %}
+{% highlight cfm %}
 <cfset session.key1="value1">
 <cfset session.key2="value2">
 <cfset session.key3="value3">
