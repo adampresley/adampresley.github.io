@@ -18,7 +18,7 @@ When I click on the button in the above screenshot all my blog entries are saved
 
 The code to do this is pretty simple. First I have a function that constructs the Markdown given a post dictionary.
 
-```python
+{% highlight python %}
 def generateMarkdownFile(post):
    result = """Title: %s
 Date: %s
@@ -43,11 +43,11 @@ Slug: %s
       blogFile.write(result)
 
    return filename
-```
+{% endhighlight %}
 
 This function writes out a file to my temporary upload path with the post data converted to a format that Texo actually knows how to import. It is simple and human readable. The next part was to write a controller action to get my posts, write Markdown files, then zip them up and serve. This method is a bit big and needs a bit of refactoring, but it does the job for now.
 
-```python
+{% highlight python %}
 @route("/admin/utilities/exportmarkdownfiles", method="GET")
 @route("/admin/utilities/exportmarkdownfiles", method="POST")
 @view("admin-export-markdown-files.html")
@@ -96,7 +96,7 @@ def adminExportMarkdownFiles():
    return {
       "title": "Export Markdown Files"
    }
-```
+{% endhighlight %}
 
 Basically this method starts up a zipfile output, gets all posts, and creates Markdown files for each post, adding to the zip file after each Markdown file is created. At the end I clean out all the generated Markdown files and serve the ZIP file back as a static download.
 
