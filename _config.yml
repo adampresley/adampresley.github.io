@@ -8,6 +8,8 @@ excerpt_separator: ""
 markdown: kramdown
 highlighter: pygments
 
+title: Adam.Blog()
+
 defaults:
   -
     scope:
@@ -25,6 +27,7 @@ author:
   linkedin: adampresley
   bio: I'm bringin' nerdy back.
   email_md5: 7e126aff2b58607e09a1c0d363a8d7da
+  bio: Father, software engineer, programming nerd. (Opinions expressed are mine, not my employer&apos;s)
 
 rss_path: feed.xml
 categories_path:
