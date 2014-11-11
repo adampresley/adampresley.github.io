@@ -12,27 +12,28 @@ Continuing the series of enhancing Groovy's core language classes, here
 is a snippet that allows a **String** to be hashed using the SHA1
 algorithm. Let's look at the code first.  
 
-	:::groovy
-	import java.security.*
+{% highlight groovy %}
+import java.security.*
 
-	def source = "Hello. This is my secret message. That should be hashed."
+def source = "Hello. This is my secret message. That should be hashed."
 
-	String.metaClass.toSHA1 = { salt = "" ->
-	   def messageDigest = MessageDigest.getInstance("SHA1")
+String.metaClass.toSHA1 = { salt = "" ->
+   def messageDigest = MessageDigest.getInstance("SHA1")
 
-	   messageDigest.update(salt.getBytes())
-	   messageDigest.update(delegate.getBytes())
+   messageDigest.update(salt.getBytes())
+   messageDigest.update(delegate.getBytes())
 
-	   /*
-	    * Why pad up to 40 characters? Because SHA-1 has an output
-	    * size of 160 bits. Each hexadecimal character is 4-bits.
-	    * 160 / 4 = 40
-	    */
-	   new BigInteger(1, messageDigest.digest()).toString(16).padLeft(40, '0')
-	}
+   /*
+    * Why pad up to 40 characters? Because SHA-1 has an output
+    * size of 160 bits. Each hexadecimal character is 4-bits.
+    * 160 / 4 = 40
+    */
+   new BigInteger(1, messageDigest.digest()).toString(16).padLeft(40, '0')
+}
 
-	println "Source = ${source}"
-	println "SHA1 = ${source.toSHA1('salty')}"
+println "Source = ${source}"
+println "SHA1 = ${source.toSHA1('salty')}"
+{% endhighlight %}
 
 This script starts innocently enough with a source string that contains
 a message to be hashed. We then extend the **String** class with a new

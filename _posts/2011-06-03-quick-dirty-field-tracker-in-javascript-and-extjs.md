@@ -17,25 +17,26 @@ change.
 So I cooked up this quick snippet to track those changes using
 ExtJS/Sencha and JavaScript.  
   
-    :::javascript
-    window.dirty = {
-        items: [],
-        add: function(itemToCheck) {
-            var found = false;
+{% highlight javascript %}
+window.dirty = {
+    items: [],
+    add: function(itemToCheck) {
+        var found = false;
 
-            Ext.each(this.items, function(item, index) {
-                if (item.id === itemToCheck.id) found = true;
-            });
-
-            if (!found) this.items.push(itemToCheck);
-        }
-    };
-
-    Ext.each(Ext.query("input, select, textarea"), function(item, index) { 
-        Ext.get(this).on("change", function() { 
-            window.dirty.add(this);
+        Ext.each(this.items, function(item, index) {
+            if (item.id === itemToCheck.id) found = true;
         });
+
+        if (!found) this.items.push(itemToCheck);
+    }
+};
+
+Ext.each(Ext.query("input, select, textarea"), function(item, index) { 
+    Ext.get(this).on("change", function() { 
+        window.dirty.add(this);
     });
+});
+{% endhighlight %}
   
 This bit of code will add hooks for an onChange event for all select,
 input and textarea boxes on a page and track if they get changed from

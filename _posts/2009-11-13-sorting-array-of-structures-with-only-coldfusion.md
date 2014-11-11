@@ -40,30 +40,32 @@ holding structure for copying items when they need swapping. Since we
 are comparing product IDs and prices, we'll need variables for these as
 well.
 
-	:::coldfusion
-	var result = duplicate(arguments.ary);
-	var size = arrayLen(result);
-	var pass = 0; var i = 0;
-	var temp = {};
+{% highlight cfm %}
+var result = duplicate(arguments.ary);
+var size = arrayLen(result);
+var pass = 0; var i = 0;
+var temp = {};
 
-	var price1 = 0.00; var price2 = 0.00;
-	var productId1 = 0; var productId2 = 0;
+var price1 = 0.00; var price2 = 0.00;
+var productId1 = 0; var productId2 = 0;
+{% endhighlight %}
 
 To start we'll need two loops. The first is the outer pass which will
 iterate over all items in the array. The inner loop will go over each
 one, comparing adjacent items. Then we'll get the product IDs and
 prices.
 
-	:::coldfusion
-	for (pass = 1; pass <= size; pass++) {
-		for (i = 1; i <= size - pass; i++) {
-			productId1 = result[i].productId;
-			productId2 = result[i + 1].productId;
+{% highlight cfm %}
+for (pass = 1; pass <= size; pass++) {
+	for (i = 1; i <= size - pass; i++) {
+		productId1 = result[i].productId;
+		productId2 = result[i + 1].productId;
 
-			price1 = result[i].price;
-			price2 = result[i + 1].price;
-		}
+		price1 = result[i].price;
+		price2 = result[i + 1].price;
 	}
+}
+{% endhighlight %}
 
 As you can see we are getting product IDs for the current index, as well
 as the next. We do the same for prices too. We will now compare the
@@ -72,35 +74,100 @@ swap. If they are the same, we want to compare prices. If the first
 price is greater than the second, we need to swap. Otherwise we just
 leave the items where they are at.
 
-	:::coldfusion
-	if (productId1 > productId2) {
+{% highlight cfm %}
+if (productId1 > productId2) {
+	temp = duplicate(result[i]);
+	result[i] = duplicate(result[i + 1]);
+	result[i + 1] = temp;
+} else if (productId1 == productId2) {
+	if (price1 > price2) {
 		temp = duplicate(result[i]);
 		result[i] = duplicate(result[i + 1]);
 		result[i + 1] = temp;
-	} else if (productId1 == productId2) {
-		if (price1 > price2) {
-			temp = duplicate(result[i]);
-			result[i] = duplicate(result[i + 1]);
-			result[i + 1] = temp;
-		}
 	}
+}
+{% endhighlight %}
 
 Once all is done, return the result. Below is the component in full (in
 both CF9 and CF8), as well as a test page. Happy coding!!
 
 **productSorter_cf9.cfc (ColdFusion 9):**
 
-	:::coldfusion
-	component output="false" {
-		public productSorter_cf9 function init() output="false" {
-			return this;
+{% highlight cfm %}
+component output="false" {
+	public productSorter_cf9 function init() output="false" {
+		return this;
+	}
+
+	public array function Sort(required array productArray) output="false" {
+		return __sort(arguments.productArray);
+	}
+
+	private array function __sort(required array ary) output="false" {
+		var result = duplicate(arguments.ary);
+		var size = arrayLen(result);
+		var pass = 0; var i = 0;
+		var temp = {};
+
+		var price1 = 0.00; var price2 = 0.00;
+		var productId1 = 0; var productId2 = 0;
+
+		/*
+		 * Iterate over the entire array. This equates to how many
+		 * comparisons we must make.
+		 */
+		for (pass = 1; pass <= size; pass++)  {
+			/*
+			 * Inner loop checks product at i against i + 1.
+			 * If the product ID is higher, swap the items.
+			 * If they are the same, check the price. Swap if higher.
+			 */
+			for (i = 1; i <= size - pass; i++) {
+				productId1 = result[i].productId;
+				productId2 = result[i + 1].productId;
+
+				price1 = result[i].price;
+				price2 = result[i + 1].price;
+
+				if (productId1 > productId2) {
+					temp = duplicate(result[i]);
+					result[i] = duplicate(result[i + 1]);
+					result[i + 1] = temp;
+				} else if (productId1 == productId2) {
+					if (price1 > price2) {
+						temp = duplicate(result[i]);
+						result[i] = duplicate(result[i + 1]);
+						result[i + 1] = temp;
+					}
+				}
+			}
 		}
 
-		public array function Sort(required array productArray) output="false" {
-			return __sort(arguments.productArray);
-		}
+		return result;
+	}
+}
+{% endhighlight %}
 
-		private array function __sort(required array ary) output="false" {
+**productSorter.cfc (ColdFusion 8):**
+
+{% highlight cfm %}
+<cfcomponent output="false">
+
+	<cffunction access="public" name="init" output="false" returntype="productSorter">
+		<cfreturn this />
+	</cffunction>
+
+	<cffunction access="public" name="Sort" output="false" returntype="array">
+		<cfargument name="productArray" required="true" type="array" />
+
+		<cfreturn __sort(arguments.productarray) />
+	</cffunction>
+
+	<cffunction access="private" name="__sort" output="false" returntype="array">
+		<cfargument name="ary" required="true" type="array" />
+
+		<cfscript>
+
 			var result = duplicate(arguments.ary);
 			var size = arrayLen(result);
 			var pass = 0; var i = 0;
@@ -113,7 +180,7 @@ both CF9 and CF8), as well as a test page. Happy coding!!
 			 * Iterate over the entire array. This equates to how many
 			 * comparisons we must make.
 			 */
-			for (pass = 1; pass <= size; pass++)  {
+			for (pass = 1; pass <= size; pass++) {
 				/*
 				 * Inner loop checks product at i against i + 1.
 				 * If the product ID is higher, swap the items.
@@ -130,7 +197,8 @@ both CF9 and CF8), as well as a test page. Happy coding!!
 						temp = duplicate(result[i]);
 						result[i] = duplicate(result[i + 1]);
 						result[i + 1] = temp;
-					} else if (productId1 == productId2) {
+					}
+					else if (productId1 == productId2) {
 						if (price1 > price2) {
 							temp = duplicate(result[i]);
 							result[i] = duplicate(result[i + 1]);
@@ -141,119 +209,57 @@ both CF9 and CF8), as well as a test page. Happy coding!!
 			}
 
 			return result;
-		}
-	}
-
-**productSorter.cfc (ColdFusion 8):**
-
-	:::coldfusion
-	<cfcomponent output="false">
-
-		<cffunction access="public" name="init" output="false" returntype="productSorter">
-			<cfreturn this />
-		</cffunction>
-
-		<cffunction access="public" name="Sort" output="false" returntype="array">
-			<cfargument name="productArray" required="true" type="array" />
-
-			<cfreturn __sort(arguments.productarray) />
-		</cffunction>
-
-		<cffunction access="private" name="__sort" output="false" returntype="array">
-			<cfargument name="ary" required="true" type="array" />
-
-			<cfscript>
-
-				var result = duplicate(arguments.ary);
-				var size = arrayLen(result);
-				var pass = 0; var i = 0;
-				var temp = {};
-
-				var price1 = 0.00; var price2 = 0.00;
-				var productId1 = 0; var productId2 = 0;
-
-				/*
-				 * Iterate over the entire array. This equates to how many
-				 * comparisons we must make.
-				 */
-				for (pass = 1; pass <= size; pass++) {
-					/*
-					 * Inner loop checks product at i against i + 1.
-					 * If the product ID is higher, swap the items.
-					 * If they are the same, check the price. Swap if higher.
-					 */
-					for (i = 1; i <= size - pass; i++) {
-						productId1 = result[i].productId;
-						productId2 = result[i + 1].productId;
-
-						price1 = result[i].price;
-						price2 = result[i + 1].price;
-
-						if (productId1 > productId2) {
-							temp = duplicate(result[i]);
-							result[i] = duplicate(result[i + 1]);
-							result[i + 1] = temp;
-						}
-						else if (productId1 == productId2) {
-							if (price1 > price2) {
-								temp = duplicate(result[i]);
-								result[i] = duplicate(result[i + 1]);
-								result[i + 1] = temp;
-							}
-						}
-					}
-				}
-
-				return result;
-			</cfscript>
-		</cffunction>
-	</cfcomponent>
+		</cfscript>
+	</cffunction>
+</cfcomponent>
+{% endhighlight %}
 
 **Test Page:**
 
-	:::coldfusion
-	<cfscript>
+{% highlight cfm %}
+<cfscript>
 
-	/*
-	 * Uncomment the next line for CF8, and comment out the line
-	 * following that.
-	 *
-	 * productSorter = createObject("component", "productSorter").init();
-	 */
-	productSorter = new productSorter_cf9();
+/*
+ * Uncomment the next line for CF8, and comment out the line
+ * following that.
+ *
+ * productSorter = createObject("component", "productSorter").init();
+ */
+productSorter = new productSorter_cf9();
 
-	unsorted = [
-		{
-			productId = 3,
-			title = "Widget ##3",
-			price = 6.95,
-			discounted = true
-		},
-		{
-			productId = 4,
-			title = "Widget ##4",
-			price = 6.75,
-			discounted = false
-		},
-		{
-			productId = 1,
-			title = "Widget ##1",
-			price = 10.95,
-			discounted = false
-		},
-		{
-			productId = 2,
-			title = "Widget ##2",
-			price = 11.95
-		},
-		{
-			productId = 3,
-			title = "Widget ##3",
-			price = 5.95,
-			discounted = false
-		}
-	];
+unsorted = [
+	{
+		productId = 3,
+		title = "Widget ##3",
+		price = 6.95,
+		discounted = true
+	},
+	{
+		productId = 4,
+		title = "Widget ##4",
+		price = 6.75,
+		discounted = false
+	},
+	{
+		productId = 1,
+		title = "Widget ##1",
+		price = 10.95,
+		discounted = false
+	},
+	{
+		productId = 2,
+		title = "Widget ##2",
+		price = 11.95
+	},
+	{
+		productId = 3,
+		title = "Widget ##3",
+		price = 5.95,
+		discounted = false
+	}
+];
 
-	sorted = productSorter.Sort(unsorted);
+sorted = productSorter.Sort(unsorted);
 
-	</cfscript>
+</cfscript>
+{% endhighlight %}

@@ -16,27 +16,31 @@ like how jQuery has the **$.extend()** method. Well there
 Let's say you have structure one that has two keys, *firstName* and
 *lastName*. 
   
-    :::coldfusion
-    <cfset struct1 = { firstName = "Adam", lastName = "Presley" } />
-  
+{% highlight cfm %}
+<cfset struct1 = { firstName = "Adam", lastName = "Presley" } />
+{% endhighlight %}
+
 And now we have structure two that has two keys, *firstName* and
 *age*.  
 
-    :::coldfusion
-    <cfset struct2 = { firstName = "Michael", age = 33 } />
+{% highlight cfm %}
+<cfset struct2 = { firstName = "Michael", age = 33 } />
+{% endhighlight %}
 
 Using a nifty ColdFusion method we can mash the two together in a single
 line of code.  
 
-    :::coldfusion
-    <cfset structAppend(struct1, struct2) /> 
-    <!--- <cfset struct1.putAll(struct2) /> ---> 
-  
+{% highlight cfm %}
+<cfset structAppend(struct1, struct2) /> 
+<!--- <cfset struct1.putAll(struct2) /> ---> 
+{% endhighlight %}
+
 Woah, that was easy! The end result will be a structure that would look
 like this.  
 
-    :::coldfusion
-    <cfset struct1 = { firstName = "Michael", lastName = "Presley", age = 33 } />
+{% highlight cfm %}
+<cfset struct1 = { firstName = "Michael", lastName = "Presley", age = 33 } />
+{% endhighlight %}
   
 Notice the commented out version. That is the underlying method to do
 the same thing as StructAppend. The benefit? Nothing I can think of. :)  

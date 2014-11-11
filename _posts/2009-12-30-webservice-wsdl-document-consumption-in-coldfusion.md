@@ -74,14 +74,15 @@ Great, so that's a lot of work. Welcome to the world of Web Services!
 Now let's look at a small snippet of ColdFusion code that actually uses
 this service!
 
-	:::coldfusion
-	<cfset service = createObject("webservice", "http://www.webservicex.net/CurrencyConvertor.asmx?WSDL") />
+{% highlight cfm %}
+<cfset service = createObject("webservice", "http://www.webservicex.net/CurrencyConvertor.asmx?WSDL") />
 
-	<cfset fromCurrency = "AUD" />
-	<cfset toCurrency = "USD" />
+<cfset fromCurrency = "AUD" />
+<cfset toCurrency = "USD" />
 
-	<cfset result = service.ConversionRate(fromCurrency, toCurrency) />
-	<cfdump var="#result#" />
+<cfset result = service.ConversionRate(fromCurrency, toCurrency) />
+<cfdump var="#result#" />
+{% endhighlight %}
 
 Woah, that was easy! Just create the object as a type of "webservice",
 give it the URL to the WSDL, and call the method "ConversionRate" and

@@ -28,41 +28,43 @@ recipe card, or even convert the recipe to XML. Here is what the
 language will look like, as well as the rendered XML output.
 
 ## Example
-    :::groovy
-    Recipe.create "Creamy Mac n' Cheese", { 
-       addIngredient 1.box, "Mac n' Cheese"
-       addIngredient 1.pound, "Hamburger meat"
-       addIngredient 1.can, "Cream of Mushroom"
+{% highlight groovy %}
+Recipe.create "Creamy Mac n' Cheese", { 
+   addIngredient 1.box, "Mac n' Cheese"
+   addIngredient 1.pound, "Hamburger meat"
+   addIngredient 1.can, "Cream of Mushroom"
 
-       addInstructions "Brown hamburger meat",
-          "Bring mac n' cheese to a boil",
-          "Drain water from noodles",
-          "Stir in cheese mixture",
-          "Add cream of mushroom and meat",
-          "Stir",
-          "Eat"
+   addInstructions "Brown hamburger meat",
+      "Bring mac n' cheese to a boil",
+      "Drain water from noodles",
+      "Stir in cheese mixture",
+      "Add cream of mushroom and meat",
+      "Stir",
+      "Eat"
 
-       show RecipeXml
-    }
+   show RecipeXml
+}
+{% endhighlight %}
 
 ## XML Output
-    :::xml
-    <recipe name='Creamy Mac n&apos; Cheese'>
-       <ingredients>
-          <ingredient>&lt;![CDATA[1 box of Mac n' Cheese]]&gt;</ingredient>
-          <ingredient>&lt;![CDATA[1 pound of Hamburger meat]]&gt;</ingredient>
-          <ingredient>&lt;![CDATA[1 can of Cream of Mushroom]]&gt;</ingredient>
-       </ingredients>
-       <instructions>
-          <instruction>&lt;![CDATA[Brown hamburger meat]]&gt;</instruction>
-          <instruction>&lt;![CDATA[Bring mac n' cheese to a boil]]&gt;</instruction>
-          <instruction>&lt;![CDATA[Drain water from noodles]]&gt;</instruction>
-          <instruction>&lt;![CDATA[Stir in cheese mixture]]&gt;</instruction>
-          <instruction>&lt;![CDATA[Add cream of mushroom and meat]]&gt;</instruction>
-          <instruction>&lt;![CDATA[Stir]]&gt;</instruction>
-          <instruction>&lt;![CDATA[Eat]]&gt;</instruction>
-       </instructions>
-    </recipe>
+{% highlight xml %}
+<recipe name='Creamy Mac n&apos; Cheese'>
+   <ingredients>
+      <ingredient>&lt;![CDATA[1 box of Mac n' Cheese]]&gt;</ingredient>
+      <ingredient>&lt;![CDATA[1 pound of Hamburger meat]]&gt;</ingredient>
+      <ingredient>&lt;![CDATA[1 can of Cream of Mushroom]]&gt;</ingredient>
+   </ingredients>
+   <instructions>
+      <instruction>&lt;![CDATA[Brown hamburger meat]]&gt;</instruction>
+      <instruction>&lt;![CDATA[Bring mac n' cheese to a boil]]&gt;</instruction>
+      <instruction>&lt;![CDATA[Drain water from noodles]]&gt;</instruction>
+      <instruction>&lt;![CDATA[Stir in cheese mixture]]&gt;</instruction>
+      <instruction>&lt;![CDATA[Add cream of mushroom and meat]]&gt;</instruction>
+      <instruction>&lt;![CDATA[Stir]]&gt;</instruction>
+      <instruction>&lt;![CDATA[Eat]]&gt;</instruction>
+   </instructions>
+</recipe>
+{% endhighlight %}
 
 Upon first glance it should be pretty apparent what we are trying to do.
 We first define a recipe with a name. Then we start adding ingredients,

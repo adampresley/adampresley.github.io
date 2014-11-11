@@ -24,11 +24,12 @@ cookie header will be completely ignored!
 Here is a sample on how to set the cookie, make sure the client browser
 gets the cookie, **THEN** redirect.
 
-	:::coldfusion
-	<cfset getPageContext().getOut().clearBuffer() />
-	<cfcookie name="testingCookies" value="#form.userName#" />
-	<cfflush />
+{% highlight cfm %}
+<cfset getPageContext().getOut().clearBuffer() />
+<cfcookie name="testingCookies" value="#form.userName#" />
+<cfflush />
 
-	<cflocation url="postLogin.cfm" />
+<cflocation url="postLogin.cfm" />
+{% endhighlight %}
 
 Happy coding!

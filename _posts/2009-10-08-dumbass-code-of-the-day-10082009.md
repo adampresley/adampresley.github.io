@@ -17,30 +17,32 @@ counted" is done by using the **listRest** ColdFusion method to remove an
 item. I hadn't even HEARD of this method till now, and it turns out that
 it just removes the first element from a list. Okaaaayyy...  
 
-	:::cfm
-	<!-- this gets a count of actual products -->
-	<cfset prodlist = ValueList(getProds.product_id) >
-	<cfif listlen(prodlist) gt 0>
-		<cfloop index="thisprodid" list="#prodlist#">
-			<cfif 999999 lt evaluate(thisprodid) or evaluate(thisprodid) lt 0 >
-				<cfset prodlist = listrest(prodlist)>
-			</cfif>
-		</cfloop>
-	</cfif>
+{% highlight cfm %}
+<!-- this gets a count of actual products -->
+<cfset prodlist = ValueList(getProds.product_id) >
+<cfif listlen(prodlist) gt 0>
+	<cfloop index="thisprodid" list="#prodlist#">
+		<cfif 999999 lt evaluate(thisprodid) or evaluate(thisprodid) lt 0 >
+			<cfset prodlist = listrest(prodlist)>
+		</cfif>
+	</cfloop>
+</cfif>
 
-	<cfset numprods = listlen(prodlist)>
+<cfset numprods = listlen(prodlist)>
+{% endhighlight %}
 
 Kind of odd eh? Seems like a lot of unnecessary processing to just get a
 count. How about something like this?  
 
-	:::cfm
-	<!--- Get a count of actual products --->
-	<cfset numProducts = 0 />
+{% highlight cfm %}
+<!--- Get a count of actual products --->
+<cfset numProducts = 0 />
 
-	<cfloop query="getProds">
-		<cfif getProds.product_id GT 0 && getProds.product_id LT 999999>
-			<cfset numProducts++ />
-		</cfif>
-	</cfloop>
+<cfloop query="getProds">
+	<cfif getProds.product_id GT 0 && getProds.product_id LT 999999>
+		<cfset numProducts++ />
+	</cfif>
+</cfloop>
+{% endhighlight %}
   
 Hmmm.

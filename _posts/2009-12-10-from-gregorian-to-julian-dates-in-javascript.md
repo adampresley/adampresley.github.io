@@ -22,20 +22,21 @@ seems to have done the trick.
 Below is a piece of code I have written to convert a Gregorian date to a
 Julian Day Number, as well as a sample of using it.  
 
-    :::javascript
-    Date.prototype.ToJulian = function() {
-    var d = this.getDate();
-    var y = this.getFullYear();
-    var m = this.getMonth() + 1;
+{% highlight javascript %}
+Date.prototype.ToJulian = function() {
+var d = this.getDate();
+var y = this.getFullYear();
+var m = this.getMonth() + 1;
 
-    return Math.floor((1461 * (y + 4800 + (m - 14) / 12)) / 4 + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12 - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4 + d - 32075);
-    };
+return Math.floor((1461 * (y + 4800 + (m - 14) / 12)) / 4 + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12 - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4 + d - 32075);
+};
 
-    var testDate = "12/9/2009";
-    var parsedDate = new Date(Date.parse(testDate));
-    var julianDate = parsedDate.ToJulian();
+var testDate = "12/9/2009";
+var parsedDate = new Date(Date.parse(testDate));
+var julianDate = parsedDate.ToJulian();
 
-    alert(julianDate);
+alert(julianDate);
+{% endhighlight %}
 
 Let me know if you run into any issues with this calculation, or find a
 better way to do it. Also let me know if you can get the reverse to work

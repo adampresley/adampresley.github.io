@@ -14,46 +14,48 @@ group by a particular key, and iterate over the grouped items. Turns out
 to be quite easy in Groovy. Let's see an example of such a structure and
 how one would *normally* iterate over it and display the data.   
 
-    :::groovy
-    public def Example1() {
-        def sampleData = [
-            [ "name": "Adam Presley", "title": "Architect", "id": 1 ],
-            [ "name": "Collin Judd", "title": "Dev II", "id": 15 ],
-            [ "name": "Steve Goodly", "title": "Architect", id: 2 ],
-            [ "name": "Chris Jordey", title: "Dev II", id: 3 ],
-            [ "name": "Ben Nadel", title: "ACP", id: 5 ]
-        ];
+{% highlight groovy %}
+public def Example1() {
+    def sampleData = [
+        [ "name": "Adam Presley", "title": "Architect", "id": 1 ],
+        [ "name": "Collin Judd", "title": "Dev II", "id": 15 ],
+        [ "name": "Steve Goodly", "title": "Architect", id: 2 ],
+        [ "name": "Chris Jordey", title: "Dev II", id: 3 ],
+        [ "name": "Ben Nadel", title: "ACP", id: 5 ]
+    ];
 
-        /*
-        * Display existing map.
-        */
-        println "Existing structure:";
-        sampleData.each {
-            println "Name: ${it.name}, Title: ${it.title}";
-        }
-        println "";
+    /*
+    * Display existing map.
+    */
+    println "Existing structure:";
+    sampleData.each {
+        println "Name: ${it.name}, Title: ${it.title}";
     }
+    println "";
+}
+{% endhighlight %}
 
 As you can see iteration over the structure is fairly easy. Now I want
 to actually group the structure items by the person's title, iterate and
 display the title, then each person who has that title. Here's how,
 using the same structure as above.   
 
-    :::groovy
-    /*
-     * Group the data by title
-     */
-    sampleData.groupBy {
-        it.title
-    }.each { group -> 
-        println "*GROUP ${group.key}*";
+{% highlight groovy %}
+/*
+ * Group the data by title
+ */
+sampleData.groupBy {
+    it.title
+}.each { group -> 
+    println "*GROUP ${group.key}*";
 
-        group.value.each { item ->
-            println "Name: ${item.name}, Title: ${item.title}";
-        }
-
-        println "";
+    group.value.each { item ->
+        println "Name: ${item.name}, Title: ${item.title}";
     }
+
+    println "";
+}
+{% endhighlight %}
 
 When you use the **groupBy** method you return, through a closure, the
 criteria to group by. Groovy then gives you a new structure, each key

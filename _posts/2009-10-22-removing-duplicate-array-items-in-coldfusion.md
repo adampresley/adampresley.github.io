@@ -15,31 +15,32 @@ result array, checking to see if you've already inserted the input
 value, and if not, inserting it. That's a bit of looping and the code is
 not quite a pretty or fun! Here's what that would look like.
 
-	:::coldfusion
-	<cffunction name="removeDuplicatesFromArrayLoop" returntype="array" access="public" output="false">
-		<cfargument name="input" type="array" required="true" />
+{% highlight cfm %}
+<cffunction name="removeDuplicatesFromArrayLoop" returntype="array" access="public" output="false">
+	<cfargument name="input" type="array" required="true" />
 
-		<cfset var result = [] />
-		<cfset var outer = 0 />
-		<cfset var inner = 0 />
-		<cfset var found = false />
+	<cfset var result = [] />
+	<cfset var outer = 0 />
+	<cfset var inner = 0 />
+	<cfset var found = false />
 
-		<cfloop array="#arguments.input#" index="outer">
-			<cfloop array="#result#" index="inner">
-				<cfif outer EQ inner>
-					<cfset found = true />
-				</cfif>
-			</cfloop>
-
-			<cfif !found>
-				<cfset arrayAppend(result, outer) />
+	<cfloop array="#arguments.input#" index="outer">
+		<cfloop array="#result#" index="inner">
+			<cfif outer EQ inner>
+				<cfset found = true />
 			</cfif>
-
-			<cfset found = false />
 		</cfloop>
 
-		<cfreturn result />
-	</cffunction>
+		<cfif !found>
+			<cfset arrayAppend(result, outer) />
+		</cfif>
+
+		<cfset found = false />
+	</cfloop>
+
+	<cfreturn result />
+</cffunction>
+{% endhighlight %}
 
 As you can see we have an outer and inner loop. The outer going over the
 input, and the inner iterating over the resulting array that should
@@ -73,29 +74,30 @@ new array.
 
 Let's take a look at a function to do this.
 
-	:::coldfusion
-	<cffunction name="removeDuplicatesFromArray" returntype="array" access="public" output="false">
-		<cfargument name="input" type="array" required="true" />
-		<cfargument name="sortArray" type="boolean" required="false" default="false" />
-		<cfargument name="sortType" type="string" required="false" default="textnocase" />
-		<cfargument name="sortDirection" type="string" required="false" default="asc" />
+{% highlight cfm %}
+<cffunction name="removeDuplicatesFromArray" returntype="array" access="public" output="false">
+	<cfargument name="input" type="array" required="true" />
+	<cfargument name="sortArray" type="boolean" required="false" default="false" />
+	<cfargument name="sortType" type="string" required="false" default="textnocase" />
+	<cfargument name="sortDirection" type="string" required="false" default="asc" />
 
-		<cfscript>
+	<cfscript>
 
-			var list = arguments.input.subList(0, arguments.input.size());
-			var set = createObject("java", "java.util.LinkedHashSet").init(list);
-			var result = [];
+		var list = arguments.input.subList(0, arguments.input.size());
+		var set = createObject("java", "java.util.LinkedHashSet").init(list);
+		var result = [];
 
-			result.addAll(set);
+		result.addAll(set);
 
-			if (arguments.sortArray) {
-				arraySort(result, arguments.sortType, arguments.sortDirection);
-			}
+		if (arguments.sortArray) {
+			arraySort(result, arguments.sortType, arguments.sortDirection);
+		}
 
-			return result;
+		return result;
 
-		</cfscript>
-	</cffunction>
+	</cfscript>
+</cffunction>
+{% endhighlight %}
 
 As you can see the code is pretty simple, though the explanation is
 lengthy. And as an added bonus I've added arguments that allow you to
@@ -103,79 +105,80 @@ optionally sort the array once it has removed duplicates. It uses the
 good old ColdFusion method *arraySort* to do this. Below is a sample
 demonstrating these functions being used. Happy coding!
 
-	:::coldfusion
-	<cffunction name="removeDuplicatesFromArray" returntype="array" access="public" output="false">
-		<cfargument name="input" type="array" required="true" />
-		<cfargument name="sortArray" type="boolean" required="false" default="false" />
-		<cfargument name="sortType" type="string" required="false" default="textnocase" />
-		<cfargument name="sortDirection" type="string" required="false" default="asc" />
+{% highlight cfm %}
+<cffunction name="removeDuplicatesFromArray" returntype="array" access="public" output="false">
+	<cfargument name="input" type="array" required="true" />
+	<cfargument name="sortArray" type="boolean" required="false" default="false" />
+	<cfargument name="sortType" type="string" required="false" default="textnocase" />
+	<cfargument name="sortDirection" type="string" required="false" default="asc" />
 
-		<cfscript>
+	<cfscript>
 
-			var list = arguments.input.subList(0, arguments.input.size());
-			var set = createObject("java", "java.util.LinkedHashSet").init(list);
-			var result = [];
+		var list = arguments.input.subList(0, arguments.input.size());
+		var set = createObject("java", "java.util.LinkedHashSet").init(list);
+		var result = [];
 
-			result.addAll(set);
+		result.addAll(set);
 
-			if (arguments.sortArray) {
-				arraySort(result, arguments.sortType, arguments.sortDirection);
-			}
+		if (arguments.sortArray) {
+			arraySort(result, arguments.sortType, arguments.sortDirection);
+		}
 
-			return result;
+		return result;
 
-		</cfscript>
-	</cffunction>
+	</cfscript>
+</cffunction>
 
-	<cffunction name="removeDuplicatesFromArrayLoop" returntype="array" access="public" output="false">
-		<cfargument name="input" type="array" required="true" />
+<cffunction name="removeDuplicatesFromArrayLoop" returntype="array" access="public" output="false">
+	<cfargument name="input" type="array" required="true" />
 
-		<cfset var result = [] />
-		<cfset var outer = 0 />
-		<cfset var inner = 0 />
-		<cfset var found = false />
+	<cfset var result = [] />
+	<cfset var outer = 0 />
+	<cfset var inner = 0 />
+	<cfset var found = false />
 
-		<cfloop array="#arguments.input#" index="outer">
-			<cfloop array="#result#" index="inner">
-				<cfif outer EQ inner>
-					<cfset found = true />
-				</cfif>
-			</cfloop>
-
-			<cfif !found>
-				<cfset arrayAppend(result, outer) />
+	<cfloop array="#arguments.input#" index="outer">
+		<cfloop array="#result#" index="inner">
+			<cfif outer EQ inner>
+				<cfset found = true />
 			</cfif>
-
-			<cfset found = false />
 		</cfloop>
 
-		<cfreturn result />
-	</cffunction>
+		<cfif !found>
+			<cfset arrayAppend(result, outer) />
+		</cfif>
+
+		<cfset found = false />
+	</cfloop>
+
+	<cfreturn result />
+</cffunction>
 
 
-	<cfset a1 = [ "value1", "value2", "value1", "value4", "value3", "value1" ] />
+<cfset a1 = [ "value1", "value2", "value1", "value4", "value3", "value1" ] />
 
-	<cfoutput>
+<cfoutput>
 
-	<h1>LOOP WAY:</h1>
+<h1>LOOP WAY:</h1>
 
-	<strong>Original Array:</strong>
-	<cfdump var="#a1#" />
+<strong>Original Array:</strong>
+<cfdump var="#a1#" />
 
-	<cfset a1NoDuplicates = removeDuplicatesFromArrayLoop(a1) />
+<cfset a1NoDuplicates = removeDuplicatesFromArrayLoop(a1) />
 
-	<strong>Duplicates Removed Array:</strong>
-	<cfdump var="#a1NoDuplicates#" />
+<strong>Duplicates Removed Array:</strong>
+<cfdump var="#a1NoDuplicates#" />
 
 
-	<h1>JAVA WAY:</h1>
+<h1>JAVA WAY:</h1>
 
-	<strong>Original Array:</strong>
-	<cfdump var="#a1#" />
+<strong>Original Array:</strong>
+<cfdump var="#a1#" />
 
-	<cfset a1NoDuplicates = removeDuplicatesFromArray(a1) />
+<cfset a1NoDuplicates = removeDuplicatesFromArray(a1) />
 
-	<strong>Duplicates Removed Array:</strong>
-	<cfdump var="#a1NoDuplicates#" />
+<strong>Duplicates Removed Array:</strong>
+<cfdump var="#a1NoDuplicates#" />
 
-	</cfoutput>
+</cfoutput>
+{% endhighlight %}

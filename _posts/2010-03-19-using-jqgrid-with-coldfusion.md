@@ -21,12 +21,13 @@ sake I would start by downloading the whole set of files. Once you've
 done this you must include them on your page. There are four files you
 will concern yourself with to start.
 
-	:::coldfusion
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
-	<script type="text/javascript" src="/js/jqgrid/i18n/grid.locale-en.js"></script>
-	<script type="text/javascript" src="/js/jqgrid/jquery.jqGrid.min.js"></script>
+{% highlight cfm %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<script type="text/javascript" src="/js/jqgrid/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="/js/jqgrid/jquery.jqGrid.min.js"></script>
 
-	<link rel="stylesheet" href="/js/jqgrid/ui.jqgrid.css" type="text/css" />
+<link rel="stylesheet" href="/js/jqgrid/ui.jqgrid.css" type="text/css" />
+{% endhighlight %}
 
 The above code shows that we need to at least include the jQuery
 library, the English locale settings for jqGrid, the jqGrid JavaScript
@@ -34,82 +35,84 @@ source, and the appropriate CSS file. The next order of business is to
 create a container for jqGrid to live in. For the grid we need to create
 a simple, blank table like so.
 
-	:::html
-	<table id="myGrid"></table>
+{% highlight html %}
+<table id="myGrid"></table>
+{% endhighlight %}
 
 That takes care of the markup and necessary includes, so now let's jump
 to the ColdFusion side. Server side we need to take some set of data and
 return it in a JSON format that jqGrid likes. First let's make a simple
 CFM page that gives us the JSON output we need for jqGrid.
 
-	:::coldfusion
-	<cfsetting showdebugoutput="false" />
+{% highlight cfm %}
+<cfsetting showdebugoutput="false" />
 
-	<cfset data = queryNew("id,name,title,age") />
+<cfset data = queryNew("id,name,title,age") />
 
-	<cfset queryAddRow(data) />
-		<cfset querySetCell(data, "id", 1) />
-		<cfset querySetCell(data, "name", "Adam Presley") />
-		<cfset querySetCell(data, "title", "Giant nerd") />
-		<cfset querySetCell(data, "age", 31) />
+<cfset queryAddRow(data) />
+	<cfset querySetCell(data, "id", 1) />
+	<cfset querySetCell(data, "name", "Adam Presley") />
+	<cfset querySetCell(data, "title", "Giant nerd") />
+	<cfset querySetCell(data, "age", 31) />
 
-	<cfset queryAddRow(data) />
-		<cfset querySetCell(data, "id", 2) />
-		<cfset querySetCell(data, "name", "Steve Good") />
-		<cfset querySetCell(data, "title", "Flex dude") />
-		<cfset querySetCell(data, "age", 30) />
+<cfset queryAddRow(data) />
+	<cfset querySetCell(data, "id", 2) />
+	<cfset querySetCell(data, "name", "Steve Good") />
+	<cfset querySetCell(data, "title", "Flex dude") />
+	<cfset querySetCell(data, "age", 30) />
 
-	<cfset queryAddRow(data) />
-		<cfset querySetCell(data, "id", 3) />
-		<cfset querySetCell(data, "name", "Adrian Moreno") />
-		<cfset querySetCell(data, "title", "Kung foo") />
-		<cfset querySetCell(data, "age", 21) />
+<cfset queryAddRow(data) />
+	<cfset querySetCell(data, "id", 3) />
+	<cfset querySetCell(data, "name", "Adrian Moreno") />
+	<cfset querySetCell(data, "title", "Kung foo") />
+	<cfset querySetCell(data, "age", 21) />
 
-	<cfset queryAddRow(data) />
-		<cfset querySetCell(data, "id", 4) />
-		<cfset querySetCell(data, "name", "Chris Jordan") />
-		<cfset querySetCell(data, "title", "Mac daddy") />
-		<cfset querySetCell(data, "age", 32) />
+<cfset queryAddRow(data) />
+	<cfset querySetCell(data, "id", 4) />
+	<cfset querySetCell(data, "name", "Chris Jordan") />
+	<cfset querySetCell(data, "title", "Mac daddy") />
+	<cfset querySetCell(data, "age", 32) />
 
-	<cfset queryAddRow(data) />
-		<cfset querySetCell(data, "id", 5) />
-		<cfset querySetCell(data, "name", "Will Belden") />
-		<cfset querySetCell(data, "title", "Look how awesome I am") />
-		<cfset querySetCell(data, "age", 33) />
+<cfset queryAddRow(data) />
+	<cfset querySetCell(data, "id", 5) />
+	<cfset querySetCell(data, "name", "Will Belden") />
+	<cfset querySetCell(data, "title", "Look how awesome I am") />
+	<cfset querySetCell(data, "age", 33) />
 
-	<cfset queryAddRow(data) />
-		<cfset querySetCell(data, "id", 6) />
-		<cfset querySetCell(data, "name", "Todd Pires") />
-		<cfset querySetCell(data, "title", "Coldbox Voodoo Magic!") />
-		<cfset querySetCell(data, "age", 20) />
+<cfset queryAddRow(data) />
+	<cfset querySetCell(data, "id", 6) />
+	<cfset querySetCell(data, "name", "Todd Pires") />
+	<cfset querySetCell(data, "title", "Coldbox Voodoo Magic!") />
+	<cfset querySetCell(data, "age", 20) />
 
-	<cfset queryAddRow(data) />
-		<cfset querySetCell(data, "id", 7) />
-		<cfset querySetCell(data, "name", "Tim Jesperson") />
-		<cfset querySetCell(data, "title", "Mr. Limo") />
-		<cfset querySetCell(data, "age", 22) />
+<cfset queryAddRow(data) />
+	<cfset querySetCell(data, "id", 7) />
+	<cfset querySetCell(data, "name", "Tim Jesperson") />
+	<cfset querySetCell(data, "title", "Mr. Limo") />
+	<cfset querySetCell(data, "age", 22) />
 
-	<cfset result = {} />
+<cfset result = {} />
 
-	<cfset result["rows"] = [] />
-	<cfset result["page"] = javaCast("int", 0) />
-	<cfset result["records"] = javaCast("int", data.recordCount) />
-	<cfset result["total"] = javaCast("int", 1) />
+<cfset result["rows"] = [] />
+<cfset result["page"] = javaCast("int", 0) />
+<cfset result["records"] = javaCast("int", data.recordCount) />
+<cfset result["total"] = javaCast("int", 1) />
 
-	<cfloop query="data">
-		<cfset temp = {} />
-		<cfset temp["id"] = javaCast("int", data.id) />
-		<cfset temp["cell"] = [] />
+<cfloop query="data">
+	<cfset temp = {} />
+	<cfset temp["id"] = javaCast("int", data.id) />
+	<cfset temp["cell"] = [] />
 
-		<cfset arrayAppend(temp["cell"], javaCast("int", data.id)) />
-		<cfset arrayAppend(temp["cell"], data.name) />
-		<cfset arrayAppend(temp["cell"], data.title) />
-		<cfset arrayAppend(temp["cell"], javaCast("int", data.age)) />
+	<cfset arrayAppend(temp["cell"], javaCast("int", data.id)) />
+	<cfset arrayAppend(temp["cell"], data.name) />
+	<cfset arrayAppend(temp["cell"], data.title) />
+	<cfset arrayAppend(temp["cell"], javaCast("int", data.age)) />
 
-		<cfset arrayAppend(result["rows"], temp) />
-	</cfloop>
+	<cfset arrayAppend(result["rows"], temp) />
+</cfloop>
 
-	<cfoutput>#serializeJson(result)#</cfoutput>
+<cfoutput>#serializeJson(result)#</cfoutput>
+{% endhighlight %}
 
 The first part of this code (gridjson.cfm) is simple. We are just
 crafting a query by hand for demonstration purposes. The result
@@ -135,21 +138,22 @@ against the table we created, and calling the **jqGrid** method. This
 method potentially takes a *lot* of parameters, but we will only concern
 ourselves with the few necessary to get a grid working. Take a look.
 
-	:::javascript
-	$("#myGrid").jqGrid({
-		url: "gridjson.cfm",
-		datatype: "json",
-		height: 165,
-		width: 450,
-		mtype: "POST",
-		emptyrecords: "No employees to display.",
-		colNames: [ "Name", "Title", "Age" ],
-		colModel: [
-			{ name: "name", width: 45, sortable: false, editable: false },
-			{ name: "title", width: 65, sortable: false, editable: false },
-			{ name: "age", width: 35, sortable: false, editable: false }
-		]
-	});
+{% highlight javascript %}
+$("#myGrid").jqGrid({
+	url: "gridjson.cfm",
+	datatype: "json",
+	height: 165,
+	width: 450,
+	mtype: "POST",
+	emptyrecords: "No employees to display.",
+	colNames: [ "Name", "Title", "Age" ],
+	colModel: [
+		{ name: "name", width: 45, sortable: false, editable: false },
+		{ name: "title", width: 65, sortable: false, editable: false },
+		{ name: "age", width: 35, sortable: false, editable: false }
+	]
+});
+{% endhighlight %}
 
 As you can see we select the table *myGrid* and call the **jqGrid**
 method against it. From here we specify our *gridjson.cfm* page we

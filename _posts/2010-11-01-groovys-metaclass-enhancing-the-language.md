@@ -17,31 +17,32 @@ example I will demonstrate how I created a new method against the
 javax scripting engine: in other words I execute Groovy code
 dynamically. Let's take a look at the code first.  
 
-    :::groovy
-    package com.adampresley
+{% highlight groovy %}
+package com.adampresley
 
-    import javax.script.ScriptContext
-    import javax.script.ScriptEngine
-    import javax.script.ScriptEngineManager
-    import javax.script.ScriptEngineFactory
+import javax.script.ScriptContext
+import javax.script.ScriptEngine
+import javax.script.ScriptEngineManager
+import javax.script.ScriptEngineFactory
 
-    class Base {
-       ScriptEngineManager manager = null
-       ScriptEngine engine = null
+class Base {
+   ScriptEngineManager manager = null
+   ScriptEngine engine = null
 
-       public Base() {
-          manager = new ScriptEngineManager()
-          engine = manager.getEngineByName("groovy")
+   public Base() {
+      manager = new ScriptEngineManager()
+      engine = manager.getEngineByName("groovy")
 
-          String.metaClass.run = { Map bindings ->
-             def b = engine.createBindings()
-             b.putAll(bindings)
+      String.metaClass.run = { Map bindings ->
+         def b = engine.createBindings()
+         b.putAll(bindings)
 
-             engine.setBindings(b, ScriptContext.ENGINE_SCOPE)
-             engine.eval(delegate)
-          }
-       }
-    }
+         engine.setBindings(b, ScriptContext.ENGINE_SCOPE)
+         engine.eval(delegate)
+      }
+   }
+}
+{% endhighlight %}
 
 In our constructor you can see how we first instantiate the Groovy
 script engine using the *javax.script.ScriptEngineManager* class. We
@@ -51,12 +52,13 @@ to bind to the script engine. This allows us to execute the text in the
 string as Groovy code, and pass in a Map of parameters that our script
 can use. Let's look at a sample usage.  
   
-    :::groovy
-    def source = [ "adam", "danable", "dood" ]
-    def code = "source.findAll { it.contains('da') }"
+{% highlight groovy %}
+def source = [ "adam", "danable", "dood" ]
+def code = "source.findAll { it.contains('da') }"
 
-    def result = code.run([ source: source ])
-    // assert [ "adam", "danable" ] == result
+def result = code.run([ source: source ])
+// assert [ "adam", "danable" ] == result
+{% endhighlight %}
 
 And that's just the surface. I barely understand how all this magic
 works, but I know it has come in handy for me. Why? There are various

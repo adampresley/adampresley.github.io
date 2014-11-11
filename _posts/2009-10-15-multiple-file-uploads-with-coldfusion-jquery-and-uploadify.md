@@ -38,33 +38,34 @@ start with a basic page that will have all of our CSS and JavaScript
 references, as well as a paragraph for messages, and a DIV for the
 Uploadify Flash object. That looks like this.  
 
-    :::coldfusion
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Uploadify Demo</title>
+{% highlight cfm %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Uploadify Demo</title>
 
-        <link href="/styles/uploadify.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="/styles/uploadify.css" rel="stylesheet" type="text/css" media="screen" />
 
-        <script language="javascript" src="/js/jquery/jquery-1.3.2.js"></script>
-        <script language="javascript" src="/js/uploadify/swfobject.js"></script>
-        <script language="javascript" src="/js/uploadify/jquery.uploadify.v2.1.0.js"></script>
-    </head>
+    <script language="javascript" src="/js/jquery/jquery-1.3.2.js"></script>
+    <script language="javascript" src="/js/uploadify/swfobject.js"></script>
+    <script language="javascript" src="/js/uploadify/jquery.uploadify.v2.1.0.js"></script>
+</head>
 
-    <body>
-        <h1>Uploadify Demo</h1>
+<body>
+    <h1>Uploadify Demo</h1>
 
-        <p>
-            Please select images to upload. You may select multiple, and they will begin 
-            as soon as you click Ok on the Open Dialog box.
-        </p>
+    <p>
+        Please select images to upload. You may select multiple, and they will begin 
+        as soon as you click Ok on the Open Dialog box.
+    </p>
 
-        <p id="message" class="messageBox" style="display: none;"></p>
+    <p id="message" class="messageBox" style="display: none;"></p>
 
-        <div id="uploadify"></div>
-    </body>
-    </html>
+    <div id="uploadify"></div>
+</body>
+</html>
+{% endhighlight %}
 
 There are a couple of points of interest here. First note that there is
 a stylesheet to load when using Uploadify. Then you will see that we
@@ -79,22 +80,23 @@ parameters to set it up. In our tutorial we want to allow multiple
 uploads at one time, and we want the to automatically start. That looks
 like this.  
   
-    :::javascript
-    $('#uploadify').uploadify({
-        uploader: '/js/uploadify/uploadify.swf',
-        folder: '/uploads',
-        cancelImg: '/js/uploadify/cancel.png',
-        multi: true,
-        auto: true,
-        script: '/uploadify.cfm',
-        fileDesc: 'Image files',
-        fileExt: '*.jpg;*.jpeg;*.gif;*.png',
-        onAllComplete: function(event, data) {
-            $('#message').html('Files uploaded successfully.').fadeIn('slow', function() {
-                setTimeout('$("#message").fadeOut("slow");', 3000); 
-            });
-        }
-    });
+{% highlight javascript %}
+$('#uploadify').uploadify({
+    uploader: '/js/uploadify/uploadify.swf',
+    folder: '/uploads',
+    cancelImg: '/js/uploadify/cancel.png',
+    multi: true,
+    auto: true,
+    script: '/uploadify.cfm',
+    fileDesc: 'Image files',
+    fileExt: '*.jpg;*.jpeg;*.gif;*.png',
+    onAllComplete: function(event, data) {
+        $('#message').html('Files uploaded successfully.').fadeIn('slow', function() {
+            setTimeout('$("#message").fadeOut("slow");', 3000); 
+        });
+    }
+});
+{% endhighlight %}
 
 The parameters are explained as follows.  
 
@@ -113,9 +115,10 @@ let's talk about the ColdFusion script that will handle accepting the
 file. This one is simple. It just has to take the file and move it to
 our directory. The directory we want will be called **/uploads**.  
 
-    :::coldfusion
-    <cffile action="upload" filefield="form.fileData" destination="#expandPath('/')#/uploads" nameconflict="overwrite" />
-  
+{% highlight cfm %}
+<cffile action="upload" filefield="form.fileData" destination="#expandPath('/')#/uploads" nameconflict="overwrite" />
+{% endhighlight %}
+
 Well that was easy! This command simply gets the uploaded file from the
 FORM field *fileData*, and moves it to the **/uploads** directory, and
 overwrites any existing files that may get in the way.  
@@ -124,10 +127,11 @@ Ok, so that's cool. But now we want to alert the user when the upload is
 done and tell them all went well. To do that lets look at that callback
 in the JavaScript again.  
 
-    :::javascript
-    onAllComplete: function(event, data) {
-        $('#message').html('Files uploaded successfully.').fadeIn('slow', function() {  setTimeout('$("#message").fadeOut("slow");', 3000); });
-    }
+{% highlight javascript %}
+onAllComplete: function(event, data) {
+    $('#message').html('Files uploaded successfully.').fadeIn('slow', function() {  setTimeout('$("#message").fadeOut("slow");', 3000); });
+}
+{% endhighlight %}
 
 According to the Uploadify documentation the *onAllComplete* event takes
 two parameters: *event*, and *data*. For our purposes we don't care much
@@ -144,53 +148,55 @@ Let's look at both pieces of code in full.
   
 ### /index.cfm
 
-    :::coldfusion
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Uploadify Demo</title>
+{% highlight cfm %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Uploadify Demo</title>
 
-        <link href="/styles/uploadify.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="/styles/uploadify.css" rel="stylesheet" type="text/css" media="screen" />
 
-        <script language="javascript" src="/js/jquery/jquery-1.3.2.js"></script>
-        <script language="javascript" src="/js/uploadify/swfobject.js"></script>
-        <script language="javascript" src="/js/uploadify/jquery.uploadify.v2.1.0.js"></script>
-    </head>
-    <body>
-        <h1>Uploadify Demo</h1>
+    <script language="javascript" src="/js/jquery/jquery-1.3.2.js"></script>
+    <script language="javascript" src="/js/uploadify/swfobject.js"></script>
+    <script language="javascript" src="/js/uploadify/jquery.uploadify.v2.1.0.js"></script>
+</head>
+<body>
+    <h1>Uploadify Demo</h1>
 
-        <p>
-            Please select images to upload. You may select multiple, and they will begin 
-            as soon as you click Ok on the Open Dialog box.
-        </p>
+    <p>
+        Please select images to upload. You may select multiple, and they will begin 
+        as soon as you click Ok on the Open Dialog box.
+    </p>
 
-        <p id="message" class="messageBox" style="display: none;"></p>
-        <div id="uploadify"></div>
+    <p id="message" class="messageBox" style="display: none;"></p>
+    <div id="uploadify"></div>
 
-        <script language="javascript" type="text/javascript">
-            $(document).ready(function() {
-                $('#uploadify').uploadify({
-                    uploader: '/js/uploadify/uploadify.swf',
-                    folder: '/uploads',
-                    cancelImg: '/js/uploadify/cancel.png',
-                    multi: true,
-                    auto: true,
-                    script: '/uploadify.cfm',
-                    fileDesc: 'Image files',
-                    fileExt: '*.jpg;*.jpeg;*.gif;*.png',
-                    onAllComplete: function(event, data) {
-                        $('#message').html('Files uploaded successfully.').fadeIn('slow', function() { setTimeout('$("#message").fadeOut("slow");', 3000); });
-                    }
-                });
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function() {
+            $('#uploadify').uploadify({
+                uploader: '/js/uploadify/uploadify.swf',
+                folder: '/uploads',
+                cancelImg: '/js/uploadify/cancel.png',
+                multi: true,
+                auto: true,
+                script: '/uploadify.cfm',
+                fileDesc: 'Image files',
+                fileExt: '*.jpg;*.jpeg;*.gif;*.png',
+                onAllComplete: function(event, data) {
+                    $('#message').html('Files uploaded successfully.').fadeIn('slow', function() { setTimeout('$("#message").fadeOut("slow");', 3000); });
+                }
             });
-        </script>
-    </body>
-    </html>
+        });
+    </script>
+</body>
+</html>
+{% endhighlight %}
 
 ### /uploadify.cfm
 
-    :::coldfusion
-    <cffile action="upload" filefield="form.fileData" destination="#expandPath('/')#/uploads" nameconflict="overwrite" />
+{% highlight cfm %}
+<cffile action="upload" filefield="form.fileData" destination="#expandPath('/')#/uploads" nameconflict="overwrite" />
+{% endhighlight %}
 
 And that's it! Happy coding!

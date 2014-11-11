@@ -15,11 +15,12 @@ Engine, a cloud PaaS system. The application is written in [Groovy](http://groov
 While attempting to deploy my application I started getting an error
 like this:   
 
-    :::java
-    Unable to update:java.io.IOException: 
-    Error posting to URL: https://appengine.google.com/api/appversion/deploy?app_id=adammaryannewedding&version=4&400 Bad 
-    RequestClient Error (400)
-    The request is invalid for an unspecified reason.
+{% highlight java %}
+Unable to update:java.io.IOException: 
+Error posting to URL: https://appengine.google.com/api/appversion/deploy?app_id=adammaryannewedding&version=4&400 Bad 
+RequestClient Error (400)
+The request is invalid for an unspecified reason.
+{% endhighlight %}
   
 This infuriating error message is so maddening because it tells you
 absolutely nothing about what could be going wrong. After a **lot** of

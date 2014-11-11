@@ -20,22 +20,23 @@ ColdFusion Builder** by default. If you open that up you can setup the
 parameters the Java Virtual Machine will run with for Eclipse. Here is
 what I use. Maybe someone will find it useful.  
   
-	:::ini
-	-startup
-	plugins\org.eclipse.equinox.launcher_1.0.101.R34x_v20081125.jar
-	--launcher.library
-	plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731
-	-vmargs
-	-Dosgi.requiredJavaVersion=1.6
-	-Xms128m
-	-Xmx384m
-	-Xss2m
-	-XX:PermSize=128m
-	-XX:MaxPermSize=128m
-	-XX:MaxGCPauseMillis=10
-	-XX:MaxHeapFreeRatio=70
-	-XX:+UseConcMarkSweepGC
-	-XX:+CMSIncrementalMode
-	-XX:+CMSIncrementalPacing
-	-XX:CompileThreshold=5
-	-Dcom.sun.management.jmxremote
+{% highlight ini %}
+-startup
+plugins\org.eclipse.equinox.launcher_1.0.101.R34x_v20081125.jar
+--launcher.library
+plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731
+-vmargs
+-Dosgi.requiredJavaVersion=1.6
+-Xms128m
+-Xmx384m
+-Xss2m
+-XX:PermSize=128m
+-XX:MaxPermSize=128m
+-XX:MaxGCPauseMillis=10
+-XX:MaxHeapFreeRatio=70
+-XX:+UseConcMarkSweepGC
+-XX:+CMSIncrementalMode
+-XX:+CMSIncrementalPacing
+-XX:CompileThreshold=5
+-Dcom.sun.management.jmxremote
+{% endhighlight %}

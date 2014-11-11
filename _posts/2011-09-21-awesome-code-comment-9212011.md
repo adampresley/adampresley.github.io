@@ -11,7 +11,8 @@ slug: awesome-code-comment-9212011
 Came across this code in a query where the programmer **clearly**
 doesn't want anyone to turn this feature on!
 
-	:::cfm
-	<---   2/7/06 TF: DO NOT !!EVER!! turn workflow on. Lest ye be kicked. --->
+{% highlight cfm %}
+<---   2/7/06 TF: DO NOT !!EVER!! turn workflow on. Lest ye be kicked. --->
+{% endhighlight %}
 
 Love it.

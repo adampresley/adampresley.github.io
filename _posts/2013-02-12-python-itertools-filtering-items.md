@@ -15,7 +15,7 @@ lambda expression). In this sample I have an array of products. I want
 to get a list of products that have inventory in stock and are allowed
 to be drop-shipped.  
   
-```python
+{% highlight python %}
 import json
 from itertools import ifilter
 
@@ -37,7 +37,7 @@ matches = [item for item in ifilter(lambda k: k["instock"] > 0 and "dropship" in
 
 for i in matches:
    print "Item ID %s is in stock and available for drop-ship" % i["id"]
-```
+{% endhighlight %}
 
 Much like most Python list and array manipulation methods I'm using a list comprehension here. The cool part is the call to **ifilter()**. The first argument is a lambda expression that checks the current item to see if we have a value greater than zero for *instock*, and if
 *dropship* is an item in the *shipTypes* array. The end result is an array of items that match, and I loop over that to show what's

@@ -23,67 +23,68 @@ Notice that in v1 of the algorithm, the first unit test has a duplicate
 in it. But more importantly notice the large drop in iterations. The new
 function looks like this. Happy coding!
 
-	:::javascript
-	/**
-	 * Removes duplicates from an array of items. Does not return any
-	 * value as it removes duplicates from the original array itself. Use
-	 * of a comparator allows for comparing complex items. For example:
-	 *
-	 * <code>
-	 * var a = [ 2, 1, 1, 5 ];
-	 * a.dedupe({
-	 *    sortComparator: function(a, b) {
-	 *       if (a > b)
-	 *          return 1;
-	 *       else if (a < b)
-	 *          return -1;
-	 *       else
-	 *          return 0;
-	 *   },
-	 *   dedupeComparator: function(a, b) {
-	 *      return a === b;
-	 *   }
-	 * });
-	 * </code>
-	 *
-	 * @author Adam Presley
-	 *
-	 * @param comparators An object containing two keys: sortComparator and
-	 *  dedupeComparator. Both are functions taking two arguments. See
-	 *  the sort method for information on the sortComparator. The
-	 *  dedupeComparator takes two arguments, and expects a true/false
-	 *  return on if the items are the same or not.
-	 */
-	 Array.prototype.dedupe = function(comparators) {
-	 	this.sort(comparators.sortComparator);
+{% highlight javascript %}
+/**
+ * Removes duplicates from an array of items. Does not return any
+ * value as it removes duplicates from the original array itself. Use
+ * of a comparator allows for comparing complex items. For example:
+ *
+ * <code>
+ * var a = [ 2, 1, 1, 5 ];
+ * a.dedupe({
+ *    sortComparator: function(a, b) {
+ *       if (a > b)
+ *          return 1;
+ *       else if (a < b)
+ *          return -1;
+ *       else
+ *          return 0;
+ *   },
+ *   dedupeComparator: function(a, b) {
+ *      return a === b;
+ *   }
+ * });
+ * </code>
+ *
+ * @author Adam Presley
+ *
+ * @param comparators An object containing two keys: sortComparator and
+ *  dedupeComparator. Both are functions taking two arguments. See
+ *  the sort method for information on the sortComparator. The
+ *  dedupeComparator takes two arguments, and expects a true/false
+ *  return on if the items are the same or not.
+ */
+ Array.prototype.dedupe = function(comparators) {
+ 	this.sort(comparators.sortComparator);
 
-	 	var length = this.length, index = 0;
-	 	var spliceStart = 0, spliceLen = 0;
-	 	var item = 0, compareResult = 0, temp = 0;
+ 	var length = this.length, index = 0;
+ 	var spliceStart = 0, spliceLen = 0;
+ 	var item = 0, compareResult = 0, temp = 0;
 
-	 	if (length > 1) {
-	 		while (index < length - 1) {
-	 			item = this[index];
+ 	if (length > 1) {
+ 		while (index < length - 1) {
+ 			item = this[index];
 
-	 			if (index + 1 < length) {
-	 				spliceStart = index + 1;
-	 				spliceLen = 0;
-	 				temp = this[spliceStart];
+ 			if (index + 1 < length) {
+ 				spliceStart = index + 1;
+ 				spliceLen = 0;
+ 				temp = this[spliceStart];
 
-	 				while ((compareResult = comparators.dedupeComparator.call(this, item, temp))) {
-	 					spliceLen++;
+ 				while ((compareResult = comparators.dedupeComparator.call(this, item, temp))) {
+ 					spliceLen++;
 
-	 					if (spliceStart + spliceLen >= length - 1) break;
-	 					temp = this[spliceStart + spliceLen];
-	 				}
+ 					if (spliceStart + spliceLen >= length - 1) break;
+ 					temp = this[spliceStart + spliceLen];
+ 				}
 
-	 				if (spliceLen > 0) {
-	 					this.splice(spliceStart, spliceLen);
-	 					length -= spliceLen;
-	 				}
-	 			}
+ 				if (spliceLen > 0) {
+ 					this.splice(spliceStart, spliceLen);
+ 					length -= spliceLen;
+ 				}
+ 			}
 
-	 			index++;
-	 		}
-	 	}
-	 };
+ 			index++;
+ 		}
+ 	}
+ };
+{% endhighlight %}

@@ -26,84 +26,87 @@ natural. For the sake of demonstration let's pretend I have a
 the database. With this list of persons I want to build an XML file that
 looks like this.  
 
-    :::xml
-    <people>  
-       <person id='1'>  
-          <firstname>Imogene</firstName>  
-          <lastname>Coffey</lastName>  
-          <email>nec.tempus.scelerisque@montesnascetur.ca</email>  
-       </person>  
-       <person id='2'>  
-          <firstname>Marsden</firstName>  
-          <lastname>Mcbride</lastName>  
-          <email>malesuada.malesuada.Integer@vitae.ca</email>  
-       </person>  
-       <person id='3'>  
-          <firstname>Jescie</firstName>  
-          <lastname>Vang</lastName>  
-          <email>neque.venenatis@ipsum.edu</email>  
-       </person>  
-       <person id='4'>  
-          <firstname>August</firstName>  
-          <lastname>Hewitt</lastName>  
-          <email>Nullam@MorbimetusVivamus.org</email>  
-       </person>  
-       <person id='5'>  
-          <firstname>Raven</firstName>  
-          <lastname>Gilmore</lastName>  
-          <email>Sed@mollisInteger.org</email>  
-       </person>  
-    </people>  
-  
+{% highlight xml %}
+<people>  
+   <person id='1'>  
+      <firstname>Imogene</firstName>  
+      <lastname>Coffey</lastName>  
+      <email>nec.tempus.scelerisque@montesnascetur.ca</email>  
+   </person>  
+   <person id='2'>  
+      <firstname>Marsden</firstName>  
+      <lastname>Mcbride</lastName>  
+      <email>malesuada.malesuada.Integer@vitae.ca</email>  
+   </person>  
+   <person id='3'>  
+      <firstname>Jescie</firstName>  
+      <lastname>Vang</lastName>  
+      <email>neque.venenatis@ipsum.edu</email>  
+   </person>  
+   <person id='4'>  
+      <firstname>August</firstName>  
+      <lastname>Hewitt</lastName>  
+      <email>Nullam@MorbimetusVivamus.org</email>  
+   </person>  
+   <person id='5'>  
+      <firstname>Raven</firstName>  
+      <lastname>Gilmore</lastName>  
+      <email>Sed@mollisInteger.org</email>  
+   </person>  
+</people>  
+{% endhighlight %}
+
 A pretty simple XML structure, but what does the domain class look
 like?  
 
-    :::groovy
-    package com.adampresley.groovy
+{% highlight groovy %}
+package com.adampresley.groovy
 
-    class Person {
-       String firstName
-       String lastName
-       String email = ""
+class Person {
+   String firstName
+   String lastName
+   String email = ""
 
-       static constraints = {
-          firstName(blank: false)
-          lastName(blank: false)
-       }
+   static constraints = {
+      firstName(blank: false)
+      lastName(blank: false)
+   }
 
-       @Override
-       public String toString() {
-          "${firstName} ${lastName}"
-       }
-    }
+   @Override
+   public String toString() {
+      "${firstName} ${lastName}"
+   }
+}
+{% endhighlight %}
 
 So with that class, and an understanding of how I wanted the XML to
 look, here's how to use the **MarkupBuilder** class to achieve
 this.  
   
-    :::groovy
-    package com.adampresley.groovy
+{% highlight groovy %}
+package com.adampresley.groovy
 
-    import groovy.xml.MarkupBuilder
+import groovy.xml.MarkupBuilder
 
-    class TransformationsController {
-       def xml = {
-          def persons = Person.list()
-          def writer = new StringWriter()
-          def builder = new MarkupBuilder(writer)
+class TransformationsController {
+   def xml = {
+      def persons = Person.list()
+      def writer = new StringWriter()
+      def builder = new MarkupBuilder(writer)
 
-          builder.people {
-             persons.each { item ->
-                builder.person(id: item.id) {
-                   firstName(item.firstName)
-                   lastName(item.lastName)
-                   email(item.email)
-                }
-             }
-          }
+      builder.people {
+         persons.each { item ->
+            builder.person(id: item.id) {
+               firstName(item.firstName)
+               lastName(item.lastName)
+               email(item.email)
+            }
+         }
+      }
 
-          [ personXml: writer.toString() ]
-       }
-    }
+      [ personXml: writer.toString() ]
+   }
+}
+{% endhighlight %}
 
 Cheers and happy coding!

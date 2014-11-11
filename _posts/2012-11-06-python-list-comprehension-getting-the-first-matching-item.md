@@ -17,18 +17,19 @@ list that matched a single criteria. A basic loop can certainly do the
 job, as show below. In this example I want to return the first item in
 the list that is greater than the number 2.
 
-    :::python
-    a = [1, 2, 3, 4, 5]
+{% highlight python %}
+a = [1, 2, 3, 4, 5]
 
-    def findFirstNumberGreaterThan2():
-       result = None
+def findFirstNumberGreaterThan2():
+   result = None
 
-       for i in a:
-          if i > 2:
-             result = i
-             break
+   for i in a:
+      if i > 2:
+         result = i
+         break
 
-       return result
+   return result
+{% endhighlight %}
 
 This works fine and all, but it is what Python folks call "pythonic",
 and there is certainly a more concise way to handle this problem. Enter
@@ -38,11 +39,12 @@ the value, or if it is not found the default value, found in the second
 argument, is returned. Let's see this in action by reworking the
 previous example.
 
-    :::python
-    a = [1, 2, 3, 4, 5]
+{% highlight python %}
+a = [1, 2, 3, 4, 5]
 
-    def findFirstNumberGreaterThan2():
-       return next((i for i in a if i > 2), None)
+def findFirstNumberGreaterThan2():
+   return next((i for i in a if i > 2), None)
+{% endhighlight %}
 
 Woah, that is pretty cool! The **next()** method takes two arguments.
 The first being an object that can be iterated over, and the second

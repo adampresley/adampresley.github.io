@@ -35,29 +35,30 @@ URL at the question mark. Why? Cause we care about everything
 **split** function to divide the parameters by the ampersand, and
 then by the equal sign. Let's take a look at what that code looks like.
   
-    :::javascript
-    var url = window.location.href;
-    var urlParts = url.split("?");
+{% highlight javascript %}
+var url = window.location.href;
+var urlParts = url.split("?");
 
-    /*
-     * If we have anything after the question mark, parse it
-     */
-    if (urlParts.length > 1)  {
-        var rightSide = urlParts[1];
-        var outerParts = rightSide.split("&");
+/*
+ * If we have anything after the question mark, parse it
+ */
+if (urlParts.length > 1)  {
+    var rightSide = urlParts[1];
+    var outerParts = rightSide.split("&");
 
-        for (var outer = 0; outer < outerParts.length; outer++) {
-            var innerParts = outerParts[outer].split("=");
-            var key = innerParts[0];
-            var value = (innerParts.length > 1) ? innerParts[1] : "";
+    for (var outer = 0; outer < outerParts.length; outer++) {
+        var innerParts = outerParts[outer].split("=");
+        var key = innerParts[0];
+        var value = (innerParts.length > 1) ? innerParts[1] : "";
 
-            /*
-             * Do something with the key/value information 
-             * here. Add what you need.
-             */
-            alert("Key = " + key + " value = " + value);
-        }
+        /*
+         * Do something with the key/value information 
+         * here. Add what you need.
+         */
+        alert("Key = " + key + " value = " + value);
     }
+}
+{% endhighlight %}
 
 As you can see in the code we aren't actually doing anything with the
 retrieved key and value, but you could use it to do whatever you needed

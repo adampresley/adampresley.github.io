@@ -17,58 +17,59 @@ wished to time and it would print to the console how many milliseconds,
 seconds, or minutes that block took to execute. Here's a sample of code
 demonstrating this.
 
-	:::groovy
-	package com.adampresley.timing
+{% highlight groovy %}
+package com.adampresley.timing
 
-	class Main {
-		static main(args) {
-			/*
-			 * Closure for timing stuff
-			 */
-			def timeMe = { Closure codeBlock ->
-				def start = new Date().getTime()
-				codeBlock()
-				def end = new Date().getTime()
+class Main {
+	static main(args) {
+		/*
+		 * Closure for timing stuff
+		 */
+		def timeMe = { Closure codeBlock ->
+			def start = new Date().getTime()
+			codeBlock()
+			def end = new Date().getTime()
 
-				def totalTime = end - start
-				def verbage = ((totalTime > 60000) ? "${(totalTime / 1000) / 60}m" : ((totalTime > 1000) ? "${totalTime / 1000}s" : "${totalTime}ms"))
-				println "Executed in ${verbage}"
-			}
+			def totalTime = end - start
+			def verbage = ((totalTime > 60000) ? "${(totalTime / 1000) / 60}m" : ((totalTime > 1000) ? "${totalTime / 1000}s" : "${totalTime}ms"))
+			println "Executed in ${verbage}"
+		}
 
-			/*
-			 * Time something simple, like inserting 1000 hash maps
-			 * into an array.
-			 */
-			timeMe {
-				def iterations = 1000
+		/*
+		 * Time something simple, like inserting 1000 hash maps
+		 * into an array.
+		 */
+		timeMe {
+			def iterations = 1000
 
-				print "Inserting ${iterations} hash maps into an array... "
-				def result = []
+			print "Inserting ${iterations} hash maps into an array... "
+			def result = []
 
-				(1..1000).each {
-					result << [ firstName: "Adam", lastName: "Presley", age: 32 ]
-				}
-			}
-
-			/*
-			 * Do something bigger, like recurse over a directory
-			 * structure and put all file names that start with
-			 * 'A' into an array.
-			 */
-			timeMe {
-				print "Get all file names that start with 'A'... "
-				def result = []
-
-				new File("C:/").eachFileRecurse { currentFile ->
-					if (!currentFile.isDirectory()) {
-						if (currentFile.name =~ /(?i)^a.*/) result << currentFile.path
-					}
-				}
-
-				print "${result.size()} match(es) found. "
+			(1..1000).each {
+				result << [ firstName: "Adam", lastName: "Presley", age: 32 ]
 			}
 		}
+
+		/*
+		 * Do something bigger, like recurse over a directory
+		 * structure and put all file names that start with
+		 * 'A' into an array.
+		 */
+		timeMe {
+			print "Get all file names that start with 'A'... "
+			def result = []
+
+			new File("C:/").eachFileRecurse { currentFile ->
+				if (!currentFile.isDirectory()) {
+					if (currentFile.name =~ /(?i)^a.*/) result << currentFile.path
+				}
+			}
+
+			print "${result.size()} match(es) found. "
+		}
 	}
+}
+{% endhighlight %}
 
 As you can see I wrap each code block I want to time with the
 **timeMe()** closure. In this example I provide two tests. The first

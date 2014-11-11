@@ -19,12 +19,13 @@ first bit of information I need is the host name, or the proper name of
 the server running ColdFusion. Java to the rescue! The Java package
 **java.net** contains what we need to do this.  
 
-    :::cfm
-    <cfset inet = createObject("java", "java.net.InetAddress") />
-    <cfset hostName = inet.getLocalHost().getHostName() />
+{% highlight cfm %}
+<cfset inet = createObject("java", "java.net.InetAddress") />
+<cfset hostName = inet.getLocalHost().getHostName() />
 
-    <cfoutput>This computer's name is #hostName#</cfoutput>
-  
+<cfoutput>This computer's name is #hostName#</cfoutput>
+{% endhighlight %}
+
 The other piece of information I needed was something to identify the
 *instance* of ColdFusion I was running on in a multi-instance
 environment. I'm betting the way I did this could be done better, but
@@ -40,20 +41,21 @@ co-workers are running JRun, and I am running Tomcat, and that object is
 what get's me a server class from Tomcat, which in turn can give me the
 port Tomcat listens on for the shutdown command.  
 
-    :::cfm
-    <!---
-        Get the port number. This is *J2EE server specific*!
-    --->
-    <cftry>
-        <cfset j2eeService = createObject("java", "jrun.naming.NamingService") />
+{% highlight cfm %}
+<!---
+    Get the port number. This is *J2EE server specific*!
+--->
+<cftry>
+    <cfset j2eeService = createObject("java", "jrun.naming.NamingService") />
 
-    <cfcatch>
-        <cfset j2eeService = createObject("java", "org.apache.catalina.ServerFactory").getServer() />
-    </cfcatch>
-    </cftry>
+<cfcatch>
+    <cfset j2eeService = createObject("java", "org.apache.catalina.ServerFactory").getServer() />
+</cfcatch>
+</cftry>
 
-    <cfset port = j2eeService.getPort() />
+<cfset port = j2eeService.getPort() />
 
-    <cfoutput>This instance is running against port #port#</cfoutput>
+<cfoutput>This instance is running against port #port#</cfoutput>
+{% endhighlight %}
 
 And this, ladies and gentlemen, is why ColdFusion rocks! Happy coding!

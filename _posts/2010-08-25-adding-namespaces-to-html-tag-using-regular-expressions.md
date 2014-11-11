@@ -17,18 +17,20 @@ example I will be injecting the SVG, or Scalable Vector Graphics
 namespace. To accomplish this in ColdFusion we simply are using the
 **replaceAll** method against the **String** class in Java.  
   
-	:::cfm
-	<cfset old = "<html>" />
-	<cfset new = old.replaceAll("(?i)(?<=<html)(.*?)>", "$1 xmlns:svg=""http://www.w3.org/2000/svg"">") />
-	<cfdump var="#new#" />
-  
+{% highlight cfm %}
+<cfset old = "<html>" />
+<cfset new = old.replaceAll("(?i)(?<=<html)(.*?)>", "$1 xmlns:svg=""http://www.w3.org/2000/svg"">") />
+<cfdump var="#new#" />
+{% endhighlight %}
+
 The next task was to ensure that if the HTML tag already had a namespace
 our regex won't erase it, but will instead append the new namespace to
 it. Let's see that code.  
   
-	:::cfm
-	<cfset old = "<html xmlns=""http://www.w3.org/1999/xhtml"">" />
-	<cfset new = old.replaceAll("(?i)(?<=<html)(.*?)>", "$1 xmlns:svg=""http://www.w3.org/2000/svg"">") />
-	<cfdump var="#new#" />
+{% highlight cfm %}
+<cfset old = "<html xmlns=""http://www.w3.org/1999/xhtml"">" />
+<cfset new = old.replaceAll("(?i)(?<=<html)(.*?)>", "$1 xmlns:svg=""http://www.w3.org/2000/svg"">") />
+<cfdump var="#new#" />
+{% endhighlight %}
 
 I love me some regular expressions. Happy coding!

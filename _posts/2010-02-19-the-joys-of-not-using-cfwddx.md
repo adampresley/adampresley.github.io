@@ -15,8 +15,9 @@ type of obscure thing. The app worked in other environments, so that was
 my first suspicion. After a bit of digging I discovered this little
 nugget (changed a bit to protect the innocent of course).
 
-	:::coldfusion
-	<cfwddx action="cfml2js" input="#rc.query#" topLevelVariable="data" />
+{% highlight cfm %}
+<cfwddx action="cfml2js" input="#rc.query#" topLevelVariable="data" />
+{% endhighlight %}
 
 Let me start by telling you what this function does. The CFWDDX tag,
 with the action of *cfml2js* takes some object, in this case a query,
@@ -25,22 +26,23 @@ this produces by taking an imaginary query object that has 2 columns,
 **firstName**, and **lastName**, and has two records. This is
 what the JavaScript would look like on the rendered page.
 
-	:::javascript
-	<script>
+{% highlight javascript %}
+<script>
 
-	data = new WddxRecordset();
-	col0 = new Array();
-	col0[0] = "Adam";
-	col0[1] = "Ben";
-	data["firstName"] = col0;
-	col0 = null;
-	col1 = new Array();
-	col1[0] = "Presley";
-	col1[1] = "Nadel";
-	data["lastName"] = col1;
-	col1 = null;
+data = new WddxRecordset();
+col0 = new Array();
+col0[0] = "Adam";
+col0[1] = "Ben";
+data["firstName"] = col0;
+col0 = null;
+col1 = new Array();
+col1[0] = "Presley";
+col1[1] = "Nadel";
+data["lastName"] = col1;
+col1 = null;
 
-	</script>
+</script>
+{% endhighlight %}
 
 Ok, now imagine that, but a query with 123 records and 8 columns. That's
 about 1,021 lines of generated JavaScript put right into the page. That
@@ -82,43 +84,44 @@ using *serializeJson()* which makes the query into an array of arrays,
 and the columns are stored in a separate array. I've blogged on this
 "issue" before for those interested.
 
-	:::javascript
-	var MyPage = function(config) {
-		this.initialize = function() {
-			jQuery.ajax({
-				data: {
-					event: "section.getData",
-					method: "process",
-					returnFormat: "json"
-				},
-				url: "coldboxproxy.cfc",
-				dataType: "json",
-				success: function(data) {
-					__config.dataIdx = __this.buildIndex(data);
-					__config.data = data;
-				}
-			});
-		};
-
-		this.buildIndex = function(data) {
-			var i = 0;
-			var result = {};
-
-			/*
-			 * The COLUMNS key contains the query's columns array.
-			 */
-			for (i = 0; i < data.COLUMNS.length; i++) {
-				result[data.COLUMNS[i]] = i;
+{% highlight javascript %}
+var MyPage = function(config) {
+	this.initialize = function() {
+		jQuery.ajax({
+			data: {
+				event: "section.getData",
+				method: "process",
+				returnFormat: "json"
+			},
+			url: "coldboxproxy.cfc",
+			dataType: "json",
+			success: function(data) {
+				__config.dataIdx = __this.buildIndex(data);
+				__config.data = data;
 			}
-
-			return result;
-		};
-
-		var __config = jQuery.extend({}, config);
-		var __this = this;
-
-		this.initialize();
+		});
 	};
+
+	this.buildIndex = function(data) {
+		var i = 0;
+		var result = {};
+
+		/*
+		 * The COLUMNS key contains the query's columns array.
+		 */
+		for (i = 0; i < data.COLUMNS.length; i++) {
+			result[data.COLUMNS[i]] = i;
+		}
+
+		return result;
+	};
+
+	var __config = jQuery.extend({}, config);
+	var __this = this;
+
+	this.initialize();
+};
+{% endhighlight %}
 
 In the above code we create a container object, or **namespace** as
 you may hear some people call it, which holds all the functionality for
@@ -130,14 +133,16 @@ off an AJAX call to get the JSON data. I then, upon success, call a
 quick function to create an "index". Normally, if I wanted to reference
 *lastName* from my serialized query, I would do this.
 
-	:::javascript
-	var lastName = __config.data[0][1];
+{% highlight javascript %}
+var lastName = __config.data[0][1];
+{% endhighlight %}
 
 The index of 1 is the second column in the query. I wanted to reference
 by the column name, however. Creating that index allows me to do this.
 
-	:::javascript
-	var lastName = __config.data[0][__config.dataIdx.LASTNAME];
+{% highlight javascript %}
+var lastName = __config.data[0][__config.dataIdx.LASTNAME];
+{% endhighlight %}
 
 Although I prefer to create code on the ColdFusion side to transform the
 query to JSON that allows me to do that in JavaScript, I did not have

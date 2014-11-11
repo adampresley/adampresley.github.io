@@ -35,31 +35,33 @@ serialization, built-in web server for development, and plugins. It's
 super light weight and fast, and it doesn't take a lot of heavy reading
 to get started. As an example here is a simple view definition.  
   
-    :::python
-    from bottle import view, route, request
-    from app.model.core.adampresley.Factory import Factory
+{% highlight python %}
+from bottle import view, route, request
+from app.model.core.adampresley.Factory import Factory
 
-    @route("/home")
-    @view("home")
-    def home():
-       viewData = {}
-       service = Factory().getVisitorService()
+@route("/home")
+@view("home")
+def home():
+   viewData = {}
+   service = Factory().getVisitorService()
 
-       viewData["numVisits"] = service.getVisitorCount()
-       return viewData
+   viewData["numVisits"] = service.getVisitorCount()
+   return viewData
+{% endhighlight %}
 
 The template engine is actually just a light wrapper around Python code
 itself with basic include ability. Compared to other template engines
 I've used it is pretty utilitarian yet it seems to serve my purposes so
 far. For example:   
   
-    :::html
-    <h1>Welcome!</h1>
-    % if numVisits > 0:
-       <p>You are visitor number {{numVisits}}!</p>
-    % else:
-       <p>No visitors before you! You are the first!</p>
-    %end
+{% highlight html %}
+<h1>Welcome!</h1>
+% if numVisits > 0:
+   <p>You are visitor number {{numVisits}}!</p>
+% else:
+   <p>No visitors before you! You are the first!</p>
+%end
+{% endhighlight %}
   
 I can honestly say I am enjoying Bottle, and look for more posts on
 this nifty framework soon. Happy coding!

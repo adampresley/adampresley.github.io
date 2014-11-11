@@ -19,25 +19,26 @@ and give it a try.
 **Edit:** Thanks to Tim Yates for bringing up the *join()*
 command. Made it a lot cleaner!
   
-	:::groovy
-	String.metaClass.encodeURL = {
-		java.net.URLEncoder.encode(delegate)
-	}
+{% highlight groovy %}
+String.metaClass.encodeURL = {
+	java.net.URLEncoder.encode(delegate)
+}
 
-	Map.metaClass.toKeyValuePair = { 
-		delegate.collect { key, value -> 
-			"${key.encodeURL()}=${value.toString().encodeURL()}"
-		}.join("&")
-	}
+Map.metaClass.toKeyValuePair = { 
+	delegate.collect { key, value -> 
+		"${key.encodeURL()}=${value.toString().encodeURL()}"
+	}.join("&")
+}
 
-	def sourceMap = [
-		a: "123",
-		b: "This is a test",
-		c: "I_have 20% coverage of this & I want *lots* more.",
-		d: "Whatever!"
-	]
+def sourceMap = [
+	a: "123",
+	b: "This is a test",
+	c: "I_have 20% coverage of this & I want *lots* more.",
+	d: "Whatever!"
+]
 
-	sourceMap.toKeyValuePair()
+sourceMap.toKeyValuePair()
+{% endhighlight %}
   
 And with that simple extension we can now easily convert a **Map**
 to a key-value pair string. The astute among you may have noticed that

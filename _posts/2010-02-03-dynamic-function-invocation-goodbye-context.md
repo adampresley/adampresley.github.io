@@ -32,31 +32,33 @@ then have a method called **doTest** which accepts a single
 argument, *value*, and returns the product of *value* and
 *multiplier*. Let's see that now.  
   
-	:::cfm
-	<cfcomponent displayname="Test" output="false">
+{% highlight cfm %}
+<cfcomponent displayname="Test" output="false">
 
-		<cffunction name="init" access="public" output="false">
-			<cfset variables.multiplier = 10 />
-			<cfreturn this />
-		</cffunction>
+	<cffunction name="init" access="public" output="false">
+		<cfset variables.multiplier = 10 />
+		<cfreturn this />
+	</cffunction>
 
-		<cffunction name="doTest" access="public" output="false">
-			<cfargument name="value" required="false" />
-			<cfreturn value * variables.multiplier />
-		</cffunction>
+	<cffunction name="doTest" access="public" output="false">
+		<cfargument name="value" required="false" />
+		<cfreturn value * variables.multiplier />
+	</cffunction>
 
-	</cfcomponent>
-  
+</cfcomponent>
+{% endhighlight %}
+
 Simple enough. Now let's look at using the same method I did last night,
 and see what happens.   
 
-	:::cfm
-	<cfset rc.object = createObject("component", "com.test").init() />
-	<cfset rc.functionName = "doTest" />
-	<cfset rc.ptr = evaluate("rc.object.#rc.functionName#") />
-	<cfset rc.result = rc.ptr(5) />
+{% highlight cfm %}
+<cfset rc.object = createObject("component", "com.test").init() />
+<cfset rc.functionName = "doTest" />
+<cfset rc.ptr = evaluate("rc.object.#rc.functionName#") />
+<cfset rc.result = rc.ptr(5) />
 
-	<cfdump var="#rc#" label="Test Results" />
+<cfdump var="#rc#" label="Test Results" />
+{% endhighlight %}
   
 **Kaboom!**   
   

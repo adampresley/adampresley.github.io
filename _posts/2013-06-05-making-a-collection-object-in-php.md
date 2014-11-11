@@ -13,13 +13,13 @@ structures (a map or dictionary) that was the result of a query to a
 database. This data represented a set of statuses, each record with an
 ID and a status. Imagine it looking something like this.  
   
-```javascript
+{% highlight javascript %}
 [
 	{ "id": 1, "status": "Active" },
 	{ "id": 2, "status": "Inactive" },
 	{ "id": 3, "status": "Terminated" }
 ]
-```
+{% endhighlight %}
 
 I had been asked to create some UI elements that would filter a page
 based on a couple of specific statuses. Knowing in the past how these
@@ -53,53 +53,55 @@ The first interface to implement is **ArrayAccess**. This allows you to
 reference an instance of your class as an array. This means you can do
 something like this.  
   
-	:::php
-	<?php
-		$statusCollection = new StatusCollection();
-		$statusCollection[] = array("id" => 1, "status" => "Active");
-		$statusCollection[] = array("id" => 2, "status" => "Inactive");
+{% highlight php %}
+<?php
+	$statusCollection = new StatusCollection();
+	$statusCollection[] = array("id" => 1, "status" => "Active");
+	$statusCollection[] = array("id" => 2, "status" => "Inactive");
 
-		$id = $statusCollection[1]["id"];
-	?>
+	$id = $statusCollection[1]["id"];
+?>
+{% endhighlight %}
 
 Notice how we can add to the object like an array, and we can reference
 by index just like an array. So how do we make a class to do this?
 Implement the **ArrayAccess** interface. Let's see how we would do that
 in our **StatusCollection** class.  
 
-	:::php
-	<?php  
-	
-	class StatusCollection implements ArrayAccess {
-	   private $statuses = array();
+{% highlight php %}
+<?php  
 
-	   public function __construct($statuses) {
-	      $this->statuses = $statuses;
-	   }
+class StatusCollection implements ArrayAccess {
+   private $statuses = array();
 
-	   public function offsetExists($offset) {
-	      return isset($this->statuses[$offset]);
-	   }
+   public function __construct($statuses) {
+      $this->statuses = $statuses;
+   }
 
-	   public function offsetGet($offset) {
-	      return isset($this->statuses[$offset]) ? $this->statuses[$offset] : null;
-	   }
+   public function offsetExists($offset) {
+      return isset($this->statuses[$offset]);
+   }
 
-	   public function offsetSet($offset, $value) {
-	      if (is_null($offset)) {
-	         $this->statuses[] = $value;
-	      } else {
-	         $this->statuses[$offset] = $value;
-	      }
-	   }
+   public function offsetGet($offset) {
+      return isset($this->statuses[$offset]) ? $this->statuses[$offset] : null;
+   }
 
-	   public function offsetUnset($offset) {
-	      unset($this->statuses[$offset]);
-	   }
-	}
+   public function offsetSet($offset, $value) {
+      if (is_null($offset)) {
+         $this->statuses[] = $value;
+      } else {
+         $this->statuses[$offset] = $value;
+      }
+   }
 
-	?>
-  
+   public function offsetUnset($offset) {
+      unset($this->statuses[$offset]);
+   }
+}
+
+?>
+{% endhighlight %}
+
 First and foremost refer to [http://us2.php.net/manual/en/class.arrayaccess.php] as a reference to
 the **ArrayAccess** interface. It dictates that your class needs to
 implement four methods: *offstExists()*, *offsetGet()*, *offsetSet()*,
@@ -110,15 +112,16 @@ Now we'd like to make it so we can easily iterate over our class
 instance variable much like any other array. Basically we want to be
 able to do this.  
   
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	foreach ($statusCollection as $status) {
-	   printf("<option value=\"%d\">%s</option>\n", $status["id"], $status["status"]);
-	}
+foreach ($statusCollection as $status) {
+   printf("<option value=\"%d\">%s</option>\n", $status["id"], $status["status"]);
+}
 
-	?>
-  
+?>
+{% endhighlight %}
+
 To do this we must implement the [**Iterator** interface](http://php.net/manual/en/class.iterator.php). This
 interface requires we implement five more methods: *current()*, *key()*,
 *next()*, *rewind()*, and *valid()*. When you write code like above to
@@ -127,145 +130,148 @@ called. The idea here is that we'll keep an internal variable to track
 the current iterator position, so when a loop asks for another item we
 know which index to return. Here's what that looks like.  
   
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	class StatusCollection implements ArrayAccess, Iterator {
-	   private $statuses = array();
-	   private $position = 0;
+class StatusCollection implements ArrayAccess, Iterator {
+   private $statuses = array();
+   private $position = 0;
 
-	   public function __construct($statuses) {
-	      $this->statuses = $statuses;
-	      $this->position = 0;
-	   }
+   public function __construct($statuses) {
+      $this->statuses = $statuses;
+      $this->position = 0;
+   }
 
-	   public function current() {
-	      return $this->statuses[$this->position];
-	   }
+   public function current() {
+      return $this->statuses[$this->position];
+   }
 
-	   public function key() {
-	      return $this->position;
-	   }
+   public function key() {
+      return $this->position;
+   }
 
-	   public function next() {
-	      ++$this->position;
-	   }
+   public function next() {
+      ++$this->position;
+   }
 
-	   public function offsetExists($offset) {
-	      return isset($this->statuses[$offset]);
-	   }
+   public function offsetExists($offset) {
+      return isset($this->statuses[$offset]);
+   }
 
-	   public function offsetGet($offset) {
-	      return isset($this->statuses[$offset]) ? $this->statuses[$offset] : null;
-	   }
+   public function offsetGet($offset) {
+      return isset($this->statuses[$offset]) ? $this->statuses[$offset] : null;
+   }
 
-	   public function offsetSet($offset, $value) {
-	      if (is_null($offset)) {
-	         $this->statuses[] = $value;
-	      } else {
-	         $this->statuses[$offset] = $value;
-	      }
-	   }
+   public function offsetSet($offset, $value) {
+      if (is_null($offset)) {
+         $this->statuses[] = $value;
+      } else {
+         $this->statuses[$offset] = $value;
+      }
+   }
 
-	   public function offsetUnset($offset) {
-	      unset($this->statuses[$offset]);
-	   }
+   public function offsetUnset($offset) {
+      unset($this->statuses[$offset]);
+   }
 
-	   public function rewind() {
-	      $this->position = 0;
-	   }
+   public function rewind() {
+      $this->position = 0;
+   }
 
-	   public function valid() {
-	      return isset($this->statuses[$this->position]);
-	   }
-	}
+   public function valid() {
+      return isset($this->statuses[$this->position]);
+   }
+}
 
-	?>
-  
+?>
+{% endhighlight %}
+
 Finally in my 3rd bullet point I said that I wanted a method to get the
 ID of a particular status by name. Here I will simply add a new method
 called *getIdByName()* which will do a quick loop to find our status. If
 the ID can't be located an exception is thrown.  
   
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	class StatusCollection implements ArrayAccess, Iterator {
-	   private $statuses = array();
-	   private $position = 0;
+class StatusCollection implements ArrayAccess, Iterator {
+   private $statuses = array();
+   private $position = 0;
 
-	   public function __construct($statuses) {
-	      $this->statuses = $statuses;
-	      $this->position = 0;
-	   }
+   public function __construct($statuses) {
+      $this->statuses = $statuses;
+      $this->position = 0;
+   }
 
-	   public function current() {
-	      return $this->statuses[$this->position];
-	   }
+   public function current() {
+      return $this->statuses[$this->position];
+   }
 
-	   public function getIdByName($statusName) {
-	      for ($i = 0; $i < count($this->statuses); $i++) {
-	         if ($this->statuses[$i]["status"] == $statusName) return $this->statuses[$i]["id"];
-	      }
+   public function getIdByName($statusName) {
+      for ($i = 0; $i < count($this->statuses); $i++) {
+         if ($this->statuses[$i]["status"] == $statusName) return $this->statuses[$i]["id"];
+      }
 
-	      throw new Exception("Status '{$statusName}' not found");
-	   }
+      throw new Exception("Status '{$statusName}' not found");
+   }
 
-	   public function key() {
-	      return $this->position;
-	   }
+   public function key() {
+      return $this->position;
+   }
 
-	   public function next() {
-	      ++$this->position;
-	   }
+   public function next() {
+      ++$this->position;
+   }
 
-	   public function offsetExists($offset) {
-	      return isset($this->statuses[$offset]);
-	   }
+   public function offsetExists($offset) {
+      return isset($this->statuses[$offset]);
+   }
 
-	   public function offsetGet($offset) {
-	      return isset($this->statuses[$offset]) ? $this->statuses[$offset] : null;
-	   }
+   public function offsetGet($offset) {
+      return isset($this->statuses[$offset]) ? $this->statuses[$offset] : null;
+   }
 
-	   public function offsetSet($offset, $value) {
-	      if (is_null($offset)) {
-	         $this->statuses[] = $value;
-	      } else {
-	         $this->statuses[$offset] = $value;
-	      }
-	   }
+   public function offsetSet($offset, $value) {
+      if (is_null($offset)) {
+         $this->statuses[] = $value;
+      } else {
+         $this->statuses[$offset] = $value;
+      }
+   }
 
-	   public function offsetUnset($offset) {
-	      unset($this->statuses[$offset]);
-	   }
+   public function offsetUnset($offset) {
+      unset($this->statuses[$offset]);
+   }
 
-	   public function rewind() {
-	      $this->position = 0;
-	   }
+   public function rewind() {
+      $this->position = 0;
+   }
 
-	   public function valid() {
-	      return isset($this->statuses[$this->position]);
-	   }
-	}
+   public function valid() {
+      return isset($this->statuses[$this->position]);
+   }
+}
 
-	?>
+?>
+{% endhighlight %}
 
 Cool, so now let's see a contrived example of how one might use this.  
 	
-	:::php
-	<?php
+{% highlight php %}
+<?php
 
-	<select id="statusId" name="statusId">
-		foreach ($statusCollection as $status) {
-			printf("<option value=\"%d\">%s</option>\n", $status["id"], $status["status"]);
-		}
-	</select>
+<select id="statusId" name="statusId">
+	foreach ($statusCollection as $status) {
+		printf("<option value=\"%d\">%s</option>\n", $status["id"], $status["status"]);
+	}
+</select>
 
-	<button name="btnShowActive" 
-		id="btnShowActive" 
-		onclick="window.location='/?statusId=<?= $statusCollection.getIdByStatus('Active') ?>';">Show Active
-	</button>
+<button name="btnShowActive" 
+	id="btnShowActive" 
+	onclick="window.location='/?statusId=<?= $statusCollection.getIdByStatus('Active') ?>';">Show Active
+</button>
 
-	?>
+?>
+{% endhighlight %}
   
 Happy coding!  

@@ -29,8 +29,9 @@ converted correctly to a string.
 The next thing I wanted was to make sure that I didn't have to do
 anything silly like this.  
   
-	:::python
-	return [myService.serialize(item) for item in myService.getMongoRecords()]
+{% highlight python %}
+return [myService.serialize(item) for item in myService.getMongoRecords()]
+{% endhighlight %}
 
 To address this I put this nifty recursive object walker method into a
 decorator. With a decorator I could decorate any route method in my
@@ -39,50 +40,52 @@ object walk and make sure any response I return from a method decorated
 would have MongoDB IDs properly converted to string. Here's what that
 decorator code looks like.  
 
-	:::python
-	from bson.objectid import ObjectId
+{% highlight python %}
+from bson.objectid import ObjectId
 
-	def ajax(fn):
-	   def wrapper(*args, **kwargs):
-	      def _toDict(obj):
-	         if isinstance(obj, dict):
-	            for key in obj.keys():
-	               obj[key] = _toDict(obj[key])
+def ajax(fn):
+   def wrapper(*args, **kwargs):
+      def _toDict(obj):
+         if isinstance(obj, dict):
+            for key in obj.keys():
+               obj[key] = _toDict(obj[key])
 
-	            return obj
+            return obj
 
-	         elif hasattr(obj, "__iter__"):
-	            return [_toDict(item) for item in obj]
+         elif hasattr(obj, "__iter__"):
+            return [_toDict(item) for item in obj]
 
-	         elif hasattr(obj, "__dict__"):
-	            return dict([(key, _toDict(value)) for key, value in obj.__dict__.iteritems() if not callable(value) and not key.startswith("_")])
+         elif hasattr(obj, "__dict__"):
+            return dict([(key, _toDict(value)) for key, value in obj.__dict__.iteritems() if not callable(value) and not key.startswith("_")])
 
-	         else:
-	            if isinstance(obj, ObjectId):
-	               return str(obj)
-	            else:
-	               return obj
+         else:
+            if isinstance(obj, ObjectId):
+               return str(obj)
+            else:
+               return obj
 
-	      result = fn(*args, **kwargs)
-	      return _toDict(result)
+      result = fn(*args, **kwargs)
+      return _toDict(result)
 
-	   return wrapper
-  
+   return wrapper
+{% endhighlight %}
+
 To use this in my Bottlepy application I would have a method for an AJAX
 response route that looks something like this.  
   
-	:::python
-	@route("/ajax/contact/:id", method="GET")
-	@ajax
-	def ajax_getContact(id):
-	   contactService = request.factory.getContactService()
-	   return contactService.read(id=id)
+{% highlight python %}
+@route("/ajax/contact/:id", method="GET")
+@ajax
+def ajax_getContact(id):
+   contactService = request.factory.getContactService()
+   return contactService.read(id=id)
 
-	@route("/ajax/contacts", method="GET")
-	@ajax
-	def ajax_getContacts():
-	   contactService = request.factory.getContactService()
-	   return contactService.list()
+@route("/ajax/contacts", method="GET")
+@ajax
+def ajax_getContacts():
+   contactService = request.factory.getContactService()
+   return contactService.list()
+{% endhighlight %}
 
 Notice how each of these methods are decorated with our cool decorator?
 That ensures that the objects and lists I return are ready for proper

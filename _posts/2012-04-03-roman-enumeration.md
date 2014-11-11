@@ -18,44 +18,45 @@ then gives a snippet of one new hire's submission. Needless to say it is
 script to do this. Why? Distraction mostly. I needed a break. :) So
 without further ado here is the Python code I wrote to do this.
 
-    :::python
-    def convert(input):
-        map = {
-            "I": 1,
-            "V": 5,
-            "X": 10,
-            "L": 50,
-            "C": 100,
-            "D": 500,
-            "M": 1000
-        }
+{% highlight python %}
+def convert(input):
+    map = {
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000
+    }
 
-        print "Input = %s" % (input)
+    print "Input = %s" % (input)
 
-        currentValue = 0
-        result = 0
-        index = 0
+    currentValue = 0
+    result = 0
+    index = 0
 
-        while index < len(input):
-            letter = input[index]
-            currentValue = map[letter]
-            nextValue = 0
+    while index < len(input):
+        letter = input[index]
+        currentValue = map[letter]
+        nextValue = 0
 
-            if (index < len(input) - 1):
-                nextValue = map[input[index + 1]]
+        if (index < len(input) - 1):
+            nextValue = map[input[index + 1]]
 
-            if currentValue < nextValue:
-                result += (nextValue - currentValue)
-                index = index + 1
-            else:
-                result += currentValue
-
+        if currentValue < nextValue:
+            result += (nextValue - currentValue)
             index = index + 1
+        else:
+            result += currentValue
 
-        return result
+        index = index + 1
 
-    input = "MCMXLIV"
-    print convert(input)
+    return result
+
+input = "MCMXLIV"
+print convert(input)
+{% endhighlight %}
 
 Is there a more efficient way? I'm sure there is, but it was fun
 nonetheless. Feel free to comment on how to make this better. Happy

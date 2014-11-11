@@ -14,12 +14,13 @@ example he uses a multi-dimensional array, then uses ColdFusion to
 iterate over the array, copy the item to move, delete it, them push it
 to the end of the array, thus "rotating" it. That looks like this.
 
-	:::coldfusion
-	<cfloop index="i" from="1" to="#arrayLen(data)#">
-		<cfset movingItem = data[i][1]>
-		<cfset arrayDeleteAt(data[i],1)>
-		<cfset arrayAppend(data[i], movingItem)>
-	</cfloop>
+{% highlight cfm %}
+<cfloop index="i" from="1" to="#arrayLen(data)#">
+	<cfset movingItem = data[i][1]>
+	<cfset arrayDeleteAt(data[i],1)>
+	<cfset arrayAppend(data[i], movingItem)>
+</cfloop>
+{% endhighlight %}
 
 Being the giant nerd that I am I wanted to see if we could do this using
 the big Java-Hemi under the hood of ColdFusion. Sure enough, the Java
@@ -31,60 +32,61 @@ but I will show you that we use the rotate method on the Collections class. And 
 it is an array of arrays, so we will loop over the first level of the
 array, and apply the [rotate method](http://java.sun.com/j2se/1.4.2/docs/api/java/util/Collections.html#rotate%28java.util.List,%20int%29) to each sub-array.
 
-	:::coldfusion
-	<cfloop from="1" to="#arrayLen(data)#" index="i">
-		<cfset collection.rotate(data[i], -1) />
-	</cfloop>
+{% highlight cfm %}
+<cfloop from="1" to="#arrayLen(data)#" index="i">
+	<cfset collection.rotate(data[i], -1) />
+</cfloop>
+{% endhighlight %}
 
 Super cool eh? Here is the code sample in full. Happy coding, and thanks
 for the interesting blog post Ray!
 
-	:::coldfusion
-	<cffunction name="render" returntype="void" access="public" output="true">
-		<cfargument name="arr" type="array" required="true" />
+{% highlight cfm %}
+<cffunction name="render" returntype="void" access="public" output="true">
+	<cfargument name="arr" type="array" required="true" />
 
-		<cfset var i = 0 />
-		<cfset var x = 0 />
+	<cfset var i = 0 />
+	<cfset var x = 0 />
 
-		<cfloop array="#arguments.arr#" index="i">
-			<cfloop array="#i#" index="x">
-				<cfset writeOutput("#x# ") />
-			</cfloop>
+	<cfloop array="#arguments.arr#" index="i">
+		<cfloop array="#i#" index="x">
+			<cfset writeOutput("#x# ") />
 		</cfloop>
-
-		<cfset writeOutput("
-
-		") />
-	</cffunction>
-
-
-	<cfset collection = createObject("java", "java.util.Collections") />
-	<cfset data = [
-		["a", "b", "c"],
-		["d", "e"]
-	] />
-
-	<!---
-		Display the original data array
-	--->
-	<cfset render(data) />
-
-	<!---
-		Rotate the arrays
-	--->
-	<cfloop from="1" to="#arrayLen(data)#" index="i">
-		<cfset collection.rotate(data[i], -1) />
 	</cfloop>
 
-	<cfset render(data) />
+	<cfset writeOutput("
+
+	") />
+</cffunction>
 
 
-	<!---
-		Rotate the arrays... again
-	--->
-	<cfloop from="1" to="#arrayLen(data)#" index="i">
-		<cfset collection.rotate(data[i], -1) />
-	</cfloop>
+<cfset collection = createObject("java", "java.util.Collections") />
+<cfset data = [
+	["a", "b", "c"],
+	["d", "e"]
+] />
 
-	<cfset render(data) />
+<!---
+	Display the original data array
+--->
+<cfset render(data) />
 
+<!---
+	Rotate the arrays
+--->
+<cfloop from="1" to="#arrayLen(data)#" index="i">
+	<cfset collection.rotate(data[i], -1) />
+</cfloop>
+
+<cfset render(data) />
+
+
+<!---
+	Rotate the arrays... again
+--->
+<cfloop from="1" to="#arrayLen(data)#" index="i">
+	<cfset collection.rotate(data[i], -1) />
+</cfloop>
+
+<cfset render(data) />
+{% endhighlight %}

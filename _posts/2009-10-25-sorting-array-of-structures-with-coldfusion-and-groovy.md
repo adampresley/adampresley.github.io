@@ -38,71 +38,73 @@ being a structure, by product ID first, and then if the product IDs
 match, then by price. Here is what an example of the array would look
 like.
 
-	:::coldfusion
-	unsorted = [
-		{
-			productId = 3,
-			title = "Widget ##3",
-			price = 4.95,
-			discounted = true
-		},
-		{
-			productId = 1,
-			title = "Widget ##1",
-			price = 10.95,
-			discounted = false
-		},
-		{
-			productId = 2,
-			title = "Widget ##2",
-			price = 11.95
-		},
-		{
-			productId = 3,
-			title = "Widget ##3",
-			price = 5.95,
-			discounted = false
-		}
-	];
+{% highlight cfm %}
+unsorted = [
+	{
+		productId = 3,
+		title = "Widget ##3",
+		price = 4.95,
+		discounted = true
+	},
+	{
+		productId = 1,
+		title = "Widget ##1",
+		price = 10.95,
+		discounted = false
+	},
+	{
+		productId = 2,
+		title = "Widget ##2",
+		price = 11.95
+	},
+	{
+		productId = 3,
+		title = "Widget ##3",
+		price = 5.95,
+		discounted = false
+	}
+];
+{% endhighlight %}
 
 Notice how our items are out of order (based on product ID and price),
 and that we have two items with the productId of 3, but differing
 prices. Let's look at how the comparator class would look.
 
-	:::java
-	import java.util.*;
+{% highlight java %}
+import java.util.*;
 
-	/*
-	 * Create a class that implements the java.util.Comparator interface.
-	 * This requires that we implement a single function named "compare"
-	 * that takes two items, and returns if the first if before, after,
-	 * or the same as the second item.
-	 *
-	 * In our case we will compare productId first. If they are the same
-	 * then we wanted to compare the prices.
-	 */
-	public class ProductComparator implements Comparator<coldfusion.runtime.Struct> {
-		public int compare(coldfusion.runtime.Struct value1, coldfusion.runtime.Struct value2) {
-			double price1 = value1.PRICE.toDouble();
-			double price2 = value2.PRICE.toDouble();
+/*
+ * Create a class that implements the java.util.Comparator interface.
+ * This requires that we implement a single function named "compare"
+ * that takes two items, and returns if the first if before, after,
+ * or the same as the second item.
+ *
+ * In our case we will compare productId first. If they are the same
+ * then we wanted to compare the prices.
+ */
+public class ProductComparator implements Comparator<coldfusion.runtime.Struct> {
+	public int compare(coldfusion.runtime.Struct value1, coldfusion.runtime.Struct value2) {
+		double price1 = value1.PRICE.toDouble();
+		double price2 = value2.PRICE.toDouble();
 
-			int productId1 = value1.PRODUCTID.toDouble();
-			int productId2 = value2.PRODUCTID.toDouble();
+		int productId1 = value1.PRODUCTID.toDouble();
+		int productId2 = value2.PRODUCTID.toDouble();
 
-			if (productId1 > productId2)
+		if (productId1 > productId2)
+			return 1;
+		else if (productId1 < productId2)
+			return -1;
+		else {
+			if (price1 > price2)
 				return 1;
-			else if (productId1 < productId2)
+			else if (price1 < price2)
 				return -1;
-			else {
-				if (price1 > price2)
-					return 1;
-				else if (price1 < price2)
-					return -1;
-				else
-					return 0;
-			}
+			else
+				return 0;
 		}
 	}
+}
+{% endhighlight %}
 
 The first thing of interest is the class definition. Notice how we
 implement the Comparator interface. You'll also see those weird
@@ -124,145 +126,147 @@ code to determine which out of two items should go after the other.
 The use of this comparator requires that we get a Collections object and
 call the sort method, passing in the array to sort, and the comparator.
 
-	:::coldfusion
-	variables.collectionObject = createObject("java", "java.util.Collections");
-	variables.collectionObject.sort(someArray, variables.comparator);
+{% highlight cfm %}
+variables.collectionObject = createObject("java", "java.util.Collections");
+variables.collectionObject.sort(someArray, variables.comparator);
+{% endhighlight %}
 
 Let's take a look at the two pieces of code. The first is a CFC that
 creates our sorter component. We will use Groovy to create the Java
 class dynamically. The second is a test page that uses it. Happy
 coding!!
 
-	:::coldfusion
-	<cfcomponent>
+{% highlight cfm %}
+<cfcomponent>
 
-		<cffunction name="init" returntype="productSorter" access="public" output="false">
-			<cfscript>
-				variables.collectionObject = createObject("java", "java.util.Collections");
-				variables.comparator = __getComparator();
+	<cffunction name="init" returntype="productSorter" access="public" output="false">
+		<cfscript>
+			variables.collectionObject = createObject("java", "java.util.Collections");
+			variables.comparator = __getComparator();
 
-				return this;
-			</cfscript>
-		</cffunction>
+			return this;
+		</cfscript>
+	</cffunction>
 
-		<cffunction name="Sort" returntype="array" access="public" output="false">
-			<cfargument name="productArray" type="array" required="true" />
+	<cffunction name="Sort" returntype="array" access="public" output="false">
+		<cfargument name="productArray" type="array" required="true" />
 
-			<cfscript>
-				var result = duplicate(arguments.productArray);
+		<cfscript>
+			var result = duplicate(arguments.productArray);
 
-				variables.collectionObject.sort(result, variables.comparator);
-				return result;
-			</cfscript>
-		</cffunction>
+			variables.collectionObject.sort(result, variables.comparator);
+			return result;
+		</cfscript>
+	</cffunction>
 
-		<cffunction name="__getComparator" returntype="any" access="private" output="false">
-			<cfimport prefix="g" taglib="/groovy" />
+	<cffunction name="__getComparator" returntype="any" access="private" output="false">
+		<cfimport prefix="g" taglib="/groovy" />
 
-			<cfset arguments.object = "" />
+		<cfset arguments.object = "" />
 
-			<cfoutput>
-			<g:script args="#arguments#">
+		<cfoutput>
+		<g:script args="#arguments#">
 
-				import java.util.*;
+			import java.util.*;
 
-				/*
-				 * Create a class that implements the java.util.Comparator interface.
-				 * This requires that we implement a single function named "compare"
-				 * that takes two items, and returns if the first if before, after,
-				 * or the same as the second item.
-				 *
-				 * In our case we will compare productId first. If they are the same
-				 * then we wanted to compare the prices.
-				 */
-				public class ProductComparator implements Comparator<coldfusion.runtime.Struct> {
-					public int compare(coldfusion.runtime.Struct value1, coldfusion.runtime.Struct value2) {
-						double price1 = value1.PRICE.toDouble();
-						double price2 = value2.PRICE.toDouble();
+			/*
+			 * Create a class that implements the java.util.Comparator interface.
+			 * This requires that we implement a single function named "compare"
+			 * that takes two items, and returns if the first if before, after,
+			 * or the same as the second item.
+			 *
+			 * In our case we will compare productId first. If they are the same
+			 * then we wanted to compare the prices.
+			 */
+			public class ProductComparator implements Comparator<coldfusion.runtime.Struct> {
+				public int compare(coldfusion.runtime.Struct value1, coldfusion.runtime.Struct value2) {
+					double price1 = value1.PRICE.toDouble();
+					double price2 = value2.PRICE.toDouble();
 
-						int productId1 = value1.PRODUCTID.toDouble();
-						int productId2 = value2.PRODUCTID.toDouble();
+					int productId1 = value1.PRODUCTID.toDouble();
+					int productId2 = value2.PRODUCTID.toDouble();
 
-						if (productId1 > productId2)
+					if (productId1 > productId2)
+						return 1;
+					else if (productId1 < productId2)
+						return -1;
+					else {
+						if (price1 > price2)
 							return 1;
-						else if (productId1 < productId2)
+						else if (price1 < price2)
 							return -1;
-						else {
-							if (price1 > price2)
-								return 1;
-							else if (price1 < price2)
-								return -1;
-							else
-								return 0;
-						}
+						else
+							return 0;
 					}
 				}
+			}
 
-				arguments.object = new ProductComparator();
+			arguments.object = new ProductComparator();
 
-			</g:script>
-			</cfoutput>
+		</g:script>
+		</cfoutput>
 
-			<cfreturn arguments.object />
-		</cffunction>
+		<cfreturn arguments.object />
+	</cffunction>
 
-	</cfcomponent>
+</cfcomponent>
+{% endhighlight %}
 
 
-	:::coldfusion
-	<cfscript>
+{% highlight cfm %}
+<cfscript>
 
-	productSorter = createObject("component", "productSorter").init();
+productSorter = createObject("component", "productSorter").init();
 
-	unsorted = [
-		{
-			productId = 3,
-			title = "Widget ##3",
-			price = 4.95,
-			discounted = true
-		},
-		{
-			productId = 1,
-			title = "Widget ##1",
-			price = 10.95,
-			discounted = false
-		},
-		{
-			productId = 2,
-			title = "Widget ##2",
-			price = 11.95
-		},
-		{
-			productId = 3,
-			title = "Widget ##3",
-			price = 5.95,
-			discounted = false
-		}
-	];
+unsorted = [
+	{
+		productId = 3,
+		title = "Widget ##3",
+		price = 4.95,
+		discounted = true
+	},
+	{
+		productId = 1,
+		title = "Widget ##1",
+		price = 10.95,
+		discounted = false
+	},
+	{
+		productId = 2,
+		title = "Widget ##2",
+		price = 11.95
+	},
+	{
+		productId = 3,
+		title = "Widget ##3",
+		price = 5.95,
+		discounted = false
+	}
+];
 
-	sorted = productSorter.Sort(unsorted);
+sorted = productSorter.Sort(unsorted);
 
-	</cfscript>
+</cfscript>
 
-	<p>
-		This page demonstrates using Groovy to create a custom comparator used to sort
-		an array of structures. In this example we will have an array of products. We
-		wish to sort these products by productId first, and if the productId matches,
-		we will then sort by price.
-	</p>
+<p>
+	This page demonstrates using Groovy to create a custom comparator used to sort
+	an array of structures. In this example we will have an array of products. We
+	wish to sort these products by productId first, and if the productId matches,
+	we will then sort by price.
+</p>
 
-	<fieldset style="padding: 10px; margin-bottom: 15px;">
-		<legend>Unsorted Array of Products</legend>
+<fieldset style="padding: 10px; margin-bottom: 15px;">
+	<legend>Unsorted Array of Products</legend>
 
-		<cfdump var="#unsorted#" />
-	</fieldset>
+	<cfdump var="#unsorted#" />
+</fieldset>
 
-	<fieldset style="padding: 10px; margin-bottom: 15px;">
-		<legend>Sorted Array of Products</legend>
+<fieldset style="padding: 10px; margin-bottom: 15px;">
+	<legend>Sorted Array of Products</legend>
 
-		<cfdump var="#sorted#" />
-	</fieldset>
-
+	<cfdump var="#sorted#" />
+</fieldset>
+{% endhighlight %}
 
 **UPDATE** (11/13/2009):
 See <#post/2009/11/sorting-array-of-structures-with-only-coldfusion/522a996b6851e13e760cd12b>

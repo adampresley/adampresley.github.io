@@ -15,10 +15,11 @@ then executes line #2 with the revers, replace, and reverse. This is
 the part I'm not sure I get. I run it, and see that the word NewOrder is
 just removed. So why all the crazy reverses and such?? No idea.  
   
-	:::cfm
-	<cfset OrderDetailStringM = "1,5,SplitHere,10,600,NewOrder5,85,684" />
-	<cfset OrderDetailStringM = reverse(replace(reverse(OrderDetailStringM),"redrOweN",""))>
+{% highlight cfm %}
+<cfset OrderDetailStringM = "1,5,SplitHere,10,600,NewOrder5,85,684" />
+<cfset OrderDetailStringM = reverse(replace(reverse(OrderDetailStringM),"redrOweN",""))>
 
-	<cfdump var="#OrderDetailStringM#" />
+<cfdump var="#OrderDetailStringM#" />
+{% endhighlight %}
 
 Uh...

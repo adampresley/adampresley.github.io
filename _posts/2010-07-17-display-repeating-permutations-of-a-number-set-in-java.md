@@ -19,28 +19,29 @@ me to write a quick little program to display all possible combinations
 for the passcode. So I did. With digits 1, 2, 3, and 4 there are 256
 possible combinations.  
 
-	:::java
-	package com.adampresley.NumDigits;
+{% highlight java %}
+package com.adampresley.NumDigits;
 
-	public class Main
-	{
-	   public static void main(String[] args) {
-	      go("1234", 4, new StringBuffer());
-	   }
+public class Main
+{
+   public static void main(String[] args) {
+      go("1234", 4, new StringBuffer());
+   }
 
-	   static void go(String input, int depth, StringBuffer output) {
-	      if (depth == 0) {
-	         System.out.println(output);
-	      } 
-	      else {
-	         for (int i = 0; i < input.length(); i++) {
-	            output.append(input.charAt(i));
-	            go(input, depth - 1, output);
-	            output.deleteCharAt(output.length() - 1);
-	         }
-	      }
-	   }
-	}  
+   static void go(String input, int depth, StringBuffer output) {
+      if (depth == 0) {
+         System.out.println(output);
+      } 
+      else {
+         for (int i = 0; i < input.length(); i++) {
+            output.append(input.charAt(i));
+            go(input, depth - 1, output);
+            output.deleteCharAt(output.length() - 1);
+         }
+      }
+   }
+}  
+{% endhighlight %}
   
 After 15 tries my fiancee gets tired of the noise it's making and has my
 daughter come take the safe away from me. My daughter then tells me the

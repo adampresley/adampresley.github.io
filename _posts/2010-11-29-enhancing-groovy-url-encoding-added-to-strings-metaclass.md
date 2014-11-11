@@ -14,17 +14,19 @@ snippet to the Groovy String class to URL encode strings. Normally this
 is done through the **java.net.URLEncoder** class, but we are going
 to add it to the string class so we can do something like this.  
 
-    :::groovy
-    def someValue = "This is some value"
-    def someKey = "key"
-    def result = "${someKey.encodeURL()}=${someValue.encodeURL()}"
-  
+{% highlight groovy %}
+def someValue = "This is some value"
+def someKey = "key"
+def result = "${someKey.encodeURL()}=${someValue.encodeURL()}"
+{% endhighlight %}
+
 Seems like a pretty handy feature. And doing this is super easy.  
 
-    :::groovy
-    String.metaClass.encodeURL = {
-       java.net.URLEncoder.encode(delegate)
-    }
+{% highlight groovy %}
+String.metaClass.encodeURL = {
+   java.net.URLEncoder.encode(delegate)
+}
+{% endhighlight %}
 
 There are a couple of tricks behind this.   
   

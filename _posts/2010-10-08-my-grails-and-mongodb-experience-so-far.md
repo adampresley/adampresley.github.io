@@ -37,51 +37,54 @@ Java objects to MongoDB. With Morphia I only have to add very little to
 describe my class so that it can be persisted to MongoDB. Here's a
 sample of a class the represents a user's Role.  
   
-    :::groovy
-    import com.google.code.morphia.annotations.*
-    import org.bson.types.*
+{% highlight groovy %}
+import com.google.code.morphia.annotations.*
+import org.bson.types.*
 
-    @Entity
-    class Role {
-       @Id ObjectId id
-       String roleName
-       boolean isSuperAdmin = false
-       int sortOrder = 0
-    }
+@Entity
+class Role {
+   @Id ObjectId id
+   String roleName
+   boolean isSuperAdmin = false
+   int sortOrder = 0
+}
+{% endhighlight %}
 
 You'll notice I added annotations for the class itself to describe that
 it is a Mongo Entity, and another for the ID field. That's it. With this
 in place it is a simple matter to persist the object.  
   
-    :::groovy
-    def mongo = new Mongo("127.0.0.1")
-    def morphia = new Morphia()
-    def ds = morphia.createDatastore(mongo, "myDB")
+{% highlight groovy %}
+def mongo = new Mongo("127.0.0.1")
+def morphia = new Morphia()
+def ds = morphia.createDatastore(mongo, "myDB")
 
-    morphia.map(Role.class)
+morphia.map(Role.class)
 
-    def newRole = new Role(roleName: "user", isSuperAdmin: false, sortOrder: 1)
-    ds.save(newRole)
+def newRole = new Role(roleName: "user", isSuperAdmin: false, sortOrder: 1)
+ds.save(newRole)
+{% endhighlight %}
 
 Easy enough to do and worked great. From here I created an additional
 class for a User that has a relationship to the Role class. In MongoDB
 you can either embed an object that has a relationship, or you can
 reference. In this case I opted to reference.  
 
-    :::groovy
-    import com.google.code.morphia.annotations.*
-    import org.bson.types.*
+{% highlight groovy %}
+import com.google.code.morphia.annotations.*
+import org.bson.types.*
 
-    @Entity
-    class User {
-       @Id ObjectId id
-       String userName = ""
-       String email = ""
-       String password = ""
-       String firstName = ""
-       String lastName = ""
-       @com.google.code.morphia.annotations.Reference List<role> roles
-    }
+@Entity
+class User {
+   @Id ObjectId id
+   String userName = ""
+   String email = ""
+   String password = ""
+   String firstName = ""
+   String lastName = ""
+   @com.google.code.morphia.annotations.Reference List<role> roles
+}
+{% endhighlight %}
 
 As you can see my user class has most of what you would expect from one.
 The user may, however, have one or more roles in the system, so I've
@@ -97,14 +100,15 @@ easy to instantiate I used Grail's Spring DSL to allow Grails to manage
 instantiation and dependencies. To do this I opened up the
 *conf/spring/resources.groovy* file and edited it to look like so.  
   
-    :::groovy
-    // Place your Spring DSL code here
-    beans = {
-       /*
-        * Database and DAO beans
-        */
-       database(com.myproject.data.Database)
-    }
+{% highlight groovy %}
+// Place your Spring DSL code here
+beans = {
+   /*
+    * Database and DAO beans
+    */
+   database(com.myproject.data.Database)
+}
+{% endhighlight %}
 
 Now inside of a controller or my bootstrap I can simply use **def
 database** and I will get my database object that handles connecting
@@ -113,69 +117,72 @@ too). Once this was in place I wanted to utilize the DAO class
 extensions offered by Morphia. To do this I created a class that looks
 like so.  
 
-    :::groovy
-    import com.myproject.data.Database
-    import com.mongodb.Mongo
-    import com.google.code.morphia.*
-    import org.bson.types.*
+{% highlight groovy %}
+import com.myproject.data.Database
+import com.mongodb.Mongo
+import com.google.code.morphia.*
+import org.bson.types.*
 
-    class RoleDAO extends DAO<role, objectid=""> {
-       public RoleDAO(Database database) {
-          super(database.ds)
-       }
-    }
+class RoleDAO extends DAO<role, objectid=""> {
+   public RoleDAO(Database database) {
+      super(database.ds)
+   }
+}
+{% endhighlight %}
 
 After creating this I then wired it into Spring similar to before. The
 biggest difference is that I need to pass the database object to this
 DAO in the constructor. Here's how that works.  
   
-    :::groovy
-    // Place your Spring DSL code here
-    beans = {
-       /*
-        * Database and DAO beans
-        */
-       database(com.myproject.data.Database)
-       roleDAO(com.myproject.Role, database)
-       userDAO(com.myproject.User, database)
-    }
+{% highlight groovy %}
+// Place your Spring DSL code here
+beans = {
+   /*
+    * Database and DAO beans
+    */
+   database(com.myproject.data.Database)
+   roleDAO(com.myproject.Role, database)
+   userDAO(com.myproject.User, database)
+}
+{% endhighlight %}
 
 With the DAO and database connectivity all wired up to Spring, I could
 now create some sample data in my bootstrap.  
 
-    :::groovy
-    def database
-    def roleDAO, userDAO
+{% highlight groovy %}
+def database
+def roleDAO, userDAO
 
-    def init = { servletContext -&amp;gt;
-       roleDAO.deleteByQuery(roleDAO.createQuery())
-       userDAO.deleteByQuery(userDAO.createQuery())
+def init = { servletContext -&amp;gt;
+   roleDAO.deleteByQuery(roleDAO.createQuery())
+   userDAO.deleteByQuery(userDAO.createQuery())
 
-       /*
-        * Create all roles
-        */
-       def superAdminRole = new Role(roleName: "superadmin", sortOrder: 1, isSuperAdmin: true)
-       def adminRole = new Role(roleName: "admin", sortOrder: 2, isSuperAdmin: false)
-       def userRole = new Role(roleName: "user", sortOrder: 3, isSuperAdmin: false)
+   /*
+    * Create all roles
+    */
+   def superAdminRole = new Role(roleName: "superadmin", sortOrder: 1, isSuperAdmin: true)
+   def adminRole = new Role(roleName: "admin", sortOrder: 2, isSuperAdmin: false)
+   def userRole = new Role(roleName: "user", sortOrder: 3, isSuperAdmin: false)
 
-       roleDAO.save(superAdminRole)
-       roleDAO.save(adminRole)
-       roleDAO.save(userRole)
+   roleDAO.save(superAdminRole)
+   roleDAO.save(adminRole)
+   roleDAO.save(userRole)
 
-       /*
-        * Make a super user
-        */
-       def user = new User(
-          userName: "admin",
-          email: "test@test.com",
-          password: "password",
-          firstName: "John",
-          lastName: "Smith",
-          roles: [ superAdminRole ]
-       )
+   /*
+    * Make a super user
+    */
+   def user = new User(
+      userName: "admin",
+      email: "test@test.com",
+      password: "password",
+      firstName: "John",
+      lastName: "Smith",
+      roles: [ superAdminRole ]
+   )
 
-       userDAO.save(user)
-    }
+   userDAO.save(user)
+}
+{% endhighlight %}
 
 So far this experience has been interesting. And by interesting I mean a
 tad frustrating, but very educational. I'll post more as I learn more

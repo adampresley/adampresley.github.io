@@ -14,21 +14,22 @@ the **OR** (**||**) operator. In the example below the variable
 **value** will be assigned the value from the text box named **textBox** if it
 isn't "false", or empty. If it is we then use the string "Default baby!".
 
-	:::javascript
-	<input type="text" name="textBox" id="textBox" value="" />
-	<input type="button" name="btn" id="btn" value="Click Me" />
+{% highlight javascript %}
+<input type="text" name="textBox" id="textBox" value="" />
+<input type="button" name="btn" id="btn" value="Click Me" />
 
-	<script type="text/javascript">
+<script type="text/javascript">
 
-	   $(document).ready(function() {
+   $(document).ready(function() {
 
-	      $("#btn").click(function() {
-	         var value = ($("#textBox").val() || "Default baby!");
-	         alert(value);
-	      });   
+      $("#btn").click(function() {
+         var value = ($("#textBox").val() || "Default baby!");
+         alert(value);
+      });   
 
-	   });
+   });
 
-	</script>
+</script>
+{% endhighlight %}
 
 Happy coding!

@@ -17,24 +17,25 @@ of parsing an XML document of movies, and we'll display some movie
 information in the console. The purpose: to see how simple it is to
 manipulate and read XML documents in Groovy!  
 
-    :::xml
-    <movies>
-        <movie name="The Matrix">
-            <year>1999</year>
-            <directors>
-            <director name="Andy Wachowski" />
-            <director name="Lana Wachowski" />
-            </directors>
-            <plotsummary><![CDATA[A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against the controllers of it.]]></plotSummary>
-        </movie>
-        <movie name="Kill Bill: Vol. 1">
-            <year>2003</year>
-            <directors>
-            <director name="Quentin Tarantino" />
-            </directors>
-            <plotsummary><![CDATA[The Bride wakes up after a long coma. The baby that she carried before entering the coma is gone. The only thing on her mind is to have revenge on the assassination team that betrayed her - a team she was once part of.]]></plotSummary>
-        </movie>
-    </movies>
+{% highlight xml %}
+<movies>
+    <movie name="The Matrix">
+        <year>1999</year>
+        <directors>
+        <director name="Andy Wachowski" />
+        <director name="Lana Wachowski" />
+        </directors>
+        <plotsummary><![CDATA[A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against the controllers of it.]]></plotSummary>
+    </movie>
+    <movie name="Kill Bill: Vol. 1">
+        <year>2003</year>
+        <directors>
+        <director name="Quentin Tarantino" />
+        </directors>
+        <plotsummary><![CDATA[The Bride wakes up after a long coma. The baby that she carried before entering the coma is gone. The only thing on her mind is to have revenge on the assassination team that betrayed her - a team she was once part of.]]></plotSummary>
+    </movie>
+</movies>
+{% endhighlight %}
 
 So that XML above is what we will be working with. A simple document
 that has a series of **movie** nodes. Each **movie** node has an
@@ -44,27 +45,28 @@ The following code sample will show us how we can display the number of
 movies we have in the document, as well as list each movie's name,
 followed by the plot. Let's see that now.  
   
-    :::groovy
-    class groovyXmlParsing  {
-        static main(args)  {
-            def xmlFileContents = new File("C:\\code\\groovyXmlParsing\\movies.xml").text;
-            def movies = new XmlSlurper().parseText(xmlFileContents);
+{% highlight groovy %}
+class groovyXmlParsing  {
+    static main(args)  {
+        def xmlFileContents = new File("C:\\code\\groovyXmlParsing\\movies.xml").text;
+        def movies = new XmlSlurper().parseText(xmlFileContents);
 
-            /*
-             * Show how many moves we have in the document
-             */
-            println "Number of movies: ${movies.movie.size()}\n";
+        /*
+         * Show how many moves we have in the document
+         */
+        println "Number of movies: ${movies.movie.size()}\n";
 
-            /*
-             * Display the titles and plot for each movie.
-             */
-            movies.movie.each { movie ->
-                println "Movie: ${movie.@name}";
-                println "Plot: ${movie.plotSummary.text()}";
-                println "";
-            };
-        }
+        /*
+         * Display the titles and plot for each movie.
+         */
+        movies.movie.each { movie ->
+            println "Movie: ${movie.@name}";
+            println "Plot: ${movie.plotSummary.text()}";
+            println "";
+        };
     }
+}
+{% endhighlight %}
 
 Yes... that's it! Let's break it down a bit. The first bit of code is
 Groovy's way of reading a text file using the **File** class. The

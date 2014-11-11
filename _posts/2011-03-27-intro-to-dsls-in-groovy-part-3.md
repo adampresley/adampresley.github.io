@@ -32,51 +32,53 @@ to a number, instead of returning an actual number class, we will
 instead create a new Measurement class that will be returned in its
 place.
 
-    :::groovy
-    /*
-     * Ensure that changes to base classes through metaClass
-     * expand downwards.
-     */
-    ExpandoMetaClass.enableGlobally()
+{% highlight groovy %}
+/*
+ * Ensure that changes to base classes through metaClass
+ * expand downwards.
+ */
+ExpandoMetaClass.enableGlobally()
 
 
-    /**
-     * Defines a unit and amount of measurement. Used for ingredients
-     */
-    class Measure {
-       def amount
-       def unit
+/**
+ * Defines a unit and amount of measurement. Used for ingredients
+ */
+class Measure {
+   def amount
+   def unit
 
-       String toString() {
-          "${amount} ${unit}"
-       }
-    }
+   String toString() {
+      "${amount} ${unit}"
+   }
+}
 
 
-    /*
-     * Allow all number classes to be expressed as #.measurement
-     */
-    Number.metaClass.getProperty = { String measurement -> 
-       new Measure(amount: delegate, unit: measurement) 
-    }
+/*
+ * Allow all number classes to be expressed as #.measurement
+ */
+Number.metaClass.getProperty = { String measurement -> 
+   new Measure(amount: delegate, unit: measurement) 
+}
+{% endhighlight %}
 
 Now with the measurement enhancement in place our DSL can now be written
 like this.
 
-    :::groovy
-    Recipe.create "Creamy Mac n' Cheese", { 
-       addIngredient 1.box, "Mac n' Cheese"
-       addIngredient 1.pound, "Hamburger meat"
-       addIngredient 1.can, "Cream of Mushroom"
+{% highlight groovy %}
+Recipe.create "Creamy Mac n' Cheese", { 
+   addIngredient 1.box, "Mac n' Cheese"
+   addIngredient 1.pound, "Hamburger meat"
+   addIngredient 1.can, "Cream of Mushroom"
 
-       addInstructions "Brown hamburger meat",
-          "Bring mac n' cheese to a boil",
-          "Drain water from noodles",
-          "Stir in cheese mixture",
-          "Add cream of mushroom and meat",
-          "Stir",
-          "Eat"
-    }
+   addInstructions "Brown hamburger meat",
+      "Bring mac n' cheese to a boil",
+      "Drain water from noodles",
+      "Stir in cheese mixture",
+      "Add cream of mushroom and meat",
+      "Stir",
+      "Eat"
+}
+{% endhighlight %}
 
 Now, finally, let's create a couple of methods in our **Recipe** class
 from part 2 that will display our culinary creations in a couple of
@@ -85,129 +87,132 @@ different ways. We will make code to show the recipe in a standard "1,
 fluent we will also create some enums that we will statically import to
 be used as "constants" to describe how to display our recipe.
 
-    :::groovy
-    import static ShowActions.*
-    import groovy.xml.MarkupBuilder
+{% highlight groovy %}
+import static ShowActions.*
+import groovy.xml.MarkupBuilder
 
-    /*
-     * These are the various actions that the "show" command can perform.
-     */
-    enum ShowActions { RecipeCard, Ingredients, Instructions, RecipeXml }
+/*
+ * These are the various actions that the "show" command can perform.
+ */
+enum ShowActions { RecipeCard, Ingredients, Instructions, RecipeXml }
 
 
-    class Recipe {
-       def name = ""
-       def ingredients = []
-       def instructions = []
+class Recipe {
+   def name = ""
+   def ingredients = []
+   def instructions = []
 
-       static def create(String name, Closure c) {
-          def clone = c.clone()
-          clone.delegate = new Recipe(name: name)
-          clone.resolveStrategy = Closure.DELEGATE_ONLY    // Resolve calls in this closure internally only
-          clone()
-       }
+   static def create(String name, Closure c) {
+      def clone = c.clone()
+      clone.delegate = new Recipe(name: name)
+      clone.resolveStrategy = Closure.DELEGATE_ONLY    // Resolve calls in this closure internally only
+      clone()
+   }
 
-       void addIngredient(def measurement, String ingredient) {
-          ingredients << [ measure: measurement, ingredient: ingredient ]
-       }
+   void addIngredient(def measurement, String ingredient) {
+      ingredients << [ measure: measurement, ingredient: ingredient ]
+   }
 
-       void addInstructions(String... instruction) {
-          instruction.each { instructions << it }
-       }
+   void addInstructions(String... instruction) {
+      instruction.each { instructions << it }
+   }
 
-       void show(ShowActions action) {
-          def printIngredients = {
-          println "INGREDIENTS:"
-          ingredients.eachWithIndex { item, index -> println "${index + 1}. ${item.measure} of  ${item.ingredient}" }
-       }
+   void show(ShowActions action) {
+      def printIngredients = {
+      println "INGREDIENTS:"
+      ingredients.eachWithIndex { item, index -> println "${index + 1}. ${item.measure} of  ${item.ingredient}" }
+   }
 
-          def printInstructions = {
-             println "
+      def printInstructions = {
+         println "
 
-    DIRECTIONS:"
-             instructions.eachWithIndex { item, index -> println "${index + 1}. ${item}" }
-          }
+DIRECTIONS:"
+         instructions.eachWithIndex { item, index -> println "${index + 1}. ${item}" }
+      }
 
-          switch (action) {
-             case ShowActions.RecipeCard:
-                printIngredients()
-                printInstructions()
-                break
+      switch (action) {
+         case ShowActions.RecipeCard:
+            printIngredients()
+            printInstructions()
+            break
 
-             case ShowActions.Ingredients:
-                printIngredients()
-                break
+         case ShowActions.Ingredients:
+            printIngredients()
+            break
 
-             case ShowActions.Instructions:
-                printInstructions()
-                break
+         case ShowActions.Instructions:
+            printInstructions()
+            break
 
-             case ShowActions.RecipeXml:
-                println toXml()
-                break
-          }
-       }
+         case ShowActions.RecipeXml:
+            println toXml()
+            break
+      }
+   }
 
-       def toXml() {
-          def writer = new StringWriter()
-          def xml = new MarkupBuilder(writer)
+   def toXml() {
+      def writer = new StringWriter()
+      def xml = new MarkupBuilder(writer)
 
-          xml.recipe(name: this.name) {
-             ingredients {
-                ingredients.each { ing ->
-                   ingredient { mkp.yieldUnescaped "&lt;![CDATA[${ing.measure} of ${ing.ingredient}]]&gt;" }
-                }
-             }
-             instructions { 
-                instructions.each { ins ->
-                   instruction { mkp.yieldUnescaped "&lt;![CDATA[${ins }]]&gt;" }
-                }
-             }
-          }
+      xml.recipe(name: this.name) {
+         ingredients {
+            ingredients.each { ing ->
+               ingredient { mkp.yieldUnescaped "&lt;![CDATA[${ing.measure} of ${ing.ingredient}]]&gt;" }
+            }
+         }
+         instructions { 
+            instructions.each { ins ->
+               instruction { mkp.yieldUnescaped "&lt;![CDATA[${ins }]]&gt;" }
+            }
+         }
+      }
 
-          writer.toString()
-       }
-    }
+      writer.toString()
+   }
+}
+{% endhighlight %}
 
 The code above is the **Recipe** class with two new methods: **show()**
 and **toXml()**. Here are a couple of sample uses with these new
 methods.
 
 ## Recipie XML
-    :::groovy
-    Recipe.create "Creamy Mac n' Cheese", { 
-       addIngredient 1.box, "Mac n' Cheese"
-       addIngredient 1.pound, "Hamburger meat"
-       addIngredient 1.can, "Cream of Mushroom"
+{% highlight groovy %}
+Recipe.create "Creamy Mac n' Cheese", { 
+   addIngredient 1.box, "Mac n' Cheese"
+   addIngredient 1.pound, "Hamburger meat"
+   addIngredient 1.can, "Cream of Mushroom"
 
-       addInstructions "Brown hamburger meat",
-          "Bring mac n' cheese to a boil",
-          "Drain water from noodles",
-          "Stir in cheese mixture",
-          "Add cream of mushroom and meat",
-          "Stir",
-          "Eat"
+   addInstructions "Brown hamburger meat",
+      "Bring mac n' cheese to a boil",
+      "Drain water from noodles",
+      "Stir in cheese mixture",
+      "Add cream of mushroom and meat",
+      "Stir",
+      "Eat"
 
-       show RecipeXml
-    }
+   show RecipeXml
+}
+{% endhighlight %}
 
 ## Recipie Card
-    :::groovy
-    Recipe.create "Creamy Mac n' Cheese", { 
-       addIngredient 1.box, "Mac n' Cheese"
-       addIngredient 1.pound, "Hamburger meat"
-       addIngredient 1.can, "Cream of Mushroom"
+{% highlight groovy %}
+Recipe.create "Creamy Mac n' Cheese", { 
+   addIngredient 1.box, "Mac n' Cheese"
+   addIngredient 1.pound, "Hamburger meat"
+   addIngredient 1.can, "Cream of Mushroom"
 
-       addInstructions "Brown hamburger meat",
-          "Bring mac n' cheese to a boil",
-          "Drain water from noodles",
-          "Stir in cheese mixture",
-          "Add cream of mushroom and meat",
-          "Stir",
-          "Eat"
+   addInstructions "Brown hamburger meat",
+      "Bring mac n' cheese to a boil",
+      "Drain water from noodles",
+      "Stir in cheese mixture",
+      "Add cream of mushroom and meat",
+      "Stir",
+      "Eat"
 
-       show RecipeCard
-    }
+   show RecipeCard
+}
+{% endhighlight %}
 
 I hope this small introduction into DSL-world has been interesting. This
 example barely scratches the surface of what can be done, and there is
@@ -221,138 +226,139 @@ how one can make DSLs. Here are some links to recommended reading.
 
 Here is the code in full:
 
-    :::groovy
-    import static ShowActions.*
-    import groovy.xml.MarkupBuilder
+{% highlight groovy %}
+import static ShowActions.*
+import groovy.xml.MarkupBuilder
 
-    /*
-     * These are the various actions that the "show" command can perform.
-     */
-    enum ShowActions { RecipeCard, Ingredients, Instructions, RecipeXml }
-
-
-    /*
-     * Ensure that changes to base classes through metaClass
-     * expand downwards.
-     */
-    ExpandoMetaClass.enableGlobally()
+/*
+ * These are the various actions that the "show" command can perform.
+ */
+enum ShowActions { RecipeCard, Ingredients, Instructions, RecipeXml }
 
 
-    /**
-     * Defines a unit and amount of measurement. Used for ingredients
-     */
-    class Measure {
-       def amount
-       def unit
-
-       String toString() {
-          "${amount} ${unit}"
-       }
-    }
+/*
+ * Ensure that changes to base classes through metaClass
+ * expand downwards.
+ */
+ExpandoMetaClass.enableGlobally()
 
 
-    /**
-     * Defines the recipe "language", it's data, and transformations.
-     */
-    class Recipe {
-       def name = ""
-       def ingredients = []
-       def instructions = []
+/**
+ * Defines a unit and amount of measurement. Used for ingredients
+ */
+class Measure {
+   def amount
+   def unit
 
-       static def create(String name, Closure c) {
-          def clone = c.clone()
-          clone.delegate = new Recipe(name: name)
-          clone.resolveStrategy = Closure.DELEGATE_ONLY    // Resolve calls in this closure internally only
-          clone()
-       }
-
-       void addIngredient(def measurement, String ingredient) {
-          ingredients << [ measure: measurement, ingredient: ingredient ]
-       }
-
-       void addInstructions(String... instruction) {
-          instruction.each { instructions << it }
-       }
-
-       void show(ShowActions action) {
-          def printIngredients = {
-          println "INGREDIENTS:"
-          ingredients.eachWithIndex { item, index -> println "${index + 1}. ${item.measure} of  ${item.ingredient}" }
-       }
-
-          def printInstructions = {
-             println "
-
-    DIRECTIONS:"
-             instructions.eachWithIndex { item, index -> println "${index + 1}. ${item}" }
-          }
-
-          switch (action) {
-             case ShowActions.RecipeCard:
-                printIngredients()
-                printInstructions()
-                break
-
-             case ShowActions.Ingredients:
-                printIngredients()
-                break
-
-             case ShowActions.Instructions:
-                printInstructions()
-                break
-
-             case ShowActions.RecipeXml:
-                println toXml()
-                break
-          }
-       }
-
-       def toXml() {
-          def writer = new StringWriter()
-          def xml = new MarkupBuilder(writer)
-
-          xml.recipe(name: this.name) {
-             ingredients {
-                ingredients.each { ing ->
-                   ingredient { mkp.yieldUnescaped "&lt;![CDATA[${ing.measure} of ${ing.ingredient}]]&gt;" }
-                }
-             }
-             instructions { 
-                instructions.each { ins ->
-                   instruction { mkp.yieldUnescaped "&lt;![CDATA[${ins }]]&gt;" }
-                }
-             }
-          }
-
-          writer.toString()
-       }
-    }
-
-    /*
-     * Allow all number classes to be expressed as #.measurement
-     */
-    Number.metaClass.getProperty = { String measurement -> 
-       new Measure(amount: delegate, unit: measurement) 
-    }
+   String toString() {
+      "${amount} ${unit}"
+   }
+}
 
 
-    /*
-     * Actually try USING our little DSL.
-     */
-    Recipe.create "Creamy Mac n' Cheese", { 
-       addIngredient 1.box, "Mac n' Cheese"
-       addIngredient 1.pound, "Hamburger meat"
-       addIngredient 1.can, "Cream of Mushroom"
+/**
+ * Defines the recipe "language", it's data, and transformations.
+ */
+class Recipe {
+   def name = ""
+   def ingredients = []
+   def instructions = []
 
-       addInstructions "Brown hamburger meat",
-          "Bring mac n' cheese to a boil",
-          "Drain water from noodles",
-          "Stir in cheese mixture",
-          "Add cream of mushroom and meat",
-          "Stir",
-          "Eat"
+   static def create(String name, Closure c) {
+      def clone = c.clone()
+      clone.delegate = new Recipe(name: name)
+      clone.resolveStrategy = Closure.DELEGATE_ONLY    // Resolve calls in this closure internally only
+      clone()
+   }
 
-       show RecipeXml
-    }
+   void addIngredient(def measurement, String ingredient) {
+      ingredients << [ measure: measurement, ingredient: ingredient ]
+   }
+
+   void addInstructions(String... instruction) {
+      instruction.each { instructions << it }
+   }
+
+   void show(ShowActions action) {
+      def printIngredients = {
+      println "INGREDIENTS:"
+      ingredients.eachWithIndex { item, index -> println "${index + 1}. ${item.measure} of  ${item.ingredient}" }
+   }
+
+      def printInstructions = {
+         println "
+
+DIRECTIONS:"
+         instructions.eachWithIndex { item, index -> println "${index + 1}. ${item}" }
+      }
+
+      switch (action) {
+         case ShowActions.RecipeCard:
+            printIngredients()
+            printInstructions()
+            break
+
+         case ShowActions.Ingredients:
+            printIngredients()
+            break
+
+         case ShowActions.Instructions:
+            printInstructions()
+            break
+
+         case ShowActions.RecipeXml:
+            println toXml()
+            break
+      }
+   }
+
+   def toXml() {
+      def writer = new StringWriter()
+      def xml = new MarkupBuilder(writer)
+
+      xml.recipe(name: this.name) {
+         ingredients {
+            ingredients.each { ing ->
+               ingredient { mkp.yieldUnescaped "&lt;![CDATA[${ing.measure} of ${ing.ingredient}]]&gt;" }
+            }
+         }
+         instructions { 
+            instructions.each { ins ->
+               instruction { mkp.yieldUnescaped "&lt;![CDATA[${ins }]]&gt;" }
+            }
+         }
+      }
+
+      writer.toString()
+   }
+}
+
+/*
+ * Allow all number classes to be expressed as #.measurement
+ */
+Number.metaClass.getProperty = { String measurement -> 
+   new Measure(amount: delegate, unit: measurement) 
+}
+
+
+/*
+ * Actually try USING our little DSL.
+ */
+Recipe.create "Creamy Mac n' Cheese", { 
+   addIngredient 1.box, "Mac n' Cheese"
+   addIngredient 1.pound, "Hamburger meat"
+   addIngredient 1.can, "Cream of Mushroom"
+
+   addInstructions "Brown hamburger meat",
+      "Bring mac n' cheese to a boil",
+      "Drain water from noodles",
+      "Stir in cheese mixture",
+      "Add cream of mushroom and meat",
+      "Stir",
+      "Eat"
+
+   show RecipeXml
+}
+{% endhighlight %}
 
 Happy coding!

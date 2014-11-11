@@ -14,7 +14,7 @@ Tonight I have integrated a few reports from Google Analytics into the Texo admi
 
 To put these graphs on my dashboard I opted to use a 3rd party library called [OOCharts](http://oocharts.com/). Their service hooks up to your Google account and provides a simplified API for retrieving charts and chart data. For example the code the retrieve the Browser usage pie chart looks like this.
 
-```javascript
+{% highlight javascript %}
 oo.setAPIKey("MyAPIKey");
 oo.load(function() {
     var
@@ -25,7 +25,7 @@ oo.load(function() {
 
     browsers.draw("browserChart");
 });
-```
+{% endhighlight %}
 
 When you include the *oocharts.js* file on your page, or inject it using RequireJS in my case, you get a global variable called **oo** to use for interacting with the OOCharts API. The first activity you must perform is to initialize the library with your API key. An API key is retrieved from the OOCharts site when you sign up and link to your Google account. After this you need to call the **load()** function and provide it a callback function in which you can do all your chart initialization. 
 

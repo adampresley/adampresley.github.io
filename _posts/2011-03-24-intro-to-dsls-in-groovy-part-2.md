@@ -17,8 +17,9 @@ throw out the syntax noise to make our "language" seem more natural.
 To get started we'll need to define the foundation for our DSL. If you
 recall the first line of the DSL code it looks like this:
 
-    ::groovy
-    Recipe.create "Creamy Mac n' Cheese", {
+{% highlight groovy %}
+Recipe.create "Creamy Mac n' Cheese", {
+{% endhighlight %}
 
 To accomplish this we are going to create a class, as well as a few
 variables to hold the information about our recipe. The first method
@@ -29,32 +30,34 @@ change the delegate to a new **Recipe** object with the passed in name,
 then execute. Changing the delegate tells the closure who it is
 executing **for**. Yes, it's magic.
 
-    :::groovy
-    class Recipe {
-       def name = ""
-       def ingredients = []
-       def instructions = []
+{% highlight groovy %}
+class Recipe {
+   def name = ""
+   def ingredients = []
+   def instructions = []
 
-       static def create(String name, Closure c) {
-          def clone = c.clone()
-          clone.delegate = new Recipe(name: name)
-          clone()
-       }
-    }
+   static def create(String name, Closure c) {
+      def clone = c.clone()
+      clone.delegate = new Recipe(name: name)
+      clone()
+   }
+}
+{% endhighlight %}
 
 Now our **Recipe** class needs methods to add ingredients and
 instructions. These methods are simple as they will just push what is
 send to them to the two collections **ingredients** and
 **instructions**.
 
-    :::groovy
-    void addIngredient(def measurement, String ingredient) {
-       ingredients << [ measure: measurement, ingredient: ingredient ]
-    }
+{% highlight groovy %}
+void addIngredient(def measurement, String ingredient) {
+   ingredients << [ measure: measurement, ingredient: ingredient ]
+}
 
-    void addInstructions(String... instruction) {
-       instruction.each { instructions << it }
-    }
+void addInstructions(String... instruction) {
+   instruction.each { instructions << it }
+}
+{% endhighlight %}
 
 To add ingredients to the recipe we take two arguments: measurement, and
 the ingredient. The **Measurement** class is something we will get to
@@ -65,43 +68,45 @@ a list with an unknown number of elements being passed in. This allows a
 list of instruction argument strings to be passed in, and it will get
 treated as a collection. The whole listing looks like this so far.
 
-    :::groovy
-    class Recipe {
-       def name = ""
-       def ingredients = []
-       def instructions = []
+{% highlight groovy %}
+class Recipe {
+   def name = ""
+   def ingredients = []
+   def instructions = []
 
-       static def create(String name, Closure c) {
-          def clone = c.clone()
-          clone.delegate = new Recipe(name: name)
-          clone()
-       }
+   static def create(String name, Closure c) {
+      def clone = c.clone()
+      clone.delegate = new Recipe(name: name)
+      clone()
+   }
 
-       void addIngredient(def measurement, String ingredient) {
-          ingredients << [ measure: measurement, ingredient: ingredient ]
-       }
+   void addIngredient(def measurement, String ingredient) {
+      ingredients << [ measure: measurement, ingredient: ingredient ]
+   }
 
-       void addInstructions(String... instruction) {
-          instruction.each { instructions << it }
-       }
-    }
+   void addInstructions(String... instruction) {
+      instruction.each { instructions << it }
+   }
+}
+{% endhighlight %}
 
 What we can do with what we have now is something like this:
 
-    :::groovy
-    Recipe.create "Creamy Mac n' Cheese", { 
-       addIngredient 1, "Mac n' Cheese"
-       addIngredient 1, "Hamburger meat"
-       addIngredient 1, "Cream of Mushroom"
+{% highlight groovy %}
+Recipe.create "Creamy Mac n' Cheese", { 
+   addIngredient 1, "Mac n' Cheese"
+   addIngredient 1, "Hamburger meat"
+   addIngredient 1, "Cream of Mushroom"
 
-       addInstructions "Brown hamburger meat",
-          "Bring mac n' cheese to a boil",
-          "Drain water from noodles",
-          "Stir in cheese mixture",
-          "Add cream of mushroom and meat",
-          "Stir",
-          "Eat"
-    }
+   addInstructions "Brown hamburger meat",
+      "Bring mac n' cheese to a boil",
+      "Drain water from noodles",
+      "Stir in cheese mixture",
+      "Add cream of mushroom and meat",
+      "Stir",
+      "Eat"
+}
+{% endhighlight %}
 
 If you compare that example to the one from the first post you will see
 we are getting close. Up next we will talk about the **Measurement**

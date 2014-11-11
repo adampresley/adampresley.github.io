@@ -24,36 +24,37 @@ items, one discounted, the other two not, I would like to calculate a
 list of what my prices are for each item in the cart. Here is a code
 snippet that does just that.
 
-	:::python
-	#
-	# Craft a list of product names and their prices
-	#
-	products = [
-		{ "name": "Baseball Cap", "price": 12.99 },
-		{ "name": "T-Shirt", "price": 18.99 },
-		{ "name": "Big Foam Finger", "price": 8.50 },
-		{ "name": "Frosty Glass Mug", "price": 15.89 },
-		{ "name": "Authentic Jersey", "price": 129.00 }
-	]
+{% highlight python %}
+#
+# Craft a list of product names and their prices
+#
+products = [
+	{ "name": "Baseball Cap", "price": 12.99 },
+	{ "name": "T-Shirt", "price": 18.99 },
+	{ "name": "Big Foam Finger", "price": 8.50 },
+	{ "name": "Frosty Glass Mug", "price": 15.89 },
+	{ "name": "Authentic Jersey", "price": 129.00 }
+]
 
-	#
-	# This is a list of the current products on discount.
-	# Also determine what percentage discount.
-	#
-	discountedProducts = [ products[0], products[3] ]
-	discountPercent = 20.0
+#
+# This is a list of the current products on discount.
+# Also determine what percentage discount.
+#
+discountedProducts = [ products[0], products[3] ]
+discountPercent = 20.0
 
-	#
-	# Here be our shoppy cart.
-	#
-	cart = [ products[1], products[3], products[2] ]
+#
+# Here be our shoppy cart.
+#
+cart = [ products[1], products[3], products[2] ]
 
-	#
-	# What are the new prices of my items in the cart?
-	#
-	prices = [ (item["price"] - (item["price"] * (discountPercent / 100))) if (item in discountedProducts) else item["price"] for item in cart ]
-	print "CART: %s" % (cart)
-	print "\nPRICES: %s" % (prices)
+#
+# What are the new prices of my items in the cart?
+#
+prices = [ (item["price"] - (item["price"] * (discountPercent / 100))) if (item in discountedProducts) else item["price"] for item in cart ]
+print "CART: %s" % (cart)
+print "\nPRICES: %s" % (prices)
+{% endhighlight %}
 
 The tricky line is line 30. The outer bracket indicates we are going to
 return a list to a variable named prices. The is followed by a

@@ -29,91 +29,92 @@ Below is an example of how I am using Fabric and Boto (for Amazon) to
 iterate over my EC2 instances, reset the repository (undoing all local
 changes), pull down the latest code, fix the config file and bundle.
 
-    :::python
-    from __future__ import with_statement
+{% highlight python %}
+from __future__ import with_statement
 
-    import fabric, boto
-    import boto.ec2, time
-    from fabric.api import *
-    from fabric.colors import green, yellow
-    from boto.ec2.connection import EC2Connection
+import fabric, boto
+import boto.ec2, time
+from fabric.api import *
+from fabric.colors import green, yellow
+from boto.ec2.connection import EC2Connection
 
-    ACCESS_KEY_ID = "PUT YOUR KEY HERE"
-    SECRET_ACCESS_KEY = "PUT YOUR ACCESS KEY HERE"
+ACCESS_KEY_ID = "PUT YOUR KEY HERE"
+SECRET_ACCESS_KEY = "PUT YOUR ACCESS KEY HERE"
 
-    REPOS = [
-        ("/path/to/repo", "origin", "master")
-    ]
-
-
-    def _connect():
-        return EC2Connection(ACCESS_KEY_ID, SECRET_ACCESS_KEY)
-
-    def _getInstances():
-        connection = _connect()
-        reservations = connection.get_all_instances()
-        instances = []
-
-        print ""
-        print green("** Getting instances **")
-
-        for reservation in reservations:
-            for instance in reservation.instances:
-                print "Instance: %s (%s) @ %s" % (instance.id, instance.state, instance.public_dns_name)
-                instances.append(instance.public_dns_name)
-
-        return instances
+REPOS = [
+    ("/path/to/repo", "origin", "master")
+]
 
 
-    def _gitReset():
-        print ""
-        print yellow("Resetting repository...")
-        run("cd %s && git checkout -f" % env.repo)
+def _connect():
+    return EC2Connection(ACCESS_KEY_ID, SECRET_ACCESS_KEY)
+
+def _getInstances():
+    connection = _connect()
+    reservations = connection.get_all_instances()
+    instances = []
+
+    print ""
+    print green("** Getting instances **")
+
+    for reservation in reservations:
+        for instance in reservation.instances:
+            print "Instance: %s (%s) @ %s" % (instance.id, instance.state, instance.public_dns_name)
+            instances.append(instance.public_dns_name)
+
+    return instances
 
 
-    def _gitPull():
-        print ""
-        print yellow("Updating code...")
-        run("cd %s && git pull %s %s" % (env.repo, env.parent, env.branch))
+def _gitReset():
+    print ""
+    print yellow("Resetting repository...")
+    run("cd %s && git checkout -f" % env.repo)
 
 
-    def _fixConfigFile():
-        print ""
-        print yellow("Updating config file...")
-        run("sed -i 's/DEBUG\s=\sTrue/DEBUG = False/g' /path/to/repo/config.py")
+def _gitPull():
+    print ""
+    print yellow("Updating code...")
+    run("cd %s && git pull %s %s" % (env.repo, env.parent, env.branch))
 
 
-    def _bundle():
-        print ""
-        print yellow("Bundling...")
-        run("cd /path/to/repo/bin && python ./bundle.py")
+def _fixConfigFile():
+    print ""
+    print yellow("Updating config file...")
+    run("sed -i 's/DEBUG\s=\sTrue/DEBUG = False/g' /path/to/repo/config.py")
 
 
-    def production():
-        env.hosts = []
-        env.user = "ubuntu"
-        env.key_filename = [ "super-secret-key-pair-file.pem" ]
-
-        #
-        # Get the DNS addresses for all the instances on this account
-        #
-        env.hosts = _getInstances()
+def _bundle():
+    print ""
+    print yellow("Bundling...")
+    run("cd /path/to/repo/bin && python ./bundle.py")
 
 
-    def updateServers():
-        require("hosts", provided_by = [ production ])
+def production():
+    env.hosts = []
+    env.user = "ubuntu"
+    env.key_filename = [ "super-secret-key-pair-file.pem" ]
 
-        print ""
-        print green("** Updating Servers **")
+    #
+    # Get the DNS addresses for all the instances on this account
+    #
+    env.hosts = _getInstances()
 
-        for repo, parent, branch in REPOS:
-            env.repo = repo
-            env.parent = parent
-            env.branch = branch
 
-            print yellow("%s at %s/%s" % (repo, parent, branch))
+def updateServers():
+    require("hosts", provided_by = [ production ])
 
-            _gitReset()
-            _gitPull()
-            _fixConfigFile()
-            _bundle()
+    print ""
+    print green("** Updating Servers **")
+
+    for repo, parent, branch in REPOS:
+        env.repo = repo
+        env.parent = parent
+        env.branch = branch
+
+        print yellow("%s at %s/%s" % (repo, parent, branch))
+
+        _gitReset()
+        _gitPull()
+        _fixConfigFile()
+        _bundle()
+{% endhighlight %}

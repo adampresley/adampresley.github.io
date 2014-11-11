@@ -15,8 +15,9 @@ corporate proxies just get in the way. Grails has a way of handling
 this, however, and you can setup a proxy so that Grails commands execute
 successfully.  
   
-    :::bash
-    $ grails add-proxy client --host=1.2.3.4 --port=80 --username=myUser --password=passwordgrails set-proxy client
+{% highlight bash %}
+$ grails add-proxy client --host=1.2.3.4 --port=80 --username=myUser --password=passwordgrails set-proxy client
+{% endhighlight %}
 
 In the above example I am setting up a proxy configuration with a name
 of **client**. I then tell Grails to use that named proxy by using the

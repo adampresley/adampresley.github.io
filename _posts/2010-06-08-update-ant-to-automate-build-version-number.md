@@ -17,9 +17,10 @@ the build number as a property so that you can include it in the ZIP
 file's name, you would need to tell ANT to load the property file and
 read in the properties like so.
 
-	:::xml
-	<property file="build.properties" />
-	<zip destfile="${sourceDir}\HelloPlugin-${buildNumber}.zip" basedir="${buildDir}" />
+{% highlight xml %}
+<property file="build.properties" />
+<zip destfile="${sourceDir}\HelloPlugin-${buildNumber}.zip" basedir="${buildDir}" />
+{% endhighlight %}
 
 The **${buildNumber}** portion gets the value from the build.properties
 file and uses it as part of the filename. Good catch Steve!

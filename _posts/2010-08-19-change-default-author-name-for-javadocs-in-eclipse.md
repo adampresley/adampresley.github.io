@@ -15,19 +15,20 @@ Eclipse at **/opt/eclipse**, so my path would be
 **/opt/eclipse/eclipse.ini**. Once editing this file add the
 following line and save.  
   
-	:::ini
-	-Duser.name=Adam Presley
-  
+{% highlight ini %}
+-Duser.name=Adam Presley
+{% endhighlight %}
+
 After saving restart Eclipse and when you do a JavaDoc comment and use
-the author attribute by typing \*\*@author\*\* and pressing enter on the
+the author attribute by typing **@author** and pressing enter on the
 autocomplete you will see something like this:  
   
-	:::javascript
-	/**
-	 * Alert some message!
-	 * @author Adam Presley
-	 */
-	function alertSomething(msg) { alert(msg); }
-  
+{% highlight javascript %}
+/**
+ * Alert some message!
+ * @author Adam Presley
+ */
+function alertSomething(msg) { alert(msg); }
+{% endhighlight %}  
   
 Simple yet useful. Happy coding!

@@ -28,114 +28,117 @@ implementation in a CPP file. The end result looks like this:
 
 **IniParser.h**
 
-	:::cpp
-	#ifndef __INI_PARSER_H__
+{% highlight cpp %}
+#ifndef __INI_PARSER_H__
 
-	#define __INI_PARSER_H__ 1
+#define __INI_PARSER_H__ 1
 
-	#include <stdio.h>
-	#include <string.h>
-	#include <iostream>
-	#include <iomanip>
-	#include <map>
-	#include <fstream>
-	#include <string>
+#include <stdio.h>
+#include <string.h>
+#include <iostream>
+#include <iomanip>
+#include <map>
+#include <fstream>
+#include <string>
 
-	using namespace std;
+using namespace std;
 
-	class IniParser {
-		private:
-			char* __filename;
-			map<string, string> __kvp;
-			ifstream __fp;
+class IniParser {
+	private:
+		char* __filename;
+		map<string, string> __kvp;
+		ifstream __fp;
 
-			void __openFile(char* filename);
-			void __closeFile();
-			char* __readLine();
+		void __openFile(char* filename);
+		void __closeFile();
+		char* __readLine();
 
-		public:
-			IniParser(const char* filename);
-			~IniParser();
+	public:
+		IniParser(const char* filename);
+		~IniParser();
 
-			void parseFile(char* filename);
-			string getValue(string key);
-	};
+		void parseFile(char* filename);
+		string getValue(string key);
+};
 
-	#endif
+#endif
+{% endhighlight %}
 
 **IniParser.cpp**
 
-	:::cpp
-	#include "IniParser.h"
+{% highlight cpp %}
+#include "IniParser.h"
 
-	void IniParser::__openFile(char* filename) {
-		__fp.open(filename);
+void IniParser::__openFile(char* filename) {
+	__fp.open(filename);
 
-		if (!__fp) {
-			cerr << "Can't open file.";
-		}
+	if (!__fp) {
+		cerr << "Can't open file.";
+	}
+}
+
+void IniParser::__closeFile() {
+	__fp.close();
+}
+
+char* IniParser::__readLine() {
+	char* line = new char[255];
+	__fp >> line;
+	return line;
+}
+
+IniParser::IniParser(const char* filename) {
+	__filename = new char[512];
+	strcpy(__filename, filename);
+	parseFile(__filename);
+}
+
+IniParser::~IniParser() {
+	delete __filename;
+}
+
+void IniParser::parseFile(char* filename) {
+	char* line;
+	string key, value;
+
+	__kvp.clear();
+	__openFile(filename);
+
+	while (strlen(line = __readLine())) {
+		key = string(strtok(line, "="));
+		value = string(strtok(NULL, "="));
+
+		printf("key = %s, value = %s\n", key.c_str(), value.c_str());
+		__kvp[key] = value;
 	}
 
-	void IniParser::__closeFile() {
-		__fp.close();
-	}
+	__closeFile();
+}
 
-	char* IniParser::__readLine() {
-		char* line = new char[255];
-		__fp >> line;
-		return line;
-	}
-
-	IniParser::IniParser(const char* filename) {
-		__filename = new char[512];
-		strcpy(__filename, filename);
-		parseFile(__filename);
-	}
-
-	IniParser::~IniParser() {
-		delete __filename;
-	}
-
-	void IniParser::parseFile(char* filename) {
-		char* line;
-		string key, value;
-
-		__kvp.clear();
-		__openFile(filename);
-
-		while (strlen(line = __readLine())) {
-			key = string(strtok(line, "="));
-			value = string(strtok(NULL, "="));
-
-			printf("key = %s, value = %s\n", key.c_str(), value.c_str());
-			__kvp[key] = value;
-		}
-
-		__closeFile();
-	}
-
-	string IniParser::getValue(string key) {
-		return __kvp[key];
-	}
+string IniParser::getValue(string key) {
+	return __kvp[key];
+}
+{% endhighlight %}
 
 **Main.cpp**
 
-	:::cpp
-	#include <string>
-	#include "IniParser/IniParser.h"
+{% highlight cpp %}
+#include <string>
+#include "IniParser/IniParser.h"
 
-	using namespace std;
+using namespace std;
 
-	int main(void) {
-		IniParser* parser = new IniParser("properties.ini");
-		string host, port;
+int main(void) {
+	IniParser* parser = new IniParser("properties.ini");
+	string host, port;
 
-		host = parser->getValue("host");
-		port = parser->getValue("port");
-		printf("%s @ %s\n", host.c_str(), port.c_str());
+	host = parser->getValue("host");
+	port = parser->getValue("port");
+	printf("%s @ %s\n", host.c_str(), port.c_str());
 
-		delete parser;
-	}
+	delete parser;
+}
+{% endhighlight %}
 
 There are two things I am reminded of after doing this part:
 

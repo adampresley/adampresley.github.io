@@ -59,65 +59,66 @@ and then will start our thread. When the thread is started the
 dirty work of listening for connections on port 25, and when a
 connection is received will actually do something. Let's see that code.  
   
-    :::java
-    package com.adampresley.TinyMailServer;
+{% highlight java %}
+package com.adampresley.TinyMailServer;
 
-    import java.net.*;
-    import java.io.*;
+import java.net.*;
+import java.io.*;
 
-    public class SmtpServer extends Thread {
-     private String address;
-     private int port;
-     private int maxRequestsInQueue;
+public class SmtpServer extends Thread {
+ private String address;
+ private int port;
+ private int maxRequestsInQueue;
 
-     private ServerSocket connection;
-     private Logger log;
+ private ServerSocket connection;
+ private Logger log;
 
-     public SmtpServer(String Address, int Port, int MaxRequestsInQueue) throws UnknownHostException, IOException {
-        address = Address;
-        port = Port;
-        maxRequestsInQueue = MaxRequestsInQueue;
+ public SmtpServer(String Address, int Port, int MaxRequestsInQueue) throws UnknownHostException, IOException {
+    address = Address;
+    port = Port;
+    maxRequestsInQueue = MaxRequestsInQueue;
 
-        /*
-         * Prepare to bind to an address and port.
-         */
-        connection = new ServerSocket(port, maxRequestsInQueue, InetAddress.getByName(address));
+    /*
+     * Prepare to bind to an address and port.
+     */
+    connection = new ServerSocket(port, maxRequestsInQueue, InetAddress.getByName(address));
 
-        /*
-         * Start our thread's processing.
-         */
-        start();
-     }
+    /*
+     * Start our thread's processing.
+     */
+    start();
+ }
 
-     @Override
-     public void run() {
-        try {
-           System.out.println("SMTP Listener started.");
+ @Override
+ public void run() {
+    try {
+       System.out.println("SMTP Listener started.");
 
-           do {
-              /*
-               * Attempt to start listening for incoming connections.
-               */
-              try {
-                 System.out.println("Accepting connections.");
-                 Socket socket = connection.accept();
+       do {
+          /*
+           * Attempt to start listening for incoming connections.
+           */
+          try {
+             System.out.println("Accepting connections.");
+             Socket socket = connection.accept();
 
-                 Thread executor = new SmtpExecutor(socket, log);
-                 executor.start();
-              }
-              catch (IOException e) {
-                 System.out.format("An exception occured while attempting to listen for connections: %s", e.getMessage());
-                 e.printStackTrace();
-                 break;
-              }
+             Thread executor = new SmtpExecutor(socket, log);
+             executor.start();
+          }
+          catch (IOException e) {
+             System.out.format("An exception occured while attempting to listen for connections: %s", e.getMessage());
+             e.printStackTrace();
+             break;
+          }
 
-           } while (true);
-        }
-        catch (Throwable e) {
-           System.out.format("An exception occured during the listener loop: %s", e.getMessage());
-        }
-     }
+       } while (true);
     }
+    catch (Throwable e) {
+       System.out.format("An exception occured during the listener loop: %s", e.getMessage());
+    }
+ }
+}
+{% endhighlight %}
 
 In the code above there is quite a bit of error handling, stack dumping,
 etc... The most interesting part is the loop. In this loop we call the
@@ -175,122 +176,123 @@ to indicate we are ready for the next command.
   
 Whew, that's a lot to cover! Let's see that code now!  
   
-    :::java
-    package com.adampresley.TinyMailServer;
+{% highlight java %}
+package com.adampresley.TinyMailServer;
 
-    import java.io.BufferedReader;
-    import java.io.IOException;
-    import java.io.InputStreamReader;
-    import java.io.OutputStreamWriter;
-    import java.io.PrintWriter;
-    import java.net.Socket;
-    import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.StringTokenizer;
 
-    public class SmtpExecutor extends Thread {
-     private Socket __socket;
+public class SmtpExecutor extends Thread {
+ private Socket __socket;
 
-     private BufferedReader __inStream;
-     private PrintWriter __outStream;
+ private BufferedReader __inStream;
+ private PrintWriter __outStream;
 
-     public SmtpExecutor(Socket socket) throws IOException {
-        __socket = socket;
-        __inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        __outStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-     }
+ public SmtpExecutor(Socket socket) throws IOException {
+    __socket = socket;
+    __inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    __outStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+ }
 
-     @Override
-     public void run() {
-        println("220 SMTP Server TinyMailServer ready and waiting.");
+ @Override
+ public void run() {
+    println("220 SMTP Server TinyMailServer ready and waiting.");
 
-        try {
-           do {
-              String input = "";
+    try {
+       do {
+          String input = "";
 
-              try {
-                 input = __inStream.readLine();
+          try {
+             input = __inStream.readLine();
 
-                 if (input == null)
-                    break;
-              }
-              catch (Exception e) {
-                 e.printStackTrace();
-              }
+             if (input == null)
+                break;
+          }
+          catch (Exception e) {
+             e.printStackTrace();
+          }
 
-              /*
-               * Parse commands. For now we just ignore the command
-               * and say all is ok.
-               */
-              StringTokenizer tokenizer = new StringTokenizer(input, " :");
-              String command = "";
+          /*
+           * Parse commands. For now we just ignore the command
+           * and say all is ok.
+           */
+          StringTokenizer tokenizer = new StringTokenizer(input, " :");
+          String command = "";
 
-              command = tokenizer.nextToken().toUpperCase();
+          command = tokenizer.nextToken().toUpperCase();
 
-              if (command.compareTo("DATA") == 0) {
-                 doCommand_DATA();
-                 continue;
-              }
+          if (command.compareTo("DATA") == 0) {
+             doCommand_DATA();
+             continue;
+          }
 
-              if (command.compareTo("RCPT") == 0) {
-                 println("250 OK, RCPT received");
-                 continue;
-              }
+          if (command.compareTo("RCPT") == 0) {
+             println("250 OK, RCPT received");
+             continue;
+          }
 
-              if ((command.compareTo("MAIL") == 0) || (command.compareTo("SEND") == 0)) {
-                 println("250 OK, MAIL/SEND received");
-                 continue;
-              }
+          if ((command.compareTo("MAIL") == 0) || (command.compareTo("SEND") == 0)) {
+             println("250 OK, MAIL/SEND received");
+             continue;
+          }
 
-              if ((command.compareTo("HELO") == 0) || (command.compareTo("EHLO") == 0)) {
-                 println ("250 OK, Howdy ya'll!");
-                 continue;
-              }
+          if ((command.compareTo("HELO") == 0) || (command.compareTo("EHLO") == 0)) {
+             println ("250 OK, Howdy ya'll!");
+             continue;
+          }
 
-              if (command.compareTo("RSET") == 0) {
-                 println("250 OK, RSET received");
-                 continue;
-              }
+          if (command.compareTo("RSET") == 0) {
+             println("250 OK, RSET received");
+             continue;
+          }
 
-              if (command.compareTo("QUIT") == 0) {
-                 println("221 SMTP Server TinyMailServer closing transmission channel");
-                 break;
-              }
-           } while (true);
-        }
-        catch (Exception e) {
-           e.printStackTrace();
-        }
-        finally {
-           try {
-              __socket.close();
-           }
-           catch (Exception e) {
-           }
-        }
-     }
-
-     private void println(String s) {
-        __outStream.println(s);
-        __outStream.flush();
-
-        System.out.println(s);
-     }
-
-     private void doCommand_DATA() throws IOException {
-        println("354 Send me data yo. End with .");
-        System.out.println("Mail:");
-
-        do {
-           String input = __inStream.readLine();
-           if (input.equals(".")) {
-              println("250 OK");
-              break;
-           }
-           else {
-              System.out.println(input);
-           }
-        } while (true);
-     }
+          if (command.compareTo("QUIT") == 0) {
+             println("221 SMTP Server TinyMailServer closing transmission channel");
+             break;
+          }
+       } while (true);
     }
+    catch (Exception e) {
+       e.printStackTrace();
+    }
+    finally {
+       try {
+          __socket.close();
+       }
+       catch (Exception e) {
+       }
+    }
+ }
+
+ private void println(String s) {
+    __outStream.println(s);
+    __outStream.flush();
+
+    System.out.println(s);
+ }
+
+ private void doCommand_DATA() throws IOException {
+    println("354 Send me data yo. End with .");
+    System.out.println("Mail:");
+
+    do {
+       String input = __inStream.readLine();
+       if (input.equals(".")) {
+          println("250 OK");
+          break;
+       }
+       else {
+          System.out.println(input);
+       }
+    } while (true);
+ }
+}
+{% endhighlight %}
 
 Ok, so we've got a server to listen for connections. When a connection
 is received we fire off a thread that actually response to the client,
@@ -298,37 +300,39 @@ then terminates the socket connection. Now we need to tie it together in
 the *Main* class. This part is easy. Instantiate and run. :) Let's see
 it.
   
-    :::java
-    package com.adampresley.TinyMailServer;
+{% highlight java %}
+package com.adampresley.TinyMailServer;
 
-    import java.io.IOException;
-    import java.net.UnknownHostException;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
-    public class Main {
-     public static void main(String[] args) throws UnknownHostException, IOException {
-        String address = "localhost";
-        int port = 25;
-        int maxRequestsInQueue = 10;
+public class Main {
+ public static void main(String[] args) throws UnknownHostException, IOException {
+    String address = "localhost";
+    int port = 25;
+    int maxRequestsInQueue = 10;
 
-        try {
-           System.out.format("Starting SMTP server at %s on port %s\n\n", address, port);
-           System.out.println("Created by Adam Presley (c) 2010");
-           System.out.println("Visit http://www.adampresley.com!!\n");
-           SmtpServer server = new SmtpServer(address, port, maxRequestsInQueue);
+    try {
+       System.out.format("Starting SMTP server at %s on port %s\n\n", address, port);
+       System.out.println("Created by Adam Presley (c) 2010");
+       System.out.println("Visit http://www.adampresley.com!!\n");
+       SmtpServer server = new SmtpServer(address, port, maxRequestsInQueue);
 
-           server.start();
-        }
-        catch (Exception e) {
-
-        }
-     }
+       server.start();
     }
+    catch (Exception e) {
+
+    }
+ }
+}
+{% endhighlight %}
 
 Now you are ready to run that thing! Go ahead, run it. To test it, create a 
 ColdFusion page with the following code, then run it.  
   
-    :::cfm
-    <cfmail from="from@address.com" to="to@address.com" subject="Test Mail Server">Test</cfmail>
+  {% highlight cfm %}
+  <cfmail from="from@address.com" to="to@address.com" subject="Test Mail Server">Test</cfmail>
+{% endhighlight %}
 
 Ok, so why reinvent the wheel? Cause sometimes it's fun to. Happy
 coding!

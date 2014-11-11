@@ -31,11 +31,12 @@ more configurable. Below I setup properties for the client's application
 directory, the path to the compressor JAR, as well as the JavaScript and
 CSS directories.  
   
-	:::xml
-	<property name="app" value="app-folder" />
-	<property name="compressorJar" value="\\devpath\yui-compressor\build\yuicompressor-2.4.2.jar" />
-	<property name="jsSourceDir" value="\\devpath\${app}\js" />
-	<property name="cssSourceDir" value="\\devpath\${app}\css" />
+{% highlight xml %}
+<property name="app" value="app-folder" />
+<property name="compressorJar" value="\\devpath\yui-compressor\build\yuicompressor-2.4.2.jar" />
+<property name="jsSourceDir" value="\\devpath\${app}\js" />
+<property name="cssSourceDir" value="\\devpath\${app}\css" />
+{% endhighlight %}
 
 After this we create a target... we'll call it **minify** ( that's
 original... :/ ). In this method we want to do two things: minify our
@@ -43,17 +44,18 @@ JavaScript file, and minify our CSS file. Clearly in my case we have
 only two files to minify, and your mileage may vary. Let's take a look
 at that.  
   
-	:::xml
-	<java jar="${compressorJar}" fork="true" failonerror="true">
-		<arg value="--line-break" />
-		<arg value="4000" />
-		<arg value="--type" />
-		<arg value="js" />
-		<arg value="--preserve-semi" />
-		<arg value="-o" />
-		<arg value="${jsSourceDir}\library.min.js" />
-		<arg value="${jsSourceDir}\library.js" />
-	</java>
+{% highlight xml %}
+<java jar="${compressorJar}" fork="true" failonerror="true">
+	<arg value="--line-break" />
+	<arg value="4000" />
+	<arg value="--type" />
+	<arg value="js" />
+	<arg value="--preserve-semi" />
+	<arg value="-o" />
+	<arg value="${jsSourceDir}\library.min.js" />
+	<arg value="${jsSourceDir}\library.js" />
+</java>
+{% endhighlight %}
 
 The task **java** executes the Java command line for the default
 installed JVM. Notice the attributes used here. The first is *jar*. This
@@ -76,56 +78,58 @@ After this we do the same to the CSS. Notice the lack of the
 --preserve-semi argument. That argument does not apply to CSS
 minification.   
   
-	:::xml
-	<java jar="${compressorJar}" fork="true" failonerror="true">
-		<arg value="--line-break" />
-		<arg value="4000" />
-		<arg value="--type" />
-		<arg value="css" />
-		<arg value="-o" />
-		<arg value="${cssSourceDir}\style.min.css" />
-		<arg value="${cssSourceDir}\style.css" />
-	</java>
-  
+{% highlight xml %}
+<java jar="${compressorJar}" fork="true" failonerror="true">
+	<arg value="--line-break" />
+	<arg value="4000" />
+	<arg value="--type" />
+	<arg value="css" />
+	<arg value="-o" />
+	<arg value="${cssSourceDir}\style.min.css" />
+	<arg value="${cssSourceDir}\style.css" />
+</java>
+{% endhighlight %}
+
 Below is the script in its full glory. Happy coding!  
   
-	:::xml
-	<?xml version="1.0" encoding="UTF-8"?>
-	<project name="Minify JS and CSS" default="minify" basedir=".">
-		<description>
-			ANT build script to automate minification of library.js
-			and style.css.
-		</description>
+{% highlight xml %}
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Minify JS and CSS" default="minify" basedir=".">
+	<description>
+		ANT build script to automate minification of library.js
+		and style.css.
+	</description>
 
-		<property name="app" value="app-folder" />
-		<property name="compressorJar" value="\\devpath\yui-compressor\build\yuicompressor-2.4.2.jar" />
-		<property name="jsSourceDir" value="\\devpath\${app}\js" />
-		<property name="cssSourceDir" value="\\devpath\${app}\css" />
+	<property name="app" value="app-folder" />
+	<property name="compressorJar" value="\\devpath\yui-compressor\build\yuicompressor-2.4.2.jar" />
+	<property name="jsSourceDir" value="\\devpath\${app}\js" />
+	<property name="cssSourceDir" value="\\devpath\${app}\css" />
 
-		<target name="minify">
-			<echo message="Starting minification process." />
+	<target name="minify">
+		<echo message="Starting minification process." />
 
-			<echo message="Minifying JS..." />
-			<java jar="${compressorJar}" fork="true" failonerror="true">
-				<arg value="--line-break" />
-				<arg value="4000" />
-				<arg value="--type" />
-				<arg value="js" />
-				<arg value="--preserve-semi" />
-				<arg value="-o" />
-				<arg value="${jsSourceDir}\library.min.js" />
-				<arg value="${jsSourceDir}\library.js" />
-			</java>
+		<echo message="Minifying JS..." />
+		<java jar="${compressorJar}" fork="true" failonerror="true">
+			<arg value="--line-break" />
+			<arg value="4000" />
+			<arg value="--type" />
+			<arg value="js" />
+			<arg value="--preserve-semi" />
+			<arg value="-o" />
+			<arg value="${jsSourceDir}\library.min.js" />
+			<arg value="${jsSourceDir}\library.js" />
+		</java>
 
-			<echo message="Minifying CSS..." />
-			<java jar="${compressorJar}" fork="true" failonerror="true">
-				<arg value="--line-break" />
-				<arg value="4000" />
-				<arg value="--type" />
-				<arg value="css" />
-				<arg value="-o" />
-				<arg value="${cssSourceDir}\style.min.css" />
-				<arg value="${cssSourceDir}\style.css" />
-			</java>
-		</target>
-	</project>
+		<echo message="Minifying CSS..." />
+		<java jar="${compressorJar}" fork="true" failonerror="true">
+			<arg value="--line-break" />
+			<arg value="4000" />
+			<arg value="--type" />
+			<arg value="css" />
+			<arg value="-o" />
+			<arg value="${cssSourceDir}\style.min.css" />
+			<arg value="${cssSourceDir}\style.css" />
+		</java>
+	</target>
+</project>
+{% endhighlight %}

@@ -25,32 +25,33 @@ To correct this I crafted a simple SQL script to randomize the SSNs,
 making the data feel a bit more natural, and the page not crash. Here it
 is.  
 
-    :::sql
-    DECLARE @id INT
-    DECLARE @newSSN VARCHAR(11)
-    
-    DECLARE pcursor CURSOR FOR SELECT
-        id
-    FROM personTable WHERE 1=1
+{% highlight sql %}
+DECLARE @id INT
+DECLARE @newSSN VARCHAR(11)
 
-    OPEN pcursor
+DECLARE pcursor CURSOR FOR SELECT
+    id
+FROM personTable WHERE 1=1
+
+OPEN pcursor
+FETCH NEXT FROM pcursor INTO @id
+
+WHILE @@FETCH_STATUS=0
+BEGIN
+    SET @newSSN = (CAST(CAST(100 + (898 * RAND()) AS INT) AS VARCHAR(3)) + '-' + CAST(CAST(10 + (88 * RAND()) AS INT) AS VARCHAR(2)) + '-' + CAST(CAST(1000 + (8998 * RAND()) AS INT) AS VARCHAR(4)))
+    PRINT @newSSN
+
+    UPDATE personTable SET
+        SSN=@newSSN
+    WHERE
+        id=@id
+
     FETCH NEXT FROM pcursor INTO @id
+END
 
-    WHILE @@FETCH_STATUS=0
-    BEGIN
-        SET @newSSN = (CAST(CAST(100 + (898 * RAND()) AS INT) AS VARCHAR(3)) + '-' + CAST(CAST(10 + (88 * RAND()) AS INT) AS VARCHAR(2)) + '-' + CAST(CAST(1000 + (8998 * RAND()) AS INT) AS VARCHAR(4)))
-        PRINT @newSSN
-
-        UPDATE personTable SET
-            SSN=@newSSN
-        WHERE
-            id=@id
-
-        FETCH NEXT FROM pcursor INTO @id
-    END
-
-    CLOSE pcursor
-    DEALLOCATE pcursor
+CLOSE pcursor
+DEALLOCATE pcursor
+{% endhighlight %}
   
 This little script simple gets a cursor for all the people in our table
 and iterates over them. For each iteration we create a random SSN value

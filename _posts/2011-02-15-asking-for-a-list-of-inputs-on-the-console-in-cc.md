@@ -22,33 +22,34 @@ then can use an old fashioned loop and **scanf()** to ask for the user
 input, and stuff the result into our new array. For good measure we then
 loop again and display what the user entered. Here's the code.
 
-	:::c
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <string.h>
+{% highlight c %}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-	int main() {
-		char** names[4];
-		int i = 0;
+int main() {
+	char** names[4];
+	int i = 0;
 
-		printf("Type in 4 names.");
+	printf("Type in 4 names.");
 
-		for (i = 0; i < 4; i++) {
-			/*
-			 * Use malloc for C apps. For C++,
-			 * names[i] = new char*[128];
-			 */
-			names[i] = (char**) malloc(128);
-			scanf("%s", (char*) names[i]);
-		}
-
-		printf("Now showing what you typed...");
-		for (i = 0; i < 4; i++) {
-			printf("%s", names[i]);
-		}
-
-		return 0;
+	for (i = 0; i < 4; i++) {
+		/*
+		 * Use malloc for C apps. For C++,
+		 * names[i] = new char*[128];
+		 */
+		names[i] = (char**) malloc(128);
+		scanf("%s", (char*) names[i]);
 	}
+
+	printf("Now showing what you typed...");
+	for (i = 0; i < 4; i++) {
+		printf("%s", names[i]);
+	}
+
+	return 0;
+}
+{% endhighlight %}
 
 I admit it was a little fun dusting off that old knowledge, but it also
 reminds me why I love languages like [ColdFusion](http://www.adobe.com/products/coldfusion/) 

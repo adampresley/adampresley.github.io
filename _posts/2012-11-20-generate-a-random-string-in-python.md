@@ -16,8 +16,9 @@ there was a more *Pythonic* way to do this, and turns out I was right.
 I'm going to first show the solution, then we'll break it down to
 explain what each little piece is doing.
 
-    :::python
-    "".join(random.choice(string.ascii_letters) for i in range(8))
+{% highlight python %}
+"".join(random.choice(string.ascii_letters) for i in range(8))
+{% endhighlight %}
 
 So the above may seem a bit anti-climatic but it demonstrates the raw
 expressiveness of the Python language. So I'd like to break this down a

@@ -12,9 +12,10 @@ Here's a little tidbit. If you need to determine what domain a request
 may have been referred from, such as when doing JSONP work, here's a
 code snippet that might help.  
 
-    :::groovy
-    def uri = new java.net.URI(request.getHeader("referer"))
-    def domainName = uri.getHost()
+{% highlight groovy %}
+def uri = new java.net.URI(request.getHeader("referer"))
+def domainName = uri.getHost()
+{% endhighlight %}
   
 The *java.net* package contains the **URI** class which aides in
 working with URIs and URLs. And in Grails the request processed by the

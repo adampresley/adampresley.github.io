@@ -15,23 +15,24 @@ way more trim. The enhancement here is to allow the user to pass in an
 array of structures, allowing for merging of as many structures as the
 user needs. We also cleaned up the code a bit to be more ***Groovy***!
 
-    :::groovy
-    def reMerge(structArray, regex) {
-       def result = [:]
-       def p = (regex instanceof java.util.regex.Pattern) ? regex : ~/${regex}/
+{% highlight groovy %}
+def reMerge(structArray, regex) {
+   def result = [:]
+   def p = (regex instanceof java.util.regex.Pattern) ? regex : ~/${regex}/
 
-       structArray.each { it.each { k, v -> if (p.matcher(k).matches()) result[k] = v } }
-       result
-    }
+   structArray.each { it.each { k, v -> if (p.matcher(k).matches()) result[k] = v } }
+   result
+}
 
-    def s1 = [ firstName: "Adam", companyName: "adampresley.com" ]
-    def s2 = [ age: 32 ]
-    def s3 = [ lastName: "Presley" ]
+def s1 = [ firstName: "Adam", companyName: "adampresley.com" ]
+def s2 = [ age: 32 ]
+def s3 = [ lastName: "Presley" ]
 
-    def list = [ s1, s2, s3 ]
-    def result = reMerge(list, ~/(?i).*name/)
+def list = [ s1, s2, s3 ]
+def result = reMerge(list, ~/(?i).*name/)
 
-    result
+result
+{% endhighlight %}
 
 Take that sample snippet and drop it in GroovyConsole and run it. As you
 can see it will give you a new structure with only the keys from the

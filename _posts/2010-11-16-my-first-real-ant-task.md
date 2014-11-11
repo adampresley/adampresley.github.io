@@ -32,18 +32,19 @@ spreadsheet.
 To demonstrate lets take a look at what the ANT script itself looks
 like.  
   
-    :::xml
-    <!--?xml version="1.0"?-->
-    <project name="CFQUERYPARAM Tester" default="main" basedir=".">
-       <taskdef name="queryParamChecker" classname="com.apihealthcare.opt.QueryParamChecker">
-     
-       <target name="main">
-          <input message="Please provide a directory path or file path to scan:" addproperty="path" defaultvalue="${basedir}">
-     
-          <queryparamchecker path="${path}" outputfile="C:\\anttasktestresults.xlsx"> 
-       </queryparamchecker></target>
-    </taskdef></project>
-  
+{% highlight xml %}
+<!--?xml version="1.0"?-->
+<project name="CFQUERYPARAM Tester" default="main" basedir=".">
+   <taskdef name="queryParamChecker" classname="com.apihealthcare.opt.QueryParamChecker">
+ 
+   <target name="main">
+      <input message="Please provide a directory path or file path to scan:" addproperty="path" defaultvalue="${basedir}">
+ 
+      <queryparamchecker path="${path}" outputfile="C:\\anttasktestresults.xlsx"> 
+   </queryparamchecker></target>
+</taskdef></project>
+{% endhighlight %}
+
 As you can see the first thing to do is "import" a custom task called
 **queryParamChecker**. This is a custom ANT task that I have written
 that scans a resource for potential problems based on a set of regular
@@ -73,27 +74,28 @@ extend the Task class. Your new class must override the **execute()**
 method, and provide **setters** for each property your new task will
 support.  
 
-    :::groovy
-    package com.apihealthcare.opt
-     
-    import org.apache.tools.ant.*
-     
-    class QueryParamChecker extends Task {
-       private String path
-       private String outputFile
-     
-       @Override
-       public void execute() throws BuildException {
-       }
-     
-       public void setPath(String path) {
-          this.path = path
-       }
-     
-       public void setOutputFile(String outputFile) {
-          this.outputFile = outputFile
-       }
-    }
+{% highlight groovy %}
+package com.apihealthcare.opt
+ 
+import org.apache.tools.ant.*
+ 
+class QueryParamChecker extends Task {
+   private String path
+   private String outputFile
+ 
+   @Override
+   public void execute() throws BuildException {
+   }
+ 
+   public void setPath(String path) {
+      this.path = path
+   }
+ 
+   public void setOutputFile(String outputFile) {
+      this.outputFile = outputFile
+   }
+}
+{% endhighlight %}
 
 This is the skeleton for a custom ANT task. But I clearly wanted more
 than a skeleton. I need it to check resources for errors in
@@ -105,45 +107,46 @@ extensions that are valid for us to check, so it contains ".cfm" and
 to filter out any undesirable files or folders, as this application has
 a number of old files that are no longer used. Here are those arrays.  
   
-    :::groovy
-    /*
-     * An array of regular expressions to check files against.
-     * Modify this list to change the rules yo.
-     */
-    private def checks = [
-       ~/(?i)in\s*\(\s*<cfqueryparam((?!list).)*>/,
-       //~/(?i)in\s*\(\s*<cfqueryparam((?!cfsqltype).)*>/,
-       ~/(?i)(#\s*cfsqltype=|#\s*maxlength=|#\s*list=|#\s*value=)/,
-       ~/(?i)\sin(\s|\()[^>]*(value="#listqualify|value="#replace|value="#preservesinglequotes)/,
-       ~/(?i)[^<]cfqueryparam/,
-       ~/(?i)<cfqueryparam[^<>]*"\s*\/[^>]/,
-       ~/(?i)<cfqueryparam\s*value=#/,
-       ~/(?i)value="#dateadd/,
-       ~/(?i)<cfqueryparams/,
-       ~/(?i)cfsqltype=""/,
-       ~/(?i)(#"list|#"value|#"cfsqltype|#"maxlength)/,
-       ~/(?i)order\s*by\s*<cfqueryparam/,
-       ~/(?i)(cfqueryparamvalue|cfqueryparamcfsqltype|cfqueryparammaxlength|cfqueryparamlist)/,
-       ~/(?i)<cfqueryparam[^>]*(?=\/\s*"\s*>)/,
-       ~/(?i)charindex\([^\)]*<cfqueryparam/,
-       ~/(?i)[^<!-|<!]--[^>|-].*<cfqueryparam/,
-       ~/(?i)session\.(?!(hasPermission|get|usersession|set).*)/
-    ]
-     
-    /*
-     * An array of extensions that we care about. Ignore all else.
-     */
-    private def validExtensions = [
-       ".cfm",
-       ".cfc"
-    ]
-     
-    /*
-     * File name regex patterns to ignore.
-     */
-    private def ignores = [
-       ~/(?i)(.*?)unused_(.*)/
-    ]
+{% highlight groovy %}
+/*
+ * An array of regular expressions to check files against.
+ * Modify this list to change the rules yo.
+ */
+private def checks = [
+   ~/(?i)in\s*\(\s*<cfqueryparam((?!list).)*>/,
+   //~/(?i)in\s*\(\s*<cfqueryparam((?!cfsqltype).)*>/,
+   ~/(?i)(#\s*cfsqltype=|#\s*maxlength=|#\s*list=|#\s*value=)/,
+   ~/(?i)\sin(\s|\()[^>]*(value="#listqualify|value="#replace|value="#preservesinglequotes)/,
+   ~/(?i)[^<]cfqueryparam/,
+   ~/(?i)<cfqueryparam[^<>]*"\s*\/[^>]/,
+   ~/(?i)<cfqueryparam\s*value=#/,
+   ~/(?i)value="#dateadd/,
+   ~/(?i)<cfqueryparams/,
+   ~/(?i)cfsqltype=""/,
+   ~/(?i)(#"list|#"value|#"cfsqltype|#"maxlength)/,
+   ~/(?i)order\s*by\s*<cfqueryparam/,
+   ~/(?i)(cfqueryparamvalue|cfqueryparamcfsqltype|cfqueryparammaxlength|cfqueryparamlist)/,
+   ~/(?i)<cfqueryparam[^>]*(?=\/\s*"\s*>)/,
+   ~/(?i)charindex\([^\)]*<cfqueryparam/,
+   ~/(?i)[^<!-|<!]--[^>|-].*<cfqueryparam/,
+   ~/(?i)session\.(?!(hasPermission|get|usersession|set).*)/
+]
+ 
+/*
+ * An array of extensions that we care about. Ignore all else.
+ */
+private def validExtensions = [
+   ".cfm",
+   ".cfc"
+]
+ 
+/*
+ * File name regex patterns to ignore.
+ */
+private def ignores = [
+   ~/(?i)(.*?)unused_(.*)/
+]
+{% endhighlight %}
 
 From here I created two functions. The first will check a single file
 for errors against the regexs, and the second will recurse a directory
@@ -166,266 +169,267 @@ the file to disk.
   
 Below is the task in its entirety. You can also [download the soure code here](http://dl.dropbox.com/u/5726689/blog-downloads/ApiAntTasks.zip). Happy coding!  
 
-    :::groovy
-    package com.apihealthcare.opt
+{% highlight groovy %}
+package com.apihealthcare.opt
 
-    import org.apache.tools.ant.*
-    import groovy.io.FileType
-    import org.apache.poi.poifs.filesystem.*
-    import org.apache.poi.xssf.extractor.*
-    import org.apache.poi.xssf.usermodel.*
+import org.apache.tools.ant.*
+import groovy.io.FileType
+import org.apache.poi.poifs.filesystem.*
+import org.apache.poi.xssf.extractor.*
+import org.apache.poi.xssf.usermodel.*
 
-    class QueryParamChecker extends Task {
-       private String path
-       private String outputFile
+class QueryParamChecker extends Task {
+   private String path
+   private String outputFile
 
-       /*
-        * An array of regular expressions to check files against.
-        * Modify this list to change the rules yo.
-        */
-       private def checks = [
-          ~/(?i)in\s*\(\s*&lt;cfqueryparam((?!list).)*>/,
-          //~/(?i)in\s*\(\s*&lt;cfqueryparam((?!cfsqltype).)*>/,
-          ~/(?i)(#\s*cfsqltype=|#\s*maxlength=|#\s*list=|#\s*value=)/,
-          ~/(?i)\sin(\s|\()[^>]*(value="#listqualify|value="#replace|value="#preservesinglequotes)/,
-          ~/(?i)[^&lt;]cfqueryparam/,
-          ~/(?i)&lt;cfqueryparam[^<>]*"\s*\/[^>]/,
-          ~/(?i)&lt;cfqueryparam\s*value=#/,
-          ~/(?i)value="#dateadd/,
-          ~/(?i)&lt;cfqueryparams/,
-          ~/(?i)cfsqltype=""/,
-          ~/(?i)(#"list|#"value|#"cfsqltype|#"maxlength)/,
-          ~/(?i)order\s*by\s*&lt;cfqueryparam/,
-          ~/(?i)(cfqueryparamvalue|cfqueryparamcfsqltype|cfqueryparammaxlength|cfqueryparamlist)/,
-          ~/(?i)&lt;cfqueryparam[^>]*(?=\/\s*"\s*>)/,
-          ~/(?i)charindex\([^\)]*<cfqueryparam/,
-          ~/(?i)[^&lt;!-|&lt;!]--[^>|-].*&lt;cfqueryparam/,
-          ~/(?i)session\.(?!(hasPermission|get|usersession|set).*)/
-       ]
+   /*
+    * An array of regular expressions to check files against.
+    * Modify this list to change the rules yo.
+    */
+   private def checks = [
+      ~/(?i)in\s*\(\s*&lt;cfqueryparam((?!list).)*>/,
+      //~/(?i)in\s*\(\s*&lt;cfqueryparam((?!cfsqltype).)*>/,
+      ~/(?i)(#\s*cfsqltype=|#\s*maxlength=|#\s*list=|#\s*value=)/,
+      ~/(?i)\sin(\s|\()[^>]*(value="#listqualify|value="#replace|value="#preservesinglequotes)/,
+      ~/(?i)[^&lt;]cfqueryparam/,
+      ~/(?i)&lt;cfqueryparam[^<>]*"\s*\/[^>]/,
+      ~/(?i)&lt;cfqueryparam\s*value=#/,
+      ~/(?i)value="#dateadd/,
+      ~/(?i)&lt;cfqueryparams/,
+      ~/(?i)cfsqltype=""/,
+      ~/(?i)(#"list|#"value|#"cfsqltype|#"maxlength)/,
+      ~/(?i)order\s*by\s*&lt;cfqueryparam/,
+      ~/(?i)(cfqueryparamvalue|cfqueryparamcfsqltype|cfqueryparammaxlength|cfqueryparamlist)/,
+      ~/(?i)&lt;cfqueryparam[^>]*(?=\/\s*"\s*>)/,
+      ~/(?i)charindex\([^\)]*<cfqueryparam/,
+      ~/(?i)[^&lt;!-|&lt;!]--[^>|-].*&lt;cfqueryparam/,
+      ~/(?i)session\.(?!(hasPermission|get|usersession|set).*)/
+   ]
 
-       /*
-        * An array of extensions that we care about. Ignore all else.
-        */
-       private def validExtensions = [
-          ".cfm",
-          ".cfc"
-       ]
+   /*
+    * An array of extensions that we care about. Ignore all else.
+    */
+   private def validExtensions = [
+      ".cfm",
+      ".cfc"
+   ]
 
-       /*
-        * File name regex patterns to ignore.
-        */
-       private def ignores = [
-          ~/(?i)(.*?)unused_(.*)/
-       ]
+   /*
+    * File name regex patterns to ignore.
+    */
+   private def ignores = [
+      ~/(?i)(.*?)unused_(.*)/
+   ]
 
-       @Override
-       public void execute() throws BuildException {
-          def fileCheck = new File(this.path)
-          def result = []
+   @Override
+   public void execute() throws BuildException {
+      def fileCheck = new File(this.path)
+      def result = []
 
-          if (fileCheck.isFile()) {
-             result = _doFile()
-          }
-          else if (fileCheck.isDirectory()) {
-             result = _doDirectory()
-          }
-          else
-             throw new Exception("The path passed in doesn't seem to be a file or a directory!")
+      if (fileCheck.isFile()) {
+         result = _doFile()
+      }
+      else if (fileCheck.isDirectory()) {
+         result = _doDirectory()
+      }
+      else
+         throw new Exception("The path passed in doesn't seem to be a file or a directory!")
 
-          _writeOutputFile(result)
-       }
+      _writeOutputFile(result)
+   }
 
-       public void setPath(String path) {
-          this.path = path
-       }
+   public void setPath(String path) {
+      this.path = path
+   }
 
-       public void setOutputFile(String outputFile) {
-          this.outputFile = outputFile
-       }
+   public void setOutputFile(String outputFile) {
+      this.outputFile = outputFile
+   }
 
-       private def _doFile() {
-          def badCodeResults = []
+   private def _doFile() {
+      def badCodeResults = []
 
-          /*
-           * The directory we are searching goes here!
-           */
-          def f = new File(this.path)
-          assert f.isFile()
+      /*
+       * The directory we are searching goes here!
+       */
+      def f = new File(this.path)
+      assert f.isFile()
 
-          def filesProcessed = 0
-          def badFiles = 0
+      def filesProcessed = 0
+      def badFiles = 0
 
-          def validFile = false
-          def printed = false
+      def validFile = false
+      def printed = false
 
-          /*
-           * Do we care about this particular file? If not set the
-           * validFile flag to false.
-           */
-          validExtensions.each {
-             if (f.name.endsWith(it)) validFile = true
-          }
+      /*
+       * Do we care about this particular file? If not set the
+       * validFile flag to false.
+       */
+      validExtensions.each {
+         if (f.name.endsWith(it)) validFile = true
+      }
 
-          ignores.each {
-             def ignoreMe = f.name ==~ it
-             if (validFile != false && ignoreMe) validFile = false
-          }
+      ignores.each {
+         def ignoreMe = f.name ==~ it
+         if (validFile != false && ignoreMe) validFile = false
+      }
 
-          /*
-           * Enter here if we care.
-           */
-          if (validFile) {
-             filesProcessed++
+      /*
+       * Enter here if we care.
+       */
+      if (validFile) {
+         filesProcessed++
 
-             /*
-              * Start looping over each regex we wish to run against this file.
-              */
-             checks.each { regex ->
-                def matcher = f.text =~ regex
-                def index = 0
+         /*
+          * Start looping over each regex we wish to run against this file.
+          */
+         checks.each { regex ->
+            def matcher = f.text =~ regex
+            def index = 0
 
-                /*
-                 * Loop over any matches in the file.
-                 */
-                while (matcher.find()) {
-                   /*
-                    * We have a bad code match! Put it into our results array.
-                    */
-                   if (matcher.group(0) != null && matcher.group(0) != "") {
-                      if (!printed) {
-                         println "File: ${f.name}..."
-                         badFiles++
-                      }
-                      printed = true
+            /*
+             * Loop over any matches in the file.
+             */
+            while (matcher.find()) {
+               /*
+                * We have a bad code match! Put it into our results array.
+                */
+               if (matcher.group(0) != null && matcher.group(0) != "") {
+                  if (!printed) {
+                     println "File: ${f.name}..."
+                     badFiles++
+                  }
+                  printed = true
 
-                      badCodeResults << [
-                         filePath: f.getAbsolutePath(),
-                         offendingText: matcher.group(0),
-                         start: matcher.start(),
-                         end: matcher.end()
-                      ]
-                   }
-                }
-             }
+                  badCodeResults << [
+                     filePath: f.getAbsolutePath(),
+                     offendingText: matcher.group(0),
+                     start: matcher.start(),
+                     end: matcher.end()
+                  ]
+               }
+            }
+         }
 
-          }
+      }
 
-          println "Processed ${filesProcessed} file(s)"
-          println "${badFiles} bad file(s) found"
+      println "Processed ${filesProcessed} file(s)"
+      println "${badFiles} bad file(s) found"
 
-          badCodeResults
-       }
+      badCodeResults
+   }
 
-       private def _doDirectory() {
-          def badCodeResults = []
+   private def _doDirectory() {
+      def badCodeResults = []
 
-          /*
-           * The directory we are searching goes here!
-           */
-          def rootPath = this.path
-          def codeBase = new File(rootPath)
-          assert codeBase.isDirectory()
+      /*
+       * The directory we are searching goes here!
+       */
+      def rootPath = this.path
+      def codeBase = new File(rootPath)
+      assert codeBase.isDirectory()
 
-          def filesProcessed = 0
-          def badFiles = 0
+      def filesProcessed = 0
+      def badFiles = 0
 
-          /*
-           * Iterate over all files in our source directory.
-           */
-          codeBase.eachFileRecurse FileType.FILES, { f ->
-          def validFile = false
-          def printed = false
+      /*
+       * Iterate over all files in our source directory.
+       */
+      codeBase.eachFileRecurse FileType.FILES, { f ->
+      def validFile = false
+      def printed = false
 
-          /*
-           * Do we care about this particular file? If not set the
-           * validFile flag to false.
-           */
-          validExtensions.each {
-             if (f.name.endsWith(it)) validFile = true
-          }
+      /*
+       * Do we care about this particular file? If not set the
+       * validFile flag to false.
+       */
+      validExtensions.each {
+         if (f.name.endsWith(it)) validFile = true
+      }
 
-          ignores.each {
-             def ignoreMe = f.name ==~ it
-             if (validFile != false && ignoreMe) validFile = false
-          }
+      ignores.each {
+         def ignoreMe = f.name ==~ it
+         if (validFile != false && ignoreMe) validFile = false
+      }
 
-          /*
-           * Enter here if we care.
-           */
-          if (validFile) {
-             filesProcessed++
+      /*
+       * Enter here if we care.
+       */
+      if (validFile) {
+         filesProcessed++
 
-             /*
-              * Start looping over each regex we wish to run against this file.
-              */
-             checks.each { regex ->
-                def matcher = f.text =~ regex
-                def index = 0
+         /*
+          * Start looping over each regex we wish to run against this file.
+          */
+         checks.each { regex ->
+            def matcher = f.text =~ regex
+            def index = 0
 
-                /*
-                 * Loop over any matches in the file.
-                 */
-                while (matcher.find()) {
-                   /*
-                    * We have a bad code match! Put it into our results array.
-                    */
-                   if (matcher.group(0) != null && matcher.group(0) != "") {
-                      if (!printed) {
-                         println "File: ${f.name}..."
-                         badFiles++
-                      }
-                      printed = true
+            /*
+             * Loop over any matches in the file.
+             */
+            while (matcher.find()) {
+               /*
+                * We have a bad code match! Put it into our results array.
+                */
+               if (matcher.group(0) != null && matcher.group(0) != "") {
+                  if (!printed) {
+                     println "File: ${f.name}..."
+                     badFiles++
+                  }
+                  printed = true
 
-                      badCodeResults << [
-                         filePath: f.getAbsolutePath() - rootPath,
-                         offendingText: matcher.group(0),
-                         start: matcher.start(),
-                         end: matcher.end()
-                      ]
-                   }
-                }
-             }
+                  badCodeResults << [
+                     filePath: f.getAbsolutePath() - rootPath,
+                     offendingText: matcher.group(0),
+                     start: matcher.start(),
+                     end: matcher.end()
+                  ]
+               }
+            }
+         }
 
-          }
+      }
 
-          println "Processed ${filesProcessed} file(s)"
-          println "${badFiles} bad file(s) found"
+      println "Processed ${filesProcessed} file(s)"
+      println "${badFiles} bad file(s) found"
 
-          badCodeResults
-       }
+      badCodeResults
+   }
 
-       private def _writeOutputFile(badCodeResults) {
-          /*
-           * Create a workbook and worksheet.
-           */
-          XSSFWorkbook wb = new XSSFWorkbook()
-          XSSFCreationHelper helper = wb.getCreationHelper()
-          XSSFSheet sheet = wb.createSheet("Search Results")
+   private def _writeOutputFile(badCodeResults) {
+      /*
+       * Create a workbook and worksheet.
+       */
+      XSSFWorkbook wb = new XSSFWorkbook()
+      XSSFCreationHelper helper = wb.getCreationHelper()
+      XSSFSheet sheet = wb.createSheet("Search Results")
 
-          def rowIndex = 0
+      def rowIndex = 0
 
-          /*
-           * Loop over all our bad code results and write them to
-           * rows in the Excel sheet.
-           */
-          badCodeResults.each {
-             XSSFRow row = sheet.createRow(rowIndex++)
+      /*
+       * Loop over all our bad code results and write them to
+       * rows in the Excel sheet.
+       */
+      badCodeResults.each {
+         XSSFRow row = sheet.createRow(rowIndex++)
 
-             row.createCell(0).setCellValue(helper.createRichTextString(it.filePath))
-             row.createCell(1).setCellValue(helper.createRichTextString(it.offendingText))
-             row.createCell(2).setCellValue(it.start)
-             row.createCell(3).setCellValue(it.end)
-          }
+         row.createCell(0).setCellValue(helper.createRichTextString(it.filePath))
+         row.createCell(1).setCellValue(helper.createRichTextString(it.offendingText))
+         row.createCell(2).setCellValue(it.start)
+         row.createCell(3).setCellValue(it.end)
+      }
 
-          /*
-           * Write out the results file. Note the path.
-           */
-          FileOutputStream out = new FileOutputStream(this.outputFile)
-          wb.write(out)
-          out.close()
+      /*
+       * Write out the results file. Note the path.
+       */
+      FileOutputStream out = new FileOutputStream(this.outputFile)
+      wb.write(out)
+      out.close()
 
-          println "Output results written to ${this.outputFile}"
-       }
-    }
+      println "Output results written to ${this.outputFile}"
+   }
+}
+{% endhighlight %}
 
-  [download the full source code]: http://dl.dropbox.com/u/5726689/blog-downloads/ApiAntTasks.zip
+[download the full source code]: http://dl.dropbox.com/u/5726689/blog-downloads/ApiAntTasks.zip

@@ -28,36 +28,37 @@ execute in the scope of another object or function. I also wanted the
 ability to pass in the element as either a string name, or the actual
 element object. Let's look at the code.  
 
-    :::javascript
-    var mine = mine || {};
+{% highlight javascript %}
+var mine = mine || {};
 
-    /**
-     * Add an event handler. Will check to see if there are
-     * already existing event handlers registered, and if so
-     * will execute them. 
-     * @author Adam Presley
-     * @param el DOM element or string of DOM element name
-     * @param handler A function to execute when the click event occurs
-     * @param scope The scope in which to execute this handler. The default
-     *    is to execute in the scope of the DOM element
-     */
-    mine.addEvent = function(el, eventName, handler, scope) {
-       var o = (typeof el == "object") ? el : document.getElementById(el);
-       var currentEvent = (o["on" + eventName]) || undefined;
+/**
+ * Add an event handler. Will check to see if there are
+ * already existing event handlers registered, and if so
+ * will execute them. 
+ * @author Adam Presley
+ * @param el DOM element or string of DOM element name
+ * @param handler A function to execute when the click event occurs
+ * @param scope The scope in which to execute this handler. The default
+ *    is to execute in the scope of the DOM element
+ */
+mine.addEvent = function(el, eventName, handler, scope) {
+   var o = (typeof el == "object") ? el : document.getElementById(el);
+   var currentEvent = (o["on" + eventName]) || undefined;
 
-       /*
-        * Assign the onclick event.
-        */
-       o["on" + eventName] = function(e) {
-          if (currentEvent !== undefined) {
-             if (scope === undefined) currentEvent.call(o, e);
-             else currentEvent.call(scope, e);
-          }
+   /*
+    * Assign the onclick event.
+    */
+   o["on" + eventName] = function(e) {
+      if (currentEvent !== undefined) {
+         if (scope === undefined) currentEvent.call(o, e);
+         else currentEvent.call(scope, e);
+      }
 
-          if (scope === undefined) handler.call(o, e);
-          else handler.call(scope, e);
-       }
-    }
+      if (scope === undefined) handler.call(o, e);
+      else handler.call(scope, e);
+   }
+}
+{% endhighlight %}
 
 The very first thing of note is the declaration of **mine**. If it
 is already defined use that, otherwise define a blank object. This is
@@ -77,10 +78,11 @@ existing event handlers. It then will call your newly passed in
 the scope of the DOM element, but you may override it if you wish. Here
 is an example of calling this.  
 
-    :::javascript
-    mine.addEvent("btnSubmit", "click", function(e) {
-       alert("You clicked me!");
-    });
+{% highlight javascript %}
+mine.addEvent("btnSubmit", "click", function(e) {
+   alert("You clicked me!");
+});
+{% endhighlight %}
 
 In almost all cases I would recommend using a library that does all this
 for you because they've gone through the trouble of cross browser

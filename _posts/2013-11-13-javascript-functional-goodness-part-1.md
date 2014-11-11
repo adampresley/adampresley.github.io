@@ -28,108 +28,109 @@ More recently I have been able to put some of this to good use.
 In one project I'm working on I have a line chart with data fed to
 it that looks like the following JSON.
 
-    :::javascript
-    {
-       "seriesTotals": [
-          3,
-          77,
-          54,
-          65,
-          64,
-          56,
-          41,
-          14,
-          63,
-          99,
-          63,
-          30,
-          41,
-          24,
-          12,
-          42,
-          53,
-          51,
-          50,
-          35,
-          27,
-          22,
-          58,
-          65,
-          40,
-          51,
-          44,
-          27,
-          12,
-          66,
-          64
-       ],
-       "labels":    [
-          "Oct 13",
-          "Oct 14",
-          "Oct 15",
-          "Oct 16",
-          "Oct 17",
-          "Oct 18",
-          "Oct 19",
-          "Oct 20",
-          "Oct 21",
-          "Oct 22",
-          "Oct 23",
-          "Oct 24",
-          "Oct 25",
-          "Oct 26",
-          "Oct 27",
-          "Oct 28",
-          "Oct 29",
-          "Oct 30",
-          "Oct 31",
-          "Nov 1",
-          "Nov 2",
-          "Nov 3",
-          "Nov 4",
-          "Nov 5",
-          "Nov 6",
-          "Nov 7",
-          "Nov 8",
-          "Nov 9",
-          "Nov 10",
-          "Nov 11",
-          "Nov 12"
-       ],
-       "dayNames":    [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-          "Monday",
-          "Tuesday"
-       ]
-    }
+{% highlight javascript %}
+{
+   "seriesTotals": [
+      3,
+      77,
+      54,
+      65,
+      64,
+      56,
+      41,
+      14,
+      63,
+      99,
+      63,
+      30,
+      41,
+      24,
+      12,
+      42,
+      53,
+      51,
+      50,
+      35,
+      27,
+      22,
+      58,
+      65,
+      40,
+      51,
+      44,
+      27,
+      12,
+      66,
+      64
+   ],
+   "labels":    [
+      "Oct 13",
+      "Oct 14",
+      "Oct 15",
+      "Oct 16",
+      "Oct 17",
+      "Oct 18",
+      "Oct 19",
+      "Oct 20",
+      "Oct 21",
+      "Oct 22",
+      "Oct 23",
+      "Oct 24",
+      "Oct 25",
+      "Oct 26",
+      "Oct 27",
+      "Oct 28",
+      "Oct 29",
+      "Oct 30",
+      "Oct 31",
+      "Nov 1",
+      "Nov 2",
+      "Nov 3",
+      "Nov 4",
+      "Nov 5",
+      "Nov 6",
+      "Nov 7",
+      "Nov 8",
+      "Nov 9",
+      "Nov 10",
+      "Nov 11",
+      "Nov 12"
+   ],
+   "dayNames":    [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday"
+   ]
+}
+{% endhighlight %}
 
 The data is pretty simple. There is a top-level object that has three
 keys, each one an array of data. The first array, **seriesTotals**
@@ -142,14 +143,15 @@ The next order of business I had to address was to sum up the total
 of the values so I could display it elsewhere on the page. One way to approach
 this is using a simple variable and a loop, adding each item to the total sum.
 
-    :::javascript
-    var total = 0;
+{% highlight javascript %}
+var total = 0;
 
-    for (var index = 0; index < data.seriesTotals.length; index++) {
-        total += data.seriesTotals[index];
-    }
+for (var index = 0; index < data.seriesTotals.length; index++) {
+    total += data.seriesTotals[index];
+}
 
-    // total == 1413
+// total == 1413
+{% endhighlight %}
 
 This works fine and there is absolutely nothing wrong with it. But I am
 wanting to try new ways to do this kind of thing, so I decided to go
@@ -158,16 +160,17 @@ going about it the wrong way entirely. Hit me up on Google+ if you have comments
 or questions about this. Here is a version using the *RAJO* utilities
 I mentioned above.
 
-    :::javascript
-    require(["rajo.util"], function(Util) {
-        var total = Util.reduce(
-            0,
-            data.seriesTotals,
-            function(a, b) { return window.parseInt(a) + window.parseInt(b); }
-        );
+{% highlight javascript %}
+require(["rajo.util"], function(Util) {
+    var total = Util.reduce(
+        0,
+        data.seriesTotals,
+        function(a, b) { return window.parseInt(a) + window.parseInt(b); }
+    );
 
-        // total == 1413
-    });
+    // total == 1413
+});
+{% endhighlight %}
 
 I've added some extra line breaks for readability, but the original version is
 a single line. Here's the breakdown.
@@ -195,13 +198,14 @@ statement if you are a functional programming expert. :)
 
 Can the be decomposed any more? Sure it can.
 
-    :::javascript
-    require(["rajo.util"], function(Util) {
-        var sum = function(a, b) { return window.parseInt(a) + window.parseInt(b); };
-        var total = Util.reduce(0, data.seriesTotals, sum);
+{% highlight javascript %}
+require(["rajo.util"], function(Util) {
+    var sum = function(a, b) { return window.parseInt(a) + window.parseInt(b); };
+    var total = Util.reduce(0, data.seriesTotals, sum);
 
-        // total == 1413
-    });
+    // total == 1413
+});
+{% endhighlight %}
 
 With this example we now have a reusable **sum()** function. It is simple, reuable
 and pure. By pure I mean that it takes a series of inputs and returns an output

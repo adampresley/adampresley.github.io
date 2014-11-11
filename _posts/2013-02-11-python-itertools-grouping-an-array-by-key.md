@@ -19,34 +19,35 @@ Alba has a home, work and cell phone number. What I want to end up with
 a a single array entry for each person, with a sub-array of all their
 phone numbers. First let's start with the code.  
   
-    :::python
-    from itertools import groupby
+{% highlight python %}
+from itertools import groupby
 
-    people = [
-      {"firstName": "Adam", "lastName": "Presley", "phoneType": "Home Phone", "phoneNumber": "555-7844"},
-      {"firstName": "Jessica", "lastName": "Alba", "phoneType": "Home Phone", "phoneNumber": "555-7833"},
-      {"firstName": "Adam", "lastName": "Presley", "phoneType": "Work Phone", "phoneNumber": "555-1122"},
-      {"firstName": "Bob", "lastName": "Hope", "phoneType": "Home Phone", "phoneNumber": "555-9987"},
-      {"firstName": "Jessica", "lastName": "Alba", "phoneType": "Cell Phone", "phoneNumber": "555-0915"},
-      {"firstName": "Jessica", "lastName": "Alba", "phoneType": "Work Phone", "phoneNumber": "555-4821"}
-    ]
+people = [
+  {"firstName": "Adam", "lastName": "Presley", "phoneType": "Home Phone", "phoneNumber": "555-7844"},
+  {"firstName": "Jessica", "lastName": "Alba", "phoneType": "Home Phone", "phoneNumber": "555-7833"},
+  {"firstName": "Adam", "lastName": "Presley", "phoneType": "Work Phone", "phoneNumber": "555-1122"},
+  {"firstName": "Bob", "lastName": "Hope", "phoneType": "Home Phone", "phoneNumber": "555-9987"},
+  {"firstName": "Jessica", "lastName": "Alba", "phoneType": "Cell Phone", "phoneNumber": "555-0915"},
+  {"firstName": "Jessica", "lastName": "Alba", "phoneType": "Work Phone", "phoneNumber": "555-4821"}
+]
 
-    people = sorted(people, key=lambda k: k["firstName"])
-    groupedResult = []
+people = sorted(people, key=lambda k: k["firstName"])
+groupedResult = []
 
-    for key, person in groupby(people, lambda k: k["firstName"]):
-      row = next(person)
+for key, person in groupby(people, lambda k: k["firstName"]):
+  row = next(person)
 
-      newRow = dict([(k, v) for k, v in row.items() if not k in ("phoneType", "phoneNumber")])
-      newRow["phoneNumbers"] = [{"phoneType": row["phoneType"], "phoneNumber": row["phoneNumber"]}] + [{"phoneType": ph["phoneType"], "phoneNumber": ph["phoneNumber"]} for ph in person]
+  newRow = dict([(k, v) for k, v in row.items() if not k in ("phoneType", "phoneNumber")])
+  newRow["phoneNumbers"] = [{"phoneType": row["phoneType"], "phoneNumber": row["phoneNumber"]}] + [{"phoneType": ph["phoneType"], "phoneNumber": ph["phoneNumber"]} for ph in person]
 
-      groupedResult.append(newRow)
+  groupedResult.append(newRow)
 
-    for person in groupedResult:
-      print "%s %s:" % (person["firstName"], person["lastName"])
+for person in groupedResult:
+  print "%s %s:" % (person["firstName"], person["lastName"])
 
-      for phoneNumber in person["phoneNumbers"]:
-         print "\t%s: %s" % (phoneNumber["phoneType"], phoneNumber["phoneNumber"])
+  for phoneNumber in person["phoneNumbers"]:
+     print "\t%s: %s" % (phoneNumber["phoneType"], phoneNumber["phoneNumber"])
+{% endhighlight %}
 
 From the beginning you will see the array of dictionaries as I described above. There are multiple records for each person who has more than one phone number. The first thing I want to do with this array is to sort it, since our group method will need them sorted. This is accomplished using the **sorted()** method. The first argument is the array to sort, and the *key* argument is a function, or a lambda expression in this case that specifies what key to use in the sorting. In our case we are
 going to sort by first name.  
@@ -60,14 +61,16 @@ though I am getting all the items from our current row *except* for the *phoneTy
   
 From here I then create a new key called *phoneNumbers* (notice the plural) that will house a sub-array of all phone numbers for the current person. We can break this line up into two parts, or list comprehension actually. The first creates an array of a single dictionary consisting of the first row we've already retrieved in the variable named *row*.  
   
-    :::python
-    [{"phoneType": row["phoneType"], "phoneNumber": row["phoneNumber"]}]
+{% highlight python %}
+[{"phoneType": row["phoneType"], "phoneNumber": row["phoneNumber"]}]
+{% endhighlight %}
 
 The next list comprehension assembles an array of the remaining rows
 from the **person** grouper iterable object.  
   
-    :::python
-    [{"phoneType": ph["phoneType"], "phoneNumber": ph["phoneNumber"]} for ph in person]
+{% highlight python %}
+[{"phoneType": ph["phoneType"], "phoneNumber": ph["phoneNumber"]} for ph in person]
+{% endhighlight %}
 
 Then you'll notice that we are using an addition operation to combine the two arrays into one. Finally the new row is added to the
 **groupedResult** array and we do a quick loop to show off our results.  

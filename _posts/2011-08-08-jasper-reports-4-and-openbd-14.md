@@ -59,43 +59,44 @@ connection object based on the active datasource defined in
 **application.dsn**. Also note this assumes you have session management
 turned on, and that your admin password is "password".
 
-	:::coldfusion
-	<cffunction name="getConnection" output="false">
-		<cfset var admin = createObject("component", "bluedragon.adminapi.Administrator") />
-		<cfset var adminDS = "" />
-		<cfset var ds = "" />
-		<cfset var loginResult = false />
-		<cfset var connection = "" />
+{% highlight cfm %}
+<cffunction name="getConnection" output="false">
+	<cfset var admin = createObject("component", "bluedragon.adminapi.Administrator") />
+	<cfset var adminDS = "" />
+	<cfset var ds = "" />
+	<cfset var loginResult = false />
+	<cfset var connection = "" />
 
-		<cfset loginResult = admin.login("password") />
-		<cfif loginResult>
-			<cfset session.auth = {
-				loggedIn = true,
-				password = "password"
-			} />
-		</cfif>
+	<cfset loginResult = admin.login("password") />
+	<cfif loginResult>
+		<cfset session.auth = {
+			loggedIn = true,
+			password = "password"
+		} />
+	</cfif>
 
-		<cfset adminDS = createObject("component", "bluedragon.adminapi.Datasource") />
-		<cfset ds = adminDS.getDatasources(application.dsn) />
+	<cfset adminDS = createObject("component", "bluedragon.adminapi.Datasource") />
+	<cfset ds = adminDS.getDatasources(application.dsn) />
 
-		<cftry>
-			<cfset connection = createObject("java", "java.sql.DriverManager").getConnection(
-				ds[1].hoststring,
-				ds[1].username,
-				ds[1].password
-			) />
+	<cftry>
+		<cfset connection = createObject("java", "java.sql.DriverManager").getConnection(
+			ds[1].hoststring,
+			ds[1].username,
+			ds[1].password
+		) />
 
-		<cfcatch>
-			<cfdump var="#ds#" />
-			<cfdump var="#cfcatch#" />
-			<cfrethrow />
-			<cfabort />
-		</cfcatch>
-		</cftry>
+	<cfcatch>
+		<cfdump var="#ds#" />
+		<cfdump var="#cfcatch#" />
+		<cfrethrow />
+		<cfabort />
+	</cfcatch>
+	</cftry>
 
-		<cfset admin.logout() />
-		<cfreturn connection />
-	</cffunction>
+	<cfset admin.logout() />
+	<cfreturn connection />
+</cffunction>
+{% endhighlight %}
 
 The first part of this function first validates the password for admin
 access. From here the remainder of the administrative methods assumes a
@@ -119,68 +120,69 @@ After this I show how to export your report as either PDF or Excel,
 based on the URL argument **format**. Hope you enjoy. Happy coding AND
 reporting!
 
-	:::coldfusion
-	<cfparam name="url.format" default="pdf" />
-	<cfset local = {} />
+{% highlight cfm %}
+<cfparam name="url.format" default="pdf" />
+<cfset local = {} />
 
-	<!---
-		This is where you would place any arguments to send to your
-		report as variables.
-	--->
-	<cfset local.args = {} />
+<!---
+	This is where you would place any arguments to send to your
+	report as variables.
+--->
+<cfset local.args = {} />
 
-	<!---
-		Grab the current datasource's connection. Note that the
-		function getConnection() refers to application.dsn.
-		Replace as necessary.
-	--->
-	<cfset local.connection = getConnection() />
+<!---
+	Grab the current datasource's connection. Note that the
+	function getConnection() refers to application.dsn.
+	Replace as necessary.
+--->
+<cfset local.connection = getConnection() />
 
-	<!---
-		Compile the report and get a print object, filling
-		it with data from the database.
-	--->
-	<cfset local.report = createObject("java", "net.sf.jasperreports.engine.JasperCompileManager").compileReport(
-		expandPath("./InactivePeopleReport.jrxml")
+<!---
+	Compile the report and get a print object, filling
+	it with data from the database.
+--->
+<cfset local.report = createObject("java", "net.sf.jasperreports.engine.JasperCompileManager").compileReport(
+	expandPath("./InactivePeopleReport.jrxml")
+) />
+<cfset local.printObject = createObject("java", "net.sf.jasperreports.engine.JasperFillManager").fillReport(
+	local.report, local.args, local.connection
+) />
+
+<!---
+	Export in the specified format.
+--->
+<cfif url.format EQ "pdf">
+	<cfset local.reportData = createObject("java", "net.sf.jasperreports.engine.JasperExportManager").exportReportToPdf(
+		local.printObject
 	) />
-	<cfset local.printObject = createObject("java", "net.sf.jasperreports.engine.JasperFillManager").fillReport(
-		local.report, local.args, local.connection
+	<cfheader name="content-length" value="#arrayLen(local.reportData)#" />
+	<cfcontent type="application/pdf" variable="#local.reportData#" />
+<cfelseif url.format EQ "excel">
+	<cfset local.exporter = createObject("java", "net.sf.jasperreports.engine.export.JRXlsExporter").init() />
+	<cfset local.baos = createObject("java", "java.io.ByteArrayOutputStream").init() />
+
+	<cfset local.exporter.setParameter(
+		createObject("java", "net.sf.jasperreports.engine.JRExporterParameter").JASPER_PRINT,
+		local.printObject
+	) />
+	<cfset local.exporter.setParameter(
+		createObject("java", "net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter").IS_DETECT_CELL_TYPE,
+		true
+	) />
+	<cfset local.exporter.setParameter(
+		createObject("java", "net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter").IS_WHITE_PAGE_BACKGROUND,
+		true
+	) />
+	<cfset local.exporter.setParameter(
+		createObject("java", "net.sf.jasperreports.engine.JRExporterParameter").OUTPUT_STREAM,
+		local.baos
 	) />
 
-	<!---
-		Export in the specified format.
-	--->
-	<cfif url.format EQ "pdf">
-		<cfset local.reportData = createObject("java", "net.sf.jasperreports.engine.JasperExportManager").exportReportToPdf(
-			local.printObject
-		) />
-		<cfheader name="content-length" value="#arrayLen(local.reportData)#" />
-		<cfcontent type="application/pdf" variable="#local.reportData#" />
-	<cfelseif url.format EQ "excel">
-		<cfset local.exporter = createObject("java", "net.sf.jasperreports.engine.export.JRXlsExporter").init() />
-		<cfset local.baos = createObject("java", "java.io.ByteArrayOutputStream").init() />
+	<cfset local.exporter.exportReport() />
+	<cfset local.reportData = local.baos.toByteArray() />
 
-		<cfset local.exporter.setParameter(
-			createObject("java", "net.sf.jasperreports.engine.JRExporterParameter").JASPER_PRINT,
-			local.printObject
-		) />
-		<cfset local.exporter.setParameter(
-			createObject("java", "net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter").IS_DETECT_CELL_TYPE,
-			true
-		) />
-		<cfset local.exporter.setParameter(
-			createObject("java", "net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter").IS_WHITE_PAGE_BACKGROUND,
-			true
-		) />
-		<cfset local.exporter.setParameter(
-			createObject("java", "net.sf.jasperreports.engine.JRExporterParameter").OUTPUT_STREAM,
-			local.baos
-		) />
-
-		<cfset local.exporter.exportReport() />
-		<cfset local.reportData = local.baos.toByteArray() />
-
-		<cfheader name="Content-Disposition" value="attachment; filename=report.xls" />
-		<cfcontent type="application/excel" variable="#local.reportData#" reset="true" />
-	</cfif>
-	<cfabort />
+	<cfheader name="Content-Disposition" value="attachment; filename=report.xls" />
+	<cfcontent type="application/excel" variable="#local.reportData#" reset="true" />
+</cfif>
+<cfabort />
+{% endhighlight %}

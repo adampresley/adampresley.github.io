@@ -22,8 +22,9 @@ considering the age and lack of support for the JRun product.
 
 So originally my JVM arguments looked like this.
 
-	:::txt
-	set JAVA_OPTS=-Xms256m -Xmx512m -XX:+UseConcMarkSweepGC -XX:GCTimeRatio=19
+{% highlight text %}
+set JAVA_OPTS=-Xms256m -Xmx512m -XX:+UseConcMarkSweepGC -XX:GCTimeRatio=19
+{% endhighlight %}
 
 Basically this is telling Tomcat to run with a minimum heap size of
 256MB, a maximum heap size of 512MB, use the concurrent sweep garbage
@@ -46,5 +47,6 @@ that flag to my JVM arguments enhanced performance in Tomcat for this
 app, and made me much happier! So now my JVM argument setting in
 *catalina.bat* looks like this.
 
-	:::txt
-	set JAVA_OPTS=-server -Xms256m -Xmx512m -XX:+UseConcMarkSweepGC -XX:GCTimeRatio=19
+{% highlight text %}
+set JAVA_OPTS=-server -Xms256m -Xmx512m -XX:+UseConcMarkSweepGC -XX:GCTimeRatio=19
+{% endhighlight %}

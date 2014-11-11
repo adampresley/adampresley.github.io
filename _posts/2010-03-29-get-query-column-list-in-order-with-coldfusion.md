@@ -16,37 +16,38 @@ natively by ColdFusion, this becomes quite a bother. Below is a simple
 solution to handle working with the query and its columns in order they
 were put into the SQL statement.   
 
-    :::cfm
-    <cfset metadata = qry.getMetaData() /> 
-    <cfset rowIndex = 0 /> 
-    <cfset index = 0 /> 
-    <cfset cols = [] />  
+{% highlight cfm %}
+<cfset metadata = qry.getMetaData() /> 
+<cfset rowIndex = 0 /> 
+<cfset index = 0 /> 
+<cfset cols = [] />  
 
-    <!--- 
-        Get an array of column names in ORDER they    
-        were put into the SQL statement. 
-    ---> 
-    <cfloop from="1" to="#metadata.getColumnCount()#" index="index">    
-        <cfset cols[index] = metadata.getColumnName(index) /> 
-    </cfloop> 
+<!--- 
+    Get an array of column names in ORDER they    
+    were put into the SQL statement. 
+---> 
+<cfloop from="1" to="#metadata.getColumnCount()#" index="index">    
+    <cfset cols[index] = metadata.getColumnName(index) /> 
+</cfloop> 
+
+<!---
+    Now we can loop over the query in column order
+---> 
+<cfset rows = [] />  
+<cfloop from="1" to="#qry.recordCount#" index="rowIndex">    
+    <cfset column = {} />     
+    <cfloop from="1" to="#arrayLen(cols)#" index="index">       
+        <cfset column["#cols[index]#"] = qry["#cols[index]#"][rowIndex] />    
+    </cfloop>     
 
     <!---
-        Now we can loop over the query in column order
-    ---> 
-    <cfset rows = [] />  
-    <cfloop from="1" to="#qry.recordCount#" index="rowIndex">    
-        <cfset column = {} />     
-        <cfloop from="1" to="#arrayLen(cols)#" index="index">       
-            <cfset column["#cols[index]#"] = qry["#cols[index]#"][rowIndex] />    
-        </cfloop>     
-
-        <!---
-            Now do something with this new row of data.       
-            In this example we are simply making an       
-            array of structs. You could do something fancier. 
-        --->    
-        <cfset arrayAppend(rows, column) /> 
-    </cfloop>
+        Now do something with this new row of data.       
+        In this example we are simply making an       
+        array of structs. You could do something fancier. 
+    --->    
+    <cfset arrayAppend(rows, column) /> 
+</cfloop>
+{% endhighlight %}
   
 In the above example we aren't transforming the data into anything more
 fancy than an array of structures, but you could obviously turn the data

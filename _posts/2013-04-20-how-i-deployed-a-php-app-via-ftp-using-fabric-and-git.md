@@ -34,12 +34,13 @@ First I needed to be able to connect to an FTP server. Python has a
 library called [ftplib](http://docs.python.org/2/library/ftplib.html) which offers basic, fairly low-level FTP
 methods. Out of the gate the first method I write looks like this.
 
-    :::python
-    def _connectToFTP():
-       print green("** Connecting to the server **")
+{% highlight python %}
+def _connectToFTP():
+   print green("** Connecting to the server **")
 
-       ftp = FTP(host=FTP_ADDRESS, user=FTP_USER, passwd=FTP_PASSWORD)
-       return ftp
+   ftp = FTP(host=FTP_ADDRESS, user=FTP_USER, passwd=FTP_PASSWORD)
+   return ftp
+{% endhighlight %}
 
 As you can see the FTP class is simple enough to use. Provide an
 address, user name, and password and you are connected to an FTP server
@@ -59,24 +60,25 @@ using their utility class that allows you to execute arbitrary Git
 commands on the command line and get the results back. This allowed me
 to get a list of files for a given commit hash.
 
-    :::python
-    def _gitLatestFiles():
-       print green("** Connecting to Git **")
+{% highlight python %}
+def _gitLatestFiles():
+   print green("** Connecting to Git **")
 
-       g = Git(REPO_ROOT)
-       repo = Repo(REPO_ROOT)
-       headCommit = repo.head.commit
+   g = Git(REPO_ROOT)
+   repo = Repo(REPO_ROOT)
+   headCommit = repo.head.commit
 
-       print "Head commit revision: %s" % headCommit
-       print "Message: %s" % headCommit.message
+   print "Head commit revision: %s" % headCommit
+   print "Message: %s" % headCommit.message
 
-       result = g.execute(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", str(headCommit)])
-       files = result.split("\n")
+   result = g.execute(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", str(headCommit)])
+   files = result.split("\n")
 
-       return _filterForValidFiles(fileList=files)
+   return _filterForValidFiles(fileList=files)
 
-    def _filterForValidFiles(fileList):
-       return [f for f in fileList if f.startswith(("components/", "www/"))]
+def _filterForValidFiles(fileList):
+   return [f for f in fileList if f.startswith(("components/", "www/"))]
+{% endhighlight %}
 
 There are two methods here to get the results I want. The first is
 **_gitLatestFiles()**. This method talks to my local Git repository and
@@ -98,81 +100,82 @@ connect to the FTP server, get a list of changed files from the HEAD
 revision in Git, then push those files to the server. Let's see what
 that code looks like.
 
-    :::python
-    from __future__ import with_statement
+{% highlight python %}
+from __future__ import with_statement
 
-    import fabric
-    import os
-    from fabric.api import *
-    from fabric.colors import green, yellow, red
-    from ftplib import FTP
-    from git import *
+import fabric
+import os
+from fabric.api import *
+from fabric.colors import green, yellow, red
+from ftplib import FTP
+from git import *
 
-    ###############################################################################
-    # SECTION: Constants
-    ###############################################################################
-    DATABASE = {
-       "local": {
-          "userName": "user",
-          "password": "password"
-       }
-    }
+###############################################################################
+# SECTION: Constants
+###############################################################################
+DATABASE = {
+   "local": {
+      "userName": "user",
+      "password": "password"
+   }
+}
 
-    FTP_ADDRESS = "ftp.something.com"
-    FTP_USER = "user"
-    FTP_PASSWORD = "password"
-    FTP_ROOT_DIR = "/appDirectory"
+FTP_ADDRESS = "ftp.something.com"
+FTP_USER = "user"
+FTP_PASSWORD = "password"
+FTP_ROOT_DIR = "/appDirectory"
 
-    REPO_ROOT = "../"
-
-
-    ###############################################################################
-    # SECTION: Private methods
-    ###############################################################################
-    def _connectToFTP():
-       print green("** Connecting to the server **")
-
-       ftp = FTP(host=FTP_ADDRESS, user=FTP_USER, passwd=FTP_PASSWORD)
-       return ftp
-
-    def _gitLatestFiles():
-       print green("** Connecting to Git **")
-
-       g = Git(REPO_ROOT)
-       repo = Repo(REPO_ROOT)
-       headCommit = repo.head.commit
-
-       print "Head commit revision: %s" % headCommit
-       print "Message: %s" % headCommit.message
-
-       result = g.execute(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", str(headCommit)])
-       files = result.split("\n")
-
-       return _filterForValidFiles(fileList=files)
-
-    def _filterForValidFiles(fileList):
-       return [f for f in fileList if f.startswith(("components/", "www/"))]
+REPO_ROOT = "../"
 
 
-    ###############################################################################
-    # SECTION: Actions
-    ###############################################################################
+###############################################################################
+# SECTION: Private methods
+###############################################################################
+def _connectToFTP():
+   print green("** Connecting to the server **")
 
-    def uploadLatest():
-       print ""
-       print green("** Upload latest changes **")
+   ftp = FTP(host=FTP_ADDRESS, user=FTP_USER, passwd=FTP_PASSWORD)
+   return ftp
 
-       ftp = _connectToFTP()
-       files = _gitLatestFiles()
+def _gitLatestFiles():
+   print green("** Connecting to Git **")
 
-       for f in files:
-          print yellow("Uploading file %s" % f)
-          split = os.path.split(f)
+   g = Git(REPO_ROOT)
+   repo = Repo(REPO_ROOT)
+   headCommit = repo.head.commit
 
-          ftp.cwd(os.path.join(FTP_ROOT_DIR, split[0]))
-          ftp.storlines("STOR %s" % split[1], open(os.path.join("../", f), "r"))
+   print "Head commit revision: %s" % headCommit
+   print "Message: %s" % headCommit.message
 
-       ftp.quit()
+   result = g.execute(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", str(headCommit)])
+   files = result.split("\n")
+
+   return _filterForValidFiles(fileList=files)
+
+def _filterForValidFiles(fileList):
+   return [f for f in fileList if f.startswith(("components/", "www/"))]
+
+
+###############################################################################
+# SECTION: Actions
+###############################################################################
+
+def uploadLatest():
+   print ""
+   print green("** Upload latest changes **")
+
+   ftp = _connectToFTP()
+   files = _gitLatestFiles()
+
+   for f in files:
+      print yellow("Uploading file %s" % f)
+      split = os.path.split(f)
+
+      ftp.cwd(os.path.join(FTP_ROOT_DIR, split[0]))
+      ftp.storlines("STOR %s" % split[1], open(os.path.join("../", f), "r"))
+
+   ftp.quit()
+{% endhighlight %}
 
 The last method in the code, **uploadLatest()** is the one that glues it
 all together. As mentioned before it first connects to the FTP server.

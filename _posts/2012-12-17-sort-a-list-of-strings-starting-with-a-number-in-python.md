@@ -16,13 +16,14 @@ just sort alphabetically.
 The following is a partial example of a list of strings that represent a
 table of contents that need sorting.
 
-	:::python
-	items = [
-		"10. Chapter 10",
-		"11. Chapter 11",
-		"8. Chapter 8",
-		"9. Chapter 9",
-	]
+{% highlight python %}
+items = [
+	"10. Chapter 10",
+	"11. Chapter 11",
+	"8. Chapter 8",
+	"9. Chapter 9",
+]
+{% endhighlight %}
 
 The above shows the strings out of order for demonstration purposes. In
 my case the list is populated from a call to **os.listdir()** and came
@@ -34,8 +35,9 @@ lambda expression. This means that I can somehow parse the incoming
 string to get only the numeric part at the beginning and use *that* as
 the key to sort on.
 
-	::python
-	items = sorted(items, key=lambda item: int(item.partition(".")[0]))
+{% highlight python %}
+items = sorted(items, key=lambda item: int(item.partition(".")[0]))
+{% endhighlight %}
 
 The magic is in two parts here. The first is the lambda expression. This
 defines an inline function used to provide the **sorted()** method a key

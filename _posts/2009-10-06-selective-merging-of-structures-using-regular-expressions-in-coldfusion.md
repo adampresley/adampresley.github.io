@@ -19,8 +19,9 @@ So I decided to build a function using the power and speed of Groovy to
 merge two structures together, but only keys that match a regular
 expression criteria. The use of such a function would look like this.
 
-	:::coldfusion
-	<cfset session.checkOut = ReMergeStructuresByKey(session.checkOut, form, '(?i)billing[a-z0-9]+|shipping[a-z0-9]+') />
+{% highlight cfm %}
+<cfset session.checkOut = ReMergeStructuresByKey(session.checkOut, form, '(?i)billing[a-z0-9]+|shipping[a-z0-9]+') />
+{% endhighlight %}
 
 In this example I want to merge keys from the form scope into the
 session.checkOut structure where the key name starts with "billing" or
@@ -30,42 +31,43 @@ only its original members, but all the new address information as well.
 Here is the function that achieves this. Note that I am using a modified
 CFGroovy script as described [here](#post/2009/08/cfgroovy2-and-arguments-scope-in-functions).
 
-	:::coldfusion
-	<cffunction name="ReMergeStructuresByKey" returntype="any" access="public" output="true">
-		<cfargument name="source" type="struct" required="true" />
-		<cfargument name="toMerge" type="struct" required="true" />
-		<cfargument name="searchPattern" type="string" required="true" />
-		<cfargument name="overwrite" type="boolean" required="false" default="true" />
+{% highlight cfm %}
+<cffunction name="ReMergeStructuresByKey" returntype="any" access="public" output="true">
+	<cfargument name="source" type="struct" required="true" />
+	<cfargument name="toMerge" type="struct" required="true" />
+	<cfargument name="searchPattern" type="string" required="true" />
+	<cfargument name="overwrite" type="boolean" required="false" default="true" />
 
-		<cfimport prefix="g" taglib="groovyEngine" />
-		<cfset arguments.result = duplicate(arguments.source) />
-		<cfset arguments.overwrite = javaCast("boolean", arguments.overwrite) />
+	<cfimport prefix="g" taglib="groovyEngine" />
+	<cfset arguments.result = duplicate(arguments.source) />
+	<cfset arguments.overwrite = javaCast("boolean", arguments.overwrite) />
 
-		<cfoutput>
-		<g:script args="#arguments#">
-			import java.util.regex.*
+	<cfoutput>
+	<g:script args="#arguments#">
+		import java.util.regex.*
 
-			keys = arguments.toMerge.keySet().iterator()
-			key = ""
-			index = 0
-			exists = 0
-			go = false
+		keys = arguments.toMerge.keySet().iterator()
+		key = ""
+		index = 0
+		exists = 0
+		go = false
 
-			Pattern p = Pattern.compile(arguments.searchPattern)
-			Matcher m = null
+		Pattern p = Pattern.compile(arguments.searchPattern)
+		Matcher m = null
 
-			while (keys.hasNext()) {
-				key = keys.next()
-				if ((m = p.matcher(key)).matches()) {
-					exists = arguments.source.containsKey(key)
-					go = ((exists && arguments.overwrite) || !exists)
-					if (go) arguments.result.put(key, arguments.toMerge.get(key))
-				}
+		while (keys.hasNext()) {
+			key = keys.next()
+			if ((m = p.matcher(key)).matches()) {
+				exists = arguments.source.containsKey(key)
+				go = ((exists && arguments.overwrite) || !exists)
+				if (go) arguments.result.put(key, arguments.toMerge.get(key))
 			}
-		</g:script>
-		</cfoutput>
+		}
+	</g:script>
+	</cfoutput>
 
-		<cfreturn arguments.result />
-	</cffunction>
+	<cfreturn arguments.result />
+</cffunction>
+{% endhighlight %}
 
 Happy coding.

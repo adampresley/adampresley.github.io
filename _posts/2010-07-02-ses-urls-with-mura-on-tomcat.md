@@ -45,20 +45,21 @@ file. Open this file in your favorite text editor. Near the top, after
 the **<display-name>** node and before the **<servlet>** nodes paste
 the following XML.
 
-	:::xml
-	<!-- URL Rewrite Filter -->
-	<filter>
-		<filter-name>UrlRewriteFilter</filter-name>
-		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-		<init-param>
-			<param-name>logLevel</param-name>
-			<param-value>WARN</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>UrlRewriteFilter</filter-name>
-		<servlet-name>CFMLServlet</servlet-name>
-	</filter-mapping>
+{% highlight xml %}
+<!-- URL Rewrite Filter -->
+<filter>
+	<filter-name>UrlRewriteFilter</filter-name>
+	<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	<init-param>
+		<param-name>logLevel</param-name>
+		<param-value>WARN</param-value>
+	</init-param>
+</filter>
+<filter-mapping>
+	<filter-name>UrlRewriteFilter</filter-name>
+	<servlet-name>CFMLServlet</servlet-name>
+</filter-mapping>
+{% endhighlight %}
 
 This block of XML tells Tomcat, when loading your application, to
 install this URL re-write filter, and to map any requests that come
@@ -70,20 +71,22 @@ mappings to allow paths after "index.cfm". This allows Mura to execute
 requests like "/index.cfm/contact-us/". To do this find the following
 block of XML:
 
-	:::xml
-	<servlet-mapping>
-		<servlet-name>CFMLServlet</servlet-name>
-		<url-pattern>*.cfm</url-pattern>
-	</servlet-mapping>
+{% highlight xml %}
+<servlet-mapping>
+	<servlet-name>CFMLServlet</servlet-name>
+	<url-pattern>*.cfm</url-pattern>
+</servlet-mapping>
+{% endhighlight %}
 
 Once you find this, you want to insert this next block of XML **right
 after it**.
 
-	:::xml
-	<servlet-mapping>
-		<servlet-name>CFMLServlet</servlet-name>
-		<url-pattern>/index.cfm/*</url-pattern>
-	</servlet-mapping>
+{% highlight xml %}
+<servlet-mapping>
+	<servlet-name>CFMLServlet</servlet-name>
+	<url-pattern>/index.cfm/*</url-pattern>
+</servlet-mapping>
+{% endhighlight %}
 
 Now we are ready to configure the re-writer filter to forward our
 "pretty" SES URLs to index.cfm! In the extracted files there is a file
@@ -96,22 +99,23 @@ here is to also ensure that when we go to Mura's administrator, the URLs
 **DO NOT** get forwarded to **index.cfm**. So, with a little bit of
 regular expression magic, we can make UrlRewriteFilter do this.
 
-	:::xml
-	<?xml version="1.0" encoding="utf-8"?>
-	<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN" "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+{% highlight xml %}
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN" "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
 
-	<!--
-		Configuration file for UrlRewriteFilter
-		http://tuckey.org/urlrewrite/
-	-->
-	<urlrewrite>
-		<rule>
-			<note>Makes all requests forward to /index.cfm/whatever-came-next
-			Ignores admin URLs so the admin still works correctly for Mura.</note>
-			<from>^/(?!admin|plugins|js|css|assets|images|tasks|railo-context|flex2gateway|wysiwyg)(.*)$</from>
-			<to>/index.cfm/$1</to>
-		</rule>
-	</urlrewrite>
+<!--
+	Configuration file for UrlRewriteFilter
+	http://tuckey.org/urlrewrite/
+-->
+<urlrewrite>
+	<rule>
+		<note>Makes all requests forward to /index.cfm/whatever-came-next
+		Ignores admin URLs so the admin still works correctly for Mura.</note>
+		<from>^/(?!admin|plugins|js|css|assets|images|tasks|railo-context|flex2gateway|wysiwyg)(.*)$</from>
+		<to>/index.cfm/$1</to>
+	</rule>
+</urlrewrite>
+{% endhighlight %}
 
 Ok, super. The final phase is to tell Mura that we wish to make our
 URL's pretty! To do this, start Tomcat back up, then log into your Mura
