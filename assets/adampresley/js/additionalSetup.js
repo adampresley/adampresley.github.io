@@ -10,6 +10,9 @@ $(document).ready(function() {
 	ga("create", "UA-44927419-1", "adampresley.com");
 	ga("send", "pageview");
 
+	/*
+	 * Google Search
+	 */
 	(function() {
 		var cx = '006005724007961568553:shpmnds4j4c';
 		var gcse = document.createElement('script');
@@ -19,5 +22,16 @@ $(document).ready(function() {
 		'//www.google.com/cse/cse.js?cx=' + cx;
 		var s = document.getElementsByTagName('script')[0];
 		s.parentNode.insertBefore(gcse, s);
+	})();
+
+	/*
+	 * Disqus
+	 */
+	var disqus_shortname = "adampresleyblog";
+
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 	})();
 })
