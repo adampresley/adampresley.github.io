@@ -3,9 +3,8 @@ layout: post
 title: A Go Weekend Puzzler
 date: 2014-11-10 14:39:00
 author: Adam Presley
-status: Published
 tags: development golang
-slug: a-go-weekend-puzzler
+comments: true
 ---
 
 [Adam Cameron](http://blog.adamcameron.me/) posted a code challenge [on his blog](http://blog.adamcameron.me/2014/11/something-for-weekend-wee-code-quiz-in.html) this last Friday. I have provided my answer in the form of a [Google Go project](https://github.com/adampresley/adamCameronCodeChallenge201411). For those interested a 10,000ft view of how this works can be found below. Here are the instructions he provided.
