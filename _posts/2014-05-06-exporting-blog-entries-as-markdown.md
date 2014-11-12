@@ -10,11 +10,11 @@ slug: exporting-blog-entries-as-markdown
 
 Since I write my blog posts in Markdown format I decided I wanted a way to backup my posts in a way that is human readable. The result is a feature in Texo to export my blog entries as zipped up Markdown files.
 
-![Screenshot of Export Interface](http://www.adampresley.com.s3.amazonaws.com/posts/texo-export-markdown-1.png)
+![Screenshot of Export Interface](/assets/adampresley/images/posts/texo-export-markdown-1.png)
 
 When I click on the button in the above screenshot all my blog entries are saved as Markdown files, zipped up, and presented to me as a download. The final zip is organized into folders of **YEAR**/**MONTH**.
 
-![Export Zip File](http://www.adampresley.com.s3.amazonaws.com/posts/text-export-markdown-2.png)
+![Export Zip File](/assets/adampresley/images/posts/text-export-markdown-2.png)
 
 The code to do this is pretty simple. First I have a function that constructs the Markdown given a post dictionary.
 

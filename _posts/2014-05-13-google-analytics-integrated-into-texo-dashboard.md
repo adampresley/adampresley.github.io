@@ -10,7 +10,7 @@ slug: google-analytics-integrated-into-texo-dashboard
 
 Tonight I have integrated a few reports from Google Analytics into the Texo adminstrator Dashboard. I have included a **Visits vs New Visits**, **Browser Stats**, and **Page Traffic** information. Now I don't have to log in to the Google Analytics dashboard unless I really want to dig into stats. Most often I just want to see page views and what posts are getting the most hits. 
 
-![Google Analytics Screenshot](http://www.adampresley.com.s3.amazonaws.com/posts/texo-dashboard-google-analytics.png)
+![Google Analytics Screenshot](/assets/adampresley/images/posts/texo-dashboard-google-analytics.png)
 
 To put these graphs on my dashboard I opted to use a 3rd party library called [OOCharts](http://oocharts.com/). Their service hooks up to your Google account and provides a simplified API for retrieving charts and chart data. For example the code the retrieve the Browser usage pie chart looks like this.
 

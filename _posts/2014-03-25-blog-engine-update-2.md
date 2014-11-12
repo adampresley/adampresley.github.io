@@ -14,6 +14,6 @@ Initially I wrote this with my site being fully AJAX driven. When you hit a URL 
 
 I decided to refactor a bit, though it has been a slow process. I also wanted to expand on the administrator I had built for myself and turn this into a proper CMS engine, or at least start down that path. Tonight I have released the newest increment of my site using the latest version of my code. I am calling my CMS engine **Texo CMS**. Of course it only really does blog posts right now, and doesn't really deserve the title of **CMS**, but I'm working on it.
 
-![Screenshot](http://www.adampresley.com.s3.amazonaws.com/posts/texo-cms-write-post-1.png)
+![Screenshot](/assets/adampresley/images/posts/texo-cms-write-post-1.png)
 
 My next steps are to continue development on this application, and make a home for it on Github. More on that soon.

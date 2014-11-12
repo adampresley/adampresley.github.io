@@ -20,4 +20,4 @@ I am proud to announce the 3.0 release of MailSlurper, the handy local developme
 
 You can get the new release at [the Github site](https://github.com/adampresley/mailslurper-go/releases/tag/3.0). 
 
-![MailSlurper 3.0](http://www.adampresley.com.s3.amazonaws.com/posts/mailslurper-3.0.png)
+![MailSlurper 3.0](/assets/adampresley/images/posts/mailslurper-3.0.png)
