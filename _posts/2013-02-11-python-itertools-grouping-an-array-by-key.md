@@ -7,7 +7,6 @@ status: Published
 tags: python itertools
 slug: python-itertools-grouping-an-array-by-key
 ---
-
 Have you ever had a flat dataset and you needed a portion of the data
 grouped into a sub-array? I came across such a need this weekend and
 thought I'd share my experience. In this code sample we'll see how to

@@ -7,7 +7,6 @@ status: Published
 tags: coldfusion ecommerce
 slug: new-houston-texans-website-live
 ---
-
 ![Houston Texans eCommerce Screenshot](http://s3.amazonaws.com/www.adampresley.com/posts/houston-texans-site-screenshot.jpg)
 
 I work for a company that provides eCommerce applications for NFL and

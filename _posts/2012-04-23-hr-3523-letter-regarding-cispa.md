@@ -7,7 +7,6 @@ status: Published
 tags: technology politics
 slug: hr-3523-letter-regarding-cispa
 ---
-
 In light of the recent proposed CISPA bill, HR 3523, I have written my
 House Representative Ralph Hall the following letter. I encourage you to
 do the same if you feel that this bill would be potentially detrimental

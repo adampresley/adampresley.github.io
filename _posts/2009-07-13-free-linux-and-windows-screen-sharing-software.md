@@ -7,7 +7,6 @@ status: Published
 tags: technology general tools
 slug: free-linux-and-windows-screen-sharing-software
 ---
-
 I'm a sucker for cool applications. I also am a super-sucker for
 **FREE** cool applications. I was working on some code with my friend
 Collin tonight and we had a need to take a look at some code together,

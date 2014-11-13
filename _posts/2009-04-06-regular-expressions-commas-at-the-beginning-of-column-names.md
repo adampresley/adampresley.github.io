@@ -7,7 +7,6 @@ status: Published
 tags: development regex
 slug: regular-expressions-commas-at-the-beginning-of-column-names
 ---
-
 If you've worked with a lot of inline SQL like I have over the years
 you've probably discovered quickly that as you have to add more columns
 to your query, **especially** columns that are only added on a dynamic

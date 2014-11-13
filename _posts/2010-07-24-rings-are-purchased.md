@@ -7,7 +7,6 @@ status: Published
 tags: general wedding
 slug: rings-are-purchased
 ---
-
 Today Maryanne and I went for another round of wedding ring shopping. I
 am pleased to announce that we have made our final decision and rings
 have been purchased for both her and myself. We ended up making our

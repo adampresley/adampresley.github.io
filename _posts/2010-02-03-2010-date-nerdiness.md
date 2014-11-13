@@ -7,7 +7,6 @@ status: Published
 tags: White and Nerdy
 slug: 2010-date-nerdiness
 ---
-
 So my girlfriend and I were discussing some plans we've gotta make this
 year, and started talking about cool dates. You know, like 9/9/1999. The
 coolest one so far for this year would be 10/10/2010 (ten ten ten).   

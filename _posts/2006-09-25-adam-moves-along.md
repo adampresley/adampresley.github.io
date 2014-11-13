@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: adam-moves-along
 ---
-
 Just a quick update. The ADAM language (Advanced Data Acquisition and
 Manipulation) is coming along nicely. I've made several updates to the
 lexical anaylizer to better handle variable and argument tokens. I have

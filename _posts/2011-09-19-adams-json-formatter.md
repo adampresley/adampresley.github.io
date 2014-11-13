@@ -7,7 +7,6 @@ status: Published
 tags: development jquery json programming coldfusion
 slug: adams-json-formatter
 ---
-
 [Curious Concept's JSON Formatter](http://jsonformatter.curiousconcept.com/) 
 is a great JSON formatter and validator application. I found myself working 
 with a JSON dataset that was larger than what this tool allowed, so naturally 

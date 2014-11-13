@@ -7,7 +7,6 @@ status: Published
 tags: development c#
 slug: syncxpress
 ---
-
 Long under development, and not due to complexity, has my program
 SyncXpress been. I am happy to state that it is nearly done with the
 first beta. I've got most all the interface elements built. Package

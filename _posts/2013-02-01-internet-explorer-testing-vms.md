@@ -7,7 +7,6 @@ status: Published
 tags: testing os browser
 slug: internet-explorer-testing-vms
 ---
-
 I'm not sure how long this site has been up but I'm just now finding it.
 <http://www.modern.ie/> is a developer site with tools and resources to
 help test and detect issues in older IE versions, as well as provide a

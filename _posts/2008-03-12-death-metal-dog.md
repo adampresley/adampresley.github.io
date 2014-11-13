@@ -7,7 +7,6 @@ status: Published
 tags: fun funny
 slug: death-metal-dog
 ---
-
 A coworker sent me a link to this video today, and I have to say that it
 made me laugh during what I would call a hectic day. Let's just say that
 this dog rocks your ass off! :)

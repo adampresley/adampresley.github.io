@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: count-lines-of-code-in-a-directory-using-groovy
 ---
-
 So here's a tasty morsel. I wrote a quick little script to count the
 number of lines of code in a ColdFusion project. Why? To make stuff look
 impressive, or course! So here we make use of Groovy's very powerful

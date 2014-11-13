@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: merging-two-coldfusion-structs
 ---
-
 Here's a quick little tidbit. My coworker [Steve Good](http://stevegood.org) asked me if I
 knew of a quick way to merge two ColdFusion structures together, kind of
 like how jQuery has the **$.extend()** method. Well there

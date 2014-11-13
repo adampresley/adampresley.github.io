@@ -7,7 +7,6 @@ status: Published
 tags: technology general server
 slug: running-on-a-vps-now
 ---
-
 About a week ago I moved all the code for my site onto a new VPS
 (Virtual Private Server) provided by [2Host.com](http://www.2host.com).
 With their unmanaged service I get 1GB of RAM, 30GB of hard drive space,

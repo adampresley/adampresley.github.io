@@ -7,7 +7,6 @@ status: Published
 tags: development software plugins
 slug: firefox-plugin-to-change-view-source
 ---
-
 Here's a nifty plugin written Davide Ficano that allows you to control
 what application(s) that is used to view the HTML source on a given page
 in Firefox. I use a nice text editor called [Boxer](http://www.boxersoftware.com/) that I prefer over

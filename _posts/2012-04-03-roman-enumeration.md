@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: roman-enumeration
 ---
-
 While trolling The Daily WTF I came across a post called [Roman
 Enumeration](http://thedailywtf.com/Articles/Roman-Enumeration.aspx). It is basically
 about a shift to HR for hiring developers and the code produced by one such hire. In the article the

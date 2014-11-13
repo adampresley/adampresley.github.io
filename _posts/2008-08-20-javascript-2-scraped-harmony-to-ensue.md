@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: javascript-2-scraped-harmony-to-ensue
 ---
-
 If you happen to be one of us who do web-based application development
 you may have at least heard the rumblings of Javascript 2, the successor
 to the current Javascript implementation supported by major browsers,

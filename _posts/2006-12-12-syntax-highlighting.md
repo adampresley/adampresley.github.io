@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: syntax-highlighting
 ---
-
 Ok, why am I having the hardest time with code syntax highlighting in
 WordPress? I've downloaded a few plugins, tried em out, but everyone of
 the so far suffers from WordPress stripping any code, well, at least

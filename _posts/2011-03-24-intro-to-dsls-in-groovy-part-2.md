@@ -7,7 +7,6 @@ status: Published
 tags: development groovy dsl
 slug: intro-to-dsls-in-groovy-part-2
 ---
-
 In my [previous post](|filename|/intro-to-dsls-in-groovy-part-1.md) I introduced a simple recipe DSL which provided
 a really easy way to describe a recipe, its ingredients and
 instructions. In part two I will start the process of how we can make

@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: enhancing-groovy-url-encoding-added-to-strings-metaclass
 ---
-
 I've talked before about enhancing the Groovy language through the
 metaclass extension abilities. Here's a short post that adds a handy
 snippet to the Groovy String class to URL encode strings. Normally this

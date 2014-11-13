@@ -7,7 +7,6 @@ status: Published
 tags: python sublime
 slug: sublime-plugin-compare
 ---
-
 Not one to be completely happy with all existing features I found the
 diff tool in Sublime Text 2 to be... lacking. The built in diff tool
 allows you to select two files in the folder explorer, right click and

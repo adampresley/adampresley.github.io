@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: javascript-functional-goodness-part-3
 ---
-
 More and more I am trying to stretch my "functional muscles" any time I have a chance. I've been working on an enhancement to my blog engine by adding a button to the [editor I am using](http://toopay.github.io/bootstrap-markdown/) for editing my Markdown-based posts. This new button, when clicked, will display a dialog widget with thumbnails for all images in an Amazon S3 bucket.
 
 ![S3 Browser Screenshot](http://s3.amazonaws.com/www.adampresley.com/posts/amazon-s3-browser-1.png)

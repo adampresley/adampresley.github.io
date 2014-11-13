@@ -7,7 +7,6 @@ status: Published
 tags: development grails
 slug: setting-a-proxy-for-the-grails-command-line-tools
 ---
-
 If you've ever worked at a company that uses a corporate proxy you may
 have run into this little issue. Some command line tools such as CURL or
 Grails make calls out to the internet to do their jobs, and some

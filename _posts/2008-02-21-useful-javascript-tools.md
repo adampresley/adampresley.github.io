@@ -7,7 +7,6 @@ status: Published
 tags: development javascript links
 slug: useful-javascript-tools
 ---
-
 I've been doing a lot of development using ExtJS, which involves a lot
 of AJAX work. And for anyone who has ever used AJAX you know you must
 deal with JSON. JSON is fine and dandy, and is certainly the best way to

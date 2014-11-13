@@ -7,7 +7,6 @@ status: Published
 tags: python
 slug: comparing-classes-in-python
 ---
-
 Most object oriented languages have a means to compare two objects or
 classes. Java has the **Comparator<T>** interface. In C# you can
 override the **Equals()** method. Python naturally has a way to make

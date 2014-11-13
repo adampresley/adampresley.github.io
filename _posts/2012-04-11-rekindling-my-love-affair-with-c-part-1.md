@@ -7,7 +7,6 @@ status: Published
 tags: development c++
 slug: rekindling-my-love-affair-with-c-part-1
 ---
-
 Yesterday I was reading various articles online and stumbled across
 [0x10c.com](http://0x10c.com/). Although I won't go into any details of
 that project (you'll just have to click to see) it did make me slightly

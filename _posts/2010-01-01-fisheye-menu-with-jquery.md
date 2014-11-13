@@ -7,7 +7,6 @@ status: Published
 tags: development jquery coldfusion javascript
 slug: fisheye-menu-with-jquery
 ---
-
 For those that have a small case of "Mac envy", this post is for you
 (and me, honestly). One of the neatest things about the Mac OS user
 interface is the "fisheye" menu at the bottom of the screen. You know

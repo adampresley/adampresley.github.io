@@ -7,7 +7,6 @@ status: Published
 tags: poetry
 slug: butterfly-dreams
 ---
-
 Flowers open bright and bold  
 Dreams and visions flicker, fade  
 Kiss me now venom sweet  

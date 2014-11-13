@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: so-i-downloaded-google-chrome
 ---
-
 ![Google Chrome](http://s3.amazonaws.com/www.adampresley.com/posts/googlechromescreenie.jpg)
 
 Just wanted to post a little blurb stating that I downloaded

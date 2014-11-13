@@ -7,7 +7,6 @@ status: Published
 tags: development groovy coldfusion ant java
 slug: my-first-real-ant-task
 ---
-
 *Notice: The opinions expressed on this blog entry are mine alone and
 do not necessarily represent the views of my employer.*  
   

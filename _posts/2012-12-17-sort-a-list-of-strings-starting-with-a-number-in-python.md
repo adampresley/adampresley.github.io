@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: sort-a-list-of-strings-starting-with-a-number-in-python
 ---
-
 I recently ran into a situation where had a list of strings I wanted
 sorted in a particular way in Python. The **sorted()** method offers a
 quick way to sort a collection, but in my case I needed to do more than

@@ -7,7 +7,6 @@ status: Published
 tags: development sql c#
 slug: writing-c-functions-for-sql-server-and-clr-integration
 ---
-
 An interested problem was presented to me today where a database table
 in SQL Server 2005 (now moved to 2008) had a trigger attached to a table
 that would encrypt a credit card number on insert or update. The

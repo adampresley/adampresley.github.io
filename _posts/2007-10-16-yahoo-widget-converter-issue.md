@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: yahoo-widget-converter-issue
 ---
-
 I ran across an interesting problem today. At work I wrote a [Yahoo!
 Widget](http://widgets.yahoo.com/) that monitors our web servers' response time and memory
 consumption. I had made a few updates and enhancements to it and was

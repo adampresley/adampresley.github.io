@@ -7,7 +7,6 @@ status: Published
 tags: funny beer video
 slug: molson-beer-commercials
 ---
-
 For those that haven't seen them, you need to check out the series of
 commercials for Molson Canadian beer. Funny stuff. 
 

@@ -7,7 +7,6 @@ status: Published
 tags: development c#
 slug: md5-hash-a-string-in-c
 ---
-
 Here's a small function to hash a string in C# using the MD5 algorithm.
 
 {% highlight csharp %}

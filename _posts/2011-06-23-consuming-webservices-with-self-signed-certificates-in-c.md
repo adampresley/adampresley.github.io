@@ -7,7 +7,6 @@ status: Published
 tags: development c#
 slug: consuming-webservices-with-self-signed-certificates-in-c
 ---
-
 Ran into a little issue today while writing a C# app to do unit testing
 of a ColdFusion-based webservice API. The ColdFusion service is running
 on a development server that has a self-signed certificate installed in

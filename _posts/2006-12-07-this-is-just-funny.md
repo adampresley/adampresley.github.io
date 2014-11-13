@@ -7,7 +7,6 @@ status: Published
 tags: funny
 slug: this-is-just-funny
 ---
-
 Check out this video. Pretty fun stuff.
 
 <http://www.funlol.com/funpages/not-a-stripper-pole.html>

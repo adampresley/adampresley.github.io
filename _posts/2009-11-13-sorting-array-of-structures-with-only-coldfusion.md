@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: sorting-array-of-structures-with-only-coldfusion
 ---
-
 In a previous post, [Sorting Array of Structures with ColdFusion and
 Groovy](#post/2009/10/sorting-array-of-structures-with-coldfusion-and-groovy/522a996a6851e13e760cd042),
 I talked about how one can use the Java Comparator interface

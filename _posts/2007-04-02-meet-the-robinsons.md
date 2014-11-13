@@ -7,7 +7,6 @@ status: Published
 tags: culture movies
 slug: meet-the-robinsons
 ---
-
 I took my baby girls to the movie *Meet the Robinsons*. They enjoyed it,
 even though my seven year old appears to be scared of all things 3D,
 which is the version we went to see. There are two versions. The regular

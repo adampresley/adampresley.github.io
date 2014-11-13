@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: excuse-me-where-is-your-chain-saw
 ---
-
 For those that know me it comes as no surprise to learn I grew up in a
 hick town in north-east Texas. And in that area I have certainly seen my
 share of interesting hick-culture. I had not, however, seen anything

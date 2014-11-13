@@ -7,7 +7,6 @@ status: Published
 tags: coldfusion
 slug: thoughts-on-the-demise-of-the-cfml-advisory-committee
 ---
-
 Today was a busy news day for me. Most of it just personal stuff, but
 the story of the day in the world of ColdFusion is the departure of
 Adobe, or more specifically Adam Lehman, from the CFML Advisory

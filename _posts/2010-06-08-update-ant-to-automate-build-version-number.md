@@ -7,7 +7,6 @@ status: Published
 tags: development ant
 slug: update-ant-to-automate-build-version-number
 ---
-
 In a previous post [Using ANT to Automate a Build Version Number](#post/2009/01/using-ant-to-automate-a-build)
 I talk about incrementing build numbers using ANT. I found this
 particularly useful when building Mura plugins. Thanks to [Steve Good](http://stevegood.org)

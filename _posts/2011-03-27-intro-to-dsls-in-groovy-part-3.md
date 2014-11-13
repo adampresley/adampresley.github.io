@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: intro-to-dsls-in-groovy-part-3
 ---
-
 Today let's continue our series of getting started with simple DSL
 creation in Groovy. In [part 1](|filename|/intro-to-dsls-in-groovy-part-1.md) we talked about the *what* and *why*
 of Domain Specific Langages, and what our sample DSL would look like.

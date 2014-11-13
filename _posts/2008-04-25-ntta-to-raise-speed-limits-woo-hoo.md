@@ -7,7 +7,6 @@ status: Published
 tags: general venting
 slug: ntta-to-raise-speed-limits-woo-hoo
 ---
-
 Today I learned that the North Texas Toll Authority, affectionately
 known as NTTA, has requested that the speed limits be raised by 10 miles
 per hour on our major toll road areas, including the North Dallas

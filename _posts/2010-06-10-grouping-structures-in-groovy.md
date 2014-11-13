@@ -7,7 +7,6 @@ status: Published
 tags: general development groovy
 slug: grouping-structures-in-groovy
 ---
-
 A useful tidbit for those interested in playing around with Groovy. I
 had need recently to take a structure, or more Groovy-like, a Map, and
 group by a particular key, and iterate over the grouped items. Turns out

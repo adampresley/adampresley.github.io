@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: default-values-in-javascript-using-the-or-operator
 ---
-
 Got a question tonight asking how to check a value in jQuery, and if it
 is null or blank use a default value. Enter the "default operator", or
 the **OR** (**||**) operator. In the example below the variable

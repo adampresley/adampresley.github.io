@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: windows-7-rc-first-night
 ---
-
 Last night I did it. I took the plunge. I formatted and installed 64-bit
 Windows 7 Release Candadite. The experience, thus far, has been fairly
 painless. The installer was the simpliest installer for Windows I've

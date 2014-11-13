@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: parsing-xml-in-groovy
 ---
-
 I've been doing a little more work with Groovy lately, and it still
 continues to impress me on how expressive and easy some things are to do
 in this language. Last night I was working with a web service that

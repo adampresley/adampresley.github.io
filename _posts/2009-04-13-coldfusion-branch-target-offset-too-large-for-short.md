@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-branch-target-offset-too-large-for-short
 ---
-
 ![JVM Error Screenshot](http://s3.amazonaws.com/www.adampresley.com/posts/jvmerror-branch-offset.jpg)
 
 Yes, that is the interestingly ambiguous message I recieved today while

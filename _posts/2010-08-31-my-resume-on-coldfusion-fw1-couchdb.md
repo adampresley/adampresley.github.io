@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion couchdb
 slug: my-resume-on-coldfusion-fw1-couchdb
 ---
-
 The last few days I decided I wanted to play around with Apache's
 CouchDB, one of the more popular database engines in the No-SQL
 movement. For those who have never heard of it [CouchDB](http://couchdb.apache.org/) is a database

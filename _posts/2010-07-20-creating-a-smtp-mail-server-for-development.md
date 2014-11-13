@@ -7,7 +7,6 @@ status: Published
 tags: development java
 slug: creating-a-smtp-mail-server-for-development
 ---
-
 While working on ColdFusion applications with Railo on Tomcat I have
 been piecing together tools necessary to get these applications to do
 everything I need them to do. So I've bolted on Hibernate, a URL

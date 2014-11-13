@@ -7,7 +7,6 @@ status: Published
 tags: python mongodb
 slug: decorator-for-serializing-mongodb-dictionaries-to-json-in-python
 ---
-
 Before you read this I'm going on the record stating that this problem
 has likely been solved hundreds of times before. So here is yet another
 take on how I am managing to serialize Python objects that are returned

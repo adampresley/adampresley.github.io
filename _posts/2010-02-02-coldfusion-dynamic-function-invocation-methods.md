@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-dynamic-function-invocation-methods
 ---
-
 Tonight I was working with a project that a buddy and I are doing on the
 side in an attempt to make money and I'm reviewing the code he's got so
 far to make sure I have a good grasp on everything that's going on. He's

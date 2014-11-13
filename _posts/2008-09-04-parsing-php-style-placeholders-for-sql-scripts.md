@@ -7,7 +7,6 @@ status: Published
 tags: development php
 slug: parsing-php-style-placeholders-for-sql-scripts
 ---
-
 If you've ever used PHP, you've probably used, or at least seen, the
 [PRINTF](http://us2.php.net/manual/en/function.printf.php) and/or 
 [SPRINTF](http://us2.php.net/manual/en/function.sprintf.php) functions. These oldie, but goodie,

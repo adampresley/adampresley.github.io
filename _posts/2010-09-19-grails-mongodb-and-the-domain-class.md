@@ -7,7 +7,6 @@ status: Published
 tags: development groovy grails
 slug: grails-mongodb-and-the-domain-class
 ---
-
 While doing some experimentation with Groovy and Grails tied to a
 MongoDB database I was running into difficulties. I first tried the two
 plugins that are available for Grails and Mongo, but I just didn't find

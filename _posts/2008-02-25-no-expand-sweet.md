@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion attributes
 slug: no-expand-sweet
 ---
-
 It's funny the little things you miss as you use a programming language.
 Although not considered the **longest**amount of time, I *have* been
 using ColdFusion for over 4 years now. I've worked with CFC's,

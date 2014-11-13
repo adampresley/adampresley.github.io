@@ -7,7 +7,6 @@ status: Published
 tags: development javascript python
 slug: google-analytics-integrated-into-texo-dashboard
 ---
-
 Tonight I have integrated a few reports from Google Analytics into the Texo adminstrator Dashboard. I have included a **Visits vs New Visits**, **Browser Stats**, and **Page Traffic** information. Now I don't have to log in to the Google Analytics dashboard unless I really want to dig into stats. Most often I just want to see page views and what posts are getting the most hits. 
 
 ![Google Analytics Screenshot](/assets/adampresley/images/posts/texo-dashboard-google-analytics.png)

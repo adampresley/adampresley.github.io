@@ -7,7 +7,6 @@ status: Published
 tags: general family
 slug: weddings-java-and-a-good-weekend
 ---
-
 Quite an eventful weekend for Maryanne and I. Friday night we went out
 to Sonny Bryan's in downtown Dallas for Billy's rehearsal dinner, and at
 the same time to surprise Maryanne's good friends Dana and John. We had

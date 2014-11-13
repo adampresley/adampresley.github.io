@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: how-to-describe
 ---
-
 I'm having a lot of trouble really sitting down and defining my data
 manipulation and translation language. I come up with several ways to
 describe how to accomplish certain tasks, but then those fail to fit

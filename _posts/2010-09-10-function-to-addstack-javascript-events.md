@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: function-to-addstack-javascript-events
 ---
-
 I'm in the process of modifying pages in a ColdFusion application where
 I do not have the option of plugging in jQuery. ExtJs is available in
 certain parts of the application, but getting it in others is not always

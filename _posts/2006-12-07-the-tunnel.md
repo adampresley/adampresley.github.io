@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: the-tunnel
 ---
-
 It was an interesting discussion last night with a good friend of mine.
 Problems come and go in life, and our minds can often be flooded with
 these issues making it difficult to thing, concentrate, and solve

@@ -7,7 +7,6 @@ status: Published
 tags: movies
 slug: the-game-plan-has-game
 ---
-
 Took the kiddos to see "The Rock" in his new movie, *The Game Plan*. It
 was fun! All the expected turns.
 

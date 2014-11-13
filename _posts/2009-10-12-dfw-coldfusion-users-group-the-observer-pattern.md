@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: dfw-coldfusion-users-group-the-observer-pattern
 ---
-
 Tomorrow evening on October 13th, 2009 I will be presenting to the
 Dallas/Ft. Worth ColdFusion Users Group the second part of the Head
 First Design Patterns for CF, otherwise known as the Observer Pattern.

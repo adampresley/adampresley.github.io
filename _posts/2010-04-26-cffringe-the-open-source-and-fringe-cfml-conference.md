@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: cffringe-the-open-source-and-fringe-cfml-conference
 ---
-
 According the the website [www.cffringe.org](http://www.cffringe.org) :  
   
 > CFFringe is the only CFML conference focused exclusively on open   

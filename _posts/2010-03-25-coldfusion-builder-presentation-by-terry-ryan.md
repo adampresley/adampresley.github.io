@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-builder-presentation-by-terry-ryan
 ---
-
 If you didn't make it out to Terry Ryan's presentation on ColdFusion
 Builder last night, here's what you missed.
 

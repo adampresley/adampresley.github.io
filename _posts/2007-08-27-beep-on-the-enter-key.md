@@ -7,7 +7,6 @@ status: Published
 tags: development c# .net
 slug: beep-on-the-enter-key
 ---
-
 One of the applications that I wrote and maintain here for use at my job
 is a C# Windows application. A couple of revisions ago I set it up so
 that the user could press the **Enter** key to submit the login instead

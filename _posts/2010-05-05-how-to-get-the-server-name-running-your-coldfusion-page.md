@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion java
 slug: how-to-get-the-server-name-running-your-coldfusion-page
 ---
-
 ColdFusion is a great language in its own right. What makes it even more
 awesome? The fact that it is a Java application. Why is this cool?
 Because you can dig into Java to do all the dirty stuff ColdFusion

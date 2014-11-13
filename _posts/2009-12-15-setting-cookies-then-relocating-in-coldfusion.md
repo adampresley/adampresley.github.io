@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: setting-cookies-then-relocating-in-coldfusion
 ---
-
 This question came across the ColdFusion User Group just recently. The
 developer has some type of login form, followed by a query that
 validates the user's information. It then attempts to set a cookie then

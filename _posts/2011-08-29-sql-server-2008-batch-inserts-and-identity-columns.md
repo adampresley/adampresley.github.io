@@ -7,7 +7,6 @@ status: Published
 tags: development sql
 slug: sql-server-2008-batch-inserts-and-identity-columns
 ---
-
 As most are aware SQL Server 2008 supports batch inserts, much like
 MySQL has for a billion years. Basically this is the ability to insert
 multiple records in a single statement like so.

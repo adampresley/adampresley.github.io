@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: parsing-the-url-using-javascript
 ---
-
 Here's a quick little post regarding a question I got today. I was asked
 how one could parse the URL to get the parameters and do something with
 them.   

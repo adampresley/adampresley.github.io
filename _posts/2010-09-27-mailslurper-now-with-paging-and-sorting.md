@@ -7,7 +7,6 @@ status: Published
 tags: development groovy grails
 slug: mailslurper-now-with-paging-and-sorting
 ---
-
 A super quick update: I have updated MailSlurper's administrative
 interface to now have paging and column sorting!! And in Grails this was
 super easy to do. I totally need to blog about this later. Meanwhile

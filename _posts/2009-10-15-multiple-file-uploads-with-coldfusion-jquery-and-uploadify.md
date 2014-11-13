@@ -7,7 +7,6 @@ status: Published
 tags: development jquery coldfusion javascript uploadify
 slug: multiple-file-uploads-with-coldfusion-jquery-and-uploadify
 ---
-
 Today had a need to work with a page that needed to allowed the quick
 upload of multiple images. I decided pretty quickly that a basic loop of
 file upload text boxes would be too icky, and did a quick search for

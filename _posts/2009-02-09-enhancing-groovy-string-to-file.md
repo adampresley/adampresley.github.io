@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: enhancing-groovy-string-to-file
 ---
-
 Although I'm sure this won't be **super** useful, I did find a use case
 for it yesterday while writing a command line log parsing tool in
 Groovy. One of the options I was providing users of this tool (mainly

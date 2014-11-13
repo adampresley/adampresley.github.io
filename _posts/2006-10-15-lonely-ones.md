@@ -7,7 +7,6 @@ status: Published
 tags: poetry
 slug: lonely-ones
 ---
-
 We are the Lonely Ones
 Alone with one heart
 Moving forward, carrying on

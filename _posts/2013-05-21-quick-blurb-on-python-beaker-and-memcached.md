@@ -7,7 +7,6 @@ status: Published
 tags: python beaker memcached
 slug: quick-blurb-on-python-beaker-and-memcached
 ---
-
 Real quickly I wanted to post to show how one can configure Beaker for
 session management using Memcached as the session storage. It took me a
 minute and a few searches to put it all together, so hopefully this will

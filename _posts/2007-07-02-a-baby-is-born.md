@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: a-baby-is-born
 ---
-
 Last Thursday night my brother Josh and his wife Jennifer celebrated the
 birth of their second child, a brand new baby boy named Caleb Landon
 Presley at around 10:15pm. With a strong healthy boy in tow the proud

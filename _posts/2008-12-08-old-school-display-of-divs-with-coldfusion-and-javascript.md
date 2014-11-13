@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion javascript
 slug: old-school-display-of-divs-with-coldfusion-and-javascript
 ---
-
 Today I was asked for some Javascript that would show or hide a DIV when
 selecting one or more values from a multi-select box based on if the
 selected values existed in a mapping table. So in this scenario there is

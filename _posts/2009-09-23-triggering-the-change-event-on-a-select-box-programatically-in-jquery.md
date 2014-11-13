@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: triggering-the-change-event-on-a-select-box-programatically-in-jquery
 ---
-
 Don't know if anyone else has had to do this, and it seems so simple,
 but it took me a couple of minutes to find this. I have a ColdFusion
 page with a lot of jQuery magic happening with a popup dialog that

@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: sorting-and-removing-duplicates-in-javascript-arrays
 ---
-
 Today I had a need to sort and remove duplicate entries from an array in
 JavaScript. I figured I'd share the code for those interested. Here is
 the code for sorting. This uses a simple Bubble Sort.

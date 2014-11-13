@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion dumbass
 slug: dumbass-code-of-the-day-10082009
 ---
-
 Welcome to another edition of "Dumbass Code". Here's a snippet that's
 fun. This bit of code gets a list of product IDs, iterates over them,
 and if the product ID is greater than zero, and less than 999,999 then

@@ -7,7 +7,6 @@ status: Published
 tags: general development c#
 slug: consuming-web-services-in-net-35-web-references
 ---
-
 I have to admit I feel a little bit behind the curve. I've not goofed
 too much with the .NET 3.5 specific stuff much lately, and much of my
 experience has been in .NET 2.0. But today I packed up the laptop and

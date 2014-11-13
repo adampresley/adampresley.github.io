@@ -7,7 +7,6 @@ status: Published
 tags: development c++ opengl
 slug: and-the-lightbulb-lit-up
 ---
-
 In my last post I mentioned I was having issue with remembering the
 order to draw vertices for quads. Ha... the light came on tonight while
 I was working on the various tutorials I've come across. The bottom and

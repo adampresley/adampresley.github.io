@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: python-list-comprehension-getting-the-first-matching-item
 ---
-
 Today I learned a nifty trick in Python using list comprehensions. If
 you don't know what list comprehensions are check out
 <http://www.python.org/dev/peps/pep-0202/>.

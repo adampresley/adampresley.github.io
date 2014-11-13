@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: exporting-blog-entries-as-markdown
 ---
-
 Since I write my blog posts in Markdown format I decided I wanted a way to backup my posts in a way that is human readable. The result is a feature in Texo to export my blog entries as zipped up Markdown files.
 
 ![Screenshot of Export Interface](/assets/adampresley/images/posts/texo-export-markdown-1.png)

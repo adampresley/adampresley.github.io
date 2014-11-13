@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: paypal-frustrations
 ---
-
 Today I've been working on the final bit of a PHP contract for a client
 where I am converting an older ASP site to PHP. This phase involves
 moving over the PayPal code. The API is pretty simple for PayPal

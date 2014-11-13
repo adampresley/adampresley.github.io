@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: advanced-javascript-201-tonight-at-dallas-cfug
 ---
-
 Tonight I will be speaking at the Dallas/Ft. Worth ColdFusion User Group
 meeting. I will be giving the introduction topic and will be covering
 Advanced JavaScript 201. This includes topics on namespacing, closures,

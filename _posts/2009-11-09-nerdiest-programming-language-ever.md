@@ -7,7 +7,6 @@ status: Published
 tags: fun development programming
 slug: nerdiest-programming-language-ever
 ---
-
 Ok, this programming language I stumbled across has to be the nerdiest
 programming language ever conceived, sober or drunk! The creators of
 this language believe that humble whitespace characters have received a

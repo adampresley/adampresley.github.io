@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: convert-array-of-strings-to-integers-using-jquery
 ---
-
 Here's a small problem I was asked about the other day. How, using
 jQuery, can you convert an array of number strings into an array of
 integers? Using jQuery this is actually pretty simple. With an input

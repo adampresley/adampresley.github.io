@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion regex
 slug: finding-specific-text-in-a-string-using-coldfusion-and-java
 ---
-
 A question was posted on the Dallas/Ft. Worth ColdFusion User Group
 today.  
 

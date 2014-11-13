@@ -7,7 +7,6 @@ status: Published
 tags: development php plugins wordpress
 slug: my-first-plugin
 ---
-
 Yes, ladies and gentlemen, I have started learning how to write
 WordPress plugins. My first plugin is one that removes the word
 "Private: " from the beginning of blog and page titles (when they are

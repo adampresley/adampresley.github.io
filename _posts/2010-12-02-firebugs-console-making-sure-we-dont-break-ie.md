@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: firebugs-console-making-sure-we-dont-break-ie
 ---
-
 Here's a quick little JavaScript function that allows you to continue
 your loving relationship with Firebug in Firefox, but also not break
 your Internet Explorer users. This function wraps the **console.log()**

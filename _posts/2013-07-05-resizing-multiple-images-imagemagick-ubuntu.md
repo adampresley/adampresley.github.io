@@ -7,7 +7,6 @@ status: Published
 tags: general tools
 slug: resizing-multiple-images-imagemagick-ubuntu
 ---
-
 Have you ever needed to resize a bunch of images in bulk? Most of us who do web development,
 image manipulation, or blogging probably have at some point. If you are running in Ubuntu here
 is a quick way to do this on the console.

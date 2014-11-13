@@ -7,7 +7,6 @@ status: Published
 tags: nerdy games
 slug: reasons-for-excitement
 ---
-
 Two reasons for my excitement this morning, and I shall sum them up
 promptly: Lord of the Rings Online content update, and Street Fighter
 IV. That's right, you heard it. Street Fighter IV! I LOVED the old

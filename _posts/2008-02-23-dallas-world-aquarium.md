@@ -7,7 +7,6 @@ status: Published
 tags: fun family
 slug: dallas-world-aquarium
 ---
-
 Today Maryanne, the kids and I joined the whole family gang at the
 [Dallas World Aquarium](http://www.dwazoo.com/default.html) for some fishy fun. Although fairly cool
 outside the sun was shining and it turned out to be a nice day for an

@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-builder-officially-released
 ---
-
 Today Adobe has announced the release of its official IDE for ColdFusion
 rapid-application development, [ColdFusion Builder](http://www.adobe.com/products/coldfusion/). 
 As a user of the beta versions for quite some time now I can go on the record and

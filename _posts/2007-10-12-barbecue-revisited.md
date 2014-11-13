@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: barbecue-revisited
 ---
-
 I made a post recently about using Barbecue barcode software in
 ColdFusion. In my example I instantiated the CFC object and called the
 *getCode128* function as the source of an image tag. With a bit of

@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: from-gregorian-to-julian-dates-in-javascript
 ---
-
 I am working on a contract right now where I am having to do some
 manipulation of dates in a calendar. This particular calendar stores
 dates in Julian Day Number (JDN) format. This by itself is not a serious

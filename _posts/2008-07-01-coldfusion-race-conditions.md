@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-race-conditions
 ---
-
 One of the things I've been struggling with at work lately is related to
 bizzare ColdFusion errors. Essentially what I am seeing is a page that
 normally works just suddenly throw an error stating that a specific

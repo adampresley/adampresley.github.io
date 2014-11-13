@@ -7,7 +7,6 @@ status: Published
 tags: culture
 slug: much-ado-about-nothing
 ---
-
 This year Shakespeare Festival of Dallas held their annual show at the
 usual location in Samual Grand Park, but also at Addison Circle Park. So
 I attended the Addison show. What started out to be a cool, brisk

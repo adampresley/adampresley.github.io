@@ -7,7 +7,6 @@ status: Published
 tags: oop php patterns
 slug: making-a-collection-object-in-php
 ---
-
 Recently I was working on a bit of code where I had an array of
 structures (a map or dictionary) that was the result of a query to a
 database. This data represented a set of statuses, each record with an

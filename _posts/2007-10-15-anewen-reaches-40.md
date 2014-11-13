@@ -7,7 +7,6 @@ status: Published
 tags: gaming nerdy
 slug: anewen-reaches-40
 ---
-
 Yay! My main character in Lord of the Rings Online: Shadows of Angmar
 just reached level 40! Woo hoo! Soon I shall be a level 50 champion
 renown throughout Middle Earth! :p  

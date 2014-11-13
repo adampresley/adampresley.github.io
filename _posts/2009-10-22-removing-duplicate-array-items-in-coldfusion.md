@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion java
 slug: removing-duplicate-array-items-in-coldfusion
 ---
-
 If you've ever had the need to quickly remove duplicate items in an
 array you might find yourself resorting to the old loop method. This
 involves looping over the input array, then further looping over a

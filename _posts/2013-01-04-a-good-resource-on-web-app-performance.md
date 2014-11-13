@@ -7,7 +7,6 @@ status: Published
 tags: review book
 slug: a-good-resource-on-web-app-performance
 ---
-
 Last night I came across an online, public domain license book by Stoyan
 Stefanov called [Book of Speed](http://www.bookofspeed.com/index.html). Although it is incomplete the
 information found in this book is **very** good.  

@@ -7,7 +7,6 @@ status: Published
 tags: coldfusion sql mysql
 slug: insert-or-update-in-mysql
 ---
-
 Tonight I **finally** got to use the very awesome *ON DUPLICATE KEY
 UPDATE* feature in MySQL. If you are wondering this is a great feature in
 MySQL that allows you, in one statement, to insert a record, and if that

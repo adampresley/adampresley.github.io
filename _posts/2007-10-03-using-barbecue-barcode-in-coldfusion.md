@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: using-barbecue-barcode-in-coldfusion
 ---
-
 I was approached today by a coworker about integrating the open source
 Java-based barcode library, [Barbecue](http://barbecue.sourceforge.net/),
 into ColdFusion. He wanted to use this library to prototype a project

@@ -7,7 +7,6 @@ status: Published
 tags: development javascript extjs
 slug: datefield-issues-with-extjs-21
 ---
-
 I ran into an interesting problem tonight while working on one of my
 projects that just so happens to use a little bit of the [ExtJs SDK](http://www.extjs.com).
 I had dropped an [Ext.form.DateField](http://extjs.com/deploy/dev/docs/?class=Ext.form.DateField) onto a regular old HTML form for

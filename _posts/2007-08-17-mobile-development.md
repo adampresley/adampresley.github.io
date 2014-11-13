@@ -7,7 +7,6 @@ status: Published
 tags: development java mobile
 slug: mobile-development
 ---
-
 Several months ago I purchased a new cell phone because I decided to
 join the cool people and jump on the media/internet/do it all phone
 bandwagon. With this in mind I purchased the Helio Ocean. Almost

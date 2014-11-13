@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: new-theme-new-wordpress
 ---
-
 Yes, I know. I seem to have a hard time sticking to one theme. It's just
 what I do. More importantly, however, I'd like to announce that I am on
 the latest, greatest, WordPress 2.5!  

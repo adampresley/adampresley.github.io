@@ -7,7 +7,6 @@ status: Published
 tags: rant review restaurant
 slug: a-less-than-pleasant-experience-on-the-kemah-boardwalk
 ---
-
 **Disclaimer:** *This blog entry isn't technical like most of my blog
 entries, but instead is a rant about a negative experience had at a show
 at an amusement park and a restaurant.*  

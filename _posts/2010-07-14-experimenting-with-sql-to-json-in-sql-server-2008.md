@@ -7,7 +7,6 @@ status: Published
 tags: development sql c#
 slug: experimenting-with-sql-to-json-in-sql-server-2008
 ---
-
 In the last couple of days at work my friend Adrian (@iknowkungfoo) and
 I (@adampresley) have been tossing around how we can improve performance
 on various portions of the application we work on. On of the trouble

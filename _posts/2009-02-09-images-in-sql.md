@@ -7,7 +7,6 @@ status: Published
 tags: development sql c#
 slug: images-in-sql
 ---
-
 So I was presented with a task today of extracting images that were
 stored in a Microsoft SQL Server 2000 database and save them as JPEG
 files. Here is a bit of code that will do this. In this code sample I am

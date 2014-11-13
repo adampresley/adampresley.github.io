@@ -7,7 +7,6 @@ status: Published
 tags: technology general development coldfusion
 slug: dallas-techfest-and-coldfusion-9
 ---
-
 This last Friday I attended the ColdFusion track at the Dallas Techfest.
 I went with a coworker and ex-coworker specifically to see the
 ColdFusion 9 preview. It was a good presentation that I must admit I'm a

@@ -7,7 +7,6 @@ status: Published
 tags: general culture
 slug: in-other-news
 ---
-
 I am loving the hell outta Guitar Hero 2. I got to play Laid to Rest -
 Lamb of God, Beast and the Harlot - Avenged Sevenfold, and Hanger 18 -
 Megadeth!! DUDE! So awesome.  

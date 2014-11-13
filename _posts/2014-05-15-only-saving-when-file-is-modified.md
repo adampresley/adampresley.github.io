@@ -7,7 +7,6 @@ status: Published
 tags: development python sublime
 slug: only-saving-when-file-is-modified
 ---
-
 I got a ticket the other day questioning why my Sublime Text [View In Browser](https://github.com/adampresley/sublime-view-in-browser) plugin saves the file they are viewing every time the plugin is used. The answer of course is because it must be saved prior to opening in the browser. However the poster of the ticket did have a good point. There is no need to save the user's file if the file hasn't actually changed. I have pushed a modification to the plugin to ensure that the save only occurs if the user's file has any modifications.
 
 To do this in Sublime's API turned out to be very simple.

@@ -7,7 +7,6 @@ status: Published
 tags: development sql java
 slug: foray-into-java
 ---
-
 So recently I've decided to delve into the world of Java development,
 or, more specifically, desktop Java development. So far I am liking it.
 My first task was to write a small application that would accept two

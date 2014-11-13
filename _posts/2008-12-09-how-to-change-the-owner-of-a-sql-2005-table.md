@@ -7,7 +7,6 @@ status: Published
 tags: development sql
 slug: how-to-change-the-owner-of-a-sql-2005-table
 ---
-
 It isn't often that I need such a thing, but occasionally I get asked by
 an engineer to change the owner of a database table in MS SQL 2005. This
 happens sometimes, though I cannot always remember how, but changing the

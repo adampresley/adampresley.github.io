@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion javascript
 slug: the-joys-of-not-using-cfwddx
 ---
-
 I had the pleasure of working an issue just the other day where an
 internal web application didn't seem to be responding. At first I
 suspected some type of bug in environment configuration, or some other

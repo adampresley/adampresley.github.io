@@ -7,7 +7,6 @@ status: Published
 tags: development groovy java
 slug: using-a-priority-queue-in-groovy
 ---
-
 Although the title suggests something specific to Groovy the concept
 demonstrated in this example will work in good old Java too, with a
 couple of tweaks of course. In this blog entry we will look at what a

@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: vacation-half-time-report
 ---
-
 So this is Wednesday night and my vacation week is half over. Here is
 the half-time report of what has transpired thus far. Monday we arrived
 a little after noon and headed down to "The Spot" for some grub. We

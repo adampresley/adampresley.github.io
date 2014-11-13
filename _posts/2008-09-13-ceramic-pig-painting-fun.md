@@ -7,7 +7,6 @@ status: Published
 tags: family
 slug: ceramic-pig-painting-fun
 ---
-
 Just wanted to post up a couple of pictures of what Maryanne and the
 girls worked on today. We had gone to [Hobby Lobby](http://hobbylobby.com/) to find some
 craft-ie kind of stuff for the kids to do, and came across a neat

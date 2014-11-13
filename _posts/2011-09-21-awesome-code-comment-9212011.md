@@ -7,7 +7,6 @@ status: Published
 tags: development funny comment code
 slug: awesome-code-comment-9212011
 ---
-
 Came across this code in a query where the programmer **clearly**
 doesn't want anyone to turn this feature on!
 

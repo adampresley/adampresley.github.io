@@ -7,7 +7,6 @@ status: Published
 tags: development jquery coldfusion javascript
 slug: using-jqgrid-with-coldfusion
 ---
-
 When looking for a grid solution compatible with jQuery that does not
 involve using CFGRID, the best I found has been jqGrid. It has a very
 impressive list of features, wide support for various incoming data

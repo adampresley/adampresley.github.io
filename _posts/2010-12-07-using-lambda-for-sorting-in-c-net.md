@@ -7,7 +7,6 @@ status: Published
 tags: development c#
 slug: using-lambda-for-sorting-in-c-net
 ---
-
 Here's a quick little tidbit that helped me this week. While writing a
 C# Windows application I found myself with a **List** of objects that
 did not implement a comparator interface. Because of this when I tried

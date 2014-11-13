@@ -7,6 +7,5 @@ status: Published
 tags: fun culture funny commercial
 slug: best-beer-commercial-ever
 ---
-
 Click [here](http://www.youtube.com/watch?v=RyRvpR4XhK4) to see one of
 the funniest beer commercials ever.

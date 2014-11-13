@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: and-just-like-that
 ---
-
 And just like that, NerdCon '06 is now officially over. All bags were
 packed, and all visitors sent safely away back home. Buses, planes, and
 sighs. Plenty of pictures to prove that they actually came in real life,

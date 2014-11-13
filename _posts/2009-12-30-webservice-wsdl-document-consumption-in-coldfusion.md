@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: webservice-wsdl-document-consumption-in-coldfusion
 ---
-
 This question was posted on the Adobe ColdFusion forums (found here at
 <http://forums.adobe.com/thread/546708?tstart=0>).
 

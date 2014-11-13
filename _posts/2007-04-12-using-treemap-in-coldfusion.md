@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: using-treemap-in-coldfusion
 ---
-
 Have you ever found the need to maintain a structured list of items? Of
 course! Have you ever needed to make sure those items stay in natural
 order? Maybe. If you answered yes then you need the Java TreeMap class.

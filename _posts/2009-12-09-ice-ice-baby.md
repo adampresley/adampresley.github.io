@@ -7,7 +7,6 @@ status: Published
 tags: general culture
 slug: ice-ice-baby
 ---
-
 Yesterday the family and I went out to Grapevine to see the Gaylord
 Texan ICE! exhibit. With over 2 million pounds of ice in a 14,000 square
 foot compound ICE was a very cool (literally and figuratively)

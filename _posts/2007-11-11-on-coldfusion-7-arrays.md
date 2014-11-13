@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: on-coldfusion-7-arrays
 ---
-
 At [Ben Nadel's Blog](http://www.bennadel.com), which I enjoy reading simply because he has a
 similar passion to me (digging into how and why it works under the
 hood), he talked about calling Java functions in ColdFusion that require

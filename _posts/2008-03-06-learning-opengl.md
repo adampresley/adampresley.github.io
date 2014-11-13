@@ -7,7 +7,6 @@ status: Published
 tags: development c++ opengl
 slug: learning-opengl
 ---
-
 In the last two days I have blown the dust film off of the old C++
 compiler and jumped back into the world of graphic programming in
 OpenGL. I have maintained a fantasy for many years now of getting into

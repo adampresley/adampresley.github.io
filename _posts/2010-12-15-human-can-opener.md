@@ -7,7 +7,6 @@ status: Published
 tags: fun funny
 slug: human-can-opener
 ---
-
 Ok, wow. This girl opens the top of coke cans with her teeth! Nice!  
   
 <http://www.funlol.com/funpages/human-can-opener.html>

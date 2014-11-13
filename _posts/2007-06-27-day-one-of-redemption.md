@@ -7,6 +7,5 @@ status: Published
 tags: venting
 slug: day-one-of-redemption
 ---
-
 Yes, today is the first day of redemption for Chic-Fil-A. Yes, that's
 right. They got my order correct! YAY!

@@ -7,7 +7,6 @@ status: Published
 tags: development groovy grails
 slug: grails-problem-transforming-call-sites
 ---
-
 While working on a project in Grails 2.1.0 (on Windows 7 64-bit) I ran
 into an interesting error.
 

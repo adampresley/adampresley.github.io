@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: configuring-illudium-pu-36-code-generator-on-ubuntu-linux
 ---
-
 In an effort to get up to speed on ColdBox, an MVC application framework
 for ColdFusion, I wanted to make use of the very cool code generator
 called Illudium PU-36. Clearly the author is a Looney Toons fan. I've

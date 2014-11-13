@@ -7,7 +7,6 @@ status: Published
 tags: development php
 slug: simple-lru-cache-class-in-php
 ---
-
 In my ongoing effort to further enhance my PHP framework I started
 recently working on a caching mechanism. For the time being I am using
 the PEAR library's [Cache_Lite](http://pear.php.net/package/Cache_Lite)

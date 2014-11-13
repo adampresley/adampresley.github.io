@@ -7,7 +7,6 @@ status: Published
 tags: development groovy xml grails
 slug: generating-xml-in-groovy-and-grails
 ---
-
 I was doing a little work in a project that spans a rather broad
 spectrum of the technology scale. One application in Groovy, the other
 is a Grails app, while another piece is ColdFusion. Overall a very

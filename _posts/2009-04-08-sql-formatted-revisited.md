@@ -7,7 +7,6 @@ status: Published
 tags: development regex
 slug: sql-formatted-revisited
 ---
-
 I posted an entry yesterday about using a regular expression to reformat
 SQL queries in code. After a bit more exploring and playing around in
 RegexBuddy (wonderful tool) I came up with a better regular expression

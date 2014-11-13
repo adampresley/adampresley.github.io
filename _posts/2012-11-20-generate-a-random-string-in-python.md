@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: generate-a-random-string-in-python
 ---
-
 Here's a tidbit I picked up from Stack Overflow
 (<http://stackoverflow.com/questions/2823316/generate-a-random-letter-in-python>)
 that I found helpful. I found the need to generate a random string of

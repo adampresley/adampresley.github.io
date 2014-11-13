@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: just-installed-wordpress-26
 ---
-
 So I finally installed WordPress 2.6, though 2.6.1 is already in BETA 2.
 I admit I am usually behind the curve on upgrading. However, there are a
 couple of exciting updates that come with 2.6.

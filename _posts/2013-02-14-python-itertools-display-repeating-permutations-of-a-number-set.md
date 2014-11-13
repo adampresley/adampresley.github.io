@@ -7,7 +7,6 @@ status: Published
 tags: python itertools
 slug: python-itertools-display-repeating-permutations-of-a-number-set
 ---
-
 Back in July of 2010 I blogged about [displaying a set of repeating
 permutations of a number set](#post/2010/07/display-repeating-permutations-of-a-number-set-in-java).
 In this blog post I explained how my daughter had a kid's "spy safe" that

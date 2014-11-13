@@ -7,7 +7,6 @@ status: Published
 tags: general nerdy
 slug: guitar-2-denied
 ---
-
 I went to Fry's Electronics tonight in search of a second guitar for my
 Guitar Hero 2 game. This is prompted by the fact that I was under the
 impression that my current second guitar was broken. Notice I said

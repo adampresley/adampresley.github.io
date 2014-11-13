@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: nerdcon-is-nearly-here
 ---
-
 Yes, it is true. NerdCon is nearly here. There are many folks arriving
 from out of state to come and participate in what we do best. Being
 nerds. I've been scrambling to make sure I've got every arrival, every

@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: javascript-functional-goodness-part-1
 ---
-
 Slowly I have been trying to learn and work in more functional-style
 programming constructs into my toolbelt. I'm not doing this for
 any particularly nefarious reason other than I like to continue

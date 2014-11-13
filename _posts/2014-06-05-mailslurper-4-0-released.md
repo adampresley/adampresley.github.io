@@ -8,7 +8,6 @@ tags: development software golang
 slug: mailslurper-4-0-released
 comments: true
 ---
-
 MailSlurper 4.0 has just been released. This update addresses some bugs in parsing attachments and date display. It also adds the ability to choose from one of the following storage engines:
 
 * SQlite

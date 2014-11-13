@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: adam-gets-an-overhaul
 ---
-
 Ok, a few out there know that I've actually been working on my ADAM
 language (Advanced Data Acquisition and Manipulation) for some time. I
 had actually had a lexical analyzer, byte code compiler, and base

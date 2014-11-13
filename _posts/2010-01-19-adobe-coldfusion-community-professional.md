@@ -7,7 +7,6 @@ status: Published
 tags: coldfusion
 slug: adobe-coldfusion-community-professional
 ---
-
 While watching a movie on TV last night, *Daylight* specifically (yes,
 the one with Sylvester Stallone), I received an email that had me as
 excited as if I was going to see Metallica in concert. The subject:

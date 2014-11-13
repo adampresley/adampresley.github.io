@@ -7,7 +7,6 @@ status: Published
 tags: python deployment
 slug: my-first-experience-with-fabric-and-amazon-ec2
 ---
-
 I've been working on a few projects and I have been in the process of
 moving them to Amazon EC2. Up until this point I have been writing Bash
 shell scripts, connecting to my servers and EC2 instances via SSH, then

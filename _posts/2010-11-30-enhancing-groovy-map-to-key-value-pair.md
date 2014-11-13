@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: enhancing-groovy-map-to-key-value-pair
 ---
-
 Here is another example of using Groovy's metaClass abilities to extend
 the language. In this scenario I have a need to convert a standard
 **Map** to a key-value pair, such as what would be used in an HTTP

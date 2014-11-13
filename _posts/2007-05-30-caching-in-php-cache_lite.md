@@ -7,7 +7,6 @@ status: Published
 tags: development php
 slug: caching-in-php-cache_lite
 ---
-
 For many web application developers the concept of caching is foreign.
 Most of us build our pages, query our databases, and spit out the
 results. This is usually sufficient as the content is entirely dynamic.

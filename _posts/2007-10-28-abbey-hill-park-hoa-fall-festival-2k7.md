@@ -7,7 +7,6 @@ status: Published
 tags: general fun
 slug: abbey-hill-park-hoa-fall-festival-2k7
 ---
-
 Yesterday we took the kids across the street to the Abbey Hill park. It
 is a nice little park with a nice play area and gazebo with park
 benches, all paid for by the members of the Abbey Hill Park HOA. In an

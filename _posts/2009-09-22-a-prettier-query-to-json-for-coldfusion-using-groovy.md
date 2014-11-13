@@ -7,7 +7,6 @@ status: Published
 tags: development groovy coldfusion sql
 slug: a-prettier-query-to-json-for-coldfusion-using-groovy
 ---
-
 ColdFusion 8 introduced the ability to serialize data structures,
 arrays, and queries to JSON notation, making building AJAX-enabled
 applications even easier. There are a couple of annoyances, however,

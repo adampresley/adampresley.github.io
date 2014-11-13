@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion adobe
 slug: my-first-entry-to-the-new-adobe-cookbooks
 ---
-
 I have posted my first entry to Adobe's new Cookbook today. It is a
 revisit of my blog entry on creating a more user-friendly psudo-random
 keys without having to use a UUID ([coldfusion-random-id-generation](|filename|/coldfusion-random-id-generation.md)).

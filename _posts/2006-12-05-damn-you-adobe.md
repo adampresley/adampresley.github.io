@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: damn-you-adobe
 ---
-
 O...M...G... Today it was brought to my attention that the name for my
 data manipulation language, ADAM, is already in use. By whom? None other
 than Adobe!!! GAH!! Bastards!! Rotten, filthy bastards!!! Now I must

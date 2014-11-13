@@ -7,7 +7,6 @@ status: Published
 tags: php python git
 slug: how-i-deployed-a-php-app-via-ftp-using-fabric-and-git
 ---
-
 A project I've been working with for a bit now uses a popular hosting
 provider to host a PHP application I'm writing. My normal workflow with
 this project is to make changes, commit my code to my Git repository,

@@ -7,7 +7,6 @@ status: Published
 tags: development programming ant
 slug: using-ant-to-automate-a-build
 ---
-
 Last night I attended the Dallas/Fort Worth ColdFusion User Group
 meeting held at the [Paladin Consulting](http://www.paladin-inc.com/)
 offices, lead here locally by Dave Shuck. There were three presentations

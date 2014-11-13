@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion regex
 slug: adding-namespaces-to-html-tag-using-regular-expressions
 ---
-
 My friend, [Mr. Steve Good](http://stevegood.org), approached me about a problem he was
 having where he needed to add a namespace to an HTML tag at runtime.
 Essentially he was parsing some dynamic HTML and wished to inject an

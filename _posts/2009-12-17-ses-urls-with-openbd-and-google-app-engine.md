@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion openbd
 slug: ses-urls-with-openbd-and-google-app-engine
 ---
-
 A little tidbit that I though I'd share. While playing with the Google
 App Engine (GAE) version of the OpenBD CFML engine I noticed that SES
 friendly URL's weren't working for me. After a small search I came

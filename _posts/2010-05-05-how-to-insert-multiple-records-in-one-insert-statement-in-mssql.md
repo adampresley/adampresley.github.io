@@ -7,7 +7,6 @@ status: Published
 tags: development sql
 slug: how-to-insert-multiple-records-in-one-insert-statement-in-mssql
 ---
-
 A friend showed me this trick a year or two ago, and it has come in
 handy once again. In Microsoft SQL Server 2005 and higher if you need to
 insert more than one record into a database table in a single statement

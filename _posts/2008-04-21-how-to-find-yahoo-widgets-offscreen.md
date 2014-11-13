@@ -7,7 +7,6 @@ status: Published
 tags: general nerdy
 slug: how-to-find-yahoo-widgets-offscreen
 ---
-
 For those that enjoy the features offered by the [Yahoo! Widgets](http://widgets.yahoo.com) you
 might at some point find yourself in a situation similar to what I
 experienced today. Somehow, perhaps with my two monitor goodness, and

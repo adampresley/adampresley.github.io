@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: bells-palsy-one-week
 ---
-
 Well, by tomorrow I will have had [Bell's Palsy](http://www.webmd.com/brain/tc/bells-palsy-topic-overview) 
 for one week. Let me say that it is a very strange experience. For those who do not know
 Bell's Palsy is allow me to indulge. Bell's Palsy is a condition that

@@ -7,7 +7,6 @@ status: Published
 tags: programming python bottle
 slug: first-experiences-with-bottlepy
 ---
-
 Here lately I've taken to writing a bit more code in Python. It isn't my
 first time around in this lovely language, but for the last few months
 I've spent more time in Groovy and Grails, and I felt it was time to

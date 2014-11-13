@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: new-jquery-plugin-ap-tags
 ---
-
 For all you jQuery fans out there, take a look at my first plugin! This
 plugin is a tagging component, similar to what is used to tag blog
 entries, for example. I had a good time making it, and found jQuery

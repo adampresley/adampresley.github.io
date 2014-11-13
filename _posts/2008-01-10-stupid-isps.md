@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: stupid-isps
 ---
-
 For several days now I have been fighting with my computer to get Apache
 configured so that I can access the site I'm working on, not only from
 the inside, but also from the outside for demo purposes. I already knew

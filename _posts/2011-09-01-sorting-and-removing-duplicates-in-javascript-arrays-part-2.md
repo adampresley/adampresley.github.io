@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: sorting-and-removing-duplicates-in-javascript-arrays-part-2
 ---
-
 Ok, so I said I'd do a follow up post, so here it is. I did some more
 playing around with the removal of duplicates. I figured since I was
 bothering to sort the array before removing duplicates I could improve

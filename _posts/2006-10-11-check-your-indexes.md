@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: check-your-indexes
 ---
-
 Yesterday, although certainly not the worst, did not start out too well.
 I'm sitting at my desk, coding away, when at around 9:30 I get an alert
 from our tech support persons that we have servers that aren't

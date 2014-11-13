@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript plugins
 slug: new-jquery-plugin-ap-text-counter
 ---
-
 I'm happy to announce my second plugin is up on the jQuery website for
 download, AP Text Counter. This is a simple plugin that implements a
 text limiter and counter mechanism in jQuery, complete with customizable

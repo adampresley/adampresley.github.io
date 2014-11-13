@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: testing-server-availability
 ---
-
 It's a simple thing, but quite useful. In the organization where I work
 we have over ten web servers, so oftentimes the location of a problem
 can be difficult to pinpoint. In this line of thought I was asked to

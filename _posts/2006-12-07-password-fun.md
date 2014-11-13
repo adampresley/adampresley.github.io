@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: password-fun
 ---
-
 Ok, that was just plain odd. I'm working on our Jedi Academy server,
 messing with administration permissions and such, and I setup a
 temporary password to get in the server for while I'm working on it.

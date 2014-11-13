@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion reflection
 slug: reflection-in-coldfusion-part-2
 ---
-
 Yesterday I was working on using [Java reflection to create function
 pointers in ColdFusion](http://blog.adampresley.com/2007/03/27/reflection-in-coldfusion/) to native ColdFusion methods. I was able to
 get this to work on any function with only String parameters, but not

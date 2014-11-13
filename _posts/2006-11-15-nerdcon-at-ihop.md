@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: nerdcon-at-ihop
 ---
-
 So here we are at IHOP. Nolan is making fun of people who are emo and
 blog at IHOP... Strange, cause that is what I am doing. <_< They
 can't talk as they are all talking MySpace picture poses. Nerds.  

@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-exception-handling
 ---
-
 For the last few days I've been messing with ColdFusion exception
 handling, specifically on the TRY/CATCH block side. At first I was
 greatly intrigued by the fact that you could throw exceptions based off

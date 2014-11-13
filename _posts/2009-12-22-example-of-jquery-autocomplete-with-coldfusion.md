@@ -7,7 +7,6 @@ status: Published
 tags: development jquery coldfusion javascript ajax
 slug: example-of-jquery-autocomplete-with-coldfusion
 ---
-
 A useful feature, and high "value add" to many sites today is a text box
 with autocomplete and suggestion as you type. The powerful [jQuery](http://jquery.com/)
 JavaScript library makes this really easy to do, especially with the

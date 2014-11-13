@@ -7,7 +7,6 @@ status: Published
 tags: development c# tutorial
 slug: tutorial-net-xml-into-a-dataset
 ---
-
 New tutorial for C# about using XML data in a DataSet object for
 manipulating the data like it came from a database. See the Software
 Development section, or go straight to it here. Cheers, and happy

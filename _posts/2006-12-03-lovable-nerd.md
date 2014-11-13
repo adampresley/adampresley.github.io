@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: lovable-nerd
 ---
-
 What am I to do? I'm not always depressed and sad. But sometimes I can't
 shake the feeling that this, the me my friends and coworkers have come
 to know and expect is all I'll ever be. That isn't too much. I'm

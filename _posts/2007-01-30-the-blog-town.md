@@ -7,6 +7,5 @@ status: Published
 tags: general
 slug: the-blog-town
 ---
-
 This is just a post to let folks know that my blogging now happens at
 [theblogtown.wordpress.com](http://theblogtown.wordpress.com). Check it out!

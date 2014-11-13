@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: groovy-script-to-generate-json-from-cfscript
 ---
-
 Today I was working on a bit of code that had a big SWITCH statement in
 CFSCRIPT in ColdFusion that for each case would go through the motions
 of registering some input parameters, then getting a reference to a

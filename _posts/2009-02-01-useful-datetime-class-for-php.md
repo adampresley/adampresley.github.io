@@ -7,7 +7,6 @@ status: Published
 tags: development php
 slug: useful-datetime-class-for-php
 ---
-
 As programmers we should always strive to better ourselves by improving
 our craft by taking pride that what we build is not only useful, but can
 continue to be useful for a long time to come. Part of this strategy

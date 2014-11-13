@@ -7,7 +7,6 @@ status: Published
 tags: development tomcat jee
 slug: tomcat-vs-jrun-jvm-arguments
 ---
-
 Lately I have been learning more about running ColdFusion applications
 in JEE application servers and servlet containers. The product I have
 focused on primarily is [Apache's Tomcat](http://tomcat.apache.org/), a

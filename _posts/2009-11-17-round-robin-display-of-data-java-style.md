@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion java
 slug: round-robin-display-of-data-java-style
 ---
-
 In my daily blog reading I came across [Mr. Ray Camden's blog post](http://www.coldfusionjedi.com/index.cfm/2009/11/17/Ask-a-Jedi-Round-robin-display-of-data)
 about rotating a grouped set of data in a "round robin" fashion. In his
 example he uses a multi-dimensional array, then uses ColdFusion to

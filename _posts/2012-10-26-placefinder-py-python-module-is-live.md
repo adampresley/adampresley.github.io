@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: placefinder-py-python-module-is-live
 ---
-
 I am happy to announce the release of **placefinder-py**, a Python
 module for consuming the Yahoo! BOSS PlaceFinder geocoding services.
 **placefinder-py** helps developers looking to add location geocoding to

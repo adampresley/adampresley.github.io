@@ -7,7 +7,6 @@ status: Published
 tags: development php
 slug: sorting-a-complex-array-of-products-in-php
 ---
-
 I've blogged twice recently about sorting an array of structures in
 ColdFusion, using both pure CF, and dipping into Groovy. This time we'll
 look at how we can easily do the same task in PHP. In this post I will

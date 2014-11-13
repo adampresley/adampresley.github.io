@@ -7,7 +7,6 @@ status: Published
 tags: general venting
 slug: without-the-chicken
 ---
-
 I just HAD to put it out there, this little ditty about a chicken
 biscuit gone horribly wrong. One of the daily routines that Maryanne and
 I have in our morning commute to work is to stop off at either

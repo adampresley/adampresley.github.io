@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: starting-to-learn-python
 ---
-
 So I am starting to learn Python. The catalyst for this was the Sublime
 Text 2 editor, which is Python based, and has full plugin support
 written in Python. So as such I set out to learn more about this

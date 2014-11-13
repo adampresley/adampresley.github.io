@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion java
 slug: coldfusion-searching-structure-values-with-regular-expressions
 ---
-
 One of my favorite ColdFusion bloggers, Mr. Ben Nadel, blogged the other
 day about creating a custom tag that would [recursively traverse a
 ColdFusion structure](http://www.bennadel.com/blog/1635-restructfindvalue-adding-regular-expression-searching-to-structfindvalue-.htm) 

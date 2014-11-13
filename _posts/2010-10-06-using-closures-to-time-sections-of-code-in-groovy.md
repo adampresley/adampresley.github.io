@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: using-closures-to-time-sections-of-code-in-groovy
 ---
-
 Last night I was working on an import script in Groovy to bring data
 back from a web service and into a MongoDB database. There's a lot of
 data, and I wanted to know how much time the whole process was taking,

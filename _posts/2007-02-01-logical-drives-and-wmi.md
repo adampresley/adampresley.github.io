@@ -7,7 +7,6 @@ status: Published
 tags: development c#
 slug: logical-drives-and-wmi
 ---
-
 In an effort to support removable media devices in SyncXpress I've had
 to do a bit of learning about WMI in .NET. It is actually quite cool how
 much information you can get from WMI about ANY piece of hardware

@@ -7,7 +7,6 @@ status: Published
 tags: groovy gevelopment
 slug: enhancing-groovy-sha1-hash-strings
 ---
-
 Continuing the series of enhancing Groovy's core language classes, here
 is a snippet that allows a **String** to be hashed using the SHA1
 algorithm. Let's look at the code first.  

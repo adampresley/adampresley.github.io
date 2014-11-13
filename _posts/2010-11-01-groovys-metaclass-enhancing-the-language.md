@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: groovys-metaclass-enhancing-the-language
 ---
-
 Here's a little tidbit I wanted to share which demonstrates one of the
 coolest bits about Groovy. Similar to how one can use prototyping in
 JavaScript to enhance existing objects Groovy allows us to modify

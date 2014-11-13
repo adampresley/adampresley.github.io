@@ -7,7 +7,6 @@ status: Published
 tags: development ant
 slug: using-ant-to-automate-a-build-version-number
 ---
-
 Recently I've been writing some [Mura](http://www.getmura.com/)
 plugins. One of the basic pieces of the plugin is the the
 **config.xml** file which contains metadata about your plugin. One piece

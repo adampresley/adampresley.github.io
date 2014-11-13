@@ -7,7 +7,6 @@ status: Published
 tags: python itertools
 slug: python-itertools-filtering-items
 ---
-
 Continuing my exploration of the **itertools** module in Python I wanted
 to look at the **ifilter()** method. **ifilter()** is a method that
 returns an iterator of items that return true from a test function (or

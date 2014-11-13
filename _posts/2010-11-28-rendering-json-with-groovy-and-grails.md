@@ -7,7 +7,6 @@ status: Published
 tags: development groovy json grails
 slug: rendering-json-with-groovy-and-grails
 ---
-
 The other day I blogged about generating XML from domain classes in
 Grails. Today I want to show how to do the same thing but with JSON
 instead. JSON is widely used and accepted as a great way to exchange

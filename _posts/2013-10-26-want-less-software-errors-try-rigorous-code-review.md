@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: want-less-software-errors-try-rigorous-code-review
 ---
-
 <img src="http://s3.amazonaws.com/www.adampresley.com/posts/python-code-angled.png" class="pull-left" style="margin-right: 10px; margin-bottom: 10px;" />
 Anyone who has been in the software development field for more than a few
 years, contributing to projects in a team environment, knows that one key

@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: announcing-cfshowdown-markdown-for-coldfusion
 ---
-
 ## Notice: This project is no longer supported.
 
 I am pleased to announce the availability of CFShowdown, a Markdown

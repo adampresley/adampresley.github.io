@@ -7,7 +7,6 @@ status: Published
 tags: fun development java
 slug: display-repeating-permutations-of-a-number-set-in-java
 ---
-
 At home my daughter has a little "spy" safe where she can keep money,
 rocks, or whatever else she wants in there. This safe is guarded by a
 passcode, and when you enter the passcode incorrectly twice it makes an

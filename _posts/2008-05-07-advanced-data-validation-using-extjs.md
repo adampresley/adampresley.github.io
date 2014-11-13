@@ -7,7 +7,6 @@ status: Published
 tags: development javascript extjs
 slug: advanced-data-validation-using-extjs
 ---
-
 While working on my personal project tonight I finally got around to
 going over some of the new examples in the [ExtJs](http://www.extjs.com) 
 [documentation](http://extjs.com/deploy/dev/docs/). In this case they are 

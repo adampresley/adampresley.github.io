@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: the-shipper-my-experience-in-anime
 ---
-
 Wind swept the scene where two warriors stood erect, gaging each other's
 inner strength. What kind of fight would this be? Who would prove
 victorious? Would The Customer's determination to retrieve that which is

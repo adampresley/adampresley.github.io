@@ -7,7 +7,6 @@ status: Published
 tags: news technology general
 slug: 30-of-internet-users-admit-to-buying-from-spam
 ---
-
 Have a read of this article and see if you don't get angry the next time
 you get spam in your email in-box.  
   

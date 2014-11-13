@@ -7,7 +7,6 @@ status: Published
 tags: general movies
 slug: surfs-up-wipes-out
 ---
-
 That's right folks. Your's truly took the girlfriend and kiddos to see
 the movie Surf's Up. Although touted as a funny movie, a great ride, I
 found that Surf's Up wiped out. The film concept was creative in that

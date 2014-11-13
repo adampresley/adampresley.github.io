@@ -7,7 +7,6 @@ status: Published
 tags: development tools eclipse
 slug: change-default-author-name-for-javadocs-in-eclipse
 ---
-
 Here is a quick way to change the default author name when using JavaDoc
 comments in your Eclipse projects. Simply edit your **eclipse.ini**
 file found in the root directory where you placed Eclipse. I have

@@ -7,7 +7,6 @@ status: Published
 tags: review
 slug: review-brio-tuscan-grille
 ---
-
 <img src="http://s3.amazonaws.com/www.adampresley.com/posts/brio-resturaunt-276x300.jpg" class="pull-left" style="margin-right: 10px; margin-bottom: 10px;" />
 Tonight Maryanne and I went to a lovely restaurant that just opened here
 in Allen called **Brio Tuscan Grille**. We were greeted by very nice

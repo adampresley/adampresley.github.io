@@ -7,7 +7,6 @@ status: Published
 tags: development python
 slug: placefinder-py-release-v03
 ---
-
 Quick entry to point out that my Yahoo! BOSS PlaceFinder API Python
 module, **placefinder-py**, has a new *0.3* release. This release
 includes:  

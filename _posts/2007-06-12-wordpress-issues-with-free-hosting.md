@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: wordpress-issues-with-free-hosting
 ---
-
 Just wanted to share a small discovery I made to those out there who may
 be wishing to setup their own WordPress blog site. I use [GoDaddy](http://www.godaddy.com)
 hosting (which I'd like to say is excellent, as is their customer

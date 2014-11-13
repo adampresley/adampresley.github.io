@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: update-v020-to-jquery-plugin-ap-tags
 ---
-
 While using my little tag plugin, [AP Tags](http://plugins.jquery.com/project/aptags), I ran into a small snag
 where I have a dialog box that I am crafting dynamically using [jQuery
 UI](http://jqueryui.com/). In this dialog I have my tag plugin, and I am calling it every

@@ -7,7 +7,6 @@ status: Published
 tags: fun funny oops
 slug: ooops-skype-and-a-bad-template
 ---
-
 While signing up for Skype today I noticed a slight bug in the form. I'm
 betting they actually want the asterisk character itself. Templating
 gone wrong!

@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: regex-merging-of-structures-in-groovy-revisited
 ---
-
 Some time ago I blogged about using CFGroovy to build a function to take
 two structures and merge their keys together selectively based on a
 regular expression. Today I revisit that to make a smarter function, and

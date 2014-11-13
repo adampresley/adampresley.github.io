@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: issues-serializing-coldfusion-session-object
 ---
-
 At work I've been asked to brainstorm solutions to a problem where a
 user's session and application information is lost when they get kicked
 off of one server and are moved to another. Essentialy we have a load

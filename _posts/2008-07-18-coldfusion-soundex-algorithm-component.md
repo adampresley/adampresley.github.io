@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-soundex-algorithm-component
 ---
-
 ## Notice: Code is no longer here
 
 Although this has been done a million times I took a little time

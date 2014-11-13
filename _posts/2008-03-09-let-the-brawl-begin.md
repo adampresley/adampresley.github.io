@@ -7,7 +7,6 @@ status: Published
 tags: gaming nintendo
 slug: let-the-brawl-begin
 ---
-
 Ladies and gentlemen! I have my copy of [Super Smash Brothers Brawl](http://www.smashbros.com/en_us/index.html),
 and it is a blast! I got to play a fair bit today, and had a really
 great time. I then hooked up online with Maryanne and I on our Wii, and

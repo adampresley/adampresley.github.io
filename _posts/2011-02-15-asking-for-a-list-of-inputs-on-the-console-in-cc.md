@@ -7,7 +7,6 @@ status: Published
 tags: development c++
 slug: asking-for-a-list-of-inputs-on-the-console-in-cc
 ---
-
 Here's a question I got today:  
   
 > I'm trying to prompt the user to enter an array of strings. How do I

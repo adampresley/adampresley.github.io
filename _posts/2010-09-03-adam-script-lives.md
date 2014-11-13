@@ -7,7 +7,6 @@ status: Published
 tags: development groovy adam
 slug: adam-script-lives
 ---
-
 It's been a **long** time since I last talked about, let alone
 worked on ADAM script, or *A*dvanced *D*ata *A*cquisition and
 *M*anipulation script. But last night I finally revived this project

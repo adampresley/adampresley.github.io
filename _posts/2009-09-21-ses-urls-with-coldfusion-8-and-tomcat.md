@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: ses-urls-with-coldfusion-8-and-tomcat
 ---
-
 A little tidbit that I had to work on today. To make sure that I am
 properly testing my applications in both Railo AND ColdFusion, I bundled
 up ColdFusion 8 as a WAR file and deployed it to Tomcat. That went

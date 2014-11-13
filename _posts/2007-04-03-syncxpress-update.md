@@ -7,7 +7,6 @@ status: Published
 tags: development c#
 slug: syncxpress-update
 ---
-
 Ladies and Gentlemen! I have put up for public download the first alpha
 release of SyncXpress. It is still in VERY early production, and not
 ready for prime time, so use at your own risk. You will need .NET 2.0 to

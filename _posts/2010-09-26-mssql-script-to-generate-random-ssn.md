@@ -7,7 +7,6 @@ status: Published
 tags: development sql
 slug: mssql-script-to-generate-random-ssn
 ---
-
 If you've ever worked with a database that contains sensitive data you
 may have had the task of "scrubbing", or cleaning the data so it can be
 used by the average developer and QA engineer. Last week I was working

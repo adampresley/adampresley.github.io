@@ -7,7 +7,6 @@ status: Published
 tags: development groovy coldfusion
 slug: selective-merging-of-structures-using-regular-expressions-in-coldfusion
 ---
-
 Today I had a small situation where there is a structure in the session
 scope that, when a form is submitted with address information, put this
 address data into that session scoped structure. However, there is a

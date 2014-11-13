@@ -7,7 +7,6 @@ status: Published
 tags: development google
 slug: google-app-engine-143-released
 ---
-
 I'm about a day late to the game, but Google has released version 1.4.3
 of their cloud-based PaaS. For those of us using [OpenBD](http://openbd.org) on the
 Google App Engine the latest enhancements to the Java platform side are

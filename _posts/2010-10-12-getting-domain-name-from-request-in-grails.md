@@ -7,7 +7,6 @@ status: Published
 tags: development groovy grails
 slug: getting-domain-name-from-request-in-grails
 ---
-
 Here's a little tidbit. If you need to determine what domain a request
 may have been referred from, such as when doing JSONP work, here's a
 code snippet that might help.  

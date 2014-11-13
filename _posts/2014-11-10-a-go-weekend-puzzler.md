@@ -6,7 +6,6 @@ author: Adam Presley
 tags: development golang
 comments: true
 ---
-
 [Adam Cameron](http://blog.adamcameron.me/) posted a code challenge [on his blog](http://blog.adamcameron.me/2014/11/something-for-weekend-wee-code-quiz-in.html) this last Friday. I have provided my answer in the form of a [Google Go project](https://github.com/adampresley/adamCameronCodeChallenge201411). For those interested a 10,000ft view of how this works can be found below. Here are the instructions he provided.
 
 > For a given array and a given threshold, return the subarray which contains the longest run of consecutive numbers which - in total - are equal-to or less than the threshold.

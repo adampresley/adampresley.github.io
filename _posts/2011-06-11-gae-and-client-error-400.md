@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: gae-and-client-error-400
 ---
-
 Ok, this one was a beating. For my wedding website I am using Google App
 Engine, a cloud PaaS system. The application is written in [Groovy](http://groovy.codehaus.org/) on
 [Gaelyk](http://gaelyk.appspot.com/). So far everything has been great, until yesterday.   

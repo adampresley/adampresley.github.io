@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: dynamic-function-invocation-goodbye-context
 ---
-
 Last night I posted about a small, unscientific performance test of
 various method for dynamically invoking a method. So, for example, if
 you have a method name stored dynamically somewhere (like a database, or

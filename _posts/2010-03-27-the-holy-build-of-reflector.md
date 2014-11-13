@@ -7,7 +7,6 @@ status: Published
 tags: funny
 slug: the-holy-build-of-reflector
 ---
-
 Ok, this made me chuckle and I had to pass it on. For those that don't
 read the [Daily WTF](http://thedailywtf.com/), you should, because you get gems like this every
 now and again. Below is a screen shot, clearly from the beta of

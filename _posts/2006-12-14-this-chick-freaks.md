@@ -7,7 +7,6 @@ status: Published
 tags: fun funny
 slug: this-chick-freaks
 ---
-
 An interesting video of a lady **FREAKING** out about her boyfriend.
 Let's just say some people get some free stuff. :)
 

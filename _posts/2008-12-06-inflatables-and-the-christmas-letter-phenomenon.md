@@ -7,7 +7,6 @@ status: Published
 tags: general shopping christmas
 slug: inflatables-and-the-christmas-letter-phenomenon
 ---
-
 Today saw this nerd out and about in the real world of bad drivers and
 crowded aisles instead of the virtual one of horses and magical swords.
 Armed with a list and a mission we embarked upon a journey of spending

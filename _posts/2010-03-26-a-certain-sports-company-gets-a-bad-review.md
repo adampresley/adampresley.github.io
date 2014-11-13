@@ -7,7 +7,6 @@ status: Published
 tags: general rant
 slug: a-certain-sports-company-gets-a-bad-review
 ---
-
 As most of you know I tend to follow the various businesses in the
 Dallas/Ft. Worth metroplex that use ColdFusion as their development
 platform. I came across this article the other day about one such

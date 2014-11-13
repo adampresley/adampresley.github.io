@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion barcode
 slug: cfbarbecue-v10-released
 ---
-
 I am happy to announce I have released CFBarbecue version 1.0 on
 RIAForge! CFBarbecue is a ColdFusion wrapper for the Barbecue Barcode
 Java library, and provides the ability to generate and display barcodes

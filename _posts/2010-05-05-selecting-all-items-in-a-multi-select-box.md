@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: selecting-all-items-in-a-multi-select-box
 ---
-
 Here's a quick [jQuery](http://jquery.com) tidbit. If you ever
 need to select or unselect all items in a muti-select box
 (a \<select\> tag set to allow multiple selected items), here's

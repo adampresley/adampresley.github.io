@@ -7,7 +7,6 @@ status: Published
 tags: development groovy mongodb grails
 slug: my-grails-and-mongodb-experience-so-far
 ---
-
 Slowly but surely I have been spending time learning how to develop web
 applications in Grails, a web application framework built on top of
 Groovy, Spring, and Hibernate. Last night I spent a good deal of time

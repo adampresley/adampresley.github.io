@@ -7,7 +7,6 @@ status: Published
 tags: development groovy dsl
 slug: intro-to-dsls-in-groovy-part-1
 ---
-
 Here in a couple of weeks I will be presenting at the Dallas/Ft. Worth
 Groovy User Group meeting on an introduction to DSLs, or *Domain
 Specific Languages*, in Groovy. What is particularly fun about this is

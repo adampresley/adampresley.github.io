@@ -7,7 +7,6 @@ status: Published
 tags: development javascript ant
 slug: automate-compressing-js-and-css-with-ant
 ---
-
 I'm still a bit of a n00b with ANT still, but I took the time today to
 improve my skills with it a tad to help automate a task which has become
 quite repetitive. Once we are ready to roll changes to our application

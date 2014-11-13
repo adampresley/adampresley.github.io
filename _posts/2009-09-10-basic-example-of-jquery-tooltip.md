@@ -7,7 +7,6 @@ status: Published
 tags: development jquery coldfusion javascript
 slug: basic-example-of-jquery-tooltip
 ---
-
 Oftentimes we developers overlook the simplest solutions to a given
 problem. And I must confess that I am the worst, often looking for the
 most complex, reusable, scalable solution to something as simple as

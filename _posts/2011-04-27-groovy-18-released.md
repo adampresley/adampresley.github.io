@@ -7,7 +7,6 @@ status: Published
 tags: development groovy
 slug: groovy-18-released
 ---
-
 Groovy 1.8 has finally been released, and let me comment on that with
 **YAY!** There are some really great enhancements to an already great
 language. I'm only going to point out a few of the areas that I am

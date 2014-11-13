@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: katys-play
 ---
-
 Maryanne, Tabitha, and I went out to Wolfe City, Texas to see my little
 sister's performance in her school's UIL one act competition play entry.
 The players did well, and it was a $5 well spent, little sister. Here

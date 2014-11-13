@@ -7,7 +7,6 @@ status: Published
 tags: development jquery coldfusion javascript presentation
 slug: code-for-my-dallas-techfest-2010-presentation-available
 ---
-
 Finally, as requested, my code and slides for my Dallas TechFest 2010
 presentation are available for download. If you missed it I presented on
 taking an existing ColdFusion application (could be anything, PHP, JSP,

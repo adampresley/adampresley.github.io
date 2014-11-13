@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: escape-of-the-single-quote
 ---
-
 Discovered the most interesting and strange bug in ColdFusion MX 7. Not
 sure about 6, cause I tested in 7. Anywho. With the MX release
 ColdFusion automagically escapes single quotes when using variables in

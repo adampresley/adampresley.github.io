@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: javascript-functional-goodness-part-2
 ---
-
 A couple of days ago I posted an entry on some basic functional-style
 programming constructs that I've been *slowly* learning. I am back
 to post part 2. Here's the refresher.

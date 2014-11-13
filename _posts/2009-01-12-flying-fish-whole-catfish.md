@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: flying-fish-whole-catfish
 ---
-
 Today myself and a group from work went to the [Flying Fish](http://www.yelp.com/biz/flying-fish-dallas-2)
 resturaunt here in Addison. We've been there many times before as its a
 pretty good cajun-style fish joint. This time I decided I was hungry,

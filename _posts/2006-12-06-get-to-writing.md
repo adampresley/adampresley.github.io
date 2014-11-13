@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: get-to-writing
 ---
-
 Yes, it has happened again. I am trying yet another blogging software.
 This time around: WordPress. I must say that I am far more impressed
 with this software when compared to any of the previous ones I have

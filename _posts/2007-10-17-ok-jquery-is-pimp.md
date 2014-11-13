@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: ok-jquery-is-pimp
 ---
-
 Alright, I'm with [Ben Nadel](http://www.bennadel.com) on this one... jQuery is **PIMP!!**
 I started playing with it, and although I have barely scratched the
 surface I can tell that this thing is really powerful. As an example let

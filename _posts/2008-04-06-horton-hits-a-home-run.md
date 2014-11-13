@@ -7,7 +7,6 @@ status: Published
 tags: movies
 slug: horton-hits-a-home-run
 ---
-
 As a loveable classic of my childhood, I approached the movie "Horton
 Hears A Who" with caution. It is not uncommon for Hollywood to screw up
 movie renditions of things that I cherish. Ok, so maybe cherish is a

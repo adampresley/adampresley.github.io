@@ -7,7 +7,6 @@ status: Published
 tags: development java
 slug: download-a-file-from-a-url-in-java
 ---
-
 I was approached tonight with a question on how one could download a
 file from a specific URL in Java. I had never done this in Java before,
 but I have done this very same task in C#, so I figured it couldn't be

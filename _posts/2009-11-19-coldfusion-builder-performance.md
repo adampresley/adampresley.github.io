@@ -7,7 +7,6 @@ status: Published
 tags: development tools eclipse
 slug: coldfusion-builder-performance
 ---
-
 I don't know about you guys, but I run into horrible performance issues
 as I use ColdFusion Builder, or most other Eclipse-based IDEs, as I use
 them more over time, add more projects, etc... After researching I've

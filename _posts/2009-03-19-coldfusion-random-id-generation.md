@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: coldfusion-random-id-generation
 ---
-
 Had a situation at work today where I needed a quasi-random ID to store
 as a "key" in the database. This key would be handed to users for their
 use over a given session for webservices.  

@@ -7,7 +7,6 @@ status: Published
 tags: development groovy coldfusion java
 slug: language-comparison-compute-factorial
 ---
-
 A friend of mine is in school and taking some classes in Java, and also
 happens to be learning ColdFusion on the side. He was talking about the
 class and how they were learning about recursion and how they used the

@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion couchdb
 slug: my-resume-the-code-and-summary
 ---
-
 Back by popular demand I have put the code for my online resume
 application up for [download](http://dl.dropbox.com/u/5726689/blog-downloads/resume.adampresley.com.zip)!
 Not too long ago I re-created my online resume in Railo using the wonderful small FW/1 framework. For the

@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion reflection
 slug: reflection-in-coldfusion
 ---
-
 So I was reading a blog entry on Ben Nadel's site about him trying to do
 function pointers in ColdFusion. It seems that a solution was never
 presented to him, though I am not sure as the entry is nearly a month

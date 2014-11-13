@@ -7,7 +7,6 @@ status: Published
 tags: games nintendo
 slug: brawl-is-fun-if-you-can-connect
 ---
-
 So my brother, his friend, and I tried to all hook up and have a nice
 Super Smash Brothers Brawl beat-em up session on our Wii's tonight.
 Didn't happen. Instead we spent over an hour trying to connect to each

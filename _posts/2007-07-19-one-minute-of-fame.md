@@ -7,7 +7,6 @@ status: Published
 tags: general
 slug: one-minute-of-fame
 ---
-
 Yes, some people get their 5 minutes of fame. Me, I got my 1 minute of
 fame. How? At NASA we were preparing to get on the Tram for the tour and
 one of the kids running the Tram schedule looks and points at my

@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: dfw-cfug-the-strategy-pattern
 ---
-
 Like to send out a thanks to Dave Shuck
 (<http://daveshuck.instantspot.com/blog/>) for his presentation tonight
 on the Strategy Pattern. Last month Dave suggested that each month

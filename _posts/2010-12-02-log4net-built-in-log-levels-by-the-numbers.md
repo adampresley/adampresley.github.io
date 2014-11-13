@@ -7,7 +7,6 @@ status: Published
 tags: development c#
 slug: log4net-built-in-log-levels-by-the-numbers
 ---
-
 I had the pleasure of using the .NET port of the very popular and
 powerful log4j library called [log4net](http://logging.apache.org/log4net/index.html).
 I've found it as powerful and enjoyable as log4j and it has **greatly**

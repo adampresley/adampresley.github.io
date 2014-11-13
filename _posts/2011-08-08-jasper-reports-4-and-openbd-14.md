@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion openbd
 slug: jasper-reports-4-and-openbd-14
 ---
-
 I've been playing with Jasper Reports lately as a solution for handling
 both pre-build and custom reports for customers in my application. The
 first hurdle to overcome was learning how to actually build a report

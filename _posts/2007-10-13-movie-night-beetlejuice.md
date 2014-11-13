@@ -7,7 +7,6 @@ status: Published
 tags: general culture movies
 slug: movie-night-beetlejuice
 ---
-
 Last night was movie night. Again Maryanne and I hosted a movie night
 starring the classic wacky movie, Beetlejuice. I forgot how fun that
 movie is. What a blast! Katie and Tim from work made it, as well as

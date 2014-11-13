@@ -7,7 +7,6 @@ status: Published
 tags: general funny
 slug: strongbad-shows-us-what-death-metal-is
 ---
-
 Great video from the ever-funny Strongbad on what makes a death metal
 artist and video, and how to go about accomplishing your dreams of
 becoming a death metal band.

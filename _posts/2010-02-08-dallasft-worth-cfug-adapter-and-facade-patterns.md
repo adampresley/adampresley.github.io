@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion pattern
 slug: dallasft-worth-cfug-adapter-and-facade-patterns
 ---
-
 Join me tomorrow night at the Dallas/Ft. Worth ColdFusion User Group
 meeting where Dave Shuck will be presenting a beginner's introduction to
 ColdSpring and dependency injection, following by yours truly presenting

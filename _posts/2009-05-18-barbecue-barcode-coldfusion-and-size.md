@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: barbecue-barcode-coldfusion-and-size
 ---
-
 Swithin writes:
 
 > Can the width and/or height parameters be passed in the

@@ -7,7 +7,6 @@ status: Published
 tags: development javascript
 slug: quick-dirty-field-tracker-in-javascript-and-extjs
 ---
-
 Here's a quick tidbit. I was asked if I had a quick way to track changes
 on an old, existing page in an application. Once a Cancel button was
 clicked, or the user tried to close the browser, the developer wanted to

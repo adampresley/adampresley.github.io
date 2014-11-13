@@ -7,7 +7,6 @@ status: Published
 tags: general culture
 slug: hawaiian-falls
 ---
-
 Dear Maryanne, Taylor, and Aaliyah,  
 
 I just wanted to write and say that I had a really great time at

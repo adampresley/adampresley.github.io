@@ -7,7 +7,6 @@ status: Published
 tags: technology general conference
 slug: dallas-techfest-2010
 ---
-
 Yesterday I had the pleasure of attending and speaking at Dallas
 TechFest 2010. I presented on taking an existing ColdFusion application
 and spicing it up incrementally using [jQuery](http://jquery.com), the hottest JavaScript

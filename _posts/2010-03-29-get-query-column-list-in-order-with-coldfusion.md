@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: get-query-column-list-in-order-with-coldfusion
 ---
-
 Don't know if you've ever noticed, but it has been a long time behavior
 that ColdFusion will alphabetize the order of columns in a query result
 set. If you are working with queries in a manner where order is

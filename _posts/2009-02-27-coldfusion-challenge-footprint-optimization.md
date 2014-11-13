@@ -7,7 +7,6 @@ status: Published
 tags: development programming coldfusion
 slug: coldfusion-challenge-footprint-optimization
 ---
-
 The heat is on! (*note* actually, I'm freezing right now, our office
 air is on, and it's 50 degrees outside). But I digress... The HEAT IS
 ON! I have initiated a code challenge at work this week. I work for a

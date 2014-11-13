@@ -7,7 +7,6 @@ status: Published
 tags: development groovy coldfusion
 slug: building-a-recursive-structure-using-groovy-in-coldfusion
 ---
-
 Last night I worked on a particular problem where I had a database table
 that represented a hierarchy of product types that looks like this.  
   

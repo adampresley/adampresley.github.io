@@ -7,7 +7,6 @@ status: Published
 tags: tools plugins sublime
 slug: july-updates-for-sublime-text-view-in-browser-plugin
 ---
-
 As some of you may know I wrote and maintain a plugin for the popular
 and excellent [Sublime Text 2](http://www.sublimetext.com/) text editor
 called [View In Browser](http://adampresley.github.io/sublime-view-in-browser/).

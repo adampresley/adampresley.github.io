@@ -7,7 +7,6 @@ status: Published
 tags: gaming
 slug: star-wars-the-force-unleashed-demo
 ---
-
 ![Star Wars: The Force Unleashed](http://s3.amazonaws.com/www.adampresley.com/posts/star-wars-the-force-unleashed.jpg)
 
 I downloaded the demo for Star Wars: The Force Unleashed today on my

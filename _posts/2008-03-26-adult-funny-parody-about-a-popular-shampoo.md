@@ -7,7 +7,6 @@ status: Published
 tags: fun funny
 slug: adult-funny-parody-about-a-popular-shampoo
 ---
-
 Here's a pretty funny video that parodies a very popular shampoo line of
 commercials (*cough* Herbal *cough* Essences). Have to say that the
 result seems fairly accurate, assuming that the product would actually

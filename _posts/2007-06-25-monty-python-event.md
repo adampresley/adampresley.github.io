@@ -7,7 +7,6 @@ status: Published
 tags: culture movies
 slug: monty-python-event
 ---
-
 This last Saturday night Maryanne and I hosted a movie watching party.
 We invited several people but ended up with most not able to show, or
 unable to at the last minute due to shifts in priority and schedule.

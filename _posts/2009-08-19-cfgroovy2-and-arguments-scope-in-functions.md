@@ -7,7 +7,6 @@ status: Published
 tags: development groovy coldfusion
 slug: cfgroovy2-and-arguments-scope-in-functions
 ---
-
 Here lately I've been dabbling in Groovy and have started using Barney
 Boisvert's excellent [CFGroovy2](http://www.barneyb.com/barneyblog/projects/cfgroovy2/) 
 custom tag which handles the hard part of running embedded Groovy 

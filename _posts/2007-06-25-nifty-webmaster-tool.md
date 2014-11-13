@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: nifty-webmaster-tool
 ---
-
 Came across this link on the programming forum
 <http://www.dreamincode.net> called Pingdom. The link is
 <http://tools.pingdom.com>. Check it out.

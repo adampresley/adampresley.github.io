@@ -7,7 +7,6 @@ status: Published
 tags: culture movies
 slug: pirates-of-the-caribbean-at-worlds-end
 ---
-
 **WARNING: Some Spoilers in here. Do not read if you don't want to hear
 about the movie before seeing.**  
   

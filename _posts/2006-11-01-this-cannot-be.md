@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: this-cannot-be
 ---
-
 NOOOO!!! Microsoft is an evil empire which represents all that is base
 in the corporate world! Why? I dunno... I just wanted to sound like
 everyone else. But I digress... Microsoft and Zend Technologies, Inc.

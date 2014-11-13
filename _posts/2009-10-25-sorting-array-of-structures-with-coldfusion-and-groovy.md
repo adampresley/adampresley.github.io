@@ -7,7 +7,6 @@ status: Published
 tags: development groovy coldfusion java
 slug: sorting-array-of-structures-with-coldfusion-and-groovy
 ---
-
 <img src="http://s3.amazonaws.com/www.adampresley.com/posts/javabookcollection.jpeg" class="pull-right" style="margin-bottom: 10px; margin-left: 10px;" />
 Today I had to work on a bit of code that dealt
 with trying to tie in merchandising promotions against a shopping cart.

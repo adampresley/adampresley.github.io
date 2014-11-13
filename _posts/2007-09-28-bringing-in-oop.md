@@ -7,7 +7,6 @@ status: Published
 tags: development frameworks oop
 slug: bringing-in-oop
 ---
-
 At work for the last couple of weeks a coworker has been working very
 hard to design a custom framework for the web based application that we
 all develop for and support. This is no simple task seeing that the

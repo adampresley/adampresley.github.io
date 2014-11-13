@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: how-i-got-started-in-coldfusion
 ---
-
 Steve Bryant came up with the idea to, on August 1st, post a blog entry
 on [How I Got Started in ColdFusion](http://www.bryantwebconsulting.com/blog/index.cfm/2011/7/20/August-1-2011-is-How-I-Started-ColdFusion-Day). So I will do just that.  
   

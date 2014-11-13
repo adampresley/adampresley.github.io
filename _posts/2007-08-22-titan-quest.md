@@ -7,7 +7,6 @@ status: Published
 tags: gaming
 slug: titan-quest
 ---
-
 For those of us that play video games, raise your hand if you remember
 playing Diablo and Diablo II. Yeah, me too. What **AWESOME** games! The
 action + rpg elemnts made it a fantastical addiction that kept many a

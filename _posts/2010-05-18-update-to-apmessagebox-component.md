@@ -7,7 +7,6 @@ status: Published
 tags: development jquery javascript
 slug: update-to-apmessagebox-component
 ---
-
 Wanted to throw out a quick blurb that I have updated my apMessageBox
 component. The newest version makes usage a little easier by providing
 convenience methods to display an error or information dialog, as well

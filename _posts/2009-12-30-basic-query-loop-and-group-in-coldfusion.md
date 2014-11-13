@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: basic-query-loop-and-group-in-coldfusion
 ---
-
 While going over the [DreamInCode.net](http://www.dreamincode.net) forums I 
 came across this question.   
 

@@ -7,7 +7,6 @@ status: Published
 tags: development
 slug: character-class-creator
 ---
-
 ## Notice: This project no longer exists
 
 Out of necessity I have created a little Windows application which will

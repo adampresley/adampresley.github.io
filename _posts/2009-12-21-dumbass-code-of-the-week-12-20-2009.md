@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion
 slug: dumbass-code-of-the-week-12-20-2009
 ---
-
 Please, someone explain to me why this was necessary. The first line of
 code is just a sample setup. The real code has a loop over some orders,
 assembles this string, and adds the word "NewOrder" at the end of it. It

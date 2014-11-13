@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion dumbass
 slug: dumbass-code-of-the-week-10052009
 ---
-
 Today's **Dumbass Code of the Week** is brought to you by code from my
 current job. This code, written circa 2002, is real, and has not been
 modified or harmed in any way during the posting of this blog entry. Are

@@ -7,7 +7,6 @@ status: Published
 tags: development coldfusion mura
 slug: ses-urls-with-mura-on-tomcat
 ---
-
 Tonight as I'm setting up a new server I wanted to make sure I had URL
 rewrite ability. Normally this is no issue as I use Apache for most
 anything web server related. However this time I am setting up a Mura
