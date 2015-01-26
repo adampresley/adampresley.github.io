@@ -7,6 +7,7 @@ tags: development golang svn
 comments: true
 ---
 ![Man with headphones](/assets/adampresley/images/posts/90H.jpg)
+*Image copyright [Ryan McGuire](http://www.gratisography.com/)*
 
 *This is part one of a two part series on how I created a Subversion post-commit hook using Go, and post a message in a HipChat room. I did this for the teams at my day job. **Please note that certain pieces of code have been changed to protect the innocent, and opinions here do not necessarily reflect those of my employer.***
 
