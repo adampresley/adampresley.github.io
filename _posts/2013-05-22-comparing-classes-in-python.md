@@ -13,8 +13,8 @@ override the **Equals()** method. Python naturally has a way to make
 your class comparable by using a magic method named **__eq__**. It
 takes an argument of the object you are comparing against, as well as
 the standard reference to *self*. In it you return *True* or *False* to
-indicate if the object passed in is equal to itself. Here's a sample.  
-  
+indicate if the object passed in is equal to itself. Here's a sample.
+
 {% highlight python %}
 class Sample():
    def __init__(self):
@@ -22,15 +22,17 @@ class Sample():
       self.age = 0
 
    def __eq__(self, other):
-      return (self.name == other.name and 
+      return (self.name == other.name and
        self.age == other.age)
 {% endhighlight %}
+
+<!-- excerpt -->
 
 The above class has a constructor method as defined by **__init__**
 that sets up two properties named *name* and *age*. It then defines the
 **__eq__** magic method. This is called automatically when you
 attempt to compare the equality of two objects of type **Sample** like
-so.  
+so.
 
 {% highlight python %}
 a = Sample()

@@ -11,6 +11,8 @@ A couple of days ago I posted an entry on some basic functional-style
 programming constructs that I've been *slowly* learning. I am back
 to post part 2. Here's the refresher.
 
+<!-- excerpt -->
+
 Here is the JSON data that I was working with. It was being used
 to feed a line chart.
 

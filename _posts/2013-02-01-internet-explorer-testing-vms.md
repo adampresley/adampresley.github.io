@@ -13,8 +13,10 @@ help test and detect issues in older IE versions, as well as provide a
 cloud-based testing suite offering. The particular feature I find most
 cool is the ability to download VM appliances for IE versions 6-10. Not
 only are VMs available for Windows hosts but they also provide Linux
-hosts!  
-  
+hosts!
+
+<!-- excerpt -->
+
 To start visit <http://www.modern.ie/virtualization-tools>. On the right
 hand side of the page you find a section named **Local virtualization**.
 Let's say you want to test your web application in IE 6 on a Linux host.
@@ -24,8 +26,8 @@ labelled **Select Virtualization Platform** where you would select
 *VirtualBox for Linux*. This will open up a whole list of IE versions
 you can download. In this example you would select **IE6 - WinXP**. This
 will download a VM appliance that you can import into Oracle VirtualBox.
-To do that:  
-  
+To do that:
+
 1. Extract the appliance file (.OVA) from the ZIP file you downloaded
 * Open VirtualBox
 * Go to File -\> Import Appliance
@@ -35,7 +37,7 @@ To do that:
 Once these steps are complete you will have a new VM called **IE6 -
 WinXP**. If you start the VM now you might find that IE6 won't be able
 to browse to any websites. This is most likely due to how the network
-adapter for this VM is setup. To address this follow these steps:  
+adapter for this VM is setup. To address this follow these steps:
 
 1. Right click on the VM named **IE6 - WinXP** and select *Settings...*
 * In the setting dialog select *Network* from the list on the left

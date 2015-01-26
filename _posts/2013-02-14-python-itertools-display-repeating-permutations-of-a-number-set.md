@@ -14,6 +14,8 @@ had four buttons on it that could be used to enter a passcode. At the time I
 crafted a bit of Java code to display all possible combinations that could be
 entered to unlock and open the safe.
 
+<!-- excerpt -->
+
 Now in my quest to explore the Python **itertools** module I wanted to
 try this exercise again. Turns out that Python's **itertools** module
 makes this easy with a method called [product()](http://docs.python.org/2/library/itertools.html#itertools.product). A product [is

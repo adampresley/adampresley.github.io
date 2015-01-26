@@ -14,6 +14,8 @@ to broaden my horizons as often as I can, and I find functional
 programming concepts difficult, so that seems like a logical
 place to start!
 
+<!-- excerpt -->
+
 The starting point for me was chapter 6 of the online book
 *Eloquent JavaScript* (<http://eloquentjavascript.net/chapter6.html>).
 In chapter 6 the author provides a gentle introduction to

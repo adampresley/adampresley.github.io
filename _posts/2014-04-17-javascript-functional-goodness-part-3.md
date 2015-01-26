@@ -11,6 +11,8 @@ More and more I am trying to stretch my "functional muscles" any time I have a c
 
 ![S3 Browser Screenshot](http://s3.amazonaws.com/www.adampresley.com/posts/amazon-s3-browser-1.png)
 
+<!-- excerpt -->
+
 When the widget is initialized it makes a call to a RESTful endpoint that is responsible for authenticating credentials and retrieving bucket contents. The result of that call returns data that looks something like this.
 
 {% highlight javascript %}
@@ -44,7 +46,7 @@ Next up we need a method to iterate over each item in our returned dataset and c
 
 {% highlight javascript %}
 $.map(data, _createThumbnailItemDom)
-{% endhighlight %} 
+{% endhighlight %}
 
 The above line of code will return a new array with each item in the old array transformed into DOM elements. Now we need to append all those elements to a target element. So what we will do is create a method that takes a reference to the target element and the array of AJAX data. We then will iterate over that dataset using jQuery's **$.each()** method. As you may recall the **$.each()** method takes two arguments. The first is an array, and the second is a function that takes an index and a current item. In this function you do whatever you wish with the item. In our case, we want to append it to the target DOM element.
 
@@ -74,7 +76,7 @@ And that's it! Below is the full code for the S3 Browser widget so far. I'm sure
  * same options available to the dialog widget are available in the S3Browser
  * widget.
  *
- * When an image is selected in the S3 Browser an event labeled 
+ * When an image is selected in the S3 Browser an event labeled
  * *s3browser-widget.select* is fired.
  *
  * Exports:
@@ -103,8 +105,8 @@ define(
     ],
     function($, PubSub) {
         "use strict";
-        
-        var 
+
+        var
             /**
              * Fuction: _createDom
              * Method that creates the DOM for a single instance of this dialog widget.
@@ -130,7 +132,7 @@ define(
                 dialogEl.html(body);
 
                 /*
-                 * Assign a click event handler to any element with a class of 
+                 * Assign a click event handler to any element with a class of
                  * "s3BrowserWidgetItem" that is a child of our container element.
                  */
                 $(el).on("click", ".s3BrowserWidgetItem", function() {
@@ -142,7 +144,7 @@ define(
             /**
              * Function: _createThumbnailItemDom
              * Creates an individual thumbnail DOM item and returns it.
-             * 
+             *
              * Parameters:
              *    thumbnailUrl - URL to the image thumbnail
              */
@@ -222,7 +224,7 @@ define(
             };
 
         /*
-         * Create the widget in the "adampresley" namespace using the 
+         * Create the widget in the "adampresley" namespace using the
          * jQuery UI WidgetFactory.
          */
         $.widget("adampresley.S3Browser", $.ui.dialog, {

@@ -25,6 +25,8 @@ func main() {
 
 The above example shows the a basic case of listening on all IP address on port 8080, using the default *ServeMux* to handle routes. This is all well good, until the point where you may need more flexibility. I have reached that point.
 
+<!-- excerpt -->
+
 Now I want to build a package that sets up my routes and returns a *Server* object that I can use in more than one project. With this I can create multiple projects that listen and serve up the same web content and write that code that serves it all up just once. To do this you need a function that can return an *Http.Server* structure, with which you can then listen to requests with. Here's how that works using [Gorilla Mux](https://github.com/gorilla/mux) and the basic Go standard library.
 
 {% highlight go %}

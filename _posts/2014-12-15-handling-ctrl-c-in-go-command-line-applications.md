@@ -8,6 +8,8 @@ comments: true
 ---
 Command line and server-style application often allow you to press a key combination, such as **CTRL+C** to gracefully exit. In Go this is a pretty easy task to accomplish, and in this entry I will show you how you can add this ability in your own applications.
 
+<!-- excerpt -->
+
 First off, **CTRL+C** is referred to, especially in the \*nix world, a **signal**. The proper name for the signal sent to your application when you press **CTRL+C** is **SIGINT**. This is short for an *interrupt signal*. The Go standard library has support for receiving and handling signals in your application.
 
 To handle **SIGINT** in your application you need to perform three steps
@@ -16,7 +18,7 @@ To handle **SIGINT** in your application you need to perform three steps
 2. Setup the notification to be sent to that channel
 3. Have a goroutine that loops and waits until something is received on that channel
 
-For this example let's look at how we can listen for **SIGINT** and simply exit the application when that signal is received. 
+For this example let's look at how we can listen for **SIGINT** and simply exit the application when that signal is received.
 
 {% highlight go %}
 import (

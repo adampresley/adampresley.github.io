@@ -11,6 +11,8 @@ Since I write my blog posts in Markdown format I decided I wanted a way to backu
 
 ![Screenshot of Export Interface](/assets/adampresley/images/posts/texo-export-markdown-1.png)
 
+<!-- excerpt -->
+
 When I click on the button in the above screenshot all my blog entries are saved as Markdown files, zipped up, and presented to me as a download. The final zip is organized into folders of **YEAR**/**MONTH**.
 
 ![Export Zip File](/assets/adampresley/images/posts/text-export-markdown-2.png)

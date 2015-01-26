@@ -6,11 +6,13 @@ author: Adam Presley
 tags: development golang deployment
 comments: true
 ---
-For the last week or so I've been converting a site I manage from WordPress to a simple Go application. There are three reasons I want to do this. 
+For the last week or so I've been converting a site I manage from WordPress to a simple Go application. There are three reasons I want to do this.
 
 1. WordPress has been extreme overkill for what I actually need
 2. Performance. WordPress on a shared host is just not fast enough for what I deem to be a super simple site
 3. I wanted to build something other than a server-style application in Go and I really enjoy writing Go code!
+
+<!-- excerpt -->
 
 With these points in mind I set out to write the site using Go, the standard template library that comes with Go's standard library, and Gorilla Mux for better routing setup. I did end up building a little bit of structure to support pre-loading layout files, and also implemented some great examples I found demonstrating how one can setup variable placeholders for insertion into a layout HTML file. But for the most part I kept the application fairly simple. I also found the need for a basic "session" management, and this is where one might think Go's standard library is lacking. It did not take long to find a simple session management library by the same people that do the Gorilla Muxer, which can be found [here](https://github.com/gorilla/sessions).
 
@@ -28,6 +30,6 @@ Mark's example shows the Go application binding to an environment variable named
 My application was binding to **localhost** explicitly. This is a no-no with Heroku. Instead use something like this: **fmt.Sprintf(":%s", os.Getenv("PORT"))**, which will bind to available IP address. In other words, Heroku manages this, and your application needs to let it do its thing.
 
 ### Results
-I am very happy with the results. Even on the free Heroku tier I'm finding the Go version of this site's requests run in half the time of the WordPress version running on shared hosting. To see it in action (for now), visit [https://clearbrookband.herokuapp.com](https://clearbrookband.herokuapp.com). 
+I am very happy with the results. Even on the free Heroku tier I'm finding the Go version of this site's requests run in half the time of the WordPress version running on shared hosting. To see it in action (for now), visit [https://clearbrookband.herokuapp.com](https://clearbrookband.herokuapp.com).
 
 Cheers, and happy coding!

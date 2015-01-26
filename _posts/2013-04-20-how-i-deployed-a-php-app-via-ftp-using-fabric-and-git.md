@@ -16,6 +16,8 @@ that there are moments when I forget a file or two. Of course the
 application blows up and I have to view my Git log to see what files I
 may have missed when uploading the code.
 
+<!-- excerpt -->
+
 Today I decided to do something about this little problem. Having
 recently discovered Fabric, the deployment framework and library for
 Python, I started crafting a script to automate the tasks of deployment.

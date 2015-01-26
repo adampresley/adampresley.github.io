@@ -16,6 +16,8 @@ project with contributors across the globe or co-located team members
 in an enterprise organization the more critical eyes you have on a given
 piece of code the better the outcome.
 
+<!-- excerpt -->
+
 Let us start with a definition of code review. Wikipedia defines code review as
 a "...systematic examination (often know as peer review) of computer source code.
 It is intended to find and fix mistakes overlooked in the initial development

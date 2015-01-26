@@ -10,8 +10,8 @@ slug: making-a-collection-object-in-php
 Recently I was working on a bit of code where I had an array of
 structures (a map or dictionary) that was the result of a query to a
 database. This data represented a set of statuses, each record with an
-ID and a status. Imagine it looking something like this.  
-  
+ID and a status. Imagine it looking something like this.
+
 {% highlight javascript %}
 [
 	{ "id": 1, "status": "Active" },
@@ -20,13 +20,15 @@ ID and a status. Imagine it looking something like this.
 ]
 {% endhighlight %}
 
+<!-- excerpt -->
+
 I had been asked to create some UI elements that would filter a page
 based on a couple of specific statuses. Knowing in the past how these
 statuses had changed and how the list had grown over time (the list
 above being merely a sample) I did not want to hard code the IDs into
 button links. Instead I preferred to have a way to refer to the status
-by name and get the ID back.  
-  
+by name and get the ID back.
+
 This problem is simple enough to address. Simply do an
 **array_search()** or **array_filter()** and call it a day. In this
 case though there is a service class that has a method to return an
@@ -34,8 +36,8 @@ array of those statuses. My first thought was to make a new method in
 this service class that would take this array of statuses and a status
 name and return the ID. However it occurred to me that I could create a
 new class to represent a *collection* of status structures. Why would I
-do that? This actually affords me a couple of abilities.  
-  
+do that? This actually affords me a couple of abilities.
+
 1.  The class could be created so I could iterate over it like a regular
     array
 *   I could also make it so I could reference it like an array by index
@@ -46,12 +48,12 @@ iterate over like an array in a **foreach** loop, and attach methods to
 for working with a collection of statuses. At this point I had decided
 this was the course of action I wanted to take. To do this there are two
 interfaces in PHP you need to implement: **ArrayAccess** and
-**Iterator**.   
-  
+**Iterator**.
+
 The first interface to implement is **ArrayAccess**. This allows you to
 reference an instance of your class as an array. This means you can do
-something like this.  
-  
+something like this.
+
 {% highlight php %}
 <?php
 	$statusCollection = new StatusCollection();
@@ -65,10 +67,10 @@ something like this.
 Notice how we can add to the object like an array, and we can reference
 by index just like an array. So how do we make a class to do this?
 Implement the **ArrayAccess** interface. Let's see how we would do that
-in our **StatusCollection** class.  
+in our **StatusCollection** class.
 
 {% highlight php %}
-<?php  
+<?php
 
 class StatusCollection implements ArrayAccess {
    private $statuses = array();
@@ -105,12 +107,12 @@ First and foremost refer to [http://us2.php.net/manual/en/class.arrayaccess.php]
 the **ArrayAccess** interface. It dictates that your class needs to
 implement four methods: *offstExists()*, *offsetGet()*, *offsetSet()*,
 and *offsetUnset*. These methods are called when you perform array-like
-operations on your class instance variable.  
-  
+operations on your class instance variable.
+
 Now we'd like to make it so we can easily iterate over our class
 instance variable much like any other array. Basically we want to be
-able to do this.  
-  
+able to do this.
+
 {% highlight php %}
 <?php
 
@@ -127,8 +129,8 @@ interface requires we implement five more methods: *current()*, *key()*,
 iterate over an object that implements **Iterator** these methods are
 called. The idea here is that we'll keep an internal variable to track
 the current iterator position, so when a loop asks for another item we
-know which index to return. Here's what that looks like.  
-  
+know which index to return. Here's what that looks like.
+
 {% highlight php %}
 <?php
 
@@ -188,8 +190,8 @@ class StatusCollection implements ArrayAccess, Iterator {
 Finally in my 3rd bullet point I said that I wanted a method to get the
 ID of a particular status by name. Here I will simply add a new method
 called *getIdByName()* which will do a quick loop to find our status. If
-the ID can't be located an exception is thrown.  
-  
+the ID can't be located an exception is thrown.
+
 {% highlight php %}
 <?php
 
@@ -254,8 +256,8 @@ class StatusCollection implements ArrayAccess, Iterator {
 ?>
 {% endhighlight %}
 
-Cool, so now let's see a contrived example of how one might use this.  
-	
+Cool, so now let's see a contrived example of how one might use this.
+
 {% highlight php %}
 <?php
 
@@ -265,12 +267,12 @@ Cool, so now let's see a contrived example of how one might use this.
 	}
 </select>
 
-<button name="btnShowActive" 
-	id="btnShowActive" 
+<button name="btnShowActive"
+	id="btnShowActive"
 	onclick="window.location='/?statusId=<?= $statusCollection.getIdByStatus('Active') ?>';">Show Active
 </button>
 
 ?>
 {% endhighlight %}
-  
-Happy coding!  
+
+Happy coding!

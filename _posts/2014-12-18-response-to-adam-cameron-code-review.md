@@ -8,6 +8,8 @@ comments: true
 ---
 A few weeks ago I submitted a [response]({% post_url 2014-11-10-a-go-weekend-puzzler %}) to a code puzzle on [Adam Cameron's blog](http://blog.adamcameron.me) that I wrote using Go. He has (finally) submitted a review! First let me say that it is about time Mr. Cameron! I have waited with bated breath! That review can be read [here](http://blog.adamcameron.me/2014/12/weekend-quiz-adam-presleys-answer-go.html). In this post I will comment on his commentary.
 
+<!-- excerpt -->
+
 #### YAGNI
 Mr. Cameron asserts in his post that I had too much "scope creep", went a "bit overboard", and that there was simply no need to go to such lengths for a simple puzzle. I will confess that I certainly took this to the next level, and certainly without prompt. In fact, I violated the YAGNI principle. For those who are unfamiliar with YAGNI it stands for *You Ain't Gonna Need It*. This principle pretty much states that if you aren't going to need it, don't build it. There was no indication in the specifications that I would need parallel processing, or that I would have large data sets to work with. I didn't violate the specifications per se, but I certainly went far above what was really **needed**.
 

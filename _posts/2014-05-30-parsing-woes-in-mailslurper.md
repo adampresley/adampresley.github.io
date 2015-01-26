@@ -7,7 +7,9 @@ status: Published
 tags: development golang
 slug: parsing-woes-in-mailslurper
 ---
-Tonight as I was working a bug in MailSlurper I quickly came to the realization that *my parsing routine sucks*. The current version is passable for simple text emails or basic HTML emails. But the moment you add attachments or inline images it all goes downhill. The further I dove into this problem the more I also realized that RFC 2822, or *Internet Message Format* and MIME are also a little dated and weird. 
+Tonight as I was working a bug in MailSlurper I quickly came to the realization that *my parsing routine sucks*. The current version is passable for simple text emails or basic HTML emails. But the moment you add attachments or inline images it all goes downhill. The further I dove into this problem the more I also realized that RFC 2822, or *Internet Message Format* and MIME are also a little dated and weird.
+
+<!-- excerpt -->
 
 Basically a mail is broken down into two major parts. The first part is headers. Headers are key/value pairs separated by a colon, each set separated by a carriage return and line feed (\r\n for you nerds out there). This describes what to expect, such as the subject of the message, the sender, recipients, and more. After that another set of **\r\n** indicates we are ready for the second half of the mail, which is called the **body**. This contains the content of your email message. It also houses an HTML version of your mail if you used fancy things like links and italics, and it will also have Base64 encoded data for each attachment in your email.
 
