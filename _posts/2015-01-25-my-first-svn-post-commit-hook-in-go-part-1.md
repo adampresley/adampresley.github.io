@@ -11,9 +11,9 @@ comments: true
 
 *This is part one of a two part series on how I created a Subversion post-commit hook using Go, and post a message in a HipChat room. I did this for the teams at my day job. **Please note that certain pieces of code have been changed to protect the innocent, and opinions here do not necessarily reflect those of my employer.***
 
-<!-- excerpt -->
-
 There has been an ongoing effort with the various teams I work with to improve code review. To provide more visibility to code being committed to our trunk branch in Subversion I decided a post-commit hook could help us achieve that visibility. This post-commit hook would send a message to a HipChat room, dedicated to reviewing code changes and information about each commit. This would allow teams to know when changes were made to our trunk branch and have the chance to review the code across teams. This strategy has been an effective one in reducing errors in code and improving overall code quality. This post will deal with utilizing Subversion to retrieve information about a commit. This information is what will be used in part 2 to post a message in HipChat.
+
+<!-- excerpt -->
 
 When you commit code into Subversion a series of events occur. The final event, and the one we are most interested in for this exercise, is the **post-commit**. Once a commit is complete and recorded to your Subversion repository Subversion will execute a post-commit handler if one is defined. This is usually setup in the form of a shell script or executable. When Subversion executes the post-commit handler it provides two pieces of useful information: ```repository path``` and the ```revision number```. Armed with this we can query Subversion for more information about the commit, such as who committed the work, and the log message that goes along with it. So the following code will demonstrate how we can get all this information. Note that this code isn't the prettiest and could use some improvement, and it also requires that you have the SVN command line tools installed at a specific location.
 
@@ -261,3 +261,4 @@ func main() {
 {% endhighlight %}
 
 Until the next installment, happy coding!
+
