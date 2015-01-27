@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Using A Middleware in Your Go Web Applications
-date: 2015-01-25 21:58
+date: 2015-02-08 09:00
 author: Adam Presley
 tags: development golang
 comments: true
