@@ -262,3 +262,4 @@ func main() {
 
 Until the next installment, happy coding!
 
+[Part 2 is here]({% post_url 2015-01-30-my-first-svn-post-commit-hook-in-go-part-2 %})
