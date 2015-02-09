@@ -116,6 +116,7 @@ import (
    "github.com/adampresley/myproject/controllers/versionController"
 
    "github.com/gorilla/mux"
+   "github.com/justinas/alice"
 )
 
 func setupHttpRouter() http.Handler {
