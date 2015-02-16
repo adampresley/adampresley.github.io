@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Waiting For Goroutines to Finish Running Before Exiting
-date: 2015-02-15 22:00
+date: 2015-02-16 08:32
 author: Adam Presley
 tags: development golang
 comments: true
