@@ -4,12 +4,12 @@ title: Enhancing Groovy - SHA1 Hash Strings
 date: 2010-12-01 21:06:00
 author: Adam Presley
 status: Published
-tags: groovy gevelopment
+tags: groovy development
 slug: enhancing-groovy-sha1-hash-strings
 ---
 Continuing the series of enhancing Groovy's core language classes, here
 is a snippet that allows a **String** to be hashed using the SHA1
-algorithm. Let's look at the code first.  
+algorithm. Let's look at the code first.
 
 {% highlight groovy %}
 import java.security.*
@@ -47,7 +47,7 @@ the byte array of the hashed string, as returned by
 and in turn translate that into a string of Base 16 digits. Also notice
 the **padLeft**. That makes sure that we have 40 digits, each
 hexadecimal character being 4-bits, giving us 160-bits. Check Wikipedia
-and you'll see that the SHA1 algorithm requires an output of 160-bits.  
-  
+and you'll see that the SHA1 algorithm requires an output of 160-bits.
+
 This technique could be easily applied to any other hashing routine such
 as MD5. Happy coding, and happy extending Groovy!
