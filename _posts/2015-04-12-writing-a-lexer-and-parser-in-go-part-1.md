@@ -9,7 +9,7 @@ comments: true
 In this three-part series I will talk about building a simple lexer and parser in [Go](http://golang.org). The work presented here is heavily based on a 2011 presentation by Rob Pike titled [Lexical Scanning in Go](http://cuddle.googlecode.com/hg/talk/lex.html#landing-slide). This series will conclude with a fully functional set of code that can parse INI files. The series breaks down into these three parts.
 
 1. Introduction to Lexing, Parsing, and Getting Started
-2. Performing Lexical Analysis
+2. [Performing Lexical Analysis](({% post_url 2015-05-12-writing-a-lexer-and-parser-in-go-part-2 %}))
 3. Parsing the Results
 
 <!-- excerpt -->
@@ -144,4 +144,4 @@ const NEWLINE string = "\n"
 {% endhighlight %}
 
 ## What's Next?
-Part 2 will be coming one of these days once I have time to write it! The second part will dive into the lexical analysis portion, making use of the token structure we've setup above.
+[Part 2]({% post_url 2015-05-12-writing-a-lexer-and-parser-in-go-part-2 %}) will dive into the lexical analysis portion, making use of the token structure we've setup above.
