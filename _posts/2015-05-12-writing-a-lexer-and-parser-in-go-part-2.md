@@ -253,4 +253,4 @@ func LexValue(lexer *Lexer) LexFn {
 {% endhighlight %}
 
 ## What's Next?
-In part 3 we will look at the final portion where we build the basic parser which uses the lexer to assemble a data structure representing the INI file.
+In [part 3]({% post_url 2015-06-01-writing-a-lexer-and-parser-in-go-part-3 %}) we will look at the final portion where we build the basic parser which uses the lexer to assemble a data structure representing the INI file.

@@ -10,7 +10,7 @@ In this three-part series I will talk about building a simple lexer and parser i
 
 1. Introduction to Lexing, Parsing, and Getting Started
 2. [Performing Lexical Analysis]({% post_url 2015-05-12-writing-a-lexer-and-parser-in-go-part-2 %})
-3. Parsing the Results
+3. [Parsing the Results]({% post_url 2015-06-01-writing-a-lexer-and-parser-in-go-part-3 %})
 
 <!-- excerpt -->
 
