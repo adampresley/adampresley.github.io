@@ -28,7 +28,7 @@ Now if you've done any reading across the internet lately you will find that Goo
 * Fast Compile Time - Go just compiles fast
 * Native - Compiles to a single, native binary, for fast execution and easy distribution
 * Goroutines - Green threads that can communicte over channels, oftentimes avoiding mutexes and locks
-* Garbage Colected - Don't have to deal with manual memory management.
+* Garbage Collected - Don't have to deal with manual memory management.
 
 #### Those Who Do Not Like It
 
