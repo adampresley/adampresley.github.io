@@ -1,5 +1,8 @@
 # visit https://github.com/mojombo/jekyll/wiki/Configuration for more settings
 
+gems:
+  - jekyll-feed
+
 paginate: 10 # pagination based on number of posts
 paginate_path: "page:num"
 exclude: ["README.md", "Gemfile", "Gemfile.lock"] # files to exclude
