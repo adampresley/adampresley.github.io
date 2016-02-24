@@ -1,0 +1,1705 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://adampresley.com/</loc>
+    <lastmod>2015-10-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/mailslurper-1.7-released/</loc>
+    <lastmod>2015-10-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/regarding-shortcuts-in-software-development/</loc>
+    <lastmod>2015-09-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/regarding-spaces/</loc>
+    <lastmod>2015-09-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sorting-inventory-items-in-go/</loc>
+    <lastmod>2015-09-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/good-application-development-hygiene/</loc>
+    <lastmod>2015-09-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/experiences-in-writing-an-integration-service-in-go/</loc>
+    <lastmod>2015-06-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/writing-a-lexer-and-parser-in-go-part-3/</loc>
+    <lastmod>2015-06-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/writing-a-lexer-and-parser-in-go-part-2/</loc>
+    <lastmod>2015-05-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/writing-a-lexer-and-parser-in-go-part-1/</loc>
+    <lastmod>2015-04-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/communication-is-an-interesting-thing/</loc>
+    <lastmod>2015-02-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/waiting-for-goroutines-to-finish-running-before-exiting/</loc>
+    <lastmod>2015-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-a-middleware-in-your-go-web-applications/</loc>
+    <lastmod>2015-02-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-first-svn-post-commit-hook-in-go-part-2/</loc>
+    <lastmod>2015-01-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-first-svn-post-commit-hook-in-go-part-1/</loc>
+    <lastmod>2015-01-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/javascript-multiselect-widget-with-no-jquery/</loc>
+    <lastmod>2015-01-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/response-to-adam-cameron-code-review/</loc>
+    <lastmod>2014-12-18T08:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/handling-ctrl-c-in-go-command-line-applications/</loc>
+    <lastmod>2014-12-15T22:31:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/deploying-my-first-go-application-to-heroku/</loc>
+    <lastmod>2014-12-14T19:51:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/returning-an-http-server-from-a-function-in-go/</loc>
+    <lastmod>2014-11-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/no-weapon-formed-debut-album-coming-soon/</loc>
+    <lastmod>2014-11-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ccisd-career-day-2014/</loc>
+    <lastmod>2014-11-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/a-go-weekend-puzzler/</loc>
+    <lastmod>2014-11-10T14:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/writing-your-first-sublime-plugin/</loc>
+    <lastmod>2014-10-22T20:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/mailslurper-4-0-released/</loc>
+    <lastmod>2014-06-05T02:40:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/mailslurper-3-5-released/</loc>
+    <lastmod>2014-06-02T22:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/parsing-woes-in-mailslurper/</loc>
+    <lastmod>2014-05-30T03:37:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/only-saving-when-file-is-modified/</loc>
+    <lastmod>2014-05-15T13:48:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/google-analytics-integrated-into-texo-dashboard/</loc>
+    <lastmod>2014-05-13T04:11:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/exporting-blog-entries-as-markdown/</loc>
+    <lastmod>2014-05-06T05:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/mailslurper-3-released/</loc>
+    <lastmod>2014-05-05T05:23:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/added-amazon-s3-browser-widget-texo/</loc>
+    <lastmod>2014-04-18T05:55:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/javascript-functional-goodness-part-3/</loc>
+    <lastmod>2014-04-17T05:17:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/click-event-scope-jquery-ui-widget-factory/</loc>
+    <lastmod>2014-04-10T02:42:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/blog-engine-update-2/</loc>
+    <lastmod>2014-03-25T05:43:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/javascript-functional-goodness-part-2/</loc>
+    <lastmod>2013-11-15T14:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/javascript-functional-goodness-part-1/</loc>
+    <lastmod>2013-11-13T05:36:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/want-less-software-errors-try-rigorous-code-review/</loc>
+    <lastmod>2013-10-26T04:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/resizing-multiple-images-imagemagick-ubuntu/</loc>
+    <lastmod>2013-07-05T11:52:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/july-updates-for-sublime-text-view-in-browser-plugin/</loc>
+    <lastmod>2013-07-02T13:13:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/making-a-collection-object-in-php/</loc>
+    <lastmod>2013-06-05T07:43:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/decorator-for-serializing-mongodb-dictionaries-to-json-in-python/</loc>
+    <lastmod>2013-06-04T19:48:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/comparing-classes-in-python/</loc>
+    <lastmod>2013-05-22T22:24:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/quick-blurb-on-python-beaker-and-memcached/</loc>
+    <lastmod>2013-05-21T12:55:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git/</loc>
+    <lastmod>2013-04-20T20:58:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/python-itertools-display-repeating-permutations-of-a-number-set/</loc>
+    <lastmod>2013-02-14T07:52:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/python-itertools-filtering-items/</loc>
+    <lastmod>2013-02-12T13:32:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/python-itertools-grouping-an-array-by-key/</loc>
+    <lastmod>2013-02-11T23:13:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/internet-explorer-testing-vms/</loc>
+    <lastmod>2013-02-01T09:17:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/a-good-resource-on-web-app-performance/</loc>
+    <lastmod>2013-01-04T10:43:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sort-a-list-of-strings-starting-with-a-number-in-python/</loc>
+    <lastmod>2012-12-17T13:47:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/a-less-than-pleasant-experience-on-the-kemah-boardwalk/</loc>
+    <lastmod>2012-12-10T02:07:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/generate-a-random-string-in-python/</loc>
+    <lastmod>2012-11-20T21:38:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/placefinder-py-release-v03/</loc>
+    <lastmod>2012-11-08T12:24:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/python-list-comprehension-getting-the-first-matching-item/</loc>
+    <lastmod>2012-11-06T17:35:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/placefinder-py-python-module-is-live/</loc>
+    <lastmod>2012-10-26T12:31:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-first-experience-with-fabric-and-amazon-ec2/</loc>
+    <lastmod>2012-10-17T13:03:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/first-experiences-with-bottlepy/</loc>
+    <lastmod>2012-09-08T10:55:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/grails-problem-transforming-call-sites/</loc>
+    <lastmod>2012-08-29T19:50:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/hr-3523-letter-regarding-cispa/</loc>
+    <lastmod>2012-04-23T22:29:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/rekindling-my-love-affair-with-c-part-1/</loc>
+    <lastmod>2012-04-11T14:51:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/roman-enumeration/</loc>
+    <lastmod>2012-04-03T13:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/opencf-summit-2012/</loc>
+    <lastmod>2012-03-06T09:29:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ooops-skype-and-a-bad-template/</loc>
+    <lastmod>2011-11-10T11:12:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sublime-plugin-compare/</loc>
+    <lastmod>2011-11-08T19:51:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/starting-to-learn-python/</loc>
+    <lastmod>2011-10-28T10:55:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/awesome-code-comment-9212011/</loc>
+    <lastmod>2011-09-21T11:13:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adams-json-formatter/</loc>
+    <lastmod>2011-09-19T13:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sorting-and-removing-duplicates-in-javascript-arrays-part-2/</loc>
+    <lastmod>2011-09-01T13:40:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sorting-and-removing-duplicates-in-javascript-arrays/</loc>
+    <lastmod>2011-09-01T11:16:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sql-server-2008-batch-inserts-and-identity-columns/</loc>
+    <lastmod>2011-08-29T22:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/insert-or-update-in-mysql/</loc>
+    <lastmod>2011-08-25T23:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/convert-array-of-strings-to-integers-using-jquery/</loc>
+    <lastmod>2011-08-10T09:35:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/jasper-reports-4-and-openbd-14/</loc>
+    <lastmod>2011-08-08T00:42:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/how-i-got-started-in-coldfusion/</loc>
+    <lastmod>2011-08-01T09:23:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/consuming-webservices-with-self-signed-certificates-in-c/</loc>
+    <lastmod>2011-06-23T16:26:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/gae-and-client-error-400/</loc>
+    <lastmod>2011-06-11T16:44:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/quick-dirty-field-tracker-in-javascript-and-extjs/</loc>
+    <lastmod>2011-06-03T13:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/groovy-18-released/</loc>
+    <lastmod>2011-04-27T10:29:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/google-app-engine-143-released/</loc>
+    <lastmod>2011-03-31T11:23:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/md5-hash-a-string-in-c/</loc>
+    <lastmod>2011-03-29T05:47:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/intro-to-dsls-in-groovy-part-3/</loc>
+    <lastmod>2011-03-27T11:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/intro-to-dsls-in-groovy-part-2/</loc>
+    <lastmod>2011-03-24T09:09:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/intro-to-dsls-in-groovy-part-1/</loc>
+    <lastmod>2011-03-22T18:40:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/asking-for-a-list-of-inputs-on-the-console-in-cc/</loc>
+    <lastmod>2011-02-15T08:53:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/regex-merging-of-structures-in-groovy-revisited/</loc>
+    <lastmod>2011-01-06T21:03:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/default-values-in-javascript-using-the-or-operator/</loc>
+    <lastmod>2010-12-15T10:37:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/human-can-opener/</loc>
+    <lastmod>2010-12-15T03:29:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-lambda-for-sorting-in-c-net/</loc>
+    <lastmod>2010-12-07T23:49:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/announcing-cfshowdown-markdown-for-coldfusion/</loc>
+    <lastmod>2010-12-05T22:51:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/firebugs-console-making-sure-we-dont-break-ie/</loc>
+    <lastmod>2010-12-02T23:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/log4net-built-in-log-levels-by-the-numbers/</loc>
+    <lastmod>2010-12-02T22:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/enhancing-groovy-sha1-hash-strings/</loc>
+    <lastmod>2010-12-01T21:06:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/enhancing-groovy-map-to-key-value-pair/</loc>
+    <lastmod>2010-11-30T11:26:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/enhancing-groovy-url-encoding-added-to-strings-metaclass/</loc>
+    <lastmod>2010-11-29T22:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/rendering-json-with-groovy-and-grails/</loc>
+    <lastmod>2010-11-28T23:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/setting-a-proxy-for-the-grails-command-line-tools/</loc>
+    <lastmod>2010-11-23T21:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/generating-xml-in-groovy-and-grails/</loc>
+    <lastmod>2010-11-22T23:26:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-first-real-ant-task/</loc>
+    <lastmod>2010-11-16T23:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/cfbarbecue-v10-released/</loc>
+    <lastmod>2010-11-10T09:51:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-a-priority-queue-in-groovy/</loc>
+    <lastmod>2010-11-08T22:04:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/groovys-metaclass-enhancing-the-language/</loc>
+    <lastmod>2010-11-01T04:19:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/groovy-script-to-generate-json-from-cfscript/</loc>
+    <lastmod>2010-10-25T04:52:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/getting-domain-name-from-request-in-grails/</loc>
+    <lastmod>2010-10-12T05:10:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-grails-and-mongodb-experience-so-far/</loc>
+    <lastmod>2010-10-08T02:44:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/language-comparison-compute-factorial/</loc>
+    <lastmod>2010-10-07T00:43:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-closures-to-time-sections-of-code-in-groovy/</loc>
+    <lastmod>2010-10-06T03:51:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/mailslurper-now-with-paging-and-sorting/</loc>
+    <lastmod>2010-09-27T04:59:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/mssql-script-to-generate-random-ssn/</loc>
+    <lastmod>2010-09-26T22:33:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/grails-mongodb-and-the-domain-class/</loc>
+    <lastmod>2010-09-19T23:50:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/function-to-addstack-javascript-events/</loc>
+    <lastmod>2010-09-10T16:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-resume-the-code-and-summary/</loc>
+    <lastmod>2010-09-10T10:24:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adam-script-lives/</loc>
+    <lastmod>2010-09-03T11:37:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/yummy-mail-mailslurper-released/</loc>
+    <lastmod>2010-09-02T05:11:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-resume-on-coldfusion-fw1-couchdb/</loc>
+    <lastmod>2010-08-31T13:29:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adding-namespaces-to-html-tag-using-regular-expressions/</loc>
+    <lastmod>2010-08-25T12:37:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/change-default-author-name-for-javadocs-in-eclipse/</loc>
+    <lastmod>2010-08-19T08:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/code-for-my-dallas-techfest-2010-presentation-available/</loc>
+    <lastmod>2010-08-05T04:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/merging-two-coldfusion-structs/</loc>
+    <lastmod>2010-08-03T06:19:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adobe-community-professional-pins-are-in/</loc>
+    <lastmod>2010-07-26T10:53:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/rings-are-purchased/</loc>
+    <lastmod>2010-07-24T06:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/thoughts-on-the-demise-of-the-cfml-advisory-committee/</loc>
+    <lastmod>2010-07-22T21:59:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/creating-a-smtp-mail-server-for-development/</loc>
+    <lastmod>2010-07-20T01:48:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/display-repeating-permutations-of-a-number-set-in-java/</loc>
+    <lastmod>2010-07-17T22:31:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/experimenting-with-sql-to-json-in-sql-server-2008/</loc>
+    <lastmod>2010-07-14T03:37:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/download-a-file-from-a-url-in-java/</loc>
+    <lastmod>2010-07-09T14:44:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/parsing-xml-in-groovy/</loc>
+    <lastmod>2010-07-02T23:44:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ses-urls-with-mura-on-tomcat/</loc>
+    <lastmod>2010-07-02T12:08:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dallas-techfest-2010/</loc>
+    <lastmod>2010-06-30T01:23:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/grouping-structures-in-groovy/</loc>
+    <lastmod>2010-06-10T02:31:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/update-ant-to-automate-build-version-number/</loc>
+    <lastmod>2010-06-08T14:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/tomcat-vs-jrun-jvm-arguments/</loc>
+    <lastmod>2010-06-02T12:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-ant-to-automate-a-build-version-number/</loc>
+    <lastmod>2010-05-20T10:18:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/update-to-apmessagebox-component/</loc>
+    <lastmod>2010-05-18T05:28:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/how-to-insert-multiple-records-in-one-insert-statement-in-mssql/</loc>
+    <lastmod>2010-05-05T21:17:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/selecting-all-items-in-a-multi-select-box/</loc>
+    <lastmod>2010-05-05T11:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/how-to-get-the-server-name-running-your-coldfusion-page/</loc>
+    <lastmod>2010-05-05T05:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/running-on-a-vps-now/</loc>
+    <lastmod>2010-04-27T21:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/cffringe-the-open-source-and-fringe-cfml-conference/</loc>
+    <lastmod>2010-04-26T02:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/advanced-javascript-201-tonight-at-dallas-cfug/</loc>
+    <lastmod>2010-04-13T17:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/parsing-the-url-using-javascript/</loc>
+    <lastmod>2010-04-04T16:18:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/example-of-jqgrid-with-coldfusion/</loc>
+    <lastmod>2010-04-03T05:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/get-query-column-list-in-order-with-coldfusion/</loc>
+    <lastmod>2010-03-29T04:47:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/the-holy-build-of-reflector/</loc>
+    <lastmod>2010-03-27T15:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/a-certain-sports-company-gets-a-bad-review/</loc>
+    <lastmod>2010-03-26T16:43:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/apmessagebox-a-new-jquery-ui-component/</loc>
+    <lastmod>2010-03-26T11:48:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-builder-presentation-by-terry-ryan/</loc>
+    <lastmod>2010-03-25T05:14:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-builder-officially-released/</loc>
+    <lastmod>2010-03-22T07:41:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-jqgrid-with-coldfusion/</loc>
+    <lastmod>2010-03-19T09:17:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/the-joys-of-not-using-cfwddx/</loc>
+    <lastmod>2010-02-19T21:59:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dallasft-worth-cfug-adapter-and-facade-patterns/</loc>
+    <lastmod>2010-02-08T16:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/paypal-frustrations/</loc>
+    <lastmod>2010-02-05T10:48:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/2010-date-nerdiness/</loc>
+    <lastmod>2010-02-03T21:59:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dynamic-function-invocation-goodbye-context/</loc>
+    <lastmod>2010-02-03T04:57:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-dynamic-function-invocation-methods/</loc>
+    <lastmod>2010-02-02T18:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adobe-coldfusion-community-professional/</loc>
+    <lastmod>2010-01-19T16:32:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/fisheye-menu-with-jquery/</loc>
+    <lastmod>2010-01-01T10:33:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/automate-compressing-js-and-css-with-ant/</loc>
+    <lastmod>2009-12-31T08:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/basic-query-loop-and-group-in-coldfusion/</loc>
+    <lastmod>2009-12-30T11:14:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/webservice-wsdl-document-consumption-in-coldfusion/</loc>
+    <lastmod>2009-12-30T08:10:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/example-of-jquery-autocomplete-with-coldfusion/</loc>
+    <lastmod>2009-12-22T07:48:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dumbass-code-of-the-week-12-20-2009/</loc>
+    <lastmod>2009-12-21T11:11:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ses-urls-with-openbd-and-google-app-engine/</loc>
+    <lastmod>2009-12-17T16:41:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/setting-cookies-then-relocating-in-coldfusion/</loc>
+    <lastmod>2009-12-15T06:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/from-gregorian-to-julian-dates-in-javascript/</loc>
+    <lastmod>2009-12-10T04:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ice-ice-baby/</loc>
+    <lastmod>2009-12-09T15:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-builder-performance/</loc>
+    <lastmod>2009-11-19T03:22:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/round-robin-display-of-data-java-style/</loc>
+    <lastmod>2009-11-17T11:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sorting-a-complex-array-of-products-in-php/</loc>
+    <lastmod>2009-11-17T04:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sorting-array-of-structures-with-only-coldfusion/</loc>
+    <lastmod>2009-11-13T16:16:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/nerdiest-programming-language-ever/</loc>
+    <lastmod>2009-11-09T06:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/new-houston-texans-website-live/</loc>
+    <lastmod>2009-11-04T12:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/new-jquery-plugin-ap-text-counter/</loc>
+    <lastmod>2009-10-26T18:12:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sorting-array-of-structures-with-coldfusion-and-groovy/</loc>
+    <lastmod>2009-10-25T13:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/removing-duplicate-array-items-in-coldfusion/</loc>
+    <lastmod>2009-10-22T07:41:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/update-v020-to-jquery-plugin-ap-tags/</loc>
+    <lastmod>2009-10-19T18:34:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/multiple-file-uploads-with-coldfusion-jquery-and-uploadify/</loc>
+    <lastmod>2009-10-15T18:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-first-entry-to-the-new-adobe-cookbooks/</loc>
+    <lastmod>2009-10-13T04:57:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dfw-coldfusion-users-group-the-observer-pattern/</loc>
+    <lastmod>2009-10-12T17:34:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dumbass-code-of-the-day-10082009/</loc>
+    <lastmod>2009-10-08T12:55:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/selective-merging-of-structures-using-regular-expressions-in-coldfusion/</loc>
+    <lastmod>2009-10-06T10:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dumbass-code-of-the-week-10052009/</loc>
+    <lastmod>2009-10-05T12:06:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/the-guild-do-you-wanna-date-my-avatar/</loc>
+    <lastmod>2009-09-28T18:33:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/triggering-the-change-event-on-a-select-box-programatically-in-jquery/</loc>
+    <lastmod>2009-09-23T12:26:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/optimize-performance-in-eclipse/</loc>
+    <lastmod>2009-09-23T05:22:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/a-prettier-query-to-json-for-coldfusion-using-groovy/</loc>
+    <lastmod>2009-09-22T07:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ses-urls-with-coldfusion-8-and-tomcat/</loc>
+    <lastmod>2009-09-21T05:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/writing-c-functions-for-sql-server-and-clr-integration/</loc>
+    <lastmod>2009-09-15T10:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/basic-example-of-jquery-tooltip/</loc>
+    <lastmod>2009-09-10T08:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/count-lines-of-code-in-a-directory-using-groovy/</loc>
+    <lastmod>2009-09-09T13:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dfw-cfug-the-strategy-pattern/</loc>
+    <lastmod>2009-09-08T17:31:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/building-a-recursive-structure-using-groovy-in-coldfusion/</loc>
+    <lastmod>2009-09-03T09:55:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/cfgroovy2-and-arguments-scope-in-functions/</loc>
+    <lastmod>2009-08-19T11:06:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ft-worth-zoo-2009/</loc>
+    <lastmod>2009-08-10T16:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/new-jquery-plugin-ap-tags/</loc>
+    <lastmod>2009-08-06T21:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/hawaiian-falls/</loc>
+    <lastmod>2009-07-25T13:22:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/finding-specific-text-in-a-string-using-coldfusion-and-java/</loc>
+    <lastmod>2009-07-15T17:24:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/free-linux-and-windows-screen-sharing-software/</loc>
+    <lastmod>2009-07-13T18:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/weddings-java-and-a-good-weekend/</loc>
+    <lastmod>2009-07-12T17:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-searching-structure-values-with-regular-expressions/</loc>
+    <lastmod>2009-07-11T07:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/configuring-illudium-pu-36-code-generator-on-ubuntu-linux/</loc>
+    <lastmod>2009-07-05T11:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/issues-serializing-coldfusion-session-object/</loc>
+    <lastmod>2009-06-24T18:26:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dallas-techfest-and-coldfusion-9/</loc>
+    <lastmod>2009-06-22T08:09:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/windows-7-rc-first-night/</loc>
+    <lastmod>2009-06-02T03:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/simple-lru-cache-class-in-php/</loc>
+    <lastmod>2009-05-27T12:58:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/barbecue-barcode-coldfusion-and-size/</loc>
+    <lastmod>2009-05-18T19:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/firefox-plugin-to-change-view-source/</loc>
+    <lastmod>2009-05-18T06:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-branch-target-offset-too-large-for-short/</loc>
+    <lastmod>2009-04-13T08:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sql-formatted-revisited/</loc>
+    <lastmod>2009-04-08T11:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/regular-expressions-commas-at-the-beginning-of-column-names/</loc>
+    <lastmod>2009-04-06T08:47:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-random-id-generation/</loc>
+    <lastmod>2009-03-19T08:08:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-challenge-footprint-optimization/</loc>
+    <lastmod>2009-02-27T05:18:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/consuming-web-services-in-net-35-web-references/</loc>
+    <lastmod>2009-02-10T22:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/images-in-sql/</loc>
+    <lastmod>2009-02-09T11:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/enhancing-groovy-string-to-file/</loc>
+    <lastmod>2009-02-09T05:44:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/useful-datetime-class-for-php/</loc>
+    <lastmod>2009-02-01T18:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-ant-to-automate-a-build/</loc>
+    <lastmod>2009-01-14T06:24:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/flying-fish-whole-catfish/</loc>
+    <lastmod>2009-01-12T08:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/an-update-is-coming-i-promise/</loc>
+    <lastmod>2009-01-12T06:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/how-to-change-the-owner-of-a-sql-2005-table/</loc>
+    <lastmod>2008-12-09T10:34:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/old-school-display-of-divs-with-coldfusion-and-javascript/</loc>
+    <lastmod>2008-12-08T09:50:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/inflatables-and-the-christmas-letter-phenomenon/</loc>
+    <lastmod>2008-12-06T17:04:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/bells-palsy-one-week/</loc>
+    <lastmod>2008-11-13T08:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/best-beer-commercial-ever/</loc>
+    <lastmod>2008-10-04T10:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ceramic-pig-painting-fun/</loc>
+    <lastmod>2008-09-13T18:36:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/parsing-php-style-placeholders-for-sql-scripts/</loc>
+    <lastmod>2008-09-04T19:12:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/so-i-downloaded-google-chrome/</loc>
+    <lastmod>2008-09-03T05:23:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/star-wars-the-force-unleashed-demo/</loc>
+    <lastmod>2008-08-23T18:06:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/30-of-internet-users-admit-to-buying-from-spam/</loc>
+    <lastmod>2008-08-21T22:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/javascript-2-scraped-harmony-to-ensue/</loc>
+    <lastmod>2008-08-20T09:28:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/preview-of-new-metallica-song/</loc>
+    <lastmod>2008-08-18T17:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/strongbad-shows-us-what-death-metal-is/</loc>
+    <lastmod>2008-08-15T21:04:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/datefield-issues-with-extjs-21/</loc>
+    <lastmod>2008-07-31T19:15:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/vacation-half-time-report/</loc>
+    <lastmod>2008-07-18T22:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-soundex-algorithm-component/</loc>
+    <lastmod>2008-07-18T11:43:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/fascinating-article-on-definition-of-terms-strategy-and-tactics/</loc>
+    <lastmod>2008-07-08T12:11:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-race-conditions/</loc>
+    <lastmod>2008-07-01T19:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/advanced-data-validation-using-extjs/</loc>
+    <lastmod>2008-05-07T19:34:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ntta-to-raise-speed-limits-woo-hoo/</loc>
+    <lastmod>2008-04-25T18:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/new-theme-new-wordpress/</loc>
+    <lastmod>2008-04-22T15:17:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/how-to-find-yahoo-widgets-offscreen/</loc>
+    <lastmod>2008-04-21T08:04:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/just-installed-wordpress-26/</loc>
+    <lastmod>2008-04-13T18:19:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/tutorial-net-xml-into-a-dataset/</loc>
+    <lastmod>2008-04-08T18:43:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/review-brio-tuscan-grille/</loc>
+    <lastmod>2008-04-08T17:08:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/horton-hits-a-home-run/</loc>
+    <lastmod>2008-04-06T12:12:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adult-funny-parody-about-a-popular-shampoo/</loc>
+    <lastmod>2008-03-26T00:57:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/brawlin/</loc>
+    <lastmod>2008-03-12T19:58:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/death-metal-dog/</loc>
+    <lastmod>2008-03-12T11:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/brawl-is-fun-if-you-can-connect/</loc>
+    <lastmod>2008-03-11T19:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/let-the-brawl-begin/</loc>
+    <lastmod>2008-03-09T17:57:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/and-the-lightbulb-lit-up/</loc>
+    <lastmod>2008-03-06T19:36:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/learning-opengl/</loc>
+    <lastmod>2008-03-06T04:38:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/no-expand-sweet/</loc>
+    <lastmod>2008-02-25T08:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dallas-world-aquarium/</loc>
+    <lastmod>2008-02-23T16:52:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/useful-javascript-tools/</loc>
+    <lastmod>2008-02-21T08:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/stupid-isps/</loc>
+    <lastmod>2008-01-10T16:22:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/excuse-me-where-is-your-chain-saw/</loc>
+    <lastmod>2007-12-17T22:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/on-coldfusion-7-arrays/</loc>
+    <lastmod>2007-11-11T22:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/abbey-hill-park-hoa-fall-festival-2k7/</loc>
+    <lastmod>2007-10-28T11:34:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/taylors-8th-birthday/</loc>
+    <lastmod>2007-10-28T11:24:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/halloween-party-2k7-1/</loc>
+    <lastmod>2007-10-28T11:07:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/reasons-for-excitement/</loc>
+    <lastmod>2007-10-19T05:08:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/ok-jquery-is-pimp/</loc>
+    <lastmod>2007-10-17T20:07:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/yahoo-widget-converter-issue/</loc>
+    <lastmod>2007-10-16T08:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/my-first-plugin/</loc>
+    <lastmod>2007-10-16T04:57:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/anewen-reaches-40/</loc>
+    <lastmod>2007-10-15T17:59:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/katys-play/</loc>
+    <lastmod>2007-10-14T15:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/molson-beer-commercials/</loc>
+    <lastmod>2007-10-13T15:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/movie-night-beetlejuice/</loc>
+    <lastmod>2007-10-13T12:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/barbecue-revisited/</loc>
+    <lastmod>2007-10-12T11:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-barbecue-barcode-in-coldfusion/</loc>
+    <lastmod>2007-10-03T10:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/the-game-plan-has-game/</loc>
+    <lastmod>2007-09-30T17:36:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/bringing-in-oop/</loc>
+    <lastmod>2007-09-28T16:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/catch-up/</loc>
+    <lastmod>2007-09-09T08:29:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/beep-on-the-enter-key/</loc>
+    <lastmod>2007-08-27T12:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/titan-quest/</loc>
+    <lastmod>2007-08-22T05:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/mobile-development/</loc>
+    <lastmod>2007-08-17T08:18:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/one-minute-of-fame/</loc>
+    <lastmod>2007-07-19T16:37:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/a-baby-is-born/</loc>
+    <lastmod>2007-07-02T22:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/day-one-of-redemption/</loc>
+    <lastmod>2007-06-27T05:21:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/chic-fil-a-strikes-again/</loc>
+    <lastmod>2007-06-26T06:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/nifty-webmaster-tool/</loc>
+    <lastmod>2007-06-25T03:53:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/monty-python-event/</loc>
+    <lastmod>2007-06-25T02:50:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/without-the-chicken/</loc>
+    <lastmod>2007-06-25T02:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/surfs-up-wipes-out/</loc>
+    <lastmod>2007-06-12T03:51:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/wordpress-issues-with-free-hosting/</loc>
+    <lastmod>2007-06-12T03:45:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/testing-server-availability/</loc>
+    <lastmod>2007-06-05T06:48:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/slow-jerk-warning-explicit/</loc>
+    <lastmod>2007-06-02T17:44:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/on-the-lot/</loc>
+    <lastmod>2007-05-31T02:42:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/caching-in-php-cache_lite/</loc>
+    <lastmod>2007-05-30T11:28:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/pirates-of-the-caribbean-at-worlds-end/</loc>
+    <lastmod>2007-05-29T05:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/using-treemap-in-coldfusion/</loc>
+    <lastmod>2007-04-12T11:40:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/syncxpress-update/</loc>
+    <lastmod>2007-04-03T17:14:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/meet-the-robinsons/</loc>
+    <lastmod>2007-04-02T09:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/reflection-in-coldfusion/</loc>
+    <lastmod>2007-03-27T08:35:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/reflection-in-coldfusion-part-2/</loc>
+    <lastmod>2007-03-27T03:26:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/foray-into-java/</loc>
+    <lastmod>2007-02-28T04:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/logical-drives-and-wmi/</loc>
+    <lastmod>2007-02-01T07:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/syncxpress/</loc>
+    <lastmod>2007-01-31T03:41:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/the-blog-town/</loc>
+    <lastmod>2007-01-30T03:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/dick-in-a-box/</loc>
+    <lastmod>2006-12-19T14:36:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/eragon/</loc>
+    <lastmod>2006-12-17T17:08:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/a-cd/</loc>
+    <lastmod>2006-12-14T16:41:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/no-code/</loc>
+    <lastmod>2006-12-14T12:14:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/like-sex/</loc>
+    <lastmod>2006-12-14T11:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/this-chick-freaks/</loc>
+    <lastmod>2006-12-14T04:10:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/syntax-highlighting/</loc>
+    <lastmod>2006-12-12T07:33:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/guitar-2-denied/</loc>
+    <lastmod>2006-12-08T17:35:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/trends/</loc>
+    <lastmod>2006-12-08T06:57:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/password-fun/</loc>
+    <lastmod>2006-12-07T16:13:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/this-is-just-funny/</loc>
+    <lastmod>2006-12-07T09:36:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/the-tunnel/</loc>
+    <lastmod>2006-12-07T04:17:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/coldfusion-exception-handling/</loc>
+    <lastmod>2006-12-06T15:41:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/get-to-writing/</loc>
+    <lastmod>2006-12-06T03:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/damn-you-adobe/</loc>
+    <lastmod>2006-12-05T11:35:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/in-other-news/</loc>
+    <lastmod>2006-12-04T16:07:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adam-gets-an-overhaul/</loc>
+    <lastmod>2006-12-04T15:58:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/lovable-nerd/</loc>
+    <lastmod>2006-12-03T15:52:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/how-to-describe/</loc>
+    <lastmod>2006-11-30T17:06:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/and-just-like-that/</loc>
+    <lastmod>2006-11-18T16:14:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/no-words/</loc>
+    <lastmod>2006-11-16T18:06:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/nerdcon-at-ihop/</loc>
+    <lastmod>2006-11-15T18:27:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/nerdcon-is-nearly-here/</loc>
+    <lastmod>2006-11-07T17:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/sexual-consent/</loc>
+    <lastmod>2006-11-02T11:06:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/this-cannot-be/</loc>
+    <lastmod>2006-11-01T03:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/losing-it/</loc>
+    <lastmod>2006-10-31T17:23:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/weddings/</loc>
+    <lastmod>2006-10-31T13:32:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/much-ado-about-nothing/</loc>
+    <lastmod>2006-10-22T17:29:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/lonely-ones/</loc>
+    <lastmod>2006-10-15T16:15:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/the-shipper-my-experience-in-anime/</loc>
+    <lastmod>2006-10-12T04:35:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/check-your-indexes/</loc>
+    <lastmod>2006-10-11T04:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/check-this-out/</loc>
+    <lastmod>2006-10-09T04:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/busy-much/</loc>
+    <lastmod>2006-10-09T03:23:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/going-crazy/</loc>
+    <lastmod>2006-10-04T22:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/its-alive/</loc>
+    <lastmod>2006-09-27T01:50:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/adam-moves-along/</loc>
+    <lastmod>2006-09-25T20:28:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/character-class-creator/</loc>
+    <lastmod>2006-08-18T16:14:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/escape-of-the-single-quote/</loc>
+    <lastmod>2006-08-18T09:54:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/butterfly-dreams/</loc>
+    <lastmod>2006-07-12T18:41:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://adampresley.com/post/changes/</loc>
+    <lastmod>2006-06-08T18:34:00+00:00</lastmod>
+  </url>
+  
+</urlset>

@@ -1,0 +1,293 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Adam.Blog()</title>
+        <meta name="author">
+        <meta name="description" content="I&#39;m bringin&#39; nerdy back">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.16-DEV" />
+          <link href="http://adampresley.com/post/index.xml" rel="alternate" type="application/rss+xml" title="Adam.Blog()" />
+          <link href="http://adampresley.com/post/index.xml" rel="feed" type="application/rss+xml" title="Adam.Blog()" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://adampresley.com/css/styles.css">
+        <link rel="icon" href="http://adampresley.com/favicon.ico">
+        <link rel="apple-touch-icon" href="http://adampresley.com/apple-touch-icon.png" />
+        <link rel="stylesheet" href="http://adampresley.com/css/highlightjs/monokai.css">
+        <script src="http://adampresley.com/js/vendor/modernizr-2.8.0.min.js"></script>
+        <style>
+        .site-header h2 .logo {
+        background: url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(http://adampresley.com/assets/images/code-background-screenshot.png);
+        }}
+       .site-header {
+         background: #2a373d url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Adam.Blog()</h2>
+          </div>
+        </header>
+
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <article class="post">
+            <a class="btn home" href="http://adampresley.com/" title="">&laquo; </a>
+            
+<h1><a href="http://adampresley.com/post/using-ant-to-automate-a-build-version-number/" title="Using ANT to Automate a Build Version Number">Using ANT to Automate a Build Version Number</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2010.05.20">2010.05.20</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/ant">ant</a>
+        
+    
+
+</span>
+</footer>
+
+            <p>Recently I&rsquo;ve been writing some <a href="http://www.getmura.com/">Mura</a>
+plugins. One of the basic pieces of the plugin is the the
+<strong>config.xml</strong> file which contains metadata about your plugin. One piece
+of that metadata is the version number of the plugin. And every time I
+made a change to the plugin, I would go and change the version number in
+the <strong>config.xml</strong> to reflect the newest build number. So if the major
+version is <em>1</em> and the minor version is <em>2</em>, and I&rsquo;ve packaged this
+plugin <em>4</em> times, the version number should be <em>1.2.04</em>.</p>
+
+<p>Changing the build number manually every time became a hassle so I&rsquo;ve
+cooked up a small ANT script to automate not only the task of build
+numbers, but also zipping up the plugin for deployment.
+My objective here is to first update the build number in the
+<strong>config.xml</strong> file then zip up all the files and directories minus the
+Eclipse <strong>.project</strong> file. The first thing we will need is a
+<em>properties</em> file. This will contain our build number.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>#Date last modified put here by ANT
+buildNumber=04
+</pre></div>
+
+
+<p>The intent here is that ANT will read this, automatically increment the
+value, and put that value into our <strong>config.xml</strong>. But how can ANT know
+how to do this? Good question! This is done by replacement tokens. Let&rsquo;s
+see that shall we?</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">&lt;plugin&gt;</span>
+	<span style="color: #f92672">&lt;name&gt;</span>Hello World Plugin<span style="color: #f92672">&lt;/name&gt;</span>
+
+	<span style="color: #75715e">&lt;!-- the package value becomes a part of the directory name where the plugin is installed. --&gt;</span>
+	<span style="color: #f92672">&lt;package&gt;</span>SayHelloPlugin<span style="color: #f92672">&lt;/package&gt;</span>
+	<span style="color: #f92672">&lt;version&gt;</span>1.2.@buildNumber@<span style="color: #f92672">&lt;/version&gt;</span>
+	<span style="color: #f92672">&lt;provider&gt;</span>AdamPresley.com<span style="color: #f92672">&lt;/provider&gt;</span>
+	<span style="color: #f92672">&lt;providerurl&gt;</span>http://www.adampresley.com<span style="color: #f92672">&lt;/providerURL&gt;</span>
+	<span style="color: #f92672">&lt;category&gt;</span>Application<span style="color: #f92672">&lt;/category&gt;</span>
+
+	<span style="color: #f92672">&lt;settings</span> <span style="color: #f92672">/&gt;</span>
+	<span style="color: #f92672">&lt;eventhandlers</span> <span style="color: #f92672">/&gt;</span>
+
+	<span style="color: #75715e">&lt;!-- For display objects the the location attribute determines whether display objects for</span>
+<span style="color: #75715e">		  the plugin will execute locally of globallyLocally means</span>
+<span style="color: #75715e">		  /[siteid]/includes/plugins/[package]_[pluginID]/Globally means /plugins/[package]_[pluginID]/</span>
+<span style="color: #75715e">	--&gt;</span>
+	<span style="color: #f92672">&lt;displayobjects</span> <span style="color: #a6e22e">location=</span><span style="color: #e6db74">&quot;global&quot;</span><span style="color: #f92672">&gt;</span>
+		<span style="color: #f92672">&lt;displayobject</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;Say Hello&quot;</span> <span style="color: #a6e22e">displayobjectfile=</span><span style="color: #e6db74">&quot;displayObjects/sayHello.cfm&quot;</span> <span style="color: #f92672">/&gt;</span>
+	<span style="color: #f92672">&lt;/displayobjects&gt;</span>
+<span style="color: #f92672">&lt;/plugin&gt;</span>
+</pre></div>
+
+
+<p>Notice the <em><version></em> node? We have replacement token in there named
+<strong>buildNumber</strong>. This is denoted by the @ symbol on either side of the
+token. ANT has a command to find and replace that token with whatever
+you wish. How? First we need to load our properties file and increment
+the build number. Then we need to do the replacement. Here&rsquo;s how that
+works.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">&lt;propertyfile</span> <span style="color: #a6e22e">file=</span><span style="color: #e6db74">&quot;build.properties&quot;</span><span style="color: #f92672">&gt;</span>
+	<span style="color: #f92672">&lt;entry</span> <span style="color: #a6e22e">key=</span><span style="color: #e6db74">&quot;buildNumber&quot;</span> <span style="color: #a6e22e">type=</span><span style="color: #e6db74">&quot;int&quot;</span> <span style="color: #a6e22e">default=</span><span style="color: #e6db74">&quot;0&quot;</span> <span style="color: #a6e22e">operation=</span><span style="color: #e6db74">&quot;+&quot;</span> <span style="color: #a6e22e">pattern=</span><span style="color: #e6db74">&quot;00&quot;</span> <span style="color: #f92672">/&gt;</span>
+<span style="color: #f92672">&lt;/propertyfile&gt;</span>
+
+<span style="color: #f92672">&lt;echo</span> <span style="color: #a6e22e">message=</span><span style="color: #e6db74">&quot;Updating build number in /plugin/config.xml&quot;</span> <span style="color: #f92672">/&gt;</span>
+<span style="color: #f92672">&lt;replace</span> <span style="color: #a6e22e">file=</span><span style="color: #e6db74">&quot;${buildDir}\plugin\config.xml&quot;</span> <span style="color: #a6e22e">propertyFile=</span><span style="color: #e6db74">&quot;build.properties&quot;</span><span style="color: #f92672">&gt;</span>
+	<span style="color: #f92672">&lt;replacefilter</span> <span style="color: #a6e22e">token=</span><span style="color: #e6db74">&quot;@buildNumber@&quot;</span> <span style="color: #a6e22e">property=</span><span style="color: #e6db74">&quot;buildNumber&quot;</span> <span style="color: #f92672">/&gt;</span>
+<span style="color: #f92672">&lt;/replace&gt;</span>
+</pre></div>
+</p>
+
+<p>The first task, <em><propertyfile></em> reads the <strong>build.properties</strong>
+file and increments the <strong>buildNumber</strong> variable by using the
+<em><entry></em> task. We then use the <em><replace></em> task to replace that
+<strong>@buildNumber@</strong> token we placed in the <strong>config.xml</strong> file. The
+<em><replacefilter></em> task tells ANT what token to replace, and what
+variable from the properties file to replace it with. Cool huh?!?</p>
+
+<p>If you&rsquo;d like some more info on the basics of ANT you can check out my
+other posts.</p>
+
+<ul>
+<li><a href="#post/2009/01/using-ant-to-automate-a-build">Using ANT To Automate a Build</a></li>
+<li><a href="#post/2009/12/automate-compressing-js-and-css-with-ant">Automate Compressing JS and CSS with ANT</a></li>
+</ul>
+
+<p>Here is a full example. Happy coding!</p>
+
+<p><strong>build.properties</strong></p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>#Date last modified put here by ANT
+buildNumber=04
+</pre></div>
+</p>
+
+<p><strong>build.xml</strong></p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+	<span style="color: #f92672">&lt;project</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;Hello World Plugin&quot;</span> <span style="color: #a6e22e">default=</span><span style="color: #e6db74">&quot;build&quot;</span> <span style="color: #a6e22e">basedir=</span><span style="color: #e6db74">&quot;.&quot;</span><span style="color: #f92672">&gt;</span>
+		<span style="color: #f92672">&lt;description&gt;</span>
+			ANT build script to build the Hello World Plugin for Mura
+		<span style="color: #f92672">&lt;/description&gt;</span>
+
+		<span style="color: #f92672">&lt;propertyfile</span> <span style="color: #a6e22e">file=</span><span style="color: #e6db74">&quot;build.properties&quot;</span><span style="color: #f92672">&gt;</span>
+			<span style="color: #f92672">&lt;entry</span> <span style="color: #a6e22e">key=</span><span style="color: #e6db74">&quot;buildNumber&quot;</span> <span style="color: #a6e22e">type=</span><span style="color: #e6db74">&quot;int&quot;</span> <span style="color: #a6e22e">default=</span><span style="color: #e6db74">&quot;0&quot;</span> <span style="color: #a6e22e">operation=</span><span style="color: #e6db74">&quot;+&quot;</span> <span style="color: #a6e22e">pattern=</span><span style="color: #e6db74">&quot;00&quot;</span> <span style="color: #f92672">/&gt;</span>
+		<span style="color: #f92672">&lt;/propertyfile&gt;</span>
+
+		<span style="color: #f92672">&lt;property</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;sourceDir&quot;</span> <span style="color: #a6e22e">location=</span><span style="color: #e6db74">&quot;C:\code\HelloPlugin&quot;</span> <span style="color: #f92672">/&gt;</span>
+		<span style="color: #f92672">&lt;property</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;buildDir&quot;</span> <span style="color: #a6e22e">location=</span><span style="color: #e6db74">&quot;${sourceDir}\build&quot;</span> <span style="color: #f92672">/&gt;</span>
+
+		<span style="color: #f92672">&lt;target</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;build&quot;</span><span style="color: #f92672">&gt;</span>
+			<span style="color: #f92672">&lt;echo</span> <span style="color: #a6e22e">message=</span><span style="color: #e6db74">&quot;Build ${buildNumber}&quot;</span> <span style="color: #f92672">/&gt;</span>
+
+			<span style="color: #f92672">&lt;echo</span> <span style="color: #a6e22e">message=</span><span style="color: #e6db74">&quot;Copying files to build folder...&quot;</span> <span style="color: #f92672">/&gt;</span>
+			<span style="color: #f92672">&lt;mkdir</span> <span style="color: #a6e22e">dir=</span><span style="color: #e6db74">&quot;${buildDir}&quot;</span> <span style="color: #f92672">/&gt;</span>
+			<span style="color: #f92672">&lt;copy</span> <span style="color: #a6e22e">todir=</span><span style="color: #e6db74">&quot;${buildDir}&quot;</span><span style="color: #f92672">&gt;</span>
+				<span style="color: #f92672">&lt;fileset</span> <span style="color: #a6e22e">dir=</span><span style="color: #e6db74">&quot;${sourceDir}&quot;</span><span style="color: #f92672">&gt;</span>
+					<span style="color: #f92672">&lt;include</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;**/displayObjects/*&quot;</span> <span style="color: #f92672">/&gt;</span>
+					<span style="color: #f92672">&lt;include</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;**/plugin/*&quot;</span> <span style="color: #f92672">/&gt;</span>
+					<span style="color: #f92672">&lt;include</span> <span style="color: #a6e22e">name=</span><span style="color: #e6db74">&quot;index.cfm&quot;</span> <span style="color: #f92672">/&gt;</span>
+				<span style="color: #f92672">&lt;/fileset&gt;</span>
+			<span style="color: #f92672">&lt;/copy&gt;</span>
+
+			<span style="color: #f92672">&lt;echo</span> <span style="color: #a6e22e">message=</span><span style="color: #e6db74">&quot;Updating build number in /plugin/config.xml&quot;</span> <span style="color: #f92672">/&gt;</span>
+			<span style="color: #f92672">&lt;replace</span> <span style="color: #a6e22e">file=</span><span style="color: #e6db74">&quot;${buildDir}\plugin\config.xml&quot;</span> <span style="color: #a6e22e">propertyFile=</span><span style="color: #e6db74">&quot;build.properties&quot;</span><span style="color: #f92672">&gt;</span>
+				<span style="color: #f92672">&lt;replacefilter</span> <span style="color: #a6e22e">token=</span><span style="color: #e6db74">&quot;@buildNumber@&quot;</span> <span style="color: #a6e22e">property=</span><span style="color: #e6db74">&quot;buildNumber&quot;</span> <span style="color: #f92672">/&gt;</span>
+			<span style="color: #f92672">&lt;/replace&gt;</span>
+
+			<span style="color: #f92672">&lt;echo</span> <span style="color: #a6e22e">message=</span><span style="color: #e6db74">&quot;Zipping contents...&quot;</span> <span style="color: #f92672">/&gt;</span>
+			<span style="color: #f92672">&lt;zip</span> <span style="color: #a6e22e">destfile=</span><span style="color: #e6db74">&quot;${sourceDir}\HelloPlugin.zip&quot;</span> <span style="color: #a6e22e">basedir=</span><span style="color: #e6db74">&quot;${buildDir}&quot;</span> <span style="color: #f92672">/&gt;</span>
+
+			<span style="color: #f92672">&lt;echo</span> <span style="color: #a6e22e">message=</span><span style="color: #e6db74">&quot;Cleaning up...&quot;</span> <span style="color: #f92672">/&gt;</span>
+			<span style="color: #f92672">&lt;delete</span> <span style="color: #a6e22e">includeEmptyDirs=</span><span style="color: #e6db74">&quot;true&quot;</span><span style="color: #f92672">&gt;</span>
+				<span style="color: #f92672">&lt;fileset</span> <span style="color: #a6e22e">dir=</span><span style="color: #e6db74">&quot;${buildDir}&quot;</span> <span style="color: #a6e22e">includes=</span><span style="color: #e6db74">&quot;**&quot;</span> <span style="color: #f92672">/&gt;</span>
+			<span style="color: #f92672">&lt;/delete&gt;</span>
+		<span style="color: #f92672">&lt;/target&gt;</span>
+	<span style="color: #f92672">&lt;/project&gt;</span>
+</pre></div>
+</p>
+
+            <ul class="share-buttons">
+    <li></li>
+    <li>
+        <a class="icon-facebook-squared" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fadampresley.com%2fpost%2fusing-ant-to-automate-a-build-version-number%2f" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-twitter" href="https://twitter.com/share?text=Using%20ANT%20to%20Automate%20a%20Build%20Version%20Number&amp;url=http%3a%2f%2fadampresley.com%2fpost%2fusing-ant-to-automate-a-build-version-number%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-gplus" href="https://plus.google.com/share?url=http%3a%2f%2fadampresley.com%2fpost%2fusing-ant-to-automate-a-build-version-number%2f" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2fadampresley.com%2fpost%2fusing-ant-to-automate-a-build-version-number%2f&title=Using%20ANT%20to%20Automate%20a%20Build%20Version%20Number" onclick="window.open(this.href, 'linkedin-share', 'width=600,height=494');return false;" title=""></a>
+    </li>
+</ul>
+
+        </article>
+        <div class="comments">
+            <h3></h3>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adampresleyblog';
+    var disqus_identifier = 'http:\/\/adampresley.com\/post\/using-ant-to-automate-a-build-version-number\/';
+    var disqus_title = 'Using ANT to Automate a Build Version Number';
+    var disqus_url = 'http:\/\/adampresley.com\/post\/using-ant-to-automate-a-build-version-number\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </main>
+    <aside class="author">
+  <img class="profile-image" src="http://adampresley.com/assets/adampresley/images/adam-bowtie.png" alt="Adam Presley" />
+  <p class="name"> 
+  <strong>Adam Presley</strong></p>
+  <p class="address">Texas, USA</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/adampresley" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/adampresley" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="http://adampresley.com/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="http://adampresley.com/post/index.xml" title="RSS"></a>
+        <p>&copy; 2016 &middot; Adam Presley. All Rights Reserved. Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="http:\/\/adampresley.com\/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="http://adampresley.com/js/plugins.js"></script>
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-44927419-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

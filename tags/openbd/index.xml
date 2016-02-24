@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Openbd on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/openbd/</link>
+    <description>Recent content in Openbd on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 08 Aug 2011 00:42:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/openbd/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Jasper Reports 4 and OpenBD 1.4</title>
+      <link>http://adampresley.com/post/jasper-reports-4-and-openbd-14/</link>
+      <pubDate>Mon, 08 Aug 2011 00:42:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/jasper-reports-4-and-openbd-14/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been playing with Jasper Reports lately as a solution for handling
+both pre-build and custom reports for customers in my application. The
+first hurdle to overcome was learning how to actually build a report
+using the iReport application. It&amp;rsquo;s not like this is hard, but more the
+fact that I have zero experience in building reports using a reporting
+engine. Now, after a week or two of playing with it, I have the idea of
+how to build something basic, including querying for data, summing and
+grouping, etc&amp;hellip;This blog entry will &lt;strong&gt;not&lt;/strong&gt;walk you through how to
+build a report, but I will tell you how to get your OpenBD 1.4
+installation ready to compile and display Jasper Report files.&lt;/p&gt;
+
+&lt;p&gt;The first step is to get the iReport software from &lt;a href=&#34;http://jasperforge.org/&#34;&gt;JasperForge&lt;/a&gt;.
+Install this software, as this will be what you will design your reports
+with. It also happens to contain the JAR files you need to work with
+Jasper in your OpenBD application. From here find those JAR files at
+&lt;em&gt;{installation directory}/ireport/modules/ext&lt;/em&gt;. The base files you will
+need are (hopefully I don&amp;rsquo;t miss any):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;jasperreports-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;jasperreports-applet-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;jasperreports-fonts-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;jasperreports-javaflow-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;groovy-all-1.7.5.jar&lt;/li&gt;
+&lt;li&gt;iText-2.1.7.jar&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Copy all the above files into your &lt;em&gt;{OpenBD App Directory}/WEB-INF/lib&lt;/em&gt;
+folder. You will notice that you now have &lt;strong&gt;two&lt;/strong&gt;iText* files. The
+older version number will be the one from OpenBD, and you must delete
+it.&lt;/p&gt;
+
+&lt;p&gt;Now that you have the JARs in place, restart your Java container (Tomcat
+for me). At this point I assume you have some type of report build and
+saved into your application directory with a JRXML extension. From here
+I will show in code how to do four things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Get a connection object from a datasource&lt;/li&gt;
+&lt;li&gt;Compile the report and get a print object&lt;/li&gt;
+&lt;li&gt;Export the report as PDF&lt;/li&gt;
+&lt;li&gt;Export the report as Excel&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The first order of business is getting a connection object. In
+ColdFusion we are accustomed to having a datasource available, but the
+rest of the Java world uses JDBC connection strings and
+*java.sql.Connection*objects. For this to work you will have to make
+sure you have the &lt;strong&gt;bluedragon&lt;/strong&gt;folder, which contains the Admin API,
+in the root of your application, or at least mapped so you can access
+its components. Let&amp;rsquo;s now take a look at a function that will return a
+connection object based on the active datasource defined in
+&lt;strong&gt;application.dsn&lt;/strong&gt;. Also note this assumes you have session management
+turned on, and that your admin password is &amp;ldquo;password&amp;rdquo;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cffunction&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;getConnection&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;output&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;false&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;admin&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;component&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;bluedragon.adminapi.Administrator&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;adminDS&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ds&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;loginResult&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;loginResult&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;admin.login&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfif&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;loginResult&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;session&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.auth&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;loggedIn&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;password&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfif&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;adminDS&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;component&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;bluedragon.adminapi.Datasource&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ds&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;adminDS.getDatasources&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;application&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.dsn)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cftry&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java.sql.DriverManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getConnection&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;ds[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].hoststring,&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;ds[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].username,&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;ds[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].password&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfcatch&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfdump&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#ds#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfdump&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#cfcatch#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;cfrethrow&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfabort&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfcatch&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cftry&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;admin.logout&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfreturn&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cffunction&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The first part of this function first validates the password for admin
+access. From here the remainder of the administrative methods assumes a
+session variable called &lt;strong&gt;auth&lt;/strong&gt;exists, and contains the keys
+&lt;strong&gt;loggedIn&lt;/strong&gt;and &lt;strong&gt;password&lt;/strong&gt;. From here we grab the datasource by
+calling &lt;strong&gt;getDatasources()&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The next statements focus on getting a connection object by passing in
+the JDBC URL, user name, and password to the &lt;strong&gt;getConnection()&lt;/strong&gt;method
+of the *java.sql.DriverManager*class in Java. If all is successful we
+log out of the admin session and return the connection object.&lt;/p&gt;
+
+&lt;p&gt;Now we can get to the fun part. This code is pretty well documented, and
+warrants little discussion. The basics are that we first get a
+connection object using our fancy new function. We then compile the
+JRXML file and create a print object. The print object needs the
+compiled report, any arguments we wish to pass, and the connection
+object.&lt;/p&gt;
+
+&lt;p&gt;After this I show how to export your report as either PDF or Excel,
+based on the URL argument &lt;strong&gt;format&lt;/strong&gt;. Hope you enjoy. Happy coding AND
+reporting!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfparam&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;url.format&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;default&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;pdf&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	This is where you would place any arguments to send to your&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	report as variables.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.args&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Grab the current datasource&amp;#39;s connection. Note that the&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	function getConnection() refers to application.dsn.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Replace as necessary.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;getConnection&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Compile the report and get a print object, filling&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	it with data from the database.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.report&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JasperCompileManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;compileReport&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;expandPath&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;./InactivePeopleReport.jrxml&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.printObject&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JasperFillManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;fillReport&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.report,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.args,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.connection&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Export in the specified format.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfif&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;url.format&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;EQ&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;pdf&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.reportData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JasperExportManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;exportReportToPdf&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.printObject&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfheader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;content-length&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#arrayLen(local.reportData)#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfcontent&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;type&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;application/pdf&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;variable&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#local.reportData#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfelseif&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;url.format&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;EQ&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;excel&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.exporter&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.export.JRXlsExporter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;init&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.baos&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java.io.ByteArrayOutputStream&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;init&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JRExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).JASPER_PRINT,&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.printObject&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).IS_DETECT_CELL_TYPE,&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).IS_WHITE_PAGE_BACKGROUND,&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JRExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).OUTPUT_STREAM,&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.baos&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.exportReport&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.reportData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.baos.toByteArray&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfheader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Content-Disposition&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;attachment; filename=report.xls&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfcontent&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;type&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;application/excel&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;variable&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#local.reportData#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;reset&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfif&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfabort&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SES URLs with OpenBD and Google App Engine</title>
+      <link>http://adampresley.com/post/ses-urls-with-openbd-and-google-app-engine/</link>
+      <pubDate>Thu, 17 Dec 2009 16:41:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/ses-urls-with-openbd-and-google-app-engine/</guid>
+      <description>&lt;p&gt;A little tidbit that I though I&amp;rsquo;d share. While playing with the Google
+App Engine (GAE) version of the OpenBD CFML engine I noticed that SES
+friendly URL&amp;rsquo;s weren&amp;rsquo;t working for me. After a small search I came
+across a bug entry on the OpenBD site that suggested that the SES filter
+is not setup in the GAE version by default, and that the following XML
+needed to be added to the WEB-INF/web.xml configuration file.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;filter&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;filter-name&amp;gt;&lt;/span&gt;SearchEngineFriendlyURLFilter&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/filter-name&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;display-name&amp;gt;&lt;/span&gt;SearchEngineFriendlyURLFilter&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/display-name&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;SearchEngineFriendlyURLFilter&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;filter-class&amp;gt;&lt;/span&gt;com.newatlanta.filters.SearchEngineFriendlyURLFilter&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/filter-class&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;init-param&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;param-name&amp;gt;&lt;/span&gt;extensions&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/param-name&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;param-value&amp;gt;&lt;/span&gt;cfm,cfml&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/param-value&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/init-param&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;filter-mapping&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;filter-name&amp;gt;&lt;/span&gt;SearchEngineFriendlyURLFilter&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/filter-name&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;url-pattern&amp;gt;&lt;/span&gt;/index.cfm/*&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/url-pattern&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/filter-mapping&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This is to be inserted just before the closing tag. After a quick
+restart of the OpenBD context, I was good to go.&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Grails on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/grails/</link>
+    <description>Recent content in Grails on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 29 Aug 2012 19:50:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/grails/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Grails - Problem Transforming Call Sites</title>
+      <link>http://adampresley.com/post/grails-problem-transforming-call-sites/</link>
+      <pubDate>Wed, 29 Aug 2012 19:50:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/grails-problem-transforming-call-sites/</guid>
+      <description>&lt;p&gt;While working on a project in Grails 2.1.0 (on Windows 7 64-bit) I ran
+into an interesting error.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;Aug 29, 2012 7:17:21 PM com.springsource.loaded.agent.SpringLoadedPreProcessor preProcess
+SEVERE: Unexpected problem transforming call sites
+java.lang.IllegalStateException: Unexpected problem processing bytes for class
+        at com.springsource.loaded.ConstantPoolChecker2.readConstantPool(ConstantPoolChecker2.java:182)
+        at com.springsource.loaded.ConstantPoolChecker2.(ConstantPoolChecker2.java:114)
+        at com.springsource.loaded.ConstantPoolChecker2.getReferences(ConstantPoolChecker2.java:88)
+        at com.springsource.loaded.MethodInvokerRewriter.rewrite(MethodInvokerRewriter.java:248)
+        at com.springsource.loaded.MethodInvokerRewriter.rewriteUsingCache(MethodInvokerRewriter.java:141)
+        at com.springsource.loaded.TypeRegistry.methodCallRewriteUseCacheIfAvailable(TypeRegistry.java:775)
+        at com.springsource.loaded.agent.SpringLoadedPreProcessor.preProcess(SpringLoadedPreProcessor.java:251)
+        at com.springsource.loaded.agent.ClassPreProcessorAgentAdapter.transform(ClassPreProcessorAgentAdapter.java:89)
+        at sun.instrument.TransformerManager.transform(TransformerManager.java:188)
+        at sun.instrument.InstrumentationImpl.transform(InstrumentationImpl.java:424)
+        at java.lang.ClassLoader.defineClass1(Native Method)...
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I had done some searching and apparently a &lt;em&gt;similar&lt;/em&gt; error had been
+addressed previously. The part about &lt;strong&gt;Unexpected problem transforming
+call sites&lt;/strong&gt; was the same, but the actual exception,
+&lt;strong&gt;java.lang.IllegalStateException&lt;/strong&gt; differed. I&amp;rsquo;m not sure what the
+&lt;em&gt;actual&lt;/em&gt; fix is, but I went to &lt;em&gt;{home folder}/AppData&lt;/em&gt; and deleted the
+&lt;strong&gt;.grails&lt;/strong&gt; folder. This seemed to address the problem. Hope this helps
+anybody who might run into the same problem.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Rendering JSON with Groovy and Grails</title>
+      <link>http://adampresley.com/post/rendering-json-with-groovy-and-grails/</link>
+      <pubDate>Sun, 28 Nov 2010 23:25:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/rendering-json-with-groovy-and-grails/</guid>
+      <description>&lt;p&gt;The other day I blogged about generating XML from domain classes in
+Grails. Today I want to show how to do the same thing but with JSON
+instead. JSON is widely used and accepted as a great way to exchange
+information in AJAX and RESTful applications, and Grails makes it
+mind-numbingly simple to do this.&lt;/p&gt;
+
+&lt;p&gt;Grails provides a class called &lt;strong&gt;grails.converters.JSON&lt;/strong&gt;. This
+class provides a DSL, or Domain Specific Language, for creating JSON, as
+well as automatic marshaling of objects to JSON. In this sample I will
+demonstrate the automatic marshaling technique, and show how to return
+the JSON string back to the view, and even how to render it to the HTTP
+output for AJAX applications. For the sake of demonstration let&amp;rsquo;s
+pretend I have a &lt;strong&gt;Person&lt;/strong&gt; domain class, and I get a list of all
+the records from the database. With this list of persons I want to build
+an XML file that looks like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;class&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;com.adampresley.groovy.Person&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;nec.tempus.scelerisque@montesnascetur.ca&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Imogene&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Coffey&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;class&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;com.adampresley.groovy.Person&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;malesuada.malesuada.Integer@vitae.ca&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Marsden&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Mcbride&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;class&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;com.adampresley.groovy.Person&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;neque.venenatis@ipsum.edu&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Jescie&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Vang&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;class&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;com.adampresley.groovy.Person&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Nullam@MorbimetusVivamus.org&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;August&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Hewitt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;class&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;com.adampresley.groovy.Person&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Sed@mollisInteger.org&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Raven&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Gilmore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A pretty simple JSON structure. Now let&amp;rsquo;s look at that Person domain
+class. You may remember this from my Grails and XML post.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;adampresley&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;groovy&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Person&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;email&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;constraints&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;blank:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;blank:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;@Override&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;toString&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${firstName} ${lastName}&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Nothing has changed here. Now let&amp;rsquo;s see how we can use the power of
+Grails to easily transform an array of Person objects into JSON data.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;adampresley&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;groovy&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;grails.converters.JSON&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;TransformationsController&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;json&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;persons&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Person&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;list&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;println&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;persons&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;JSON&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;personJSON:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;persons&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;JSON&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;renderJson&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;persons&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Person&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;list&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;render&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;persons&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;JSON&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The above controller has two methods, one for returning a JSON string,
+and the other renders JSON to the HTTP output. As you can see it is
+quite possibly the simplest thing you&amp;rsquo;ve ever done in your life. Cheers and
+happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Setting a Proxy for the Grails Command Line Tools</title>
+      <link>http://adampresley.com/post/setting-a-proxy-for-the-grails-command-line-tools/</link>
+      <pubDate>Tue, 23 Nov 2010 21:54:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/setting-a-proxy-for-the-grails-command-line-tools/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;ve ever worked at a company that uses a corporate proxy you may
+have run into this little issue. Some command line tools such as CURL or
+Grails make calls out to the internet to do their jobs, and some
+corporate proxies just get in the way. Grails has a way of handling
+this, however, and you can setup a proxy so that Grails commands execute
+successfully.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;$ grails add-proxy client --host&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;1.2.3.4 --port&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;80&lt;/span&gt; --username&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;myUser --password&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;passwordgrails set-proxy client
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In the above example I am setting up a proxy configuration with a name
+of &lt;strong&gt;client&lt;/strong&gt;. I then tell Grails to use that named proxy by using the
+&lt;strong&gt;set-proxy&lt;/strong&gt; command. There is a catch, however, if you are stuck in
+Windows. In my Windows 7 64-bit machine environment I ran into a problem
+where the proxy didn&amp;rsquo;t seem to setup correctly. To remedy this browse to
+your user folder and open up the &lt;strong&gt;.grails/ProxySettings.groovy&lt;/strong&gt; file.
+In there you will see your named proxy, &lt;strong&gt;client&lt;/strong&gt; in my case, and you
+will notice that all the values are wrong. Correct those values by
+making them strings and save the changes. Note that by strings I mean
+they must have quotes around the values (after the equal sign).&lt;/p&gt;
+
+&lt;p&gt;Then try your Grails commands again and you should be golden! Happy
+coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Generating XML in Groovy and Grails</title>
+      <link>http://adampresley.com/post/generating-xml-in-groovy-and-grails/</link>
+      <pubDate>Mon, 22 Nov 2010 23:26:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/generating-xml-in-groovy-and-grails/</guid>
+      <description>&lt;p&gt;I was doing a little work in a project that spans a rather broad
+spectrum of the technology scale. One application in Groovy, the other
+is a Grails app, while another piece is ColdFusion. Overall a very
+interesting project.&lt;/p&gt;
+
+&lt;p&gt;One of the things I was working on is a sort of RESTful API, which is
+the portion written in Grails, and I found myself needing to craft an
+XML response that is essentially a domain-class transformed. I found
+this exercise in Grails to be quite simple.&lt;/p&gt;
+
+&lt;p&gt;Groovy provides a class called &lt;strong&gt;groovy.xml.MarkupBuilder&lt;/strong&gt;. This
+class provides a DSL, or Domain Specific Language, for creating XML. The
+syntax is actually quite easy and takes very little practice to become
+natural. For the sake of demonstration let&amp;rsquo;s pretend I have a
+&lt;strong&gt;Person&lt;/strong&gt; domain class, and I get a list of all the records from
+the database. With this list of persons I want to build an XML file that
+looks like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;people&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;person&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;id=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;firstname&amp;gt;&lt;/span&gt;Imogene&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/firstName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;lastname&amp;gt;&lt;/span&gt;Coffey&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/lastName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;email&amp;gt;&lt;/span&gt;nec.tempus.scelerisque@montesnascetur.ca&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/email&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/person&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;person&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;id=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;2&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;firstname&amp;gt;&lt;/span&gt;Marsden&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/firstName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;lastname&amp;gt;&lt;/span&gt;Mcbride&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/lastName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;email&amp;gt;&lt;/span&gt;malesuada.malesuada.Integer@vitae.ca&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/email&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/person&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;person&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;id=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;3&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;firstname&amp;gt;&lt;/span&gt;Jescie&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/firstName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;lastname&amp;gt;&lt;/span&gt;Vang&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/lastName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;email&amp;gt;&lt;/span&gt;neque.venenatis@ipsum.edu&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/email&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/person&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;person&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;id=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;4&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;firstname&amp;gt;&lt;/span&gt;August&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/firstName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;lastname&amp;gt;&lt;/span&gt;Hewitt&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/lastName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;email&amp;gt;&lt;/span&gt;Nullam@MorbimetusVivamus.org&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/email&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/person&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;person&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;id=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;5&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;firstname&amp;gt;&lt;/span&gt;Raven&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/firstName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;lastname&amp;gt;&lt;/span&gt;Gilmore&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/lastName&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;email&amp;gt;&lt;/span&gt;Sed@mollisInteger.org&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/email&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/person&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/people&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A pretty simple XML structure, but what does the domain class look
+like?&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;adampresley&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;groovy&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Person&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;email&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;constraints&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;blank:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;blank:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #a6e22e&#34;&gt;@Override&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;toString&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${firstName} ${lastName}&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;So with that class, and an understanding of how I wanted the XML to
+look, here&amp;rsquo;s how to use the &lt;strong&gt;MarkupBuilder&lt;/strong&gt; class to achieve
+this.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;adampresley&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;groovy&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;groovy.xml.MarkupBuilder&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;TransformationsController&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;xml&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;persons&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Person&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;list&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;writer&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;StringWriter&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;builder&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;MarkupBuilder&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;writer&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;builder&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;people&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;persons&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;each&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;item&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #f8f8f2&#34;&gt;builder&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;person&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;id:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;item&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;id&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+               &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;item&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;firstName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+               &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;item&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;lastName&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+               &lt;span style=&#34;color: #f8f8f2&#34;&gt;email&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;item&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;email&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+            &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+         &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;personXml:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;writer&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;toString&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Cheers and happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Getting Domain Name From Request in Grails</title>
+      <link>http://adampresley.com/post/getting-domain-name-from-request-in-grails/</link>
+      <pubDate>Tue, 12 Oct 2010 05:10:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/getting-domain-name-from-request-in-grails/</guid>
+      <description>&lt;p&gt;Here&amp;rsquo;s a little tidbit. If you need to determine what domain a request
+may have been referred from, such as when doing JSONP work, here&amp;rsquo;s a
+code snippet that might help.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;uri&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;java&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;net&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;URI&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;request&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getHeader&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;referer&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;))&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;domainName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;uri&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getHost&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The &lt;em&gt;java.net&lt;/em&gt; package contains the &lt;strong&gt;URI&lt;/strong&gt; class which aides in
+working with URIs and URLs. And in Grails the request processed by the
+servlet engine is an object named &lt;strong&gt;request&lt;/strong&gt;. That object contains
+a method called &lt;strong&gt;getHeader&lt;/strong&gt; that allows you to get any header
+value by name.&lt;/p&gt;
+
+&lt;p&gt;Using this little bit of code I am able to check the referring domain of
+a JSONP request against a MongoDB collection that contains a list of
+valid domains for a given registered user. Then if the request came from
+a valid domain I serve up the requested JSON response.&lt;/p&gt;
+
+&lt;p&gt;Hope that&amp;rsquo;s helpful to someone. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My Grails and MongoDB Experience (so far)</title>
+      <link>http://adampresley.com/post/my-grails-and-mongodb-experience-so-far/</link>
+      <pubDate>Fri, 08 Oct 2010 02:44:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/my-grails-and-mongodb-experience-so-far/</guid>
+      <description>&lt;p&gt;Slowly but surely I have been spending time learning how to develop web
+applications in Grails, a web application framework built on top of
+Groovy, Spring, and Hibernate. Last night I spent a good deal of time
+and effort trying to fit MongoDB into this framework stack, and met with
+quite a bit of resistance. I found that I didn&amp;rsquo;t quite like the existing
+Grails plugins for MongoDB, so I set off to do this in a little more
+&amp;ldquo;manual&amp;rdquo; way.&lt;/p&gt;
+
+&lt;p&gt;Once I had my Grails project setup I first set out to download the &lt;a href=&#34;http://github.com/mongodb/mongo-java-driver/downloads&#34;&gt;Java
+driver&lt;/a&gt; for MongoDB. The nice folks who make this lovely
+document-based database product provide this already, so that was a
+no-brainer. There are plenty of tutorials on how to use this driver so I
+won&amp;rsquo;t delve into that.&lt;/p&gt;
+
+&lt;p&gt;After getting my classpath adjusted accordingly I set out on how to make
+and persist my Grails domain classes. The first annoyance is that I
+could not put my classes in the actual &lt;em&gt;domain&lt;/em&gt; folder, but instead
+had to place them into &lt;em&gt;src/groovy&lt;/em&gt;. This appears to be a Grails
+limitation because everything in the &lt;em&gt;domain&lt;/em&gt; folder expects to be
+persisted by Hibernate, and since I am not using Hibernate that caused
+an issue. Allegedly this is being addressed in the next release of
+Grails. I tried a number of techniques to persist my classes to MongoDB
+but found a lot of walls.&lt;/p&gt;
+
+&lt;p&gt;Enter &lt;a href=&#34;http://code.google.com/p/morphia/&#34;&gt;Morphia&lt;/a&gt;. This nifty jewel is a type-safe library for mapping
+Java objects to MongoDB. With Morphia I only have to add very little to
+describe my class so that it can be persisted to MongoDB. Here&amp;rsquo;s a
+sample of a class the represents a user&amp;rsquo;s Role.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com.google.code.morphia.annotations.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.bson.types.*&lt;/span&gt;
+
+&lt;span style=&#34;color: #a6e22e&#34;&gt;@Entity&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Role&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #a6e22e&#34;&gt;@Id&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ObjectId&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;id&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;roleName&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isSuperAdmin&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;sortOrder&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You&amp;rsquo;ll notice I added annotations for the class itself to describe that
+it is a Mongo Entity, and another for the ID field. That&amp;rsquo;s it. With this
+in place it is a simple matter to persist the object.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;mongo&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Mongo&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;127.0.0.1&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;morphia&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Morphia&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ds&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;morphia&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;createDatastore&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;mongo&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;myDB&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;morphia&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;map&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;Role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;newRole&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;roleName:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isSuperAdmin:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;sortOrder:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;ds&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;save&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;newRole&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Easy enough to do and worked great. From here I created an additional
+class for a User that has a relationship to the Role class. In MongoDB
+you can either embed an object that has a relationship, or you can
+reference. In this case I opted to reference.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com.google.code.morphia.annotations.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.bson.types.*&lt;/span&gt;
+
+&lt;span style=&#34;color: #a6e22e&#34;&gt;@Entity&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;User&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #a6e22e&#34;&gt;@Id&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ObjectId&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;id&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;userName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;email&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;password&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #a6e22e&#34;&gt;@com.google.code.morphia.annotations.Reference&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;List&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;roles&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;As you can see my user class has most of what you would expect from one.
+The user may, however, have one or more roles in the system, so I&amp;rsquo;ve
+created a List of Role objects, and annotated it with the @Reference
+annotation. This tells Morphia that when persisting this object save it
+with a reference to the listed roles.&lt;/p&gt;
+
+&lt;p&gt;After getting this all to jive I then decided I wanted to hide the
+connection and data store details and make it simpler to consume. At
+this point I created a &lt;strong&gt;Database&lt;/strong&gt; class that handles all the
+connection code, as well as mapping the objects to Morphia. To make it
+easy to instantiate I used Grail&amp;rsquo;s Spring DSL to allow Grails to manage
+instantiation and dependencies. To do this I opened up the
+&lt;em&gt;conf/spring/resources.groovy&lt;/em&gt; file and edited it to look like so.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;// Place your Spring DSL code here&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;beans&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * Database and DAO beans&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    */&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;myproject&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;data&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now inside of a controller or my bootstrap I can simply use &lt;strong&gt;def
+database&lt;/strong&gt; and I will get my database object that handles connecting
+and mapping for me (and has a handy method to get the datastore back
+too). Once this was in place I wanted to utilize the DAO class
+extensions offered by Morphia. To do this I created a class that looks
+like so.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com.myproject.data.Database&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com.mongodb.Mongo&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com.google.code.morphia.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.bson.types.*&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;RoleDAO&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;DAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;objectid&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;RoleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;Database&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;super&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;ds&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;After creating this I then wired it into Spring similar to before. The
+biggest difference is that I need to pass the database object to this
+DAO in the constructor. Here&amp;rsquo;s how that works.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;// Place your Spring DSL code here&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;beans&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * Database and DAO beans&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    */&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;myproject&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;data&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;roleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;myproject&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;userDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;myproject&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;User&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;database&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;With the DAO and database connectivity all wired up to Spring, I could
+now create some sample data in my bootstrap.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;database&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;roleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;userDAO&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;init&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&amp;amp;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;gt&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;roleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;deleteByQuery&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;roleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;createQuery&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;())&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;userDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;deleteByQuery&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;userDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;createQuery&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;())&lt;/span&gt;
+
+   &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * Create all roles&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    */&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;superAdminRole&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;roleName:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;superadmin&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;sortOrder:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isSuperAdmin:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;adminRole&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;roleName:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;sortOrder:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isSuperAdmin:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;userRole&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Role&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;roleName:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;sortOrder:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isSuperAdmin:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;roleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;save&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;superAdminRole&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;roleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;save&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;adminRole&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;roleDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;save&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;userRole&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * Make a super user&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    */&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;user&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;User&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;userName:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;email:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;test@test.com&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;password:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;John&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Smith&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;roles:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;superAdminRole&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;userDAO&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;save&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;user&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;So far this experience has been interesting. And by interesting I mean a
+tad frustrating, but very educational. I&amp;rsquo;ll post more as I learn more
+about this experience. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MailSlurper, Now with Paging and Sorting!</title>
+      <link>http://adampresley.com/post/mailslurper-now-with-paging-and-sorting/</link>
+      <pubDate>Mon, 27 Sep 2010 04:59:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/mailslurper-now-with-paging-and-sorting/</guid>
+      <description>&lt;p&gt;A super quick update: I have updated MailSlurper&amp;rsquo;s administrative
+interface to now have paging and column sorting!! And in Grails this was
+super easy to do. I totally need to blog about this later. Meanwhile
+check it out and go &lt;a href=&#34;http://dl.dropbox.com/u/5726689/blog-downloads/MailSlurper.zip&#34;&gt;download it&lt;/a&gt;.
+Cheers!!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Grails, MongoDB, and the Domain Class</title>
+      <link>http://adampresley.com/post/grails-mongodb-and-the-domain-class/</link>
+      <pubDate>Sun, 19 Sep 2010 23:50:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/grails-mongodb-and-the-domain-class/</guid>
+      <description>&lt;p&gt;While doing some experimentation with Groovy and Grails tied to a
+MongoDB database I was running into difficulties. I first tried the two
+plugins that are available for Grails and Mongo, but I just didn&amp;rsquo;t find
+them to work quite the way I liked, and didn&amp;rsquo;t feel like they fit the
+GORM paradigm.&lt;/p&gt;
+
+&lt;p&gt;So I decided to old-school it and just use the Java MongoDB library and
+persist objects the old fashioned way. I quickly ran into a problem
+where the &lt;strong&gt;Customer&lt;/strong&gt; class I created in the &lt;em&gt;domain&lt;/em&gt; directory
+could not be instantiated. I simply got a null value as the returned
+object. Clearly trying to persist a null to Mongo was not going to work!
+As a result I posted a message to the Dallas Groovy user group and
+someone suggested I move my class to the &lt;em&gt;/src/groovy&lt;/em&gt; directory. This
+worked like a charm! So here is my class.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Customer&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;address&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;city&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;state&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;zip&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And then here is my Bootstrap where I am simply setting up some sample
+data using the MongoDB Java drivers and the JSON-lib library.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;mongodbtest1.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;net.sf.json.groovy.GJson&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com.mongodb.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;net.sf.json.*&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;BootStrap&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;init&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;mongo&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Mongo&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;localhost&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;27017&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;mongo&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;].&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getDB&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;collections&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;customer:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;].&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getCollection&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Customer&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+
+      &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;       * Clear out all records&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;       */&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;collections&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;].&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;customer&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;drop&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+
+      &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;       * Create some test records yo.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;       */&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;servletContext&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;collections&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;].&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;customer&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;insert&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;JSONObject&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;fromObject&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Customer&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;name:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Adam&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;address:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;111 MyStreet Dr.&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;city:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Allen&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;state:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;TX&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;zip:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;77777&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;BasicDBObject&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;destroy&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;And with that I can log into the Mongo console and do
+&lt;strong&gt;db.Customer.find()&lt;/strong&gt; and see the document I just inserted. Woot!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Yummy Mail! MailSlurper Released!</title>
+      <link>http://adampresley.com/post/yummy-mail-mailslurper-released/</link>
+      <pubDate>Thu, 02 Sep 2010 05:11:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/yummy-mail-mailslurper-released/</guid>
+      <description>&lt;p&gt;That&amp;rsquo;s right, I said it. MailSlurper, the mostly useless mail SMTP
+server has been released! Not only does it slurp your mail into
+oblivion, but you can see those doomed emails in an administrative
+interface now. Woo hoo!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

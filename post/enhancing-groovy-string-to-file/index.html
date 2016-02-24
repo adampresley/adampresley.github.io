@@ -1,0 +1,220 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Adam.Blog()</title>
+        <meta name="author">
+        <meta name="description" content="I&#39;m bringin&#39; nerdy back">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.16-DEV" />
+          <link href="http://adampresley.com/post/index.xml" rel="alternate" type="application/rss+xml" title="Adam.Blog()" />
+          <link href="http://adampresley.com/post/index.xml" rel="feed" type="application/rss+xml" title="Adam.Blog()" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://adampresley.com/css/styles.css">
+        <link rel="icon" href="http://adampresley.com/favicon.ico">
+        <link rel="apple-touch-icon" href="http://adampresley.com/apple-touch-icon.png" />
+        <link rel="stylesheet" href="http://adampresley.com/css/highlightjs/monokai.css">
+        <script src="http://adampresley.com/js/vendor/modernizr-2.8.0.min.js"></script>
+        <style>
+        .site-header h2 .logo {
+        background: url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(http://adampresley.com/assets/images/code-background-screenshot.png);
+        }}
+       .site-header {
+         background: #2a373d url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Adam.Blog()</h2>
+          </div>
+        </header>
+
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <article class="post">
+            <a class="btn home" href="http://adampresley.com/" title="">&laquo; </a>
+            
+<h1><a href="http://adampresley.com/post/enhancing-groovy-string-to-file/" title="Enhancing Groovy - String to File">Enhancing Groovy - String to File</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2009.02.09">2009.02.09</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/groovy">groovy</a>
+        
+    
+
+</span>
+</footer>
+
+            <p>Although I&rsquo;m sure this won&rsquo;t be <strong>super</strong> useful, I did find a use case
+for it yesterday while writing a command line log parsing tool in
+Groovy. One of the options I was providing users of this tool (mainly
+me) is the ability to pass in a comma-delimited list of files to
+process. Because of this I get a String that I can use <em>split()</em>
+against, and have a Collection to work with. I also provided a way to
+parse files that match a regular expression, so basically there are two
+ways to specify files.</p>
+
+<p>Because of this the parser class is expecting a Collection of <strong>File</strong>
+objects. So then I was on task to find the best, or maybe just coolest,
+way to convert that Collection of Strings into a Collection of File
+objects.</p>
+
+<p>For the first pass at this I use a simple <strong>each</strong> iteration like so:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #f8f8f2">pretendCommandLineArg</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;/home/psykoprogrammer/Documents/test.xls,/home/psykoprogrammer/Documents/ClearConnectUserGuide.docx&quot;</span>
+<span style="color: #66d9ef">def</span> <span style="color: #f8f8f2">fileList</span> <span style="color: #f92672">=</span> <span style="color: #f92672">[]</span>
+
+<span style="color: #f8f8f2">pretendCommandLineArg</span><span style="color: #f92672">.</span><span style="color: #a6e22e">split</span><span style="color: #f92672">(</span><span style="color: #e6db74">&quot;,&quot;</span><span style="color: #f92672">).</span><span style="color: #a6e22e">each</span> <span style="color: #f92672">{</span>
+	<span style="color: #f8f8f2">fileList</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #66d9ef">new</span> <span style="color: #f8f8f2">File</span><span style="color: #f92672">(</span><span style="color: #f8f8f2">it</span><span style="color: #f92672">)</span>
+<span style="color: #f92672">}</span>
+
+<span style="color: #f8f8f2">fileList</span><span style="color: #f92672">.</span><span style="color: #a6e22e">each</span> <span style="color: #f92672">{</span>
+	<span style="color: #f8f8f2">println</span> <span style="color: #e6db74">&quot;File Name: ${it.getName()}, Path: ${it.getCanonicalPath()}&quot;</span>
+<span style="color: #f92672">}</span>
+</pre></div>
+
+
+<p>And that worked just fine. Then it occured to me that I could add a
+metaClass enhancement to my already growing list of metaClass
+enhancements that can convert a string to a File object. That&rsquo;s simple
+enough to do.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">String</span><span style="color: #f92672">.</span><span style="color: #a6e22e">metaClass</span><span style="color: #f92672">.</span><span style="color: #a6e22e">toFile</span> <span style="color: #f92672">{</span> <span style="color: #f8f8f2">basePath</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;&quot;</span> <span style="color: #f92672">-&gt;</span>
+	<span style="color: #66d9ef">new</span> <span style="color: #a6e22e">File</span><span style="color: #f92672">(</span><span style="color: #e6db74">&quot;${basePath}${delegate}&quot;</span><span style="color: #f92672">)</span>
+<span style="color: #f92672">}</span>
+</pre></div>
+</p>
+
+<p>With that enhancement to the String class I can now do something like
+this:</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #e6db74">&quot;/home/adampresley/filea.txt&quot;</span><span style="color: #f92672">.</span><span style="color: #a6e22e">toFile</span><span style="color: #f92672">()</span>
+<span style="color: #e6db74">&quot;filea.txt&quot;</span><span style="color: #f92672">.</span><span style="color: #a6e22e">toFile</span><span style="color: #f92672">(</span><span style="color: #e6db74">&quot;/home/adampresley/&quot;</span><span style="color: #f92672">)</span>
+</pre></div>
+</p>
+
+<p>That&rsquo;s pretty neat, but what about the fact I have a command line
+argument with a list of files delimited by a comma? Simple.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #f8f8f2">pretendCommandLineArg</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;/home/adampresley/test.xls,/home/adampresley/testfile.txt&quot;</span>
+<span style="color: #66d9ef">def</span> <span style="color: #f8f8f2">fileList</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">pretendCommandLineArg</span><span style="color: #f92672">.</span><span style="color: #a6e22e">split</span><span style="color: #f92672">(</span><span style="color: #e6db74">&quot;,&quot;</span><span style="color: #f92672">)*.</span><span style="color: #a6e22e">toFile</span><span style="color: #f92672">()</span>
+
+<span style="color: #f8f8f2">fileList</span><span style="color: #f92672">.</span><span style="color: #a6e22e">each</span> <span style="color: #f92672">{</span>
+	<span style="color: #f8f8f2">println</span> <span style="color: #e6db74">&quot;File Name: ${it.getName()}, Path: ${it.getCanonicalPath()}&quot;</span>
+<span style="color: #f92672">}</span>
+</pre></div>
+</p>
+
+<p>By using the spread operator I can apply my new <strong>toFile()</strong> String
+method to each String in the Collection! Pretty cool eh? Although not
+the most useful thing hopefully this gets your brain pumping on the
+coolness that is Groovy! Happy coding!</p>
+
+            <ul class="share-buttons">
+    <li></li>
+    <li>
+        <a class="icon-facebook-squared" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fadampresley.com%2fpost%2fenhancing-groovy-string-to-file%2f" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-twitter" href="https://twitter.com/share?text=Enhancing%20Groovy%20-%20String%20to%20File&amp;url=http%3a%2f%2fadampresley.com%2fpost%2fenhancing-groovy-string-to-file%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-gplus" href="https://plus.google.com/share?url=http%3a%2f%2fadampresley.com%2fpost%2fenhancing-groovy-string-to-file%2f" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2fadampresley.com%2fpost%2fenhancing-groovy-string-to-file%2f&title=Enhancing%20Groovy%20-%20String%20to%20File" onclick="window.open(this.href, 'linkedin-share', 'width=600,height=494');return false;" title=""></a>
+    </li>
+</ul>
+
+        </article>
+        <div class="comments">
+            <h3></h3>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adampresleyblog';
+    var disqus_identifier = 'http:\/\/adampresley.com\/post\/enhancing-groovy-string-to-file\/';
+    var disqus_title = 'Enhancing Groovy - String to File';
+    var disqus_url = 'http:\/\/adampresley.com\/post\/enhancing-groovy-string-to-file\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </main>
+    <aside class="author">
+  <img class="profile-image" src="http://adampresley.com/assets/adampresley/images/adam-bowtie.png" alt="Adam Presley" />
+  <p class="name"> 
+  <strong>Adam Presley</strong></p>
+  <p class="address">Texas, USA</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/adampresley" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/adampresley" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="http://adampresley.com/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="http://adampresley.com/post/index.xml" title="RSS"></a>
+        <p>&copy; 2016 &middot; Adam Presley. All Rights Reserved. Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="http:\/\/adampresley.com\/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="http://adampresley.com/js/plugins.js"></script>
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-44927419-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

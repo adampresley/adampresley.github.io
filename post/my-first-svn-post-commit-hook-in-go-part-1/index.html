@@ -1,0 +1,417 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Adam.Blog()</title>
+        <meta name="author">
+        <meta name="description" content="I&#39;m bringin&#39; nerdy back">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.16-DEV" />
+          <link href="http://adampresley.com/post/index.xml" rel="alternate" type="application/rss+xml" title="Adam.Blog()" />
+          <link href="http://adampresley.com/post/index.xml" rel="feed" type="application/rss+xml" title="Adam.Blog()" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://adampresley.com/css/styles.css">
+        <link rel="icon" href="http://adampresley.com/favicon.ico">
+        <link rel="apple-touch-icon" href="http://adampresley.com/apple-touch-icon.png" />
+        <link rel="stylesheet" href="http://adampresley.com/css/highlightjs/monokai.css">
+        <script src="http://adampresley.com/js/vendor/modernizr-2.8.0.min.js"></script>
+        <style>
+        .site-header h2 .logo {
+        background: url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(http://adampresley.com/assets/images/code-background-screenshot.png);
+        }}
+       .site-header {
+         background: #2a373d url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Adam.Blog()</h2>
+          </div>
+        </header>
+
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <article class="post">
+            <a class="btn home" href="http://adampresley.com/" title="">&laquo; </a>
+            
+<h1><a href="http://adampresley.com/post/my-first-svn-post-commit-hook-in-go-part-1/" title="My First SVN Post-Commit Hook in Go - Part 1">My First SVN Post-Commit Hook in Go - Part 1</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2015.01.25">2015.01.25</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/golang">golang</a>, 
+        
+        <a href="http://adampresley.com/tags/svn">svn</a>
+        
+    
+
+</span>
+</footer>
+
+            
+
+<p><img src="/assets/adampresley/images/posts/90H.jpg" alt="Man with headphones" />
+<em>Image copyright <a href="http://www.gratisography.com/">Ryan McGuire</a></em></p>
+
+<p>*This is part one of a two part series on how I created a Subversion post-commit hook using Go, and post a message in a HipChat room. I did this for the teams at my day job. <strong>Please note that certain pieces of code have been changed to protect the innocent, and opinions here do not necessarily reflect those of my employer.</strong>*</p>
+
+<p>There has been an ongoing effort with the various teams I work with to improve code review. To provide more visibility to code being committed to our trunk branch in Subversion I decided a post-commit hook could help us achieve that visibility. This post-commit hook would send a message to a HipChat room, dedicated to reviewing code changes and information about each commit. This would allow teams to know when changes were made to our trunk branch and have the chance to review the code across teams. This strategy has been an effective one in reducing errors in code and improving overall code quality. This post will deal with utilizing Subversion to retrieve information about a commit. This information is what will be used in part 2 to post a message in HipChat.</p>
+
+<!-- excerpt -->
+
+<p>When you commit code into Subversion a series of events occur. The final event, and the one we are most interested in for this exercise, is the <strong>post-commit</strong>. Once a commit is complete and recorded to your Subversion repository Subversion will execute a post-commit handler if one is defined. This is usually setup in the form of a shell script or executable. When Subversion executes the post-commit handler it provides two pieces of useful information: <code>repository path</code> and the <code>revision number</code>. Armed with this we can query Subversion for more information about the commit, such as who committed the work, and the log message that goes along with it. So the following code will demonstrate how we can get all this information. Note that this code isn&rsquo;t the prettiest and could use some improvement, and it also requires that you have the SVN command line tools installed at a specific location.</p>
+
+<h3 id="command-line-arguments:cecc607d79c6afd1a713d11b72475d8e">Command Line Arguments</h3>
+
+<p>The first order of business is to get the repository path and revision number. This can be done using the <code>os</code> package, which provides an array of command line arguments called <strong>Args</strong>. The very first argument will be the executable Go program, so we are expecting the repository path and revision number at positions 1 and 2, respectively. Thus means we are expecting at least 3 arguments, and we are interested in the first two (past the executable name).</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">len(</span><span style="color: #a6e22e">os</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Args</span><span style="color: #f8f8f2">)</span> <span style="color: #f92672">&gt;=</span> <span style="color: #ae81ff">3</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #a6e22e">repo</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">os</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Args</span><span style="color: #f8f8f2">[</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">]</span>
+	<span style="color: #a6e22e">rev</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">os</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Args</span><span style="color: #f8f8f2">[</span><span style="color: #ae81ff">2</span><span style="color: #f8f8f2">]</span>
+	<span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Printf</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;Commit revision %s against %s&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">rev</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">repo</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+
+<h3 id="getting-info-from-subversion:cecc607d79c6afd1a713d11b72475d8e">Getting Info from Subversion</h3>
+
+<p>Once we have the repository path and revision number we need to get author and log message information from Subversion. This is where we will make a new file to put a few functions into. These functions will do the talking to the command line to execute Subversion commands. More specifically we will use the <code>svnlook.exe</code> program to get what we need. Let&rsquo;s create a folder named <code>svnLook</code> and make a file called <strong>SvnLook.go</strong>. This will house functions to communicate with SVN.</p>
+
+<h4 id="give-it-a-home:cecc607d79c6afd1a713d11b72475d8e">Give It a Home</h4>
+
+<p>There are several operations that we are going to want to perform. We will want to get the author, log, and changed paths for a specific commit. As such there is some information that we can use across all our functions. For this we can setup a structure, and then attach functions to it.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">type</span> <span style="color: #a6e22e">SvnLook</span> <span style="color: #66d9ef">struct</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">SvnLookBinaryPath</span> <span style="color: #66d9ef">string</span>
+   <span style="color: #a6e22e">RepositoryPath</span>    <span style="color: #66d9ef">string</span>
+   <span style="color: #a6e22e">Revision</span>          <span style="color: #66d9ef">string</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+
+
+<p>It would also be handy to have a function to return a new <code>SvnLook</code> structure instance. So let&rsquo;s make one. It doesn&rsquo;t need to do much. Just create the instance of the <code>SvnLook</code> structure, replace backslashes with forward slashes, and return it.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">func</span> <span style="color: #a6e22e">NewSvnLook</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">svnLookBinaryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">repositoryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">revision</span> <span style="color: #66d9ef">string</span><span style="color: #f8f8f2">)</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #f92672">&amp;</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">{</span>
+      <span style="color: #a6e22e">SvnLookBinaryPath</span><span style="color: #f8f8f2">:</span> <span style="color: #a6e22e">svnLookBinaryPath</span><span style="color: #f8f8f2">,</span>
+      <span style="color: #a6e22e">RepositoryPath</span><span style="color: #f8f8f2">:</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Replace</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">repositoryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;\\&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;/&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f92672">-</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">),</span>
+      <span style="color: #a6e22e">Revision</span><span style="color: #f8f8f2">:</span> <span style="color: #a6e22e">revision</span><span style="color: #f8f8f2">,</span>
+   <span style="color: #f8f8f2">}</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+
+
+<h4 id="executing-commands:cecc607d79c6afd1a713d11b72475d8e">Executing Commands</h4>
+
+<p>Now that we have a place to put Subversion commands we need to actually execute them. There are three commands we are going to need, each switches on the <code>svnlook.exe</code> program. With that in mind let&rsquo;s make a function that executes the <code>svnlook.exe</code> program which takes in arguments and returns any output spit out. To execute a command line program we&rsquo;ll make use of the <code>os/exec</code> Go package. This will take an argument of the specific command we want to execute It then calls <strong>exec.Command()</strong>. Each Subversion command we execute will write information to the console normally, but we need that information. To capture this we redirect the <strong>Stdout</strong> to a byte array buffer. After running the command that byte array will contain the console output, which we return back as a string.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">command</span> <span style="color: #66d9ef">string</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">out</span> <span style="color: #a6e22e">bytes</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Buffer</span>
+
+   <span style="color: #a6e22e">cmd</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">exec</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Command</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">SvnLookBinaryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">command</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">RepositoryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;--revision&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Revision</span><span style="color: #f8f8f2">)</span>
+   <span style="color: #a6e22e">cmd</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Stdout</span> <span style="color: #f8f8f2">=</span> <span style="color: #f92672">&amp;</span><span style="color: #a6e22e">out</span>
+
+   <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">cmd</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Run</span><span style="color: #f8f8f2">()</span>
+   <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+      <span style="color: #66d9ef">return</span> <span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span>
+   <span style="color: #f8f8f2">}</span>
+
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">out</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">String</span><span style="color: #f8f8f2">(),</span> <span style="color: #66d9ef">nil</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<h4 id="the-author:cecc607d79c6afd1a713d11b72475d8e">The Author</h4>
+
+<p>Now that we have a function to run the <code>svnlook.exe</code> program with an arbitrary command it should be trivial to get the data we want. One of the things we&rsquo;d like to know is the author of the commit. On the console that would look like <code>svnlook.exe author /repo/path --revision 12345</code>. Our <strong>executeCommand()</strong> function takes care of most of that, so we&rsquo;ll just need to tell it that we want to get author information.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">GetAuthor</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">result</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;author&quot;</span><span style="color: #f8f8f2">)</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">TrimSpace</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">result</span><span style="color: #f8f8f2">),</span> <span style="color: #a6e22e">err</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<h4 id="directories-changed:cecc607d79c6afd1a713d11b72475d8e">Directories Changed</h4>
+
+<p>We also need to know what directory paths were affected by this commit. On the console that would look like <code>svnlook.exe dirs-changed /repo/path --revision 12345</code>. The only thing we need to add here is to take the result and split it by newline. This is because each affected directory of the commit is on a separate line.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">GetDirectoriesChanged</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">([]</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">result</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;dirs-changed&quot;</span><span style="color: #f8f8f2">)</span>
+   <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+      <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">make([]</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">),</span> <span style="color: #a6e22e">err</span>
+   <span style="color: #f8f8f2">}</span>
+
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Split</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">result</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;\n&quot;</span><span style="color: #f8f8f2">),</span> <span style="color: #66d9ef">nil</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<h4 id="log-message:cecc607d79c6afd1a713d11b72475d8e">Log Message</h4>
+
+<p>Hopefully each commit a developer makes is accompanied by a detailed log message. We&rsquo;d like to see that too. On the console that would look like <code>svnlookexe log /repo/path --revision 12345</code>.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">GetLog</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;log&quot;</span><span style="color: #f8f8f2">)</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<h3 id="making-good-use:cecc607d79c6afd1a713d11b72475d8e">Making Good Use</h3>
+
+<p>Now let&rsquo;s make good use of our new functions. When we last left our main program was getting repository path and revision information. This is exactly what we need to make use of our new <code>SvnLook</code> functions. That, and a path to the executable. So let&rsquo;s put them to use!</p>
+
+<h4 id="the-right-change:cecc607d79c6afd1a713d11b72475d8e">The Right Change?</h4>
+
+<p>The first order of business is to create an instance and get affected paths. We want to know what paths were affected because in our situation we only want to alert HipChat if a commit was made against the trunk branch. Other branches we do not care about.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #a6e22e">svnLook</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnlook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">NewSvnLook</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">SVNLOOK_PATH</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">repo</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">rev</span><span style="color: #f8f8f2">)</span>
+
+<span style="color: #a6e22e">affectedPaths</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnLook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">GetDirectoriesChanged</span><span style="color: #f8f8f2">()</span>
+<span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f92672">||</span> <span style="color: #f8f8f2">len(</span><span style="color: #a6e22e">affectedPaths</span><span style="color: #f8f8f2">)</span> <span style="color: #f92672">&lt;=</span> <span style="color: #ae81ff">0</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Fatalf</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;An error occurred running svnlook: %s&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Error</span><span style="color: #f8f8f2">())</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #66d9ef">if</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Contains</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Join</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">affectedPaths</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot; &quot;</span><span style="color: #f8f8f2">),</span> <span style="color: #e6db74">&quot;trunk/&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<h4 id="who-did-what:cecc607d79c6afd1a713d11b72475d8e">Who Did What?</h4>
+
+<p>Now that we know what paths changed, and if we care about them, let&rsquo;s get the good stuff. The author and log message are what ultimately will be important to convey in a HipChat message.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #a6e22e">author</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnLook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">GetAuthor</span><span style="color: #f8f8f2">()</span>
+<span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;ERROR - No author information available&quot;</span><span style="color: #f8f8f2">)</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #a6e22e">logMessage</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnLook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">GetLog</span><span style="color: #f8f8f2">()</span>
+<span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;ERROR - No log information available&quot;</span><span style="color: #f8f8f2">)</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<h3 id="the-culmination:cecc607d79c6afd1a713d11b72475d8e">The Culmination</h3>
+
+<p>Let&rsquo;s see what it all looks like so far. This isn&rsquo;t everything, because the rest will be done in part 2, but for the moment I&rsquo;ll put what we have right here.</p>
+
+<h4 id="svnlook-svnlook-go:cecc607d79c6afd1a713d11b72475d8e">svnlook/SvnLook.go</h4>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">svnlook</span>
+
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">(</span>
+   <span style="color: #e6db74">&quot;bytes&quot;</span>
+   <span style="color: #e6db74">&quot;os/exec&quot;</span>
+   <span style="color: #e6db74">&quot;strings&quot;</span>
+<span style="color: #f8f8f2">)</span>
+
+<span style="color: #66d9ef">type</span> <span style="color: #a6e22e">SvnLook</span> <span style="color: #66d9ef">struct</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">SvnLookBinaryPath</span> <span style="color: #66d9ef">string</span>
+   <span style="color: #a6e22e">RepositoryPath</span>    <span style="color: #66d9ef">string</span>
+   <span style="color: #a6e22e">Revision</span>          <span style="color: #66d9ef">string</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #66d9ef">func</span> <span style="color: #a6e22e">NewSvnLook</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">svnLookBinaryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">repositoryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">revision</span> <span style="color: #66d9ef">string</span><span style="color: #f8f8f2">)</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #f92672">&amp;</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">{</span>
+      <span style="color: #a6e22e">SvnLookBinaryPath</span><span style="color: #f8f8f2">:</span> <span style="color: #a6e22e">svnLookBinaryPath</span><span style="color: #f8f8f2">,</span>
+      <span style="color: #a6e22e">RepositoryPath</span><span style="color: #f8f8f2">:</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Replace</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">repositoryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;\\&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;/&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f92672">-</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">),</span>
+      <span style="color: #a6e22e">Revision</span><span style="color: #f8f8f2">:</span> <span style="color: #a6e22e">revision</span><span style="color: #f8f8f2">,</span>
+   <span style="color: #f8f8f2">}</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">command</span> <span style="color: #66d9ef">string</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">out</span> <span style="color: #a6e22e">bytes</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Buffer</span>
+
+   <span style="color: #a6e22e">cmd</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">exec</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Command</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">SvnLookBinaryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">command</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">RepositoryPath</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;--revision&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Revision</span><span style="color: #f8f8f2">)</span>
+   <span style="color: #a6e22e">cmd</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Stdout</span> <span style="color: #f8f8f2">=</span> <span style="color: #f92672">&amp;</span><span style="color: #a6e22e">out</span>
+
+   <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">cmd</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Run</span><span style="color: #f8f8f2">()</span>
+   <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+      <span style="color: #66d9ef">return</span> <span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span>
+   <span style="color: #f8f8f2">}</span>
+
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">out</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">String</span><span style="color: #f8f8f2">(),</span> <span style="color: #66d9ef">nil</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">GetAuthor</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">result</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;author&quot;</span><span style="color: #f8f8f2">)</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">TrimSpace</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">result</span><span style="color: #f8f8f2">),</span> <span style="color: #a6e22e">err</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">GetDirectoriesChanged</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">([]</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">result</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;dirs-changed&quot;</span><span style="color: #f8f8f2">)</span>
+   <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+      <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">make([]</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">),</span> <span style="color: #a6e22e">err</span>
+   <span style="color: #f8f8f2">}</span>
+
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Split</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">result</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;\n&quot;</span><span style="color: #f8f8f2">),</span> <span style="color: #66d9ef">nil</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #66d9ef">func</span> <span style="color: #f8f8f2">(</span><span style="color: #a6e22e">this</span> <span style="color: #f92672">*</span><span style="color: #a6e22e">SvnLook</span><span style="color: #f8f8f2">)</span> <span style="color: #a6e22e">GetLog</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span><span style="color: #f8f8f2">,</span> <span style="color: #66d9ef">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #a6e22e">this</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">executeCommand</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;log&quot;</span><span style="color: #f8f8f2">)</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<h4 id="post-commit-go:cecc607d79c6afd1a713d11b72475d8e">post-commit.go</h4>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
+
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">(</span>
+   <span style="color: #e6db74">&quot;log&quot;</span>
+   <span style="color: #e6db74">&quot;os&quot;</span>
+   <span style="color: #e6db74">&quot;strings&quot;</span>
+   <span style="color: #e6db74">&quot;regexp&quot;</span>
+<span style="color: #f8f8f2">)</span>
+
+<span style="color: #66d9ef">const</span> <span style="color: #a6e22e">SVNLOOK_PATH</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">=</span> <span style="color: #e6db74">&quot;C:\\progra~1\\Subversion\\bin\\svnlook.exe&quot;</span>
+
+<span style="color: #66d9ef">func</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Printf</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;svnPostCommitHook activated with %d arguments&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">len(</span><span style="color: #a6e22e">os</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Args</span><span style="color: #f8f8f2">))</span>
+
+   <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">len(</span><span style="color: #a6e22e">os</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Args</span><span style="color: #f8f8f2">)</span> <span style="color: #f92672">&gt;=</span> <span style="color: #ae81ff">3</span> <span style="color: #f8f8f2">{</span>
+      <span style="color: #a6e22e">repo</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">os</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Args</span><span style="color: #f8f8f2">[</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">]</span>
+      <span style="color: #a6e22e">rev</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">os</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Args</span><span style="color: #f8f8f2">[</span><span style="color: #ae81ff">2</span><span style="color: #f8f8f2">]</span>
+      <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Printf</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;Commit revision %s against %s&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">rev</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">repo</span><span style="color: #f8f8f2">)</span>
+
+      <span style="color: #a6e22e">svnLook</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnlook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">NewSvnLook</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">SVNLOOK_PATH</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">repo</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">rev</span><span style="color: #f8f8f2">)</span>
+
+      <span style="color: #a6e22e">affectedPaths</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnLook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">GetDirectoriesChanged</span><span style="color: #f8f8f2">()</span>
+      <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f92672">||</span> <span style="color: #f8f8f2">len(</span><span style="color: #a6e22e">affectedPaths</span><span style="color: #f8f8f2">)</span> <span style="color: #f92672">&lt;=</span> <span style="color: #ae81ff">0</span> <span style="color: #f8f8f2">{</span>
+         <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Fatalf</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;An error occurred running svnlook: %s&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Error</span><span style="color: #f8f8f2">())</span>
+      <span style="color: #f8f8f2">}</span>
+
+      <span style="color: #75715e">/*</span>
+<span style="color: #75715e">       * Makes sure the repo name contains /trunk/. If so get</span>
+<span style="color: #75715e">       * author and log message.</span>
+<span style="color: #75715e">       */</span>
+      <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Contains</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">strings</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Join</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">affectedPaths</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot; &quot;</span><span style="color: #f8f8f2">),</span> <span style="color: #e6db74">&quot;trunk/&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+         <span style="color: #a6e22e">author</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnLook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">GetAuthor</span><span style="color: #f8f8f2">()</span>
+         <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+            <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;ERROR - No author information available&quot;</span><span style="color: #f8f8f2">)</span>
+         <span style="color: #f8f8f2">}</span>
+
+         <span style="color: #a6e22e">logMessage</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">:=</span> <span style="color: #a6e22e">svnLook</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">GetLog</span><span style="color: #f8f8f2">()</span>
+         <span style="color: #66d9ef">if</span> <span style="color: #a6e22e">err</span> <span style="color: #f92672">!=</span> <span style="color: #66d9ef">nil</span> <span style="color: #f8f8f2">{</span>
+            <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;ERROR - No log information available&quot;</span><span style="color: #f8f8f2">)</span>
+         <span style="color: #f8f8f2">}</span>
+      <span style="color: #f8f8f2">}</span>
+   <span style="color: #f8f8f2">}</span> <span style="color: #66d9ef">else</span> <span style="color: #f8f8f2">{</span>
+      <span style="color: #a6e22e">log</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;Not enough arguments to activate svnPostCommitHook power!&quot;</span><span style="color: #f8f8f2">)</span>
+   <span style="color: #f8f8f2">}</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<p>Until the next installment, happy coding!</p>
+
+<p><a href="{% post_url 2015-01-30-my-first-svn-post-commit-hook-in-go-part-2 %}">Part 2 is here</a></p>
+
+            <ul class="share-buttons">
+    <li></li>
+    <li>
+        <a class="icon-facebook-squared" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fadampresley.com%2fpost%2fmy-first-svn-post-commit-hook-in-go-part-1%2f" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-twitter" href="https://twitter.com/share?text=My%20First%20SVN%20Post-Commit%20Hook%20in%20Go%20-%20Part%201&amp;url=http%3a%2f%2fadampresley.com%2fpost%2fmy-first-svn-post-commit-hook-in-go-part-1%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-gplus" href="https://plus.google.com/share?url=http%3a%2f%2fadampresley.com%2fpost%2fmy-first-svn-post-commit-hook-in-go-part-1%2f" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2fadampresley.com%2fpost%2fmy-first-svn-post-commit-hook-in-go-part-1%2f&title=My%20First%20SVN%20Post-Commit%20Hook%20in%20Go%20-%20Part%201" onclick="window.open(this.href, 'linkedin-share', 'width=600,height=494');return false;" title=""></a>
+    </li>
+</ul>
+
+        </article>
+        <div class="comments">
+            <h3></h3>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adampresleyblog';
+    var disqus_identifier = 'http:\/\/adampresley.com\/post\/my-first-svn-post-commit-hook-in-go-part-1\/';
+    var disqus_title = 'My First SVN Post-Commit Hook in Go - Part 1';
+    var disqus_url = 'http:\/\/adampresley.com\/post\/my-first-svn-post-commit-hook-in-go-part-1\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </main>
+    <aside class="author">
+  <img class="profile-image" src="http://adampresley.com/assets/adampresley/images/adam-bowtie.png" alt="Adam Presley" />
+  <p class="name"> 
+  <strong>Adam Presley</strong></p>
+  <p class="address">Texas, USA</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/adampresley" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/adampresley" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="http://adampresley.com/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="http://adampresley.com/post/index.xml" title="RSS"></a>
+        <p>&copy; 2016 &middot; Adam Presley. All Rights Reserved. Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="http:\/\/adampresley.com\/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="http://adampresley.com/js/plugins.js"></script>
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-44927419-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

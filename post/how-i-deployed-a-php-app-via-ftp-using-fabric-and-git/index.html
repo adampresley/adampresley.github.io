@@ -1,0 +1,355 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Adam.Blog()</title>
+        <meta name="author">
+        <meta name="description" content="I&#39;m bringin&#39; nerdy back">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.16-DEV" />
+          <link href="http://adampresley.com/post/index.xml" rel="alternate" type="application/rss+xml" title="Adam.Blog()" />
+          <link href="http://adampresley.com/post/index.xml" rel="feed" type="application/rss+xml" title="Adam.Blog()" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://adampresley.com/css/styles.css">
+        <link rel="icon" href="http://adampresley.com/favicon.ico">
+        <link rel="apple-touch-icon" href="http://adampresley.com/apple-touch-icon.png" />
+        <link rel="stylesheet" href="http://adampresley.com/css/highlightjs/monokai.css">
+        <script src="http://adampresley.com/js/vendor/modernizr-2.8.0.min.js"></script>
+        <style>
+        .site-header h2 .logo {
+        background: url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(http://adampresley.com/assets/images/code-background-screenshot.png);
+        }}
+       .site-header {
+         background: #2a373d url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Adam.Blog()</h2>
+          </div>
+        </header>
+
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <article class="post">
+            <a class="btn home" href="http://adampresley.com/" title="">&laquo; </a>
+            
+<h1><a href="http://adampresley.com/post/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git/" title="How I Deployed a PHP App via FTP Using Fabric and Git">How I Deployed a PHP App via FTP Using Fabric and Git</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2013.04.20">2013.04.20</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/php">php</a>, 
+        
+        <a href="http://adampresley.com/tags/python">python</a>, 
+        
+        <a href="http://adampresley.com/tags/git">git</a>
+        
+    
+
+</span>
+</footer>
+
+            <p>A project I&rsquo;ve been working with for a bit now uses a popular hosting
+provider to host a PHP application I&rsquo;m writing. My normal workflow with
+this project is to make changes, commit my code to my Git repository,
+push it to Github (a private account), then FTP the files manually to
+the hosting provider. This works fine most of the time though I&rsquo;ll admit
+that there are moments when I forget a file or two. Of course the
+application blows up and I have to view my Git log to see what files I
+may have missed when uploading the code.</p>
+
+<!-- excerpt -->
+
+<p>Today I decided to do something about this little problem. Having
+recently discovered Fabric, the deployment framework and library for
+Python, I started crafting a script to automate the tasks of deployment.
+There are a number of ways to approach this, but for now I decided that
+I have only a couple of simple requirements.</p>
+
+<ul>
+<li>Need to upload files from my latest commit (HEAD)</li>
+<li>A single command to do the upload</li>
+<li>Upload is done via FTP</li>
+</ul>
+
+<p>Based on these requirements I needed to learn two additional things: how
+to use FTP in Python, and how to get a log from Git in Python. I won&rsquo;t
+go into great deal on how all this works but I will cover the basics.
+First I needed to be able to connect to an FTP server. Python has a
+library called <a href="http://docs.python.org/2/library/ftplib.html">ftplib</a> which offers basic, fairly low-level FTP
+methods. Out of the gate the first method I write looks like this.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #a6e22e">_connectToFTP</span><span style="color: #f8f8f2">():</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #f8f8f2">green(</span><span style="color: #e6db74">&quot;** Connecting to the server **&quot;</span><span style="color: #f8f8f2">)</span>
+
+   <span style="color: #f8f8f2">ftp</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">FTP(host</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">FTP_ADDRESS,</span> <span style="color: #f8f8f2">user</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">FTP_USER,</span> <span style="color: #f8f8f2">passwd</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">FTP_PASSWORD)</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">ftp</span>
+</pre></div>
+
+
+<p>As you can see the FTP class is simple enough to use. Provide an
+address, user name, and password and you are connected to an FTP server
+and are given an object to perform further tasks with. Naturally the
+next task would be to upload files, but before we can do that we have to
+know what we are uploading. This would be defined as one of the
+requirements listed above where I wanted to upload the files from my
+last commit.</p>
+
+<p>To satisfy the requirement for uploading files from my last commit I
+installed the library <a href="https://github.com/gitpython-developers/GitPython">gitpython</a>. GitPython, simply put, is a
+library used to allow your Python code to interact with Git
+repositories. Here I must admit that I had some struggles as some of the
+abstractions I failed to comprehend. As a result I had a hard time
+getting the results I wanted just using the pure library, so I ended up
+using their utility class that allows you to execute arbitrary Git
+commands on the command line and get the results back. This allowed me
+to get a list of files for a given commit hash.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #a6e22e">_gitLatestFiles</span><span style="color: #f8f8f2">():</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #f8f8f2">green(</span><span style="color: #e6db74">&quot;** Connecting to Git **&quot;</span><span style="color: #f8f8f2">)</span>
+
+   <span style="color: #f8f8f2">g</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">Git(REPO_ROOT)</span>
+   <span style="color: #f8f8f2">repo</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">Repo(REPO_ROOT)</span>
+   <span style="color: #f8f8f2">headCommit</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">repo</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">head</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">commit</span>
+
+   <span style="color: #66d9ef">print</span> <span style="color: #e6db74">&quot;Head commit revision: %s&quot;</span> <span style="color: #f92672">%</span> <span style="color: #f8f8f2">headCommit</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #e6db74">&quot;Message: %s&quot;</span> <span style="color: #f92672">%</span> <span style="color: #f8f8f2">headCommit</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">message</span>
+
+   <span style="color: #f8f8f2">result</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">g</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">execute([</span><span style="color: #e6db74">&quot;git&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;diff-tree&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;--no-commit-id&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;--name-only&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;-r&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">str(headCommit)])</span>
+   <span style="color: #f8f8f2">files</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">result</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">split(</span><span style="color: #e6db74">&quot;</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">)</span>
+
+   <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">_filterForValidFiles(fileList</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">files)</span>
+
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">_filterForValidFiles</span><span style="color: #f8f8f2">(fileList):</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">[f</span> <span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">f</span> <span style="color: #f92672">in</span> <span style="color: #f8f8f2">fileList</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">f</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">startswith((</span><span style="color: #e6db74">&quot;components/&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;www/&quot;</span><span style="color: #f8f8f2">))]</span>
+</pre></div>
+
+
+<p>There are two methods here to get the results I want. The first is
+<strong>_gitLatestFiles()</strong>. This method talks to my local Git repository and
+gets the HEAD commit entry. With it I have a commit hash that I can use
+to pull logs for. I then use the library&rsquo;s <strong>execute()</strong> method that
+allows me to run command line Git and store the results. In my case I
+wanted to run a <em>diff-tree</em> and get only the names of the files modified
+for the specified commit hash. The result of the <em>diff-tree</em> is a single
+string of the modified files, so I needed to split them into a list on a
+newline character.</p>
+
+<p>The next method you&rsquo;ll see is <strong>_filterForValidFiles()</strong>. It is called
+by the <strong>_gitLatestFiles()</strong> method. This piece of code ensures that
+the files modified are children of a specific set of directories. If
+they reside outside that directory I don&rsquo;t want to deploy them.</p>
+
+<p>The final step in this process is to put it all together. We need to
+connect to the FTP server, get a list of changed files from the HEAD
+revision in Git, then push those files to the server. Let&rsquo;s see what
+that code looks like.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">from</span> <span style="color: #f8f8f2">__future__</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">with_statement</span>
+
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">fabric</span>
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">os</span>
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">fabric.api</span> <span style="color: #f92672">import</span> <span style="color: #f92672">*</span>
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">fabric.colors</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">green,</span> <span style="color: #f8f8f2">yellow,</span> <span style="color: #f8f8f2">red</span>
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">ftplib</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">FTP</span>
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">git</span> <span style="color: #f92672">import</span> <span style="color: #f92672">*</span>
+
+<span style="color: #75715e">###############################################################################</span>
+<span style="color: #75715e"># SECTION: Constants</span>
+<span style="color: #75715e">###############################################################################</span>
+<span style="color: #f8f8f2">DATABASE</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span>
+   <span style="color: #e6db74">&quot;local&quot;</span><span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">{</span>
+      <span style="color: #e6db74">&quot;userName&quot;</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&quot;user&quot;</span><span style="color: #f8f8f2">,</span>
+      <span style="color: #e6db74">&quot;password&quot;</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&quot;password&quot;</span>
+   <span style="color: #f8f8f2">}</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #f8f8f2">FTP_ADDRESS</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;ftp.something.com&quot;</span>
+<span style="color: #f8f8f2">FTP_USER</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;user&quot;</span>
+<span style="color: #f8f8f2">FTP_PASSWORD</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;password&quot;</span>
+<span style="color: #f8f8f2">FTP_ROOT_DIR</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;/appDirectory&quot;</span>
+
+<span style="color: #f8f8f2">REPO_ROOT</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;../&quot;</span>
+
+
+<span style="color: #75715e">###############################################################################</span>
+<span style="color: #75715e"># SECTION: Private methods</span>
+<span style="color: #75715e">###############################################################################</span>
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">_connectToFTP</span><span style="color: #f8f8f2">():</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #f8f8f2">green(</span><span style="color: #e6db74">&quot;** Connecting to the server **&quot;</span><span style="color: #f8f8f2">)</span>
+
+   <span style="color: #f8f8f2">ftp</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">FTP(host</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">FTP_ADDRESS,</span> <span style="color: #f8f8f2">user</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">FTP_USER,</span> <span style="color: #f8f8f2">passwd</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">FTP_PASSWORD)</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">ftp</span>
+
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">_gitLatestFiles</span><span style="color: #f8f8f2">():</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #f8f8f2">green(</span><span style="color: #e6db74">&quot;** Connecting to Git **&quot;</span><span style="color: #f8f8f2">)</span>
+
+   <span style="color: #f8f8f2">g</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">Git(REPO_ROOT)</span>
+   <span style="color: #f8f8f2">repo</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">Repo(REPO_ROOT)</span>
+   <span style="color: #f8f8f2">headCommit</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">repo</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">head</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">commit</span>
+
+   <span style="color: #66d9ef">print</span> <span style="color: #e6db74">&quot;Head commit revision: %s&quot;</span> <span style="color: #f92672">%</span> <span style="color: #f8f8f2">headCommit</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #e6db74">&quot;Message: %s&quot;</span> <span style="color: #f92672">%</span> <span style="color: #f8f8f2">headCommit</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">message</span>
+
+   <span style="color: #f8f8f2">result</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">g</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">execute([</span><span style="color: #e6db74">&quot;git&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;diff-tree&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;--no-commit-id&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;--name-only&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;-r&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">str(headCommit)])</span>
+   <span style="color: #f8f8f2">files</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">result</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">split(</span><span style="color: #e6db74">&quot;</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">)</span>
+
+   <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">_filterForValidFiles(fileList</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">files)</span>
+
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">_filterForValidFiles</span><span style="color: #f8f8f2">(fileList):</span>
+   <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">[f</span> <span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">f</span> <span style="color: #f92672">in</span> <span style="color: #f8f8f2">fileList</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">f</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">startswith((</span><span style="color: #e6db74">&quot;components/&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;www/&quot;</span><span style="color: #f8f8f2">))]</span>
+
+
+<span style="color: #75715e">###############################################################################</span>
+<span style="color: #75715e"># SECTION: Actions</span>
+<span style="color: #75715e">###############################################################################</span>
+
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">uploadLatest</span><span style="color: #f8f8f2">():</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #e6db74">&quot;&quot;</span>
+   <span style="color: #66d9ef">print</span> <span style="color: #f8f8f2">green(</span><span style="color: #e6db74">&quot;** Upload latest changes **&quot;</span><span style="color: #f8f8f2">)</span>
+
+   <span style="color: #f8f8f2">ftp</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">_connectToFTP()</span>
+   <span style="color: #f8f8f2">files</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">_gitLatestFiles()</span>
+
+   <span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">f</span> <span style="color: #f92672">in</span> <span style="color: #f8f8f2">files:</span>
+      <span style="color: #66d9ef">print</span> <span style="color: #f8f8f2">yellow(</span><span style="color: #e6db74">&quot;Uploading file %s&quot;</span> <span style="color: #f92672">%</span> <span style="color: #f8f8f2">f)</span>
+      <span style="color: #f8f8f2">split</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">path</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">split(f)</span>
+
+      <span style="color: #f8f8f2">ftp</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">cwd(os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">path</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">join(FTP_ROOT_DIR,</span> <span style="color: #f8f8f2">split[</span><span style="color: #ae81ff">0</span><span style="color: #f8f8f2">]))</span>
+      <span style="color: #f8f8f2">ftp</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">storlines(</span><span style="color: #e6db74">&quot;STOR %s&quot;</span> <span style="color: #f92672">%</span> <span style="color: #f8f8f2">split[</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">],</span> <span style="color: #f8f8f2">open(os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">path</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">join(</span><span style="color: #e6db74">&quot;../&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">f),</span> <span style="color: #e6db74">&quot;r&quot;</span><span style="color: #f8f8f2">))</span>
+
+   <span style="color: #f8f8f2">ftp</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">quit()</span>
+</pre></div>
+</p>
+
+<p>The last method in the code, <strong>uploadLatest()</strong> is the one that glues it
+all together. As mentioned before it first connects to the FTP server.
+Then it gets a list of files to upload from the latest Git commit. After
+this we iterate over the file names and split each of them into
+directory and file name. We do this so we can issues a CWD (current
+working directory) command to the FTP server, and have a file name to
+pass to the STOR FTP command.</p>
+
+<p>The next steps actually change the directory on the FTP server to match
+the path of the changed file. From here we send the STOR command by
+calling the <strong>storlines</strong> method on the FTP library. This method first
+takes the command to use, which is <strong>STOR</strong> followed by the name of the
+file to upload. The second argument is an open file handle to the actual
+file to upload. In this case we are just using the built-in Python
+<strong>open()</strong> method to open up the file in read mode. Finally when all is
+done we issue a QUIT command by calling the <strong>quit()</strong> method.</p>
+
+<p>All of this code is saved in my <em>/bin</em> folder of the project in a file
+named <em>fabfile.py</em>. To run this I open up my terminal and execute <strong>fab
+uploadLatest</strong>. If you aren&rsquo;t familiar with Fabric take a look at <a href="http://docs.fabfile.org/en/1.6/">the
+Fabric site</a> and also
+<a href="#post/2012/10/my-first-experience-with-fabric-and-amazon-ec2">my previous blog entry</a> on the subject.</p>
+
+<p>Happy coding!</p>
+
+            <ul class="share-buttons">
+    <li></li>
+    <li>
+        <a class="icon-facebook-squared" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fadampresley.com%2fpost%2fhow-i-deployed-a-php-app-via-ftp-using-fabric-and-git%2f" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-twitter" href="https://twitter.com/share?text=How%20I%20Deployed%20a%20PHP%20App%20via%20FTP%20Using%20Fabric%20and%20Git&amp;url=http%3a%2f%2fadampresley.com%2fpost%2fhow-i-deployed-a-php-app-via-ftp-using-fabric-and-git%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-gplus" href="https://plus.google.com/share?url=http%3a%2f%2fadampresley.com%2fpost%2fhow-i-deployed-a-php-app-via-ftp-using-fabric-and-git%2f" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2fadampresley.com%2fpost%2fhow-i-deployed-a-php-app-via-ftp-using-fabric-and-git%2f&title=How%20I%20Deployed%20a%20PHP%20App%20via%20FTP%20Using%20Fabric%20and%20Git" onclick="window.open(this.href, 'linkedin-share', 'width=600,height=494');return false;" title=""></a>
+    </li>
+</ul>
+
+        </article>
+        <div class="comments">
+            <h3></h3>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adampresleyblog';
+    var disqus_identifier = 'http:\/\/adampresley.com\/post\/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git\/';
+    var disqus_title = 'How I Deployed a PHP App via FTP Using Fabric and Git';
+    var disqus_url = 'http:\/\/adampresley.com\/post\/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </main>
+    <aside class="author">
+  <img class="profile-image" src="http://adampresley.com/assets/adampresley/images/adam-bowtie.png" alt="Adam Presley" />
+  <p class="name"> 
+  <strong>Adam Presley</strong></p>
+  <p class="address">Texas, USA</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/adampresley" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/adampresley" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="http://adampresley.com/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="http://adampresley.com/post/index.xml" title="RSS"></a>
+        <p>&copy; 2016 &middot; Adam Presley. All Rights Reserved. Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="http:\/\/adampresley.com\/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="http://adampresley.com/js/plugins.js"></script>
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-44927419-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

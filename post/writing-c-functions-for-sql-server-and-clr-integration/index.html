@@ -1,0 +1,446 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Adam.Blog()</title>
+        <meta name="author">
+        <meta name="description" content="I&#39;m bringin&#39; nerdy back">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.16-DEV" />
+          <link href="http://adampresley.com/post/index.xml" rel="alternate" type="application/rss+xml" title="Adam.Blog()" />
+          <link href="http://adampresley.com/post/index.xml" rel="feed" type="application/rss+xml" title="Adam.Blog()" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://adampresley.com/css/styles.css">
+        <link rel="icon" href="http://adampresley.com/favicon.ico">
+        <link rel="apple-touch-icon" href="http://adampresley.com/apple-touch-icon.png" />
+        <link rel="stylesheet" href="http://adampresley.com/css/highlightjs/monokai.css">
+        <script src="http://adampresley.com/js/vendor/modernizr-2.8.0.min.js"></script>
+        <style>
+        .site-header h2 .logo {
+        background: url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(http://adampresley.com/assets/images/code-background-screenshot.png);
+        }}
+       .site-header {
+         background: #2a373d url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Adam.Blog()</h2>
+          </div>
+        </header>
+
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <article class="post">
+            <a class="btn home" href="http://adampresley.com/" title="">&laquo; </a>
+            
+<h1><a href="http://adampresley.com/post/writing-c-functions-for-sql-server-and-clr-integration/" title="Writing C# Functions for SQL Server and CLR Integration">Writing C# Functions for SQL Server and CLR Integration</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2009.09.15">2009.09.15</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/sql">sql</a>, 
+        
+        <a href="http://adampresley.com/tags/csharp">csharp</a>
+        
+    
+
+</span>
+</footer>
+
+            <p>An interested problem was presented to me today where a database table
+in SQL Server 2005 (now moved to 2008) had a trigger attached to a table
+that would encrypt a credit card number on insert or update. The
+encryption routine used the sp_OACreate stored procedure to make use of
+an older Microsoft cryptography library called CAPICOM. With the move to
+SQL Server 2008, however, we also upgraded our OS to 64-bit Windows. It
+turns out that this CAPICOM component does not have support for the
+64-bit world, and started to cause a world of hurt, causing credit card
+numbers to not go into the database. This, or course, is bad.</p>
+
+<p>So I now decided that to tackle this problem I would make use of SQL
+Server&rsquo;s ability to access .NET assemblies and their methods. The first
+order of business to get this started is to enable CLR integration in
+your SQL Server instance. By default this is disabled, so two simple
+statements will do the trick to turn it on.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">sp_configure</span> <span style="color: #e6db74">&#39;clr enabled&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+<span style="color: #66d9ef">GO</span>
+<span style="color: #f8f8f2">reconfigure</span>
+<span style="color: #66d9ef">GO</span>
+</pre></div>
+
+
+<p>Now that you have CLR integration turned on let&rsquo;s get to the fun stuff.
+Code. Fire up your C# environment ladies! Now, if you are like me, and
+you don&rsquo;t have the super cool Enterprise edition of Visual Studio, you
+will have to make due without all the little helper wizards that handle
+deployment of your code to a SQL Server instance, and you will have to
+do it manually. Don&rsquo;t worry, it isn&rsquo;t hard.</p>
+
+<p>First, create a new Class Library project. This will create a project
+that contains a file named &ldquo;Class.cs&rdquo;. I normally rename that to
+something nicer, like &ldquo;Crypto.cs&rdquo;. C# will also create a namespace
+definition for your new project by default. In our case we won&rsquo;t be
+needing that, so remove it (don&rsquo;t forget your open and close curly
+braces).</p>
+
+<p>From here we will need a few references for our project. Those are:
+System, System.Data.SqlTypes, System.Security.Cryptography, System.Text,
+System.IO, and Microsoft.SqlServer.Server. That will look like this.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.IO;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.Text;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.Data.SqlTypes;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">Microsoft.SqlServer.Server;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.Security.Cryptography;</span>
+</pre></div>
+
+
+<p>SQL Server expects a class defined as <strong>partial</strong>, and a series of
+methods that are <strong>public static</strong>, and have the attribute
+<strong>[SqlFunction()]</strong> for creating a .NET managed function for SQL Server.
+Functions are easy to implement because they simply return simple
+values, unlike stored procedures (which is beyond the scope of this
+post).</p>
+
+<p>For this example I will be creating two functions: Encrypt and Decrypt.
+Each function that we wish to expose will contain the SqlFunction
+attribute as described above, will be public, and also be marked as
+static. Here are what they look like.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #a6e22e">[SqlFunction()]</span>
+<span style="color: #66d9ef">public</span> <span style="color: #66d9ef">static</span> <span style="color: #66d9ef">string</span> <span style="color: #a6e22e">Encrypt</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Input,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Password,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Salt)</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(Input</span> <span style="color: #f8f8f2">==</span> <span style="color: #66d9ef">null</span> <span style="color: #f8f8f2">||</span> <span style="color: #f8f8f2">Input.Length</span> <span style="color: #f8f8f2">&lt;=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">return</span> <span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">;</span>
+
+	<span style="color: #f8f8f2">Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">keyGen</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createKeyGen(Password,</span> <span style="color: #f8f8f2">Salt);</span>
+	<span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #f8f8f2">transformer</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createEncryptor(keyGen);</span>
+	<span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">transformed</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__transform(Encoding.Default.GetBytes(Input),</span> <span style="color: #f8f8f2">transformer);</span>
+
+	<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">Convert.ToBase64String(transformed);</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #a6e22e">[SqlFunction()]</span>
+<span style="color: #66d9ef">public</span> <span style="color: #66d9ef">static</span> <span style="color: #66d9ef">string</span> <span style="color: #a6e22e">Decrypt</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Input,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Password,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Salt)</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(Input</span> <span style="color: #f8f8f2">==</span> <span style="color: #66d9ef">null</span> <span style="color: #f8f8f2">||</span> <span style="color: #f8f8f2">Input.Length</span> <span style="color: #f8f8f2">&lt;=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">return</span> <span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">keyGen</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createKeyGen(Password,</span> <span style="color: #f8f8f2">Salt);</span>
+	<span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #f8f8f2">transformer</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createDecryptor(keyGen);</span>
+	<span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">transformed</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__transform(Convert.FromBase64String(Input),</span> <span style="color: #f8f8f2">transformer);</span>
+
+	<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">Encoding.Default.GetString(transformed);</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+
+
+<p>Clearly these methods are higher level and depend on other methods to do
+the actual dirty work, but they are the methods that will be exposed to
+SQL Server, and will serve to describe what is happening.</p>
+
+<p>Each method takes three arguments. The first is an input string. For the
+<strong>Encrypt</strong> method this will be the plain text value that needs to be
+encrypted. For the <strong>Decrypt</strong> method this will be the base64 encoded
+encrypted string that needs to be decrypted. The <em>Password</em> argument is
+the password that will be used to generate the encryption and decrypt
+values, followed by the <em>Salt</em> value used along with the <em>Password</em> to
+generate the encryption key.</p>
+
+<p>As seen in the code above there are four primary methods used to perform
+these actions: <strong>__createKeyGen</strong>, <strong>__createEncryptor</strong>,
+<strong>__createDecryptor</strong>, and <strong>__transform</strong>. Let&rsquo;s look at each.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #f8f8f2">Rfc2898DeriveBytes</span> <span style="color: #a6e22e">__createKeyGen</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Password,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Salt)</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">Rfc2898DeriveBytes</span><span style="color: #f8f8f2">(Password,</span> <span style="color: #f8f8f2">Encoding.Default.GetBytes(Salt));</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<p>The <strong>__createKeyGen</strong> method takes a password and salt values to
+create a key generator object based on the RFC 2989 specification. This
+will be used by the encryptor and decryptor to generate the key and
+initialization vector (IV).</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #a6e22e">__createEncryptor</span><span style="color: #f8f8f2">(Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">KeyGen)</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">TripleDES</span> <span style="color: #f8f8f2">provider</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">TripleDES.Create();</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">provider.CreateEncryptor(KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">),</span> <span style="color: #f8f8f2">KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">));</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<p>The <strong>__createEncryptor</strong> method creates an object used to encrypt
+values based on the encryption provider, which in this case is
+TripleDES. Notice how this method expects a Rfc2989DeriveBytes object
+which we generate from the <strong>__createKeyGen</strong>, and that we use it to
+generate a 128-bit (16 bytes) key and IV.</p>
+
+<p>The same applies to the <strong>__createDecryptor</strong> method, except that we
+create an object that decrypts instead of encrypts.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #a6e22e">__createDecryptor</span><span style="color: #f8f8f2">(Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">KeyGen)</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">TripleDES</span> <span style="color: #f8f8f2">provider</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">TripleDES.Create();</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">provider.CreateDecryptor(KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">),</span> <span style="color: #f8f8f2">KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">));</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<p>Now comes the fun part. Time to perform encryption or decryption.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #a6e22e">__transform</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">Input,</span> <span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #f8f8f2">Transformer)</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">MemoryStream</span> <span style="color: #f8f8f2">ms</span> <span style="color: #f8f8f2">=</span> <span style="color: #66d9ef">new</span> <span style="color: #f8f8f2">MemoryStream();</span>
+	<span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">result;</span>
+
+	<span style="color: #f8f8f2">CryptoStream</span> <span style="color: #f8f8f2">writer</span> <span style="color: #f8f8f2">=</span> <span style="color: #66d9ef">new</span> <span style="color: #f8f8f2">CryptoStream(ms,</span> <span style="color: #f8f8f2">Transformer,</span> <span style="color: #f8f8f2">CryptoStreamMode.Write);</span>
+	<span style="color: #f8f8f2">writer.Write(Input,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">Input.Length);</span>
+	<span style="color: #f8f8f2">writer.FlushFinalBlock();</span>
+
+	<span style="color: #f8f8f2">ms.Position</span> <span style="color: #f8f8f2">=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">result</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">ms.ToArray();</span>
+
+	<span style="color: #f8f8f2">ms.Close();</span>
+	<span style="color: #f8f8f2">writer.Close();</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">result;</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<p>This method takes a byte array for the input, and an encryptor or
+decryptor (thus the ICryptoTransform interface argument). Right out of
+the box we create a MemoryStream object. This is where the final
+encrypted or decrypted result will be stored. We also create a byte
+array called <em>result</em> that we will get an array of bytes from the
+MemoryStream into to send back as the result.</p>
+
+<p>From here we create an instance of the CryptoStream class and we will
+call it <em>writer</em>. The first parameter specifies that the MemoryStream
+<em>ms</em> will be where the CryptoStream writer will put its data. The second
+parameter is the encryptor or decryptor object. The third parameter
+specifies that we wish to write to the MemoryStream.</p>
+
+<p>From here we use the <strong>Write</strong> method, passing it the input byte array,
+start offset, and byte array length, to write the bytes to the
+CryptoStream writer to be encrypted or decrypted.</p>
+
+<p>After this we reset our MemoryStream position, and read the data from it
+into a byte array, which will be the resulting encrypted or decrypted
+value. Close up shop to clean up, and return the results.</p>
+
+<p>It is worth noting that the <strong>Encrypt</strong> method converts the encrypted
+byte array to a Base64 string for portability, and the <strong>Decrypt</strong>
+method expects a Base64 encoded string to decrypt.</p>
+
+<p>Now we get to plug it into SQL Server. For your database there is a
+branch in the Object Explorer named &ldquo;Programmability&rdquo;. Under here there
+is a branch named &ldquo;Assemblies&rdquo;. After you compile your code you will
+need to register your assembly in SQL Server. To do this, right click on
+the Assemblies folder and select &ldquo;New Assembly&hellip;&rdquo;. The resulting dialog
+will have a Path option where you can browse for your compiled DLL file.
+Find this, then click &ldquo;Ok&rdquo;. If all is well you will see your DLL name
+under the &ldquo;Assemblies&rdquo; folder.</p>
+
+<p>Now you need to create an actual SQL Server function wrapper for the CLR
+function. For the sake of this bit of code let&rsquo;s assume the name of the
+assembly is &ldquo;MyCrypto&rdquo;, and the name of the class is &ldquo;Crypto&rdquo;. This can
+be done like so.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">CREATE</span> <span style="color: #66d9ef">FUNCTION</span> <span style="color: #f8f8f2">Encrypt(</span><span style="color: #f92672">@</span><span style="color: #66d9ef">Input</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">),</span> <span style="color: #f92672">@</span><span style="color: #f8f8f2">Password</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">),</span> <span style="color: #f92672">@</span><span style="color: #f8f8f2">Salt</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">))</span> <span style="color: #66d9ef">RETURNS</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">EXTERNAL</span> <span style="color: #f8f8f2">NAME</span> <span style="color: #f8f8f2">MyCrypto.Crypto.Encrypt;</span>
+
+<span style="color: #66d9ef">CREATE</span> <span style="color: #66d9ef">FUNCTION</span> <span style="color: #f8f8f2">Encrypt(</span><span style="color: #f92672">@</span><span style="color: #66d9ef">Input</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">),</span> <span style="color: #f92672">@</span><span style="color: #f8f8f2">Password</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">),</span> <span style="color: #f92672">@</span><span style="color: #f8f8f2">Salt</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">))</span> <span style="color: #66d9ef">RETURNS</span> <span style="color: #f8f8f2">nvarchar(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">EXTERNAL</span> <span style="color: #f8f8f2">NAME</span> <span style="color: #f8f8f2">MyCrypto.Crypto.Decrypt;</span>
+</pre></div>
+</p>
+
+<p>This bit of SQL will create SQL Server functions that reference the .NET
+assembly. To use this function would look something like this.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">SELECT</span> <span style="color: #f8f8f2">dbo.Encrypt(</span><span style="color: #e6db74">&#39;some important value&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;myPassword&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;salt is nice&#39;</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">AS</span> <span style="color: #f8f8f2">encryptedValue;</span>
+</pre></div>
+</p>
+
+<p>And there you have it. A cool, powerful feature, and not hard to do!
+Happy coding!</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.IO;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.Text;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.Data.SqlTypes;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">Microsoft.SqlServer.Server;</span>
+<span style="color: #66d9ef">using</span> <span style="color: #f8f8f2">System.Security.Cryptography;</span>
+
+<span style="color: #66d9ef">public</span> <span style="color: #66d9ef">partial</span> <span style="color: #66d9ef">class</span> <span style="color: #a6e22e">Crypto</span> <span style="color: #f8f8f2">{</span>
+<span style="color: #a6e22e">	[SqlFunction()]</span>
+	<span style="color: #66d9ef">public</span> <span style="color: #66d9ef">static</span> <span style="color: #66d9ef">string</span> <span style="color: #a6e22e">Encrypt</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Input,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Password,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Salt)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(Input</span> <span style="color: #f8f8f2">==</span> <span style="color: #66d9ef">null</span> <span style="color: #f8f8f2">||</span> <span style="color: #f8f8f2">Input.Length</span> <span style="color: #f8f8f2">&lt;=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">return</span> <span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">;</span>
+
+		<span style="color: #f8f8f2">Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">keyGen</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createKeyGen(Password,</span> <span style="color: #f8f8f2">Salt);</span>
+		<span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #f8f8f2">transformer</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createEncryptor(keyGen);</span>
+		<span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">transformed</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__transform(Encoding.Default.GetBytes(Input),</span> <span style="color: #f8f8f2">transformer);</span>
+
+		<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">Convert.ToBase64String(transformed);</span>
+	<span style="color: #f8f8f2">}</span>
+
+<span style="color: #a6e22e">	[SqlFunction()]</span>
+	<span style="color: #66d9ef">public</span> <span style="color: #66d9ef">static</span> <span style="color: #66d9ef">string</span> <span style="color: #a6e22e">Decrypt</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Input,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Password,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Salt)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(Input</span> <span style="color: #f8f8f2">==</span> <span style="color: #66d9ef">null</span> <span style="color: #f8f8f2">||</span> <span style="color: #f8f8f2">Input.Length</span> <span style="color: #f8f8f2">&lt;=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">return</span> <span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">;</span>
+
+		<span style="color: #f8f8f2">Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">keyGen</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createKeyGen(Password,</span> <span style="color: #f8f8f2">Salt);</span>
+		<span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #f8f8f2">transformer</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__createDecryptor(keyGen);</span>
+		<span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">transformed</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">__transform(Convert.FromBase64String(Input),</span> <span style="color: #f8f8f2">transformer);</span>
+
+		<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">Encoding.Default.GetString(transformed);</span>
+	<span style="color: #f8f8f2">}</span>
+
+<span style="color: #a6e22e">	[SqlFunction()]</span>
+	<span style="color: #66d9ef">public</span> <span style="color: #66d9ef">static</span> <span style="color: #66d9ef">string</span> <span style="color: #a6e22e">Hash</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Input)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(Input</span> <span style="color: #f8f8f2">==</span> <span style="color: #66d9ef">null</span> <span style="color: #f8f8f2">||</span> <span style="color: #f8f8f2">Input.Length</span> <span style="color: #f8f8f2">&lt;=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">return</span> <span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">;</span>
+
+		<span style="color: #f8f8f2">StringBuilder</span> <span style="color: #f8f8f2">result</span> <span style="color: #f8f8f2">=</span> <span style="color: #66d9ef">new</span> <span style="color: #f8f8f2">StringBuilder();</span>
+		<span style="color: #f8f8f2">SHA1</span> <span style="color: #f8f8f2">provider</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">SHA1.Create();</span>
+		<span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">__result</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">provider.ComputeHash(Encoding.Default.GetBytes(Input));</span>
+
+		<span style="color: #66d9ef">foreach</span> <span style="color: #f8f8f2">(Byte</span> <span style="color: #f8f8f2">b</span> <span style="color: #66d9ef">in</span> <span style="color: #f8f8f2">__result)</span>
+			<span style="color: #f8f8f2">result.Append(String.Format(</span><span style="color: #e6db74">&quot;{0:x2}&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">b));</span>
+
+		<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">result.ToString();</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #f8f8f2">Rfc2898DeriveBytes</span> <span style="color: #a6e22e">__createKeyGen</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Password,</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">Salt)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">Rfc2898DeriveBytes</span><span style="color: #f8f8f2">(Password,</span> <span style="color: #f8f8f2">Encoding.Default.GetBytes(Salt));</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #a6e22e">__createEncryptor</span><span style="color: #f8f8f2">(Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">KeyGen)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">TripleDES</span> <span style="color: #f8f8f2">provider</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">TripleDES.Create();</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">provider.CreateEncryptor(KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">),</span> <span style="color: #f8f8f2">KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">));</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #a6e22e">__createDecryptor</span><span style="color: #f8f8f2">(Rfc2898DeriveBytes</span> <span style="color: #f8f8f2">KeyGen)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">TripleDES</span> <span style="color: #f8f8f2">provider</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">TripleDES.Create();</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">provider.CreateDecryptor(KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">),</span> <span style="color: #f8f8f2">KeyGen.GetBytes(</span><span style="color: #ae81ff">16</span><span style="color: #f8f8f2">));</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #66d9ef">private</span> <span style="color: #66d9ef">static</span> <span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #a6e22e">__transform</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">Input,</span> <span style="color: #f8f8f2">ICryptoTransform</span> <span style="color: #f8f8f2">Transformer)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">MemoryStream</span> <span style="color: #f8f8f2">ms</span> <span style="color: #f8f8f2">=</span> <span style="color: #66d9ef">new</span> <span style="color: #f8f8f2">MemoryStream();</span>
+		<span style="color: #66d9ef">byte</span><span style="color: #f8f8f2">[]</span> <span style="color: #f8f8f2">result;</span>
+
+		<span style="color: #f8f8f2">CryptoStream</span> <span style="color: #f8f8f2">writer</span> <span style="color: #f8f8f2">=</span> <span style="color: #66d9ef">new</span> <span style="color: #f8f8f2">CryptoStream(ms,</span> <span style="color: #f8f8f2">Transformer,</span> <span style="color: #f8f8f2">CryptoStreamMode.Write);</span>
+		<span style="color: #f8f8f2">writer.Write(Input,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">Input.Length);</span>
+		<span style="color: #f8f8f2">writer.FlushFinalBlock();</span>
+
+		<span style="color: #f8f8f2">ms.Position</span> <span style="color: #f8f8f2">=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+		<span style="color: #f8f8f2">result</span> <span style="color: #f8f8f2">=</span> <span style="color: #f8f8f2">ms.ToArray();</span>
+
+		<span style="color: #f8f8f2">ms.Close();</span>
+		<span style="color: #f8f8f2">writer.Close();</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">result;</span>
+	<span style="color: #f8f8f2">}</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+            <ul class="share-buttons">
+    <li></li>
+    <li>
+        <a class="icon-facebook-squared" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fadampresley.com%2fpost%2fwriting-c-functions-for-sql-server-and-clr-integration%2f" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-twitter" href="https://twitter.com/share?text=Writing%20C%23%20Functions%20for%20SQL%20Server%20and%20CLR%20Integration&amp;url=http%3a%2f%2fadampresley.com%2fpost%2fwriting-c-functions-for-sql-server-and-clr-integration%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-gplus" href="https://plus.google.com/share?url=http%3a%2f%2fadampresley.com%2fpost%2fwriting-c-functions-for-sql-server-and-clr-integration%2f" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2fadampresley.com%2fpost%2fwriting-c-functions-for-sql-server-and-clr-integration%2f&title=Writing%20C%23%20Functions%20for%20SQL%20Server%20and%20CLR%20Integration" onclick="window.open(this.href, 'linkedin-share', 'width=600,height=494');return false;" title=""></a>
+    </li>
+</ul>
+
+        </article>
+        <div class="comments">
+            <h3></h3>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adampresleyblog';
+    var disqus_identifier = 'http:\/\/adampresley.com\/post\/writing-c-functions-for-sql-server-and-clr-integration\/';
+    var disqus_title = 'Writing C# Functions for SQL Server and CLR Integration';
+    var disqus_url = 'http:\/\/adampresley.com\/post\/writing-c-functions-for-sql-server-and-clr-integration\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </main>
+    <aside class="author">
+  <img class="profile-image" src="http://adampresley.com/assets/adampresley/images/adam-bowtie.png" alt="Adam Presley" />
+  <p class="name"> 
+  <strong>Adam Presley</strong></p>
+  <p class="address">Texas, USA</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/adampresley" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/adampresley" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="http://adampresley.com/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="http://adampresley.com/post/index.xml" title="RSS"></a>
+        <p>&copy; 2016 &middot; Adam Presley. All Rights Reserved. Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="http:\/\/adampresley.com\/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="http://adampresley.com/js/plugins.js"></script>
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-44927419-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

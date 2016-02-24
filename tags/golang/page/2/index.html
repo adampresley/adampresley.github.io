@@ -1,0 +1,235 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Golang &middot; Adam.Blog()</title>
+        <meta name="author">
+        <meta name="description" content="I&#39;m bringin&#39; nerdy back">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.16-DEV" />
+          <link href="http://adampresley.com/post/index.xml" rel="alternate" type="application/rss+xml" title="Adam.Blog()" />
+          <link href="http://adampresley.com/post/index.xml" rel="feed" type="application/rss+xml" title="Adam.Blog()" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://adampresley.com/css/styles.css">
+        <link rel="icon" href="http://adampresley.com/favicon.ico">
+        <link rel="apple-touch-icon" href="http://adampresley.com/apple-touch-icon.png" />
+        <link rel="stylesheet" href="http://adampresley.com/css/highlightjs/monokai.css">
+        <script src="http://adampresley.com/js/vendor/modernizr-2.8.0.min.js"></script>
+        <style>
+        .site-header h2 .logo {
+        background: url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(http://adampresley.com/assets/images/code-background-screenshot.png);
+        }}
+       .site-header {
+         background: #2a373d url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Adam.Blog()</h2>
+          </div>
+        </header>
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <a class="btn home" href="http://adampresley.com/" title="">&laquo; </a>
+        
+        
+            <article class="post">
+    
+<h1><a href="http://adampresley.com/post/waiting-for-goroutines-to-finish-running-before-exiting/" title="Waiting For Goroutines to Finish Running Before Exiting">Waiting For Goroutines to Finish Running Before Exiting</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2015.02.16">2015.02.16</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/golang">golang</a>
+        
+    
+
+</span>
+</footer>
+
+    <p>Image copyright Faizal Sugi Goroutines are primitives in Google&rsquo;s Go language that allow a developer to easily write concurrent applications to make use of modern multi-core CPUs. Because these are baked into the language and super easy to use it becomes simple to make quick use of them in your applications. As you start to write more sophisticated server applications you realize you need a way to gracefully exit your application.&hellip;</p>
+    <a href="http://adampresley.com/post/waiting-for-goroutines-to-finish-running-before-exiting/" title="Waiting For Goroutines to Finish Running Before Exiting"> &raquo;</a>
+</article>
+
+        
+            <article class="post">
+    
+<h1><a href="http://adampresley.com/post/using-a-middleware-in-your-go-web-applications/" title="Using A Middleware in Your Go Web Applications">Using A Middleware in Your Go Web Applications</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2015.02.08">2015.02.08</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/golang">golang</a>
+        
+    
+
+</span>
+</footer>
+
+    <p>Image copyright Ryan McGuire Middleware in Go HTTP applications is a way to chain HTTP handlers in a sequence to alter the request and response chain prior to your primary handler getting it. This is useful for activities such as logging, input sanitization, handling authorization and security, and more. This concept is supported in the Go standard library with functions like http.StripPrefix and http.TimeoutHandler. Each of the previously mentioned functions take a reference to a handler and return a new handler, wrapping the original with its own logic and processing of the request and response chain.&hellip;</p>
+    <a href="http://adampresley.com/post/using-a-middleware-in-your-go-web-applications/" title="Using A Middleware in Your Go Web Applications"> &raquo;</a>
+</article>
+
+        
+            <article class="post">
+    
+<h1><a href="http://adampresley.com/post/my-first-svn-post-commit-hook-in-go-part-2/" title="My First SVN Post-Commit Hook in Go - Part 2">My First SVN Post-Commit Hook in Go - Part 2</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2015.01.30">2015.01.30</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/golang">golang</a>, 
+        
+        <a href="http://adampresley.com/tags/svn">svn</a>
+        
+    
+
+</span>
+</footer>
+
+    <p>Image copyright Ryan McGuire <em>This is part two of the two part series on how I created a Subversion post-commit hook using Go, and post a message in a HipChat room. This post follows part one by talking about how to post the message to HipChat. I did this for the teams at my day job. Please note that certain pieces of code have been changed to protect the innocent, and opinions here do not necessarily reflect those of my employer.</em> In part one of this two part series I talked about how to execute svnlook.exe on the command line using Go, then capture that output.&hellip;</p>
+    <a href="http://adampresley.com/post/my-first-svn-post-commit-hook-in-go-part-2/" title="My First SVN Post-Commit Hook in Go - Part 2"> &raquo;</a>
+</article>
+
+        
+            <article class="post">
+    
+<h1><a href="http://adampresley.com/post/my-first-svn-post-commit-hook-in-go-part-1/" title="My First SVN Post-Commit Hook in Go - Part 1">My First SVN Post-Commit Hook in Go - Part 1</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2015.01.25">2015.01.25</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/golang">golang</a>, 
+        
+        <a href="http://adampresley.com/tags/svn">svn</a>
+        
+    
+
+</span>
+</footer>
+
+    <p>Image copyright Ryan McGuire <em>This is part one of a two part series on how I created a Subversion post-commit hook using Go, and post a message in a HipChat room. I did this for the teams at my day job. Please note that certain pieces of code have been changed to protect the innocent, and opinions here do not necessarily reflect those of my employer.</em> There has been an ongoing effort with the various teams I work with to improve code review.&hellip;</p>
+    <a href="http://adampresley.com/post/my-first-svn-post-commit-hook-in-go-part-1/" title="My First SVN Post-Commit Hook in Go - Part 1"> &raquo;</a>
+</article>
+
+        
+            <article class="post">
+    
+<h1><a href="http://adampresley.com/post/response-to-adam-cameron-code-review/" title="Response To Adam Cameron&#39;s Code Review">Response To Adam Cameron&#39;s Code Review</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2014.12.18">2014.12.18</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/golang">golang</a>
+        
+    
+
+</span>
+</footer>
+
+    <p>A few weeks ago I submitted a response to a code puzzle on Adam Cameron&rsquo;s blog that I wrote using Go. He has (finally) submitted a review! First let me say that it is about time Mr. Cameron! I have waited with bated breath! That review can be read here. In this post I will comment on his commentary. YAGNI Mr. Cameron asserts in his post that I had too much &ldquo;scope creep&rdquo;, went a &ldquo;bit overboard&rdquo;, and that there was simply no need to go to such lengths for a simple puzzle.&hellip;</p>
+    <a href="http://adampresley.com/post/response-to-adam-cameron-code-review/" title="Response To Adam Cameron&#39;s Code Review"> &raquo;</a>
+</article>
+
+        
+        <div class="pagination">
+<nav>
+
+    
+	<a class="btn newer" href="/tags/golang/" title="">&laquo; </a>
+	
+
+	<p class="counter"> 2  4</p>
+
+
+	
+	<a class="btn older" href="/tags/golang/page/3/" title=""> &raquo;</a>
+	
+
+</nav>
+</div>
+
+    </main>
+
+    <aside class="author">
+  <img class="profile-image" src="http://adampresley.com/assets/adampresley/images/adam-bowtie.png" alt="Adam Presley" />
+  <p class="name"> 
+  <strong>Adam Presley</strong></p>
+  <p class="address">Texas, USA</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/adampresley" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/adampresley" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="http://adampresley.com/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="http://adampresley.com/post/index.xml" title="RSS"></a>
+        <p>&copy; 2016 &middot; Adam Presley. All Rights Reserved. Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="http:\/\/adampresley.com\/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="http://adampresley.com/js/plugins.js"></script>
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-44927419-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

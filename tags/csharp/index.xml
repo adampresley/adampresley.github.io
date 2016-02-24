@@ -1,0 +1,890 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Csharp on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/csharp/</link>
+    <description>Recent content in Csharp on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 23 Jun 2011 16:26:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/csharp/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Consuming Webservices with Self-signed Certificates in C#</title>
+      <link>http://adampresley.com/post/consuming-webservices-with-self-signed-certificates-in-c/</link>
+      <pubDate>Thu, 23 Jun 2011 16:26:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/consuming-webservices-with-self-signed-certificates-in-c/</guid>
+      <description>&lt;p&gt;Ran into a little issue today while writing a C# app to do unit testing
+of a ColdFusion-based webservice API. The ColdFusion service is running
+on a development server that has a self-signed certificate installed in
+IIS for HTTPS testing. When I finished up my C# application and
+attempted to connect and execute one of the services I got an error:
+&amp;ldquo;The underlying connection was closed: Could not establish trust
+relationship for the SSL/TLS secure channel.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Fortunately a little Googling showed the way to those who have solved
+this issue before me. This solution is pretty simple, though Visual
+Studio complains that this method is deprecated. This doesn&amp;rsquo;t bother me,
+because it works. :)&lt;/p&gt;
+
+&lt;p&gt;First create a new class in your project. Let&amp;rsquo;s call the file
+&lt;strong&gt;CertValidation.cs&lt;/strong&gt;. In this file we&amp;rsquo;ll put in some code that
+implements a specific interface designed to handle certificate
+validation. Except when the validation method is called we won&amp;rsquo;t bother
+to validate, but instead will just tell the app that all is well!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;:::c#
+using System;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+
+namespace ourCoolApp {
+ public class CertValidation : ICertificatePolicy {
+  public Boolean CheckValidationResult(ServicePoint srvPoint, X509Certificate cert, WebRequest request, Int32 problem) {
+   // Return true to indicate the cert is ALWAYS valid. Hacky-tastic!
+   return true;
+  }
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once you have that saved you will need to tell your application to use
+this for certificate validation. I did exactly this in the Load event in
+my main form like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;:::c#
+ServicePointManager.CertificatePolicy = new CertValidation();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make sure to import &lt;strong&gt;System.Security.Cryptography.X509Certificates&lt;/strong&gt; in
+your form code, or that will fail. Now when you run your application,
+the &lt;em&gt;CertValidation&lt;/em&gt; class will tell your application that the cert is
+cool!&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MD5 Hash a String in C#</title>
+      <link>http://adampresley.com/post/md5-hash-a-string-in-c/</link>
+      <pubDate>Tue, 29 Mar 2011 05:47:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/md5-hash-a-string-in-c/</guid>
+      <description>&lt;p&gt;Here&amp;rsquo;s a small function to hash a string in C# using the MD5 algorithm.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Text;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Security.Cryptography;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;md5Hash&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;input)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(MD5&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;md5&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;MD5CryptoServiceProvider())&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;BitConverter.ToString(md5.ComputeHash(ASCIIEncoding.Default.GetBytes(input)));&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Replace(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;-&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String.Empty);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Note that the &lt;strong&gt;Replace()&lt;/strong&gt; at the end is optional and you may remove it
+should you want the dashes in your hash string.&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Lambda for Sorting in C# .NET</title>
+      <link>http://adampresley.com/post/using-lambda-for-sorting-in-c-net/</link>
+      <pubDate>Tue, 07 Dec 2010 23:49:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/using-lambda-for-sorting-in-c-net/</guid>
+      <description>&lt;p&gt;Here&amp;rsquo;s a quick little tidbit that helped me this week. While writing a
+C# Windows application I found myself with a &lt;strong&gt;List&lt;/strong&gt; of objects that
+did not implement a comparator interface. Because of this when I tried
+to call &lt;strong&gt;mylist.Sort()&lt;/strong&gt; I got an error complaining about how it
+couldn&amp;rsquo;t compare the two objects.&lt;/p&gt;
+
+&lt;p&gt;The quick and dirty way to address this is C# .NET 3.5 and above is to
+use a Lambda expression. So given a list named &lt;strong&gt;mylist&lt;/strong&gt;, here is how
+one can do this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;:::c#
+mylist.Sort( (a, b) =&amp;gt; a.ToString().CompareTo(b.ToString()) );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice how we start immediately with a set of arguments, followed by
+&lt;strong&gt;=&amp;gt;&lt;/strong&gt;. This is the start of the lambda expression, and it tells us
+&amp;ldquo;arguments a and b goes to {some expression}&amp;rdquo;. In our case &lt;strong&gt;{some
+expression}&lt;/strong&gt; is to take the string version of object &lt;em&gt;a&lt;/em&gt; and compare it
+to the string version of object &lt;em&gt;b&lt;/em&gt;. This works because the objects in
+question &lt;strong&gt;did&lt;/strong&gt; override the &lt;strong&gt;ToString()&lt;/strong&gt; method allowing us to do a
+basic string comparison between the two objects.&lt;/p&gt;
+
+&lt;p&gt;Pretty nifty eh? Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Log4Net - Built in Log Levels by the Numbers</title>
+      <link>http://adampresley.com/post/log4net-built-in-log-levels-by-the-numbers/</link>
+      <pubDate>Thu, 02 Dec 2010 22:05:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/log4net-built-in-log-levels-by-the-numbers/</guid>
+      <description>&lt;p&gt;I had the pleasure of using the .NET port of the very popular and
+powerful log4j library called &lt;a href=&#34;http://logging.apache.org/log4net/index.html&#34;&gt;log4net&lt;/a&gt;.
+I&amp;rsquo;ve found it as powerful and enjoyable as log4j and it has &lt;strong&gt;greatly&lt;/strong&gt;
+simplified my logging needs for this C# project.&lt;/p&gt;
+
+&lt;p&gt;At some point I found myself needing to create a custom log level. This
+is actually documented fairly well, and there are even a couple of
+examples provided in the download. What I couldn&amp;rsquo;t find easily, however,
+is the numeric value assigned to the built-in log levels. Ya know, WARN,
+INFO, DEBUG, etc&amp;hellip; Why is this important? Because when you build a
+custom log level you specify both a name and an integer value for the
+level. This is so that the level names can be sorted, and when you
+configure an appender you can specify what level to log at. That
+comparison is done by the integer value assigned to the log level name.
+But for the life of me I couldn&amp;rsquo;t find the integer values for the
+built-in levels!&lt;/p&gt;
+
+&lt;p&gt;Well, dig in the source code I did, and down in the &lt;strong&gt;/Core/Level.cs&lt;/strong&gt;
+file I found what I needed. Here is a quick table of the built-in
+levels.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Off - int.MaxValue&lt;/li&gt;
+&lt;li&gt;Emergency - 120,000&lt;/li&gt;
+&lt;li&gt;Fatal - 110,000&lt;/li&gt;
+&lt;li&gt;Alert - 100,000&lt;/li&gt;
+&lt;li&gt;Critical - 90,000&lt;/li&gt;
+&lt;li&gt;Severe - 80,000&lt;/li&gt;
+&lt;li&gt;Error - 70,000&lt;/li&gt;
+&lt;li&gt;Warn - 60,000&lt;/li&gt;
+&lt;li&gt;Notice - 50,000&lt;/li&gt;
+&lt;li&gt;Info - 40,000&lt;/li&gt;
+&lt;li&gt;Debug - 30,000&lt;/li&gt;
+&lt;li&gt;Fine - 30,000&lt;/li&gt;
+&lt;li&gt;Trace - 20,000&lt;/li&gt;
+&lt;li&gt;Finer - 20,000&lt;/li&gt;
+&lt;li&gt;Verbose - 10,000&lt;/li&gt;
+&lt;li&gt;Finest - 10,000&lt;/li&gt;
+&lt;li&gt;All - int.MinValue&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now armed with this knowledge I now know where I can place my custom log
+levels. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Experimenting with SQL to JSON in SQL Server 2008</title>
+      <link>http://adampresley.com/post/experimenting-with-sql-to-json-in-sql-server-2008/</link>
+      <pubDate>Wed, 14 Jul 2010 03:37:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/experimenting-with-sql-to-json-in-sql-server-2008/</guid>
+      <description>&lt;p&gt;In the last couple of days at work my friend Adrian (@iknowkungfoo) and
+I (@adampresley) have been tossing around how we can improve performance
+on various portions of the application we work on. On of the trouble
+areas has always been large query sets that then have to be transformed
+into JSON for an AJAX response.&lt;/p&gt;
+
+&lt;p&gt;One little feature introduced in SQL Server 2005 that I had completely
+forgot about is the ability to take a given query result set and turn it
+into XML. It&amp;rsquo;s a very nifty feature, and once Adrian reminded me of this
+some thoughts started to take shape. First let&amp;rsquo;s look at how the XML
+feature works. Below is a query that I ran against a test database that
+contains address information. Below that is a screenshot of how the
+result set looks using the XML feature.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;SELECT&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;id&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;email&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;phone&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;postalCode&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;FROM&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;address&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;ORDER&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;BY&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;FOR&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;XML&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;AUTO,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ROOT(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;addresses&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Ok, so that&amp;rsquo;s pretty cool. So what I&amp;rsquo;ve done so far is write a .NET
+assembly that I register in SQL Server, wrap a SQL function around the
+.NET method, and am using this to turn the XML from the query into JSON.
+For more info on creating and registering a .NET method in SQL server
+see my previous post &lt;a href=&#34;http://blog.adampresley.com/2009/writing-csharp-functions-for-sql-server-and-clr-integration/&#34;&gt;Writing C# Functions for SQL Server and CLR
+Integration&lt;/a&gt;.
+So without any ado here is the code for the assembly.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Data;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Data.SqlTypes;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Data.SqlClient;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Microsoft.SqlServer.Server;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Collections.Generic;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Linq;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Text;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.IO;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Xml;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Xml.XPath;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * The JSONTransformer class provides methods to encode XML datasets&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * into JSON. These methods are intended to be used by a&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * Microsoft SQL Server 2005 or higher.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * @author Adam Presley&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;partial&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;JSONTransformer&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #75715e&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * This method takes an XML dataset and serializes it to a&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * JSON string acceptable for AJAX/client use.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * &amp;lt;code&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * DECLARE @resultSetXML VARCHAR(max);&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * DECLARE @rootNodeName VARCHAR(75);&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * DECLARE @elementNodeName VARCHAR(75);&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * DECLARE @result VARCHAR(max);&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * SET @rootNodeName = &amp;#39;addresses&amp;#39;;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * SET @elementNodeName = &amp;#39;address&amp;#39;;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * SET @resultSetXML = (&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *     SELECT&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *         id&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *         , firstName&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *         , lastName&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *         , email&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *         , phone&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *         , postalCode&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * FROM address&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *     ORDER BY&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *         firstName, lastName&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * FOR XML AUTO, ROOT(&amp;#39;addresses&amp;#39;));&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * SELECT dbo.SQLJsonEncode(@resultSetXML, @rootNodeName, @elementNodeName) AS jsonResult;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * &amp;lt;/code&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    *&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @author Adam Presley&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @param resultSetXML - The SQL result set serialized to XML&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @param rootNodeName - The name of the XML root node&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @param elementNodeName - The name of a record&amp;#39;s XML node&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @returns A string containing the resultset as JSON.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    */&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;   [SqlFunction()]&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Encode&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;resultSetXML,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;rootNodeName,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;elementNodeName)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;XmlDocument&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;xmlDoc&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;XmlDocument();&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;DataSet&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;dataset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;DataSet();&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;StringBuilder&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;StringBuilder();&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;recordCount&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;currentIndex&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+      &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;       * Create an XPath iterator.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;       */&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;XmlTextReader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;reader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;XmlTextReader(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;StringReader(resultSetXML));&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;XPathDocument&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;xdoc&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;XPathDocument(reader);&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;XPathNavigator&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nav&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;xdoc.CreateNavigator();&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;XPathNodeIterator&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;iter&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nav.Select(rootNodeName&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;/&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;elementNodeName);&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;recordCount&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;iter.Count;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;currentIndex&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Append(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;{ \&amp;quot;recordcount\&amp;quot;: \&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;recordCount.ToString()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;\&amp;quot;, \&amp;quot;data\&amp;quot;: [ &amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(iter.MoveNext())&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;XPathNavigator&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;item&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;iter.Current;&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Append(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;{ &amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+         &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;          * If we have attributes iterate over them and add them to&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;          * the JSON object.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;          */&lt;/span&gt;
+         &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(item.HasAttributes)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+            &lt;span style=&#34;color: #f8f8f2&#34;&gt;item.MoveToFirstAttribute();&lt;/span&gt;
+            &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;line&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+            &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+               &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;item.Name;&lt;/span&gt;
+               &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;value&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;item.Value;&lt;/span&gt;
+
+               &lt;span style=&#34;color: #f8f8f2&#34;&gt;line&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;\&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;\&amp;quot;: \&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__jsonEscape(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;\&amp;quot;, &amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+            &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(item.MoveToNextAttribute());&lt;/span&gt;
+
+            &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;             * Remove trailing comma&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;             */&lt;/span&gt;
+            &lt;span style=&#34;color: #f8f8f2&#34;&gt;line&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;line.Substring(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;line.Length&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+            &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Append(line);&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Append(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot; }&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+         &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(currentIndex&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;recordCount&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Append(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;, &amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;currentIndex++;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Append(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot; ]}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;reader.Close();&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.ToString();&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #75715e&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * This method escapes a string in a format suitable&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * for JSON and JavaScript.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @author Adam Presley&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @param data - The piece of data to JavaScript encode&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * @returns A string properly encoded for JavaScript&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    */&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__jsonEscape&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;data)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;data;&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Replace(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;\&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;\\\&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now we can run a query or proc something like this to see JSON data.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;DECLARE&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;resultSetXML&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;VARCHAR(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;max&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;DECLARE&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;rootNodeName&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;VARCHAR(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;75&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;DECLARE&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;elementNodeName&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;VARCHAR(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;75&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;DECLARE&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;VARCHAR(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;max&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;SET&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;rootNodeName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;addresses&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;SET&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;elementNodeName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;SET&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;resultSetXML&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;SELECT&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;id&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;email&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;phone&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;postalCode&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;FROM&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;address&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;ORDER&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;BY&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;FOR&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;XML&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;AUTO,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ROOT(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;addresses&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;));&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;dbo.SQLJsonEncode(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;resultSetXML,&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;rootNodeName,&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;elementNodeName)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;AS&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;jsonResult;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Pretty cool! Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Writing C# Functions for SQL Server and CLR Integration</title>
+      <link>http://adampresley.com/post/writing-c-functions-for-sql-server-and-clr-integration/</link>
+      <pubDate>Tue, 15 Sep 2009 10:46:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/writing-c-functions-for-sql-server-and-clr-integration/</guid>
+      <description>&lt;p&gt;An interested problem was presented to me today where a database table
+in SQL Server 2005 (now moved to 2008) had a trigger attached to a table
+that would encrypt a credit card number on insert or update. The
+encryption routine used the sp_OACreate stored procedure to make use of
+an older Microsoft cryptography library called CAPICOM. With the move to
+SQL Server 2008, however, we also upgraded our OS to 64-bit Windows. It
+turns out that this CAPICOM component does not have support for the
+64-bit world, and started to cause a world of hurt, causing credit card
+numbers to not go into the database. This, or course, is bad.&lt;/p&gt;
+
+&lt;p&gt;So I now decided that to tackle this problem I would make use of SQL
+Server&amp;rsquo;s ability to access .NET assemblies and their methods. The first
+order of business to get this started is to enable CLR integration in
+your SQL Server instance. By default this is disabled, so two simple
+statements will do the trick to turn it on.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;sp_configure&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;clr enabled&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;GO&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;reconfigure&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;GO&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now that you have CLR integration turned on let&amp;rsquo;s get to the fun stuff.
+Code. Fire up your C# environment ladies! Now, if you are like me, and
+you don&amp;rsquo;t have the super cool Enterprise edition of Visual Studio, you
+will have to make due without all the little helper wizards that handle
+deployment of your code to a SQL Server instance, and you will have to
+do it manually. Don&amp;rsquo;t worry, it isn&amp;rsquo;t hard.&lt;/p&gt;
+
+&lt;p&gt;First, create a new Class Library project. This will create a project
+that contains a file named &amp;ldquo;Class.cs&amp;rdquo;. I normally rename that to
+something nicer, like &amp;ldquo;Crypto.cs&amp;rdquo;. C# will also create a namespace
+definition for your new project by default. In our case we won&amp;rsquo;t be
+needing that, so remove it (don&amp;rsquo;t forget your open and close curly
+braces).&lt;/p&gt;
+
+&lt;p&gt;From here we will need a few references for our project. Those are:
+System, System.Data.SqlTypes, System.Security.Cryptography, System.Text,
+System.IO, and Microsoft.SqlServer.Server. That will look like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.IO;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Text;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Data.SqlTypes;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Microsoft.SqlServer.Server;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Security.Cryptography;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;SQL Server expects a class defined as &lt;strong&gt;partial&lt;/strong&gt;, and a series of
+methods that are &lt;strong&gt;public static&lt;/strong&gt;, and have the attribute
+&lt;strong&gt;[SqlFunction()]&lt;/strong&gt; for creating a .NET managed function for SQL Server.
+Functions are easy to implement because they simply return simple
+values, unlike stored procedures (which is beyond the scope of this
+post).&lt;/p&gt;
+
+&lt;p&gt;For this example I will be creating two functions: Encrypt and Decrypt.
+Each function that we wish to expose will contain the SqlFunction
+attribute as described above, will be public, and also be marked as
+static. Here are what they look like.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;[SqlFunction()]&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Encrypt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Password,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(Input&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input.Length&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;keyGen&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createKeyGen(Password,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createEncryptor(keyGen);&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformed&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__transform(Encoding.Default.GetBytes(Input),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer);&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Convert.ToBase64String(transformed);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #a6e22e&#34;&gt;[SqlFunction()]&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Decrypt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Password,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(Input&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input.Length&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;keyGen&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createKeyGen(Password,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createDecryptor(keyGen);&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformed&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__transform(Convert.FromBase64String(Input),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer);&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Encoding.Default.GetString(transformed);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Clearly these methods are higher level and depend on other methods to do
+the actual dirty work, but they are the methods that will be exposed to
+SQL Server, and will serve to describe what is happening.&lt;/p&gt;
+
+&lt;p&gt;Each method takes three arguments. The first is an input string. For the
+&lt;strong&gt;Encrypt&lt;/strong&gt; method this will be the plain text value that needs to be
+encrypted. For the &lt;strong&gt;Decrypt&lt;/strong&gt; method this will be the base64 encoded
+encrypted string that needs to be decrypted. The &lt;em&gt;Password&lt;/em&gt; argument is
+the password that will be used to generate the encryption and decrypt
+values, followed by the &lt;em&gt;Salt&lt;/em&gt; value used along with the &lt;em&gt;Password&lt;/em&gt; to
+generate the encryption key.&lt;/p&gt;
+
+&lt;p&gt;As seen in the code above there are four primary methods used to perform
+these actions: &lt;strong&gt;__createKeyGen&lt;/strong&gt;, &lt;strong&gt;__createEncryptor&lt;/strong&gt;,
+&lt;strong&gt;__createDecryptor&lt;/strong&gt;, and &lt;strong&gt;__transform&lt;/strong&gt;. Let&amp;rsquo;s look at each.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__createKeyGen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Password,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(Password,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Encoding.Default.GetBytes(Salt));&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;__createKeyGen&lt;/strong&gt; method takes a password and salt values to
+create a key generator object based on the RFC 2989 specification. This
+will be used by the encryptor and decryptor to generate the key and
+initialization vector (IV).&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__createEncryptor&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES.Create();&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider.CreateEncryptor(KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;));&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;__createEncryptor&lt;/strong&gt; method creates an object used to encrypt
+values based on the encryption provider, which in this case is
+TripleDES. Notice how this method expects a Rfc2989DeriveBytes object
+which we generate from the &lt;strong&gt;__createKeyGen&lt;/strong&gt;, and that we use it to
+generate a 128-bit (16 bytes) key and IV.&lt;/p&gt;
+
+&lt;p&gt;The same applies to the &lt;strong&gt;__createDecryptor&lt;/strong&gt; method, except that we
+create an object that decrypts instead of encrypts.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__createDecryptor&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES.Create();&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider.CreateDecryptor(KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;));&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now comes the fun part. Time to perform encryption or decryption.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__transform&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Transformer)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;MemoryStream&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ms&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;MemoryStream();&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;CryptoStream&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;writer&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;CryptoStream(ms,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Transformer,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;CryptoStreamMode.Write);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;writer.Write(Input,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input.Length);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;writer.FlushFinalBlock();&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;ms.Position&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ms.ToArray();&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;ms.Close();&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;writer.Close();&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This method takes a byte array for the input, and an encryptor or
+decryptor (thus the ICryptoTransform interface argument). Right out of
+the box we create a MemoryStream object. This is where the final
+encrypted or decrypted result will be stored. We also create a byte
+array called &lt;em&gt;result&lt;/em&gt; that we will get an array of bytes from the
+MemoryStream into to send back as the result.&lt;/p&gt;
+
+&lt;p&gt;From here we create an instance of the CryptoStream class and we will
+call it &lt;em&gt;writer&lt;/em&gt;. The first parameter specifies that the MemoryStream
+&lt;em&gt;ms&lt;/em&gt; will be where the CryptoStream writer will put its data. The second
+parameter is the encryptor or decryptor object. The third parameter
+specifies that we wish to write to the MemoryStream.&lt;/p&gt;
+
+&lt;p&gt;From here we use the &lt;strong&gt;Write&lt;/strong&gt; method, passing it the input byte array,
+start offset, and byte array length, to write the bytes to the
+CryptoStream writer to be encrypted or decrypted.&lt;/p&gt;
+
+&lt;p&gt;After this we reset our MemoryStream position, and read the data from it
+into a byte array, which will be the resulting encrypted or decrypted
+value. Close up shop to clean up, and return the results.&lt;/p&gt;
+
+&lt;p&gt;It is worth noting that the &lt;strong&gt;Encrypt&lt;/strong&gt; method converts the encrypted
+byte array to a Base64 string for portability, and the &lt;strong&gt;Decrypt&lt;/strong&gt;
+method expects a Base64 encoded string to decrypt.&lt;/p&gt;
+
+&lt;p&gt;Now we get to plug it into SQL Server. For your database there is a
+branch in the Object Explorer named &amp;ldquo;Programmability&amp;rdquo;. Under here there
+is a branch named &amp;ldquo;Assemblies&amp;rdquo;. After you compile your code you will
+need to register your assembly in SQL Server. To do this, right click on
+the Assemblies folder and select &amp;ldquo;New Assembly&amp;hellip;&amp;rdquo;. The resulting dialog
+will have a Path option where you can browse for your compiled DLL file.
+Find this, then click &amp;ldquo;Ok&amp;rdquo;. If all is well you will see your DLL name
+under the &amp;ldquo;Assemblies&amp;rdquo; folder.&lt;/p&gt;
+
+&lt;p&gt;Now you need to create an actual SQL Server function wrapper for the CLR
+function. For the sake of this bit of code let&amp;rsquo;s assume the name of the
+assembly is &amp;ldquo;MyCrypto&amp;rdquo;, and the name of the class is &amp;ldquo;Crypto&amp;rdquo;. This can
+be done like so.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;FUNCTION&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Encrypt(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Input&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;Password&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;RETURNS&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;EXTERNAL&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;NAME&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;MyCrypto.Crypto.Encrypt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;FUNCTION&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Encrypt(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Input&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;Password&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;RETURNS&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;nvarchar(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;255&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;EXTERNAL&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;NAME&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;MyCrypto.Crypto.Decrypt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This bit of SQL will create SQL Server functions that reference the .NET
+assembly. To use this function would look something like this.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;dbo.Encrypt(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;some important value&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;myPassword&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;salt is nice&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;AS&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;encryptedValue;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;And there you have it. A cool, powerful feature, and not hard to do!
+Happy coding!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.IO;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Text;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Data.SqlTypes;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Microsoft.SqlServer.Server;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Security.Cryptography;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;partial&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Crypto&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;	[SqlFunction()]&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Encrypt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Password,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(Input&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input.Length&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;keyGen&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createKeyGen(Password,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt);&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createEncryptor(keyGen);&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformed&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__transform(Encoding.Default.GetBytes(Input),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer);&lt;/span&gt;
+
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Convert.ToBase64String(transformed);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #a6e22e&#34;&gt;	[SqlFunction()]&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Decrypt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Password,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(Input&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input.Length&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;keyGen&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createKeyGen(Password,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt);&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__createDecryptor(keyGen);&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformed&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__transform(Convert.FromBase64String(Input),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;transformer);&lt;/span&gt;
+
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Encoding.Default.GetString(transformed);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #a6e22e&#34;&gt;	[SqlFunction()]&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Hash&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(Input&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input.Length&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;StringBuilder&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;StringBuilder();&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;SHA1&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;SHA1.Create();&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider.ComputeHash(Encoding.Default.GetBytes(Input));&lt;/span&gt;
+
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(Byte&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__result)&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;result.Append(String.Format(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;{0:x2}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;b));&lt;/span&gt;
+
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result.ToString();&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__createKeyGen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Password,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Salt)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Rfc2898DeriveBytes&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(Password,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Encoding.Default.GetBytes(Salt));&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__createEncryptor&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES.Create();&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider.CreateEncryptor(KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;));&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__createDecryptor&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(Rfc2898DeriveBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;TripleDES.Create();&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;provider.CreateDecryptor(KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;KeyGen.GetBytes(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;16&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;));&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__transform&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ICryptoTransform&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Transformer)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;MemoryStream&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ms&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;MemoryStream();&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;CryptoStream&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;writer&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;CryptoStream(ms,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Transformer,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;CryptoStreamMode.Write);&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;writer.Write(Input,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Input.Length);&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;writer.FlushFinalBlock();&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;ms.Position&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ms.ToArray();&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;ms.Close();&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;writer.Close();&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Consuming Web Services in .NET 3.5 - Web References</title>
+      <link>http://adampresley.com/post/consuming-web-services-in-net-35-web-references/</link>
+      <pubDate>Tue, 10 Feb 2009 22:00:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/consuming-web-services-in-net-35-web-references/</guid>
+      <description>&lt;p&gt;I have to admit I feel a little bit behind the curve. I&amp;rsquo;ve not goofed
+too much with the .NET 3.5 specific stuff much lately, and much of my
+experience has been in .NET 2.0. But today I packed up the laptop and
+headed to Starbucks to get out of the office so I could have some peace
+and quite, as the office is usually the wrong place for that kind of
+thing.&lt;/p&gt;
+
+&lt;p&gt;For the last couple of hours I&amp;rsquo;ve been working on supplemental
+documentation for the Clearview DataServices API. This has been a pet
+project of mine for our company for the last year and a half, and in the
+last month the CTO has really decided to make a major marketing push and
+get this polished up and to our clients. I&amp;rsquo;ve already got 70+ pages of
+the API&amp;rsquo;s function documentation written, but I have found that the
+average developer contracted to use my API for our clients don&amp;rsquo;t
+understand the business well, so when they consult the documentation to
+try to do anything with our system, they end up lost.&lt;/p&gt;
+
+&lt;p&gt;With this in mind I&amp;rsquo;m writing two things. The first is a &amp;ldquo;Cookbook&amp;rdquo;
+style document which gives common problems or tasks, and the code to
+solve the problem. I&amp;rsquo;ve read these kinds of books myself in the past and
+I&amp;rsquo;m personally a big fan of them. The second thing I am writing is a set
+of libraries to simplify consuming our web service API from ColdFusion,
+PHP, and .NET.&lt;/p&gt;
+
+&lt;p&gt;Apparently in .NET they&amp;rsquo;ve made some changes to how web service
+references are added. Once upon a time you simply added a &amp;ldquo;Web
+Reference&amp;rdquo; to the project, providing the URL and a namespace, and the
+proxy classes were generated for you. I go to do this now, and there&amp;rsquo;s
+new stuff there. I no longer see the ability to add a &amp;ldquo;Web Reference&amp;rdquo;,
+but now a &amp;ldquo;Service Reference&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;For those of you who don&amp;rsquo;t know, when you enter the address to your web
+service, there is a new &amp;ldquo;Advanced&amp;rdquo; button at the bottom of the dialog.
+Click on this, and you will see a new button on a &lt;em&gt;second&lt;/em&gt; dialog to add
+a &amp;ldquo;Web Reference&amp;rsquo;. Viola! They&amp;rsquo;ve hidden it!! Chances are this is what
+you will be looking for.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Images in SQL</title>
+      <link>http://adampresley.com/post/images-in-sql/</link>
+      <pubDate>Mon, 09 Feb 2009 11:21:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/images-in-sql/</guid>
+      <description>&lt;p&gt;So I was presented with a task today of extracting images that were
+stored in a Microsoft SQL Server 2000 database and save them as JPEG
+files. Here is a bit of code that will do this. In this code sample I am
+assuming domain authenticated SQL login. The table name here will be
+called &lt;strong&gt;Photos&lt;/strong&gt; and the column names &lt;strong&gt;id&lt;/strong&gt;, &lt;strong&gt;type&lt;/strong&gt;, and &lt;strong&gt;photo&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;SqlConnection&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;SqlCommand&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;command;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;SqlDataReader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;reader;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;outputDirectory&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;C:\\TestLocation&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;PictureBox&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;pic&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;PictureBox();&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(connection&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;SqlConnection(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;data source=MyServer;initial catalog=Database;persist security info=True;packet size=4096;Trusted_Connection=True&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection.Open();&lt;/span&gt;
+
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;command&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;SqlCommand(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SELECT id, type, photo FROM Photos&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection);&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;command.CommandType&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;CommandType.Text;&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;command.CommandTimeout&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3000&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;reader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;command.ExecuteReader();&lt;/span&gt;
+
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(reader.Read())&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+       &lt;span style=&#34;color: #66d9ef&#34;&gt;try&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+          &lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;rawBytes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[])&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;reader[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;photo&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+          &lt;span style=&#34;color: #f8f8f2&#34;&gt;MemoryStream&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;memStream&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;MemoryStream();&lt;/span&gt;
+          &lt;span style=&#34;color: #f8f8f2&#34;&gt;memStream.Write(rawBytes,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;rawBytes.Length);&lt;/span&gt;
+
+          &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;filename&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;outputDirectory&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;\\image-&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;reader[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].ToString()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;-&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;reader[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;type&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].ToString()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;.jpg&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+          &lt;span style=&#34;color: #f8f8f2&#34;&gt;pic.Image&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Image.FromStream(memStream);&lt;/span&gt;
+          &lt;span style=&#34;color: #f8f8f2&#34;&gt;pic.Image.Save(filename,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;System.Drawing.Imaging.ImageFormat.Jpeg);&lt;/span&gt;
+
+          &lt;span style=&#34;color: #f8f8f2&#34;&gt;memStream.Close();&lt;/span&gt;
+       &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+       &lt;span style=&#34;color: #66d9ef&#34;&gt;catch&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(Exception&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ex)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+       &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This C# code will loop over a record set and save the images stored in
+the table as JPEG files. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>&#39;Tutorial: .NET XML Into A DataSet&#39;</title>
+      <link>http://adampresley.com/post/tutorial-net-xml-into-a-dataset/</link>
+      <pubDate>Tue, 08 Apr 2008 18:43:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/tutorial-net-xml-into-a-dataset/</guid>
+      <description>&lt;p&gt;New tutorial for C# about using XML data in a DataSet object for
+manipulating the data like it came from a database. See the Software
+Development section, or go straight to it here. Cheers, and happy
+coding!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Sadly the links above are lost in the annals of time&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Beep on the Enter Key</title>
+      <link>http://adampresley.com/post/beep-on-the-enter-key/</link>
+      <pubDate>Mon, 27 Aug 2007 12:20:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/beep-on-the-enter-key/</guid>
+      <description>&lt;p&gt;One of the applications that I wrote and maintain here for use at my job
+is a C# Windows application. A couple of revisions ago I set it up so
+that the user could press the &lt;strong&gt;Enter&lt;/strong&gt; key to submit the login instead
+of having to click the actual login button. For the longest time now
+this has produced a &lt;strong&gt;&lt;em&gt;beep&lt;/em&gt;&lt;/strong&gt; sound. ANNOYING!&lt;/p&gt;
+
+&lt;p&gt;I finally took the time to address this. On the text boxes I was
+catching the &lt;em&gt;KeyUp&lt;/em&gt; event and checking for the &lt;strong&gt;Enter&lt;/strong&gt; key. Come to
+find out that to properly make sure that the &lt;strong&gt;WHOLE&lt;/strong&gt; event gets
+handled I needed to use the &lt;em&gt;KeyPress&lt;/em&gt; event, and set the &lt;strong&gt;&lt;em&gt;Handled&lt;/em&gt;&lt;/strong&gt;
+property to &lt;em&gt;true&lt;/em&gt; so that it would not flow back down to the key event
+handler on the form. Now, no more beep!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SyncXpress Update</title>
+      <link>http://adampresley.com/post/syncxpress-update/</link>
+      <pubDate>Tue, 03 Apr 2007 17:14:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/syncxpress-update/</guid>
+      <description>&lt;p&gt;Ladies and Gentlemen! I have put up for public download the first alpha
+release of SyncXpress. It is still in VERY early production, and not
+ready for prime time, so use at your own risk. You will need .NET 2.0 to
+run this application. I also hope to have a forum up soon for feedback
+and chat regarding features and bugs and such.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTICE: This site no longer exists&lt;/strong&gt;
+&lt;a href=&#34;http://www.syncxpress.com&#34;&gt;http://www.syncxpress.com&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Logical Drives and WMI</title>
+      <link>http://adampresley.com/post/logical-drives-and-wmi/</link>
+      <pubDate>Thu, 01 Feb 2007 07:39:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/logical-drives-and-wmi/</guid>
+      <description>&lt;p&gt;In an effort to support removable media devices in SyncXpress I&amp;rsquo;ve had
+to do a bit of learning about WMI in .NET. It is actually quite cool how
+much information you can get from WMI about ANY piece of hardware
+attached to your system, and even INSIDE your system. So in my case I
+want to find out information about a logical drive device in Windows.
+Using the &lt;em&gt;System.Management&lt;/em&gt; namespace we can access the
+&lt;em&gt;ManagementObject&lt;/em&gt; classes that will allow us to query the WMI services
+to get information about our device. Here is an example of getting
+information about your *&lt;em&gt;C:\*&lt;/em&gt; drive.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ManagementObject&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;wmi;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;serialNumber,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;freeSpace;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;wmi&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ManagementObject(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Win32_LogicalDisk.DeviceID=\&amp;quot;C:\&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;serialNumber&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;wmi[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;VolumeSerialNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].ToString();&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;wmi[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].ToString();&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;freeSpace&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;wmi[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;FreeSpace&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].ToString();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;For more information on what data can be queried on a logical device see
+&lt;a href=&#34;http://msdn2.microsoft.com/en-us/library/aa394173.aspx&#34;&gt;http://msdn2.microsoft.com/en-us/library/aa394173.aspx&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SyncXpress</title>
+      <link>http://adampresley.com/post/syncxpress/</link>
+      <pubDate>Wed, 31 Jan 2007 03:41:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/syncxpress/</guid>
+      <description>&lt;p&gt;Long under development, and not due to complexity, has my program
+SyncXpress been. I am happy to state that it is nearly done with the
+first beta. I&amp;rsquo;ve got most all the interface elements built. Package
+management is working, allowing you to create, modify, and delete
+packages and their respective targets. I finished writing and testing
+the directory exclusion list editor last night, and it is working well.
+I then began on the actual synchronization process, and once that part
+is done, I&amp;rsquo;ll be ready to put it up for download as a beta.&lt;/p&gt;
+
+&lt;p&gt;The site to start looking at stuff: &lt;a href=&#34;http://www.syncxpress.com&#34;&gt;http://www.syncxpress.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTICE: This site no longer exists&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

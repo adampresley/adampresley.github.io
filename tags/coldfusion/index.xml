@@ -1,0 +1,1122 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Coldfusion on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/coldfusion/</link>
+    <description>Recent content in Coldfusion on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 06 Mar 2012 09:29:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/coldfusion/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>OpenCF Summit 2012</title>
+      <link>http://adampresley.com/post/opencf-summit-2012/</link>
+      <pubDate>Tue, 06 Mar 2012 09:29:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/opencf-summit-2012/</guid>
+      <description>&lt;p&gt;I had the pleasure of attending the OpenCF Summit this year
+(&lt;a href=&#34;http://opencfsummit.org/&#34;&gt;http://opencfsummit.org/&lt;/a&gt;) in Garland, TX. Luckily I live down the
+road a piece in Allen, TX so it wasn&amp;rsquo;t a far trek for me. Summarizing
+the experience into a word for me would be &amp;ldquo;worthwhile&amp;rdquo;, but perhaps I
+am jumping ahead.&lt;/p&gt;
+
+&lt;p&gt;One of the coolest parts about this conference was getting to meet a lot
+of the cool people I have interacted with on various social media
+outlets. It is always good to put a face to the tweets and personality.
+I also consider it energizing to feed off the air of enthusiasm of other
+people who are passionate about the CFML language, and there certainly
+was plenty of that to go around!&lt;/p&gt;
+
+&lt;p&gt;Presentations of note (to me at least) were some of the really cool
+things Railo and team are doing. Gert peeled back the covers a bit to
+show off some of the more useful/cooler features of Railo, including the
+highly useful abilities of specifying session storage. Highly
+versatile!&lt;/p&gt;
+
+&lt;p&gt;Allan Williamson presented on CFML and OpenBD and the challenges of huge
+scale. Some of the techniques he presented on were downright
+inspirational. The topic covered everything from high visibility,
+centralized logging, fire-and-forget cloud instances, and even general
+techniques for preparing your CFML code for high scale. I have to admit
+that when he spoke on how his organization doesn&amp;rsquo;t even bother to turn
+on SSH access to their cloud instances because they can shutdown and
+spin up new ones so easily, my mind pretty much blew out of the back of
+my skull.&lt;/p&gt;
+
+&lt;p&gt;Other presentations I enjoyed included a lightning talk on the life and
+death of stars and star systems by Christian Ready. Daria Norris talked
+about the very cool things they are doing with CFML at the Free Library
+of Philadelphia. Google Maps laid over old town maps was pretty cool.&lt;/p&gt;
+
+&lt;p&gt;I also participated in the Hackfest. I admit I was a bit nervous as I&amp;rsquo;ve
+never really contributed to an ongoing open-source project that I didn&amp;rsquo;t
+just make myself and upload somewhere. There were several challenges for
+me personally, as I am brand new to Git, never used the Mach-II
+framework (in any serious capacity), and generally groan when I have to
+use ColdSpring. Don&amp;rsquo;t get me wrong, all good products, but not generally
+my cup of tea. Just the same the experience was rewarding and I was
+happy to contribute. I always enjoy learning a few new things when I
+can.&lt;/p&gt;
+
+&lt;p&gt;Overall OpenCF Summit felt like a success to me, and I look forward to
+attending next year.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adam&#39;s JSON Formatter</title>
+      <link>http://adampresley.com/post/adams-json-formatter/</link>
+      <pubDate>Mon, 19 Sep 2011 13:05:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/adams-json-formatter/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://jsonformatter.curiousconcept.com/&#34;&gt;Curious Concept&amp;rsquo;s JSON Formatter&lt;/a&gt;
+is a great JSON formatter and validator application. I found myself working
+with a JSON dataset that was larger than what this tool allowed, so naturally
+I set out and made my own. &lt;a href=&#34;http://jsonformatter.adampresley.com/&#34;&gt;Adam&amp;rsquo;s JSON Formatter&lt;/a&gt;
+runs on &lt;a href=&#34;http://www.cloudbees.com/&#34;&gt;CloudBees&lt;/a&gt;, a PaaS platform for running Java applications.
+This little tool is built on OpenBD and uses the excellent &lt;a href=&#34;http://json-lib.sourceforge.net/&#34;&gt;JSONlib&lt;/a&gt;
+tool for JSON beautification. For the front end stuff I&amp;rsquo;m using jQuery and jQuery UI.
+CloudBees was super easy to get started with, and super easy to deploy my application to.
+And of course the tiny footprint of OpenBD is perfect for the small, 128M slice
+you get for free with CloudBees. So I recommend you give them a try.
+That and OpenBD. :) Cheers, and happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>INSERT or UPDATE in MySQL</title>
+      <link>http://adampresley.com/post/insert-or-update-in-mysql/</link>
+      <pubDate>Thu, 25 Aug 2011 23:25:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/insert-or-update-in-mysql/</guid>
+      <description>&lt;p&gt;Tonight I &lt;strong&gt;finally&lt;/strong&gt; got to use the very awesome &lt;em&gt;ON DUPLICATE KEY
+UPDATE&lt;/em&gt; feature in MySQL. If you are wondering this is a great feature in
+MySQL that allows you, in one statement, to insert a record, and if that
+record already exists, update it instead. The criteria for already
+existing is based on checking primary and unique keys on the record.&lt;/p&gt;
+
+&lt;p&gt;The only question that wasn&amp;rsquo;t clearly answered by MySQL&amp;rsquo;s documentation
+for me was how *autoincrement*fields behave. Turns out this is pretty
+easy. For demonstration purposes assume that we have a table with &lt;em&gt;id&lt;/em&gt;,
+&lt;em&gt;firstName&lt;/em&gt;, &lt;em&gt;lastName&lt;/em&gt;, and &lt;em&gt;age&lt;/em&gt;. The ColdFusion snippet below will
+not only insert a new record if one does not already exist, it will
+update an existing one if an existing ID is passed in. The sample
+function takes a single structure as an argument.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;::cfm
+&amp;lt;cffunction name=&amp;quot;savePerson&amp;quot; output=&amp;quot;false&amp;quot;&amp;gt;
+    &amp;lt;cfargument name=&amp;quot;person&amp;quot; /&amp;gt;
+
+    &amp;lt;cfset var qrySave = &amp;quot;&amp;quot; /&amp;gt;
+
+    &amp;lt;cfquery name=&amp;quot;qrySave&amp;quot; datasource=&amp;quot;#application.dsn#&amp;quot;&amp;gt;
+        INSERT INTO persons (
+            id
+            , firstName
+            , lastName
+            , age
+        ) VALUES (
+            &amp;lt;cfqueryparam value=&amp;quot;#arguments.person.id#&amp;quot; cfsqltype=&amp;quot;CF_SQL_INTEGER&amp;quot; /&amp;gt;
+            , &amp;lt;cfqueryparam value=&amp;quot;#arguments.person.firstName#&amp;quot; cfsqltype=&amp;quot;CF_SQL_VARCHAR&amp;quot; maxlength=&amp;quot;50&amp;quot; /&amp;gt;
+            , &amp;lt;cfqueryparam value=&amp;quot;#arguments.person.lastName#&amp;quot; cfsqltype=&amp;quot;CF_SQL_VARCHAR&amp;quot; maxlength=&amp;quot;50&amp;quot; /&amp;gt;
+            , &amp;lt;cfqueryparam value=&amp;quot;#arguments.person.age#&amp;quot; cfsqltype=&amp;quot;CF_SQL_INTEGER&amp;quot; /&amp;gt;
+        )
+        ON DUPLICATE KEY UPDATE
+            id=LAST_INSERT_ID(id)
+            , firstName=&amp;lt;cfqueryparam value=&amp;quot;#arguments.person.firstName#&amp;quot; cfsqltype=&amp;quot;CF_SQL_VARCHAR&amp;quot; maxlength=&amp;quot;50&amp;quot; /&amp;gt;
+            , lastName=&amp;lt;cfqueryparam value=&amp;quot;#arguments.person.lastName#&amp;quot; cfsqltype=&amp;quot;CF_SQL_VARCHAR&amp;quot; maxlength=&amp;quot;50&amp;quot; /&amp;gt;
+            , age=&amp;lt;cfqueryparam value=&amp;quot;#arguments.person.age#&amp;quot; cfsqltype=&amp;quot;CF_SQL_INTEGER&amp;quot; /&amp;gt;;
+
+        SELECT LAST_INSERT_ID() as newId;
+    &amp;lt;/cfquery&amp;gt;
+
+    &amp;lt;cfset arguments.person.id = qrySave.newId /&amp;gt;
+    &amp;lt;cfreturn arguments.person /&amp;gt;
+&amp;lt;/cffunction&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The highlighted lines are of interest. Line 18 is where the magic
+happens. This is what tells MySQL that we want to update instead of
+insert when an existing record is found. Line 19 is a trick that will
+set the LAST_INSERT_ID() variable in MySQL to the existing ID in the
+event of an update. Line 24 simply gets the last inserted ID, and if
+this turned out to be an update, gets the ID from line 19.&lt;/p&gt;
+
+&lt;p&gt;Please note that if the *id*column is an autoincrement, and you pass a
+non-existent ID, that&amp;rsquo;s OK. It will simply ignore what you pass in to
+it, and generate a new ID.&lt;/p&gt;
+
+&lt;p&gt;MySQL == nice. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Jasper Reports 4 and OpenBD 1.4</title>
+      <link>http://adampresley.com/post/jasper-reports-4-and-openbd-14/</link>
+      <pubDate>Mon, 08 Aug 2011 00:42:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/jasper-reports-4-and-openbd-14/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been playing with Jasper Reports lately as a solution for handling
+both pre-build and custom reports for customers in my application. The
+first hurdle to overcome was learning how to actually build a report
+using the iReport application. It&amp;rsquo;s not like this is hard, but more the
+fact that I have zero experience in building reports using a reporting
+engine. Now, after a week or two of playing with it, I have the idea of
+how to build something basic, including querying for data, summing and
+grouping, etc&amp;hellip;This blog entry will &lt;strong&gt;not&lt;/strong&gt;walk you through how to
+build a report, but I will tell you how to get your OpenBD 1.4
+installation ready to compile and display Jasper Report files.&lt;/p&gt;
+
+&lt;p&gt;The first step is to get the iReport software from &lt;a href=&#34;http://jasperforge.org/&#34;&gt;JasperForge&lt;/a&gt;.
+Install this software, as this will be what you will design your reports
+with. It also happens to contain the JAR files you need to work with
+Jasper in your OpenBD application. From here find those JAR files at
+&lt;em&gt;{installation directory}/ireport/modules/ext&lt;/em&gt;. The base files you will
+need are (hopefully I don&amp;rsquo;t miss any):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;jasperreports-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;jasperreports-applet-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;jasperreports-fonts-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;jasperreports-javaflow-4.0.0.jar&lt;/li&gt;
+&lt;li&gt;groovy-all-1.7.5.jar&lt;/li&gt;
+&lt;li&gt;iText-2.1.7.jar&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Copy all the above files into your &lt;em&gt;{OpenBD App Directory}/WEB-INF/lib&lt;/em&gt;
+folder. You will notice that you now have &lt;strong&gt;two&lt;/strong&gt;iText* files. The
+older version number will be the one from OpenBD, and you must delete
+it.&lt;/p&gt;
+
+&lt;p&gt;Now that you have the JARs in place, restart your Java container (Tomcat
+for me). At this point I assume you have some type of report build and
+saved into your application directory with a JRXML extension. From here
+I will show in code how to do four things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Get a connection object from a datasource&lt;/li&gt;
+&lt;li&gt;Compile the report and get a print object&lt;/li&gt;
+&lt;li&gt;Export the report as PDF&lt;/li&gt;
+&lt;li&gt;Export the report as Excel&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The first order of business is getting a connection object. In
+ColdFusion we are accustomed to having a datasource available, but the
+rest of the Java world uses JDBC connection strings and
+*java.sql.Connection*objects. For this to work you will have to make
+sure you have the &lt;strong&gt;bluedragon&lt;/strong&gt;folder, which contains the Admin API,
+in the root of your application, or at least mapped so you can access
+its components. Let&amp;rsquo;s now take a look at a function that will return a
+connection object based on the active datasource defined in
+&lt;strong&gt;application.dsn&lt;/strong&gt;. Also note this assumes you have session management
+turned on, and that your admin password is &amp;ldquo;password&amp;rdquo;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cffunction&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;getConnection&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;output&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;false&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;admin&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;component&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;bluedragon.adminapi.Administrator&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;adminDS&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ds&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;loginResult&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;loginResult&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;admin.login&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfif&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;loginResult&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;session&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.auth&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;loggedIn&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;password&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfif&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;adminDS&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;component&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;bluedragon.adminapi.Datasource&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ds&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;adminDS.getDatasources&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;application&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.dsn)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cftry&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java.sql.DriverManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getConnection&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;ds[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].hoststring,&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;ds[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].username,&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;ds[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;].password&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfcatch&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfdump&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#ds#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfdump&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#cfcatch#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;cfrethrow&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfabort&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfcatch&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cftry&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;admin.logout&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfreturn&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cffunction&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The first part of this function first validates the password for admin
+access. From here the remainder of the administrative methods assumes a
+session variable called &lt;strong&gt;auth&lt;/strong&gt;exists, and contains the keys
+&lt;strong&gt;loggedIn&lt;/strong&gt;and &lt;strong&gt;password&lt;/strong&gt;. From here we grab the datasource by
+calling &lt;strong&gt;getDatasources()&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The next statements focus on getting a connection object by passing in
+the JDBC URL, user name, and password to the &lt;strong&gt;getConnection()&lt;/strong&gt;method
+of the *java.sql.DriverManager*class in Java. If all is successful we
+log out of the admin session and return the connection object.&lt;/p&gt;
+
+&lt;p&gt;Now we can get to the fun part. This code is pretty well documented, and
+warrants little discussion. The basics are that we first get a
+connection object using our fancy new function. We then compile the
+JRXML file and create a print object. The print object needs the
+compiled report, any arguments we wish to pass, and the connection
+object.&lt;/p&gt;
+
+&lt;p&gt;After this I show how to export your report as either PDF or Excel,
+based on the URL argument &lt;strong&gt;format&lt;/strong&gt;. Hope you enjoy. Happy coding AND
+reporting!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfparam&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;url.format&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;default&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;pdf&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	This is where you would place any arguments to send to your&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	report as variables.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.args&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Grab the current datasource&amp;#39;s connection. Note that the&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	function getConnection() refers to application.dsn.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Replace as necessary.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.connection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;getConnection&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Compile the report and get a print object, filling&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	it with data from the database.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.report&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JasperCompileManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;compileReport&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;expandPath&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;./InactivePeopleReport.jrxml&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.printObject&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JasperFillManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;fillReport&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.report,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.args,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.connection&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!---&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	Export in the specified format.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfif&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;url.format&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;EQ&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;pdf&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.reportData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JasperExportManager&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;exportReportToPdf&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.printObject&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfheader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;content-length&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#arrayLen(local.reportData)#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfcontent&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;type&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;application/pdf&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;variable&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#local.reportData#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfelseif&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;url.format&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;EQ&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;excel&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.exporter&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.export.JRXlsExporter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;init&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.baos&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java.io.ByteArrayOutputStream&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;init&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JRExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).JASPER_PRINT,&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.printObject&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).IS_DETECT_CELL_TYPE,&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).IS_WHITE_PAGE_BACKGROUND,&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.setParameter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;net.sf.jasperreports.engine.JRExporterParameter&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;).OUTPUT_STREAM,&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;local.baos&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.exporter.exportReport&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;local.reportData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;local.baos.toByteArray&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfheader&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Content-Disposition&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;attachment; filename=report.xls&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfcontent&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;type&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;application/excel&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;variable&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#local.reportData#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;reset&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfif&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfabort&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How I Got Started in ColdFusion</title>
+      <link>http://adampresley.com/post/how-i-got-started-in-coldfusion/</link>
+      <pubDate>Mon, 01 Aug 2011 09:23:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/how-i-got-started-in-coldfusion/</guid>
+      <description>&lt;p&gt;Steve Bryant came up with the idea to, on August 1st, post a blog entry
+on &lt;a href=&#34;http://www.bryantwebconsulting.com/blog/index.cfm/2011/7/20/August-1-2011-is-How-I-Started-ColdFusion-Day&#34;&gt;How I Got Started in ColdFusion&lt;/a&gt;. So I will do just that.&lt;/p&gt;
+
+&lt;p&gt;My story is much like many of yours. It starts with a boy who wanted to
+be an astronaut (ok, so not all boys want to be astronauts), found a
+computer, and became hooked by the idea that by telling it to do
+something, in a certain way, it would simply do it.&lt;/p&gt;
+
+&lt;p&gt;My &amp;ldquo;career&amp;rdquo; in software engineering started with a lowly TI-99 4a from
+Texas Instruments. This machine featured 16K of RAM, a tape drive for
+&amp;ldquo;recording&amp;rdquo; my programs, and a cartridge drive I rarely used. This was
+later replaced by a Commodore 64, which was twice the machine! Using
+code from books and magazines (no internet yet), at the age of 14, I was
+learning to program. My friends called me a nerd because I learned how
+to draw a stick-man on the screen, and made him move.&lt;/p&gt;
+
+&lt;p&gt;It started on those computers with BASIC. On later, PC-based machines I
+followed suit with QBASIC, then moving on to Pascal and C/C++. C++ I
+liked a lot, while Pascal has remained &amp;ldquo;unfriended&amp;rdquo; for a long time. :)&lt;/p&gt;
+
+&lt;p&gt;I was hooked, and knew that I wanted to do this all the time! After a
+few years of &amp;ldquo;service&amp;rdquo; in tech support, MSN, Microsoft, Road Runner to
+name a few, I finally got my break. A company in Dallas was looking for
+a C++ programmer for internal applications. I applied for the job,
+though having &lt;strong&gt;no&lt;/strong&gt; real world experience, and somehow I landed the
+job. I was in &lt;em&gt;way&lt;/em&gt; over my head, but did manage to squeeze out a few
+programs before I, and a few others, was laid off.&lt;/p&gt;
+
+&lt;p&gt;A little later down the road I had found myself imaging old computers
+for resale in a warehouse where I had to work with an old label printer.
+For some odd reason it took two different programs, and a lot of steps
+to work this old printer. So, being the good programmer I wanted to be,
+I automated it in a little C++ application. My boss took notice of this
+and told his Senior Programmer about it.&lt;/p&gt;
+
+&lt;p&gt;At the time this Senior Programmer was building an e-commerce
+application for them, and he needed some help. So he approched me asking
+if I had ever done any programming in ColdFusion. I had never heard of
+it, and had only dabbled in ASP-classic once before. I told the guy I&amp;rsquo;d
+figure it out. So I went to work learning ColdFusion 6.0 MX.&lt;/p&gt;
+
+&lt;p&gt;From there I&amp;rsquo;ve programming applications, both web and desktop, in many
+languages, some favorites being PHP, Groovy, Java, and C#. But to this
+day CFML and ColdFusion is the language that keeps me productive in both
+my day job, and my side projects.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Announcing CFShowdown - Markdown for ColdFusion</title>
+      <link>http://adampresley.com/post/announcing-cfshowdown-markdown-for-coldfusion/</link>
+      <pubDate>Sun, 05 Dec 2010 22:51:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/announcing-cfshowdown-markdown-for-coldfusion/</guid>
+      <description>
+
+&lt;h2 id=&#34;notice-this-project-is-no-longer-supported:a7b3d3843d98d300bf722b396ee67244&#34;&gt;Notice: This project is no longer supported.&lt;/h2&gt;
+
+&lt;p&gt;I am pleased to announce the availability of CFShowdown, a Markdown
+library for ColdFusion. You can visit the &lt;a href=&#34;http://cfshowdown.riaforge.org/&#34;&gt;RIAForge project page&lt;/a&gt; for
+more information, as well as to download the project.&lt;/p&gt;
+
+&lt;p&gt;If anyone has any questions I am happy to help. Happy coding, and
+Markdown-ing!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My First Real ANT Task</title>
+      <link>http://adampresley.com/post/my-first-real-ant-task/</link>
+      <pubDate>Tue, 16 Nov 2010 23:54:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/my-first-real-ant-task/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Notice: The opinions expressed on this blog entry are mine alone and
+do not necessarily represent the views of my employer.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that the employer notice is out of the way I can actually start
+talking about what I wish to talk about. At work we have a big
+initiative to put CFQUERYPARAM into our SQL statements that do not have
+it. Since this code is quite old a large majority of it does not make
+use of this handy tag, so as you might imagine it is a pretty big task
+to go over 3,000 files and validate that CFQUERYPARAM was put everywhere
+it needs to be.&lt;/p&gt;
+
+&lt;p&gt;After the initial effort a coworker of mine created a series of regular
+expressions to help validate the effort and point out any areas where we
+may have done the work incorrectly. And lets be honest, staring at a
+screen for 8 hours and looking for CFQUERY and variables in pound signs
+can start to blur pretty quickly. Given these useful regexs I though it
+would be neat to have a simple ANT script that would prompt for a
+directory or file name resource and run these regexs against that
+resource and create a report of any potential problem areas in an Excel
+spreadsheet.&lt;/p&gt;
+
+&lt;p&gt;To demonstrate lets take a look at what the ANT script itself looks
+like.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--?xml version=&amp;quot;1.0&amp;quot;?--&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;project&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;CFQUERYPARAM Tester&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;default=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;main&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;basedir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;.&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;taskdef&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;queryParamChecker&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;classname=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;com.apihealthcare.opt.QueryParamChecker&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;target&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;main&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;input&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Please provide a directory path or file path to scan:&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;addproperty=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;path&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;defaultvalue=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${basedir}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;queryparamchecker&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;path=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${path}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;outputfile=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;C:\\anttasktestresults.xlsx&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/queryparamchecker&amp;gt;&amp;lt;/target&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/taskdef&amp;gt;&amp;lt;/project&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;As you can see the first thing to do is &amp;ldquo;import&amp;rdquo; a custom task called
+&lt;strong&gt;queryParamChecker&lt;/strong&gt;. This is a custom ANT task that I have written
+that scans a resource for potential problems based on a set of regular
+expressions. We then make use of the &lt;strong&gt;input&lt;/strong&gt; task to prompt the user
+for the resource name, a directory or file path, and then pass that to
+the query param checker task.&lt;/p&gt;
+
+&lt;p&gt;So how does one write a custom ANT task? For this I used Groovy, so I
+started with a new Groovy project in Eclipse. I then added the following
+JAR files to my classpath:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ant.jar&lt;/li&gt;
+&lt;li&gt;commons-logging-1.1.jar&lt;/li&gt;
+&lt;li&gt;dom4j-1.6.1.jar&lt;/li&gt;
+&lt;li&gt;poi-3.7-beta3-20100924.jar&lt;/li&gt;
+&lt;li&gt;poi-ooxml-3.7-beta3-20100924.jar&lt;/li&gt;
+&lt;li&gt;poi-ooxml-schemas-3.7-beta3-20100924.jar&lt;/li&gt;
+&lt;li&gt;xmlbeans-2.3.0.jar&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These JAR files give us the Apache POI project for creating Excel
+documents, as well as the necessary ANT classes for building a custom
+ANT task. I then created a new package in my freshly created project and
+called it &lt;strong&gt;com.apihealthcare.opt&lt;/strong&gt;. In this package I created a new
+Groovy class named &lt;strong&gt;QueryParamChecker&lt;/strong&gt;. The first thing necessary to
+creating a custom ANT task is to import the Apache ANT classes, then
+extend the Task class. Your new class must override the &lt;strong&gt;execute()&lt;/strong&gt;
+method, and provide &lt;strong&gt;setters&lt;/strong&gt; for each property your new task will
+support.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;apihealthcare&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;opt&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.apache.tools.ant.*&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;QueryParamChecker&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Task&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;outputFile&lt;/span&gt;
+
+   &lt;span style=&#34;color: #a6e22e&#34;&gt;@Override&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;execute&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;throws&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;BuildException&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;setPath&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;path&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;setOutputFile&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;outputFile&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;outputFile&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;outputFile&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This is the skeleton for a custom ANT task. But I clearly wanted more
+than a skeleton. I need it to check resources for errors in
+CFQUERYPARAM. There are three pieces of information I used to do this.
+The first is an array of regular expression object that are the meat and
+potatoes of what we are trying to do here. The next is an array of file
+extensions that are valid for us to check, so it contains &amp;ldquo;.cfm&amp;rdquo; and
+&amp;ldquo;.cfc&amp;rdquo;. And finally I have an array of regular expressions that are used
+to filter out any undesirable files or folders, as this application has
+a number of old files that are no longer used. Here are those arrays.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * An array of regular expressions to check files against.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * Modify this list to change the rules yo.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;checks&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)in\s*\(\s*&amp;lt;cfqueryparam((?!list).)*&amp;gt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+   &lt;span style=&#34;color: #75715e&#34;&gt;//~/(?i)in\s*\(\s*&amp;lt;cfqueryparam((?!cfsqltype).)*&amp;gt;/,&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)(#\s*cfsqltype=|#\s*maxlength=|#\s*list=|#\s*value=)/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)\sin(\s|\()[^&amp;gt;]*(value=&amp;quot;#listqualify|value=&amp;quot;#replace|value=&amp;quot;#preservesinglequotes)/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)[^&amp;lt;]cfqueryparam/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)&amp;lt;cfqueryparam[^&amp;lt;&amp;gt;]*&amp;quot;\s*\/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[^&amp;gt;]&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfqueryparam&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;s&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#dateadd/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/(?i)&amp;lt;cfqueryparams/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/(?i)cfsqltype=&amp;quot;&amp;quot;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/(?i)(#&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;list&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;value|#&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfsqltype&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;maxlength)/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/(?i)order\s*by\s*&amp;lt;cfqueryparam/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/(?i)(cfqueryparamvalue|cfqueryparamcfsqltype|cfqueryparammaxlength|cfqueryparamlist)/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/(?i)&amp;lt;cfqueryparam[^&amp;gt;]*(?=\/\s*&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;s&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&amp;gt;)&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;charindex&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;([^&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)]*&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfqueryparam&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)[^&amp;lt;!-|&amp;lt;!]--[^&amp;gt;|-].*&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfqueryparam&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;session&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.(?!(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;hasPermission&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;usersession&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;set&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;).*)&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;]&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+ &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;An&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;extensions&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;that&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;care&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;about&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Ignore&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;all&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+ &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;private def validExtensions = [&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   &amp;quot;.cfm&amp;quot;,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   &amp;quot;.cfc&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;]&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+ &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;File&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;regex&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;patterns&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ignore&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+ &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;private def ignores = [&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)(.*?)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;unused_&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(.*)/&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;From here I created two functions. The first will check a single file
+for errors against the regexs, and the second will recurse a directory
+structure. They are both very similar, and likely could have been
+written more reusable, but for now they do the trick. Essentially these
+functions will read the text from the file and compare it against each
+regular expression in the &lt;strong&gt;checks&lt;/strong&gt; array. If there are matches
+they are stored in a structure and put into the &lt;strong&gt;badCodeResults&lt;/strong&gt;
+array.&lt;/p&gt;
+
+&lt;p&gt;After these are done the &lt;strong&gt;_writeOutputFile()&lt;/strong&gt; method is called to
+take the items in &lt;strong&gt;badCodeResults&lt;/strong&gt; and place them into an Excel
+spreadsheet. To do this you first create an &lt;strong&gt;XSSFWorkbook&lt;/strong&gt;, an
+&lt;strong&gt;XSSFCreationHelper&lt;/strong&gt;, and an &lt;strong&gt;XSSFSheet&lt;/strong&gt; object. The sheet
+is created off the workbook; essentially it creates a new worksheet in
+the workbook in Excel. The I loop over the &lt;strong&gt;badCodeResults&lt;/strong&gt; and
+create cells for the file path, the offending text, and the start and
+end locations of the offending text location. To top it off I then write
+the file to disk.&lt;/p&gt;
+
+&lt;p&gt;Below is the task in its entirety. You can also &lt;a href=&#34;http://dl.dropbox.com/u/5726689/blog-downloads/ApiAntTasks.zip&#34;&gt;download the soure code here&lt;/a&gt;. Happy coding!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;apihealthcare&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;opt&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.apache.tools.ant.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;groovy.io.FileType&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.apache.poi.poifs.filesystem.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.apache.poi.xssf.extractor.*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;org.apache.poi.xssf.usermodel.*&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;QueryParamChecker&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Task&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;outputFile&lt;/span&gt;
+
+   &lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * An array of regular expressions to check files against.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    * Modify this list to change the rules yo.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;    */&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;checks&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)in\s*\(\s*&amp;lt;cfqueryparam((?!list).)*&amp;gt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #75715e&#34;&gt;//~/(?i)in\s*\(\s*&amp;lt;cfqueryparam((?!cfsqltype).)*&amp;gt;/,&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)(#\s*cfsqltype=|#\s*maxlength=|#\s*list=|#\s*value=)/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)\sin(\s|\()[^&amp;gt;]*(value=&amp;quot;#listqualify|value=&amp;quot;#replace|value=&amp;quot;#preservesinglequotes)/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)[^&amp;lt;]cfqueryparam/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;~&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/(?i)&amp;lt;cfqueryparam[^&amp;lt;&amp;gt;]*&amp;quot;\s*\/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[^&amp;gt;]&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfqueryparam&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;s&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;value&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#dateadd/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/(?i)&amp;lt;cfqueryparams/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/(?i)cfsqltype=&amp;quot;&amp;quot;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/(?i)(#&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;list&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;value|#&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfsqltype&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;maxlength)/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/(?i)order\s*by\s*&amp;lt;cfqueryparam/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/(?i)(cfqueryparamvalue|cfqueryparamcfsqltype|cfqueryparammaxlength|cfqueryparamlist)/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/(?i)&amp;lt;cfqueryparam[^&amp;gt;]*(?=\/\s*&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;s&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&amp;gt;)&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;charindex&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;([^&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)]*&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfqueryparam&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)[^&amp;lt;!-|&amp;lt;!]--[^&amp;gt;|-].*&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cfqueryparam&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;session&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.(?!(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;hasPermission&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;usersession&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;set&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;).*)&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ]&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;An&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;extensions&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;that&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;care&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;about&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Ignore&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;all&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   private def validExtensions = [&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      &amp;quot;.cfm&amp;quot;,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      &amp;quot;.cfc&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ]&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;File&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;regex&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;patterns&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ignore&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   private def ignores = [&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ~/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(?&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)(.*?)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;unused_&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(.*)&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   ]&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   @Override&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   public void execute() throws BuildException {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def fileCheck = new File(this.path)&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def result = []&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      if (fileCheck.isFile()) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         result = _doFile()&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      else if (fileCheck.isDirectory()) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         result = _doDirectory()&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      else&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         throw new Exception(&amp;quot;The path passed in doesn&amp;#39;t seem to be a file or a directory!&amp;quot;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      _writeOutputFile(result)&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   public void setPath(String path) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      this.path = path&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   public void setOutputFile(String outputFile) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      this.outputFile = outputFile&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   private def _doFile() {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def badCodeResults = []&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;The&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;directory&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;are&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;searching&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;goes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;here&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;!&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def f = new File(this.path)&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      assert f.isFile()&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def filesProcessed = 0&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def badFiles = 0&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def validFile = false&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def printed = false&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Do&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;care&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;about&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;this&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;particular&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;file&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;If&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;the&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;validFile&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;flag&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      validExtensions.each {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         if (f.name.endsWith(it)) validFile = true&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ignores.each {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         def ignoreMe = f.name ==~ it&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         if (validFile != false &amp;amp;&amp;amp; ignoreMe) validFile = false&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Enter&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;here&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;care&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      if (validFile) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         filesProcessed++&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;         /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+          &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Start&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;looping&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;over&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;each&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;regex&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;wish&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;run&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;against&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;this&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;file&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+          &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         checks.each { regex -&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            def matcher = f.text =~ regex&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            def index = 0&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;            /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+             &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Loop&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;over&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;any&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;matches&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;the&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;file&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+             &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            while (matcher.find()) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;               /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+                &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;We&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;bad&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;code&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;match&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;!&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Put&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;it&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;into&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;our&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;results&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+                &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;               if (matcher.group(0) != null &amp;amp;&amp;amp; matcher.group(0) != &amp;quot;&amp;quot;) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  if (!printed) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     println &amp;quot;File: ${f.name}...&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     badFiles++&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  printed = true&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  badCodeResults &amp;lt;&amp;lt; [&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     filePath: f.getAbsolutePath(),&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     offendingText: matcher.group(0),&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     start: matcher.start(),&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     end: matcher.end()&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  ]&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;               }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      println &amp;quot;Processed ${filesProcessed} file(s)&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      println &amp;quot;${badFiles} bad file(s) found&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      badCodeResults&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   private def _doDirectory() {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def badCodeResults = []&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;The&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;directory&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;are&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;searching&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;goes&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;here&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;!&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def rootPath = this.path&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def codeBase = new File(rootPath)&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      assert codeBase.isDirectory()&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def filesProcessed = 0&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def badFiles = 0&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Iterate&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;over&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;all&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;files&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;our&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;source&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;directory&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      codeBase.eachFileRecurse FileType.FILES, { f -&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def validFile = false&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def printed = false&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Do&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;care&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;about&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;this&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;particular&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;file&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;If&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;the&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;validFile&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;flag&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      validExtensions.each {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         if (f.name.endsWith(it)) validFile = true&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      ignores.each {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         def ignoreMe = f.name ==~ it&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         if (validFile != false &amp;amp;&amp;amp; ignoreMe) validFile = false&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Enter&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;here&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;care&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      if (validFile) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         filesProcessed++&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;         /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+          &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Start&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;looping&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;over&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;each&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;regex&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;we&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;wish&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;run&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;against&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;this&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;file&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+          &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         checks.each { regex -&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            def matcher = f.text =~ regex&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            def index = 0&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;            /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+             &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Loop&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;over&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;any&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;matches&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;the&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;file&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+             &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            while (matcher.find()) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;               /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+                &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;We&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;bad&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;code&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;match&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;!&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Put&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;it&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;into&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;our&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;results&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+                &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;               if (matcher.group(0) != null &amp;amp;&amp;amp; matcher.group(0) != &amp;quot;&amp;quot;) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  if (!printed) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     println &amp;quot;File: ${f.name}...&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     badFiles++&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  printed = true&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  badCodeResults &amp;lt;&amp;lt; [&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     filePath: f.getAbsolutePath() - rootPath,&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     offendingText: matcher.group(0),&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     start: matcher.start(),&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                     end: matcher.end()&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;                  ]&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;               }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;            }&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      println &amp;quot;Processed ${filesProcessed} file(s)&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      println &amp;quot;${badFiles} bad file(s) found&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      badCodeResults&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;   }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;   private def _writeOutputFile(badCodeResults) {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Create&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;workbook&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;worksheet&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      XSSFWorkbook wb = new XSSFWorkbook()&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      XSSFCreationHelper helper = wb.getCreationHelper()&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      XSSFSheet sheet = wb.createSheet(&amp;quot;Search Results&amp;quot;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      def rowIndex = 0&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Loop&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;over&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;all&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;our&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;bad&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;code&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;results&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;write&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;them&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;to&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;rows&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;the&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Excel&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;sheet&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      badCodeResults.each {&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         XSSFRow row = sheet.createRow(rowIndex++)&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;         row.createCell(0).setCellValue(helper.createRichTextString(it.filePath))&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         row.createCell(1).setCellValue(helper.createRichTextString(it.offendingText))&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         row.createCell(2).setCellValue(it.start)&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;         row.createCell(3).setCellValue(it.end)&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;      }&lt;/span&gt;
+
+&lt;span style=&#34;color: #e6db74&#34;&gt;      /&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Write&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;the&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;results&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;file&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Note&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;the&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;
+       &lt;span style=&#34;color: #f92672&#34;&gt;*/&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;FileOutputStream&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;FileOutputStream&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;outputFile&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;wb&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;write&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;close&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;println&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Output results written to ${this.outputFile}&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CFBarbecue v1.0 Released!</title>
+      <link>http://adampresley.com/post/cfbarbecue-v10-released/</link>
+      <pubDate>Wed, 10 Nov 2010 09:51:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/cfbarbecue-v10-released/</guid>
+      <description>&lt;p&gt;I am happy to announce I have released CFBarbecue version 1.0 on
+RIAForge! CFBarbecue is a ColdFusion wrapper for the Barbecue Barcode
+Java library, and provides the ability to generate and display barcodes
+on your web application pages. It also makes scaling and rotating
+barcodes easy too.&lt;/p&gt;
+
+&lt;p&gt;Visit the &lt;a href=&#34;http://cfbarbecue.riaforge.org/&#34;&gt;RIAForge page&lt;/a&gt; to download
+the library. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>&#39;Language Comparison: Compute Factorial&#39;</title>
+      <link>http://adampresley.com/post/language-comparison-compute-factorial/</link>
+      <pubDate>Thu, 07 Oct 2010 00:43:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/language-comparison-compute-factorial/</guid>
+      <description>&lt;p&gt;A friend of mine is in school and taking some classes in Java, and also
+happens to be learning ColdFusion on the side. He was talking about the
+class and how they were learning about recursion and how they used the
+example of computing the factorial of a given number. Just for fun I
+took that opportunity to do this in a couple of languages&amp;hellip; just to see
+what they look like side by side.&lt;/p&gt;
+
+&lt;p&gt;Please note there are no advantages or disadvantages to any of these
+code samples, but instead is shown as something educational&amp;hellip; food for
+the brain if you will. :)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ColdFusion&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cffunction&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;findFactorialCF&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;returntype&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;numeric&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;access&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;public&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;output&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;false&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfargument&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;type&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;numeric&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;required&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfreturn&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;arguments&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;EQ&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;arguments&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;findFactorialCF&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;arguments&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cffunction&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfoutput&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;findFactorialCF&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;11&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)#&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfoutput&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Java&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;com.adampresley.factorial&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Factorial&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;args&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;System&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;findFactorialJava&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;11&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;));&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;findFactorialJava&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;findFactorialJava&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;);&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Groovy&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;findFactorialGroovy&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;call&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;println&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;findFactorialGroovy&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;11&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I love languages. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My Resume - The Code and Summary</title>
+      <link>http://adampresley.com/post/my-resume-the-code-and-summary/</link>
+      <pubDate>Fri, 10 Sep 2010 10:24:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/my-resume-the-code-and-summary/</guid>
+      <description>&lt;p&gt;Back by popular demand I have put the code for my online resume
+application up for &lt;a href=&#34;http://dl.dropbox.com/u/5726689/blog-downloads/resume.adampresley.com.zip&#34;&gt;download&lt;/a&gt;!
+Not too long ago I re-created my online resume in Railo using the wonderful small FW/1 framework. For the
+persistence layer I used Apache CouchDB and my ColdFusion wrapper for
+the Java CouchDB4J library, CouchDB4CF. Since then I have received
+numerous requests to put the code up online. So this post is doing just
+that. If you want to look over the code, the first order of business is
+to &lt;a href=&#34;http://dl.dropbox.com/u/5726689/blog-downloads/resume.adampresley.com.zip&#34;&gt;download&lt;/a&gt; it.&lt;/p&gt;
+
+&lt;p&gt;To begin extract the contents of the ZIP file into any directory of your
+choice. There should be two sub-directories, &lt;strong&gt;application&lt;/strong&gt; and
+&lt;strong&gt;tomcat&lt;/strong&gt;. You shouldn&amp;rsquo;t need to do much of anything in the
+&lt;strong&gt;application&lt;/strong&gt; directory, but you will need to do a slight
+configuration change in the &lt;strong&gt;tomcat/conf&lt;/strong&gt; directory. In this
+directory open up &lt;strong&gt;server.xml&lt;/strong&gt; and near the bottom find the XML
+node for the localhost host. There is a node inside of this named
+&lt;strong&gt;Context&lt;/strong&gt;, and the &lt;strong&gt;docBase&lt;/strong&gt; path will need to be modified
+to match where you have extracted the ZIP file. Save those changes.&lt;/p&gt;
+
+&lt;p&gt;Next you will need to actually have an instance of the Apache CouchDB
+server running. It is beyond the scope of this blog post to detail how
+to actually setup Couch, but there are enough tutorials out there to get
+you started. In fact you will likely start at
+&lt;a href=&#34;http://couchdb.apache.org/&#34;&gt;http://couchdb.apache.org/&lt;/a&gt;. Get Couch installed and setup. Once you&amp;rsquo;ve
+done this your will need to log into Futon and create a database called
+&amp;ldquo;resume&amp;rdquo;. From here you probably want some data, so I have included a
+copy of my resume JSON object that can be inserted using the command
+line (CURL is a nice option). Here is a &lt;a href=&#34;http://morethanseven.net/2007/12/11/using-curl-to-play-with-couchdb.html&#34;&gt;blog post&lt;/a&gt;
+on using CURL to put data into Couch. You can find the JSON data in the
+&lt;strong&gt;application/doc&lt;/strong&gt; directory. There are two documents to import.&lt;/p&gt;
+
+&lt;p&gt;If you thought there was more than that then I am sorry to say that you
+should just be able to start up the app. First make sure Couch is
+running. Then browse to the &lt;strong&gt;tomcat/bin&lt;/strong&gt; and run either
+&lt;strong&gt;startup.bat&lt;/strong&gt; or &lt;strong&gt;startup.sh&lt;/strong&gt;, depending on your OS. From
+here you should be able to browse to &lt;strong&gt;&lt;a href=&#34;http://localhost:8080&#34;&gt;http://localhost:8080&lt;/a&gt;&lt;/strong&gt; and
+see my resume. To get to the Railo web administrator you can just browse
+to &lt;strong&gt;&lt;a href=&#34;http://localhost:8080/railo-context/admin.cfm&#34;&gt;http://localhost:8080/railo-context/admin.cfm&lt;/a&gt;&lt;/strong&gt; and use the
+password &amp;ldquo;password&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s the summarized breakdown. If anyone has any questions please do
+not hesitate to contact me and I will try to answer as swiftly as my
+work schedule allows! Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My Resume on ColdFusion &#43; FW/1 &#43; CouchDB</title>
+      <link>http://adampresley.com/post/my-resume-on-coldfusion-fw1-couchdb/</link>
+      <pubDate>Tue, 31 Aug 2010 13:29:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/my-resume-on-coldfusion-fw1-couchdb/</guid>
+      <description>&lt;p&gt;The last few days I decided I wanted to play around with Apache&amp;rsquo;s
+CouchDB, one of the more popular database engines in the No-SQL
+movement. For those who have never heard of it &lt;a href=&#34;http://couchdb.apache.org/&#34;&gt;CouchDB&lt;/a&gt; is a database
+engine written in Erlang, and is an Apache Foundation project. One of
+the neatest things about CouchDB is that the API is based entirely on
+RESTful JSON services, so all command to it are HTTP commands like PUT,
+GET, POST, and DELETE. All data is stored as JSON objects known as
+&amp;ldquo;documents&amp;rdquo;. When you have a chance take a look at it.&lt;/p&gt;
+
+&lt;p&gt;For me the project I always fall back to when I want to try something
+new is my Resume project. I&amp;rsquo;ve kept my resume online for several years
+now. My first version of it was to proof-of-concept my PHP framework,
+and this worked well for a long time. I then modified it to work with
+ColdFusion, Groovy, and Hibernate with MySQL as the persistence layer.
+That was fun too. Now I set out to redo this in ColdFusion with CouchDB
+as the persistence layer.&lt;/p&gt;
+
+&lt;p&gt;The result is a ColdFusion application using Sean Corfield&amp;rsquo;s excellent
+&lt;a href=&#34;http://fw1.riaforge.org/&#34;&gt;FW/1&lt;/a&gt; framework, my &lt;a href=&#34;https://sourceforge.net/projects/couchdb4cf/&#34;&gt;CouchDB4CF&lt;/a&gt; Java facade, and Apache CouchDB.
+Check it out at &lt;a href=&#34;http://resume.adampresley.com&#34;&gt;http://resume.adampresley.com&lt;/a&gt;. I&amp;rsquo;ll post more soon
+about how it is built.&lt;/p&gt;
+
+&lt;p&gt;Notice: This site is no longer available&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adding Namespaces to HTML Tag Using Regular Expressions</title>
+      <link>http://adampresley.com/post/adding-namespaces-to-html-tag-using-regular-expressions/</link>
+      <pubDate>Wed, 25 Aug 2010 12:37:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/adding-namespaces-to-html-tag-using-regular-expressions/</guid>
+      <description>&lt;p&gt;My friend, &lt;a href=&#34;http://stevegood.org&#34;&gt;Mr. Steve Good&lt;/a&gt;, approached me about a problem he was
+having where he needed to add a namespace to an HTML tag at runtime.
+Essentially he was parsing some dynamic HTML and wished to inject an
+additional namespace into the HTML declaration. Regular expressions to
+the rescue! The first test I ran was with a blank &lt;HTML&gt; tag. For this
+example I will be injecting the SVG, or Scalable Vector Graphics
+namespace. To accomplish this in ColdFusion we simply are using the
+&lt;strong&gt;replaceAll&lt;/strong&gt; method against the &lt;strong&gt;String&lt;/strong&gt; class in Java.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;old&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;html&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;&amp;quot; /&amp;gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;old.replaceAll&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;(?i)(?&amp;lt;=&amp;lt;html)(.*?)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;&amp;quot;, &amp;quot;$1 xmlns:svg=&amp;quot;&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;quot;&amp;gt;&amp;quot;) /&amp;gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfdump&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#new#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The next task was to ensure that if the HTML tag already had a namespace
+our regex won&amp;rsquo;t erase it, but will instead append the new namespace to
+it. Let&amp;rsquo;s see that code.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;old&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;html xmlns=&amp;quot;&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;&amp;quot; /&amp;gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;old.replaceAll&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;(?i)(?&amp;lt;=&amp;lt;html)(.*?)&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;&amp;quot;, &amp;quot;$1 xmlns:svg=&amp;quot;&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;quot;&amp;gt;&amp;quot;) /&amp;gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfdump&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#new#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I love me some regular expressions. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Code for my Dallas TechFest 2010 Presentation Available</title>
+      <link>http://adampresley.com/post/code-for-my-dallas-techfest-2010-presentation-available/</link>
+      <pubDate>Thu, 05 Aug 2010 04:45:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/code-for-my-dallas-techfest-2010-presentation-available/</guid>
+      <description>&lt;p&gt;Finally, as requested, my code and slides for my Dallas TechFest 2010
+presentation are available for download. If you missed it I presented on
+taking an existing ColdFusion application (could be anything, PHP, JSP,
+Groovy + Grails) and incrementally spicing it up with &lt;a href=&#34;http://jquery.com&#34;&gt;jQuery&lt;/a&gt;. Click
+&lt;a href=&#34;http://dl.dropbox.com/u/5726689/blog-downloads/MovieMania.zip&#34;&gt;here&lt;/a&gt; to download the code!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Merging Two ColdFusion Structs</title>
+      <link>http://adampresley.com/post/merging-two-coldfusion-structs/</link>
+      <pubDate>Tue, 03 Aug 2010 06:19:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/merging-two-coldfusion-structs/</guid>
+      <description>&lt;p&gt;Here&amp;rsquo;s a quick little tidbit. My coworker &lt;a href=&#34;http://stevegood.org&#34;&gt;Steve Good&lt;/a&gt; asked me if I
+knew of a quick way to merge two ColdFusion structures together, kind of
+like how jQuery has the &lt;strong&gt;$.extend()&lt;/strong&gt; method. Well there
+&lt;strong&gt;is&lt;/strong&gt; in fact a way to do this! And it&amp;rsquo;s super easy.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say you have structure one that has two keys, &lt;em&gt;firstName&lt;/em&gt; and
+&lt;em&gt;lastName&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;struct1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Adam&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Presley&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And now we have structure two that has two keys, &lt;em&gt;firstName&lt;/em&gt; and
+&lt;em&gt;age&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;struct2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Michael&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;age&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;33&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Using a nifty ColdFusion method we can mash the two together in a single
+line of code.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;structAppend&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(struct1,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;struct2)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--- &amp;lt;cfset struct1.putAll(struct2) /&amp;gt; ---&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Woah, that was easy! The end result will be a structure that would look
+like this.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;struct1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;firstName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Michael&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lastName&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Presley&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;age&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;33&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Notice the commented out version. That is the underlying method to do
+the same thing as StructAppend. The benefit? Nothing I can think of. :)&lt;/p&gt;
+
+&lt;p&gt;Enjoy, and happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adobe Community Professional Pins Are In!</title>
+      <link>http://adampresley.com/post/adobe-community-professional-pins-are-in/</link>
+      <pubDate>Mon, 26 Jul 2010 10:53:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/adobe-community-professional-pins-are-in/</guid>
+      <description>&lt;p&gt;Sweeeet. I got home and on my keyboard is sitting a letter from Liz
+Frederick at Adobe. I open it up and discover that my nifty magnetic ACP
+pin is in there, as well as stickers! I love stickers!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

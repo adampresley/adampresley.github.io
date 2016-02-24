@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Programming on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/programming/</link>
+    <description>Recent content in Programming on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 10 Apr 2014 02:42:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Click Event Scope in jQuery UI Widget Factory</title>
+      <link>http://adampresley.com/post/click-event-scope-jquery-ui-widget-factory/</link>
+      <pubDate>Thu, 10 Apr 2014 02:42:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/click-event-scope-jquery-ui-widget-factory/</guid>
+      <description>&lt;p&gt;A little tidbit that I figured out today regarding the scope of &lt;strong&gt;this&lt;/strong&gt; in a jQuery UI dialog button. Actually I feel foolish for not checking the actual value of &lt;strong&gt;this&lt;/strong&gt; sooner, but you can&amp;rsquo;t win them all. With the creation of the &lt;strong&gt;WidgetFactory&lt;/strong&gt; I&amp;rsquo;ve been looking at writing my UI widgets using this tool. In fact the search widget on this blog uses the jQuery UI &lt;strong&gt;WidgetFactory&lt;/strong&gt;. Originally I thought I had an issue with scope, but turns out I was mistaken. You see the search widget extends the jQuery UI &lt;strong&gt;dialog&lt;/strong&gt; object and has a button on it. Usually when an event handler is called the scope of &lt;strong&gt;this&lt;/strong&gt; references the DOM element that fired the event. So I assumed that &lt;strong&gt;this&lt;/strong&gt; would reference the button being clicked. Fortunately I was wrong.&lt;/p&gt;
+
+&lt;p&gt;When jQuery UI handles a click event on buttons defined in your options object it actually changes the scope of &lt;strong&gt;this&lt;/strong&gt; to the dialog element itself. This is a good thing. Why? Because you may be initializing your widget against multiple matched DOM elements in your jQuery selector, so you need to know which dialog/widget you are working with. So for anyone who may have wondered, there you have it.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Blog Engine - Update 2</title>
+      <link>http://adampresley.com/post/blog-engine-update-2/</link>
+      <pubDate>Tue, 25 Mar 2014 05:43:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/blog-engine-update-2/</guid>
+      <description>&lt;p&gt;Back in November 2013 I released my blog site under a new engine written by me. Before that I had run my site on Blogger for a while, but I grew tired of how sluggish it had become. I felt I could get better performance. So I set out to write my own using Python and lots of JavaScript.&lt;/p&gt;
+
+&lt;p&gt;Initially I wrote this with my site being fully AJAX driven. When you hit a URL you were hitting URI fragments which would hit a JavaScript controller I had written to route you to the correct blog entry or page of entries. This worked fairly well performance wise, but suffered from one major problem that I was ignorant of. &lt;em&gt;It became a giant pain in the butt to index my site with Google&lt;/em&gt;. After researching the issue I did find that Google offers a solution for indexing AJAX-heavy sites, but it required me to come up with clever, convoluted solutions to create static renders of each blog post and page of posts. This turned out to be more trouble than it&amp;rsquo;s really worth.&lt;/p&gt;
+
+&lt;p&gt;I decided to refactor a bit, though it has been a slow process. I also wanted to expand on the administrator I had built for myself and turn this into a proper CMS engine, or at least start down that path. Tonight I have released the newest increment of my site using the latest version of my code. I am calling my CMS engine &lt;strong&gt;Texo CMS&lt;/strong&gt;. Of course it only really does blog posts right now, and doesn&amp;rsquo;t really deserve the title of &lt;strong&gt;CMS&lt;/strong&gt;, but I&amp;rsquo;m working on it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://adampresley.com/assets/adampresley/images/posts/texo-cms-write-post-1.png&#34; alt=&#34;Screenshot&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;My next steps are to continue development on this application, and make a home for it on Github. More on that soon.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>First Experiences With Bottlepy</title>
+      <link>http://adampresley.com/post/first-experiences-with-bottlepy/</link>
+      <pubDate>Sat, 08 Sep 2012 10:55:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/first-experiences-with-bottlepy/</guid>
+      <description>&lt;p&gt;Here lately I&amp;rsquo;ve taken to writing a bit more code in Python. It isn&amp;rsquo;t my
+first time around in this lovely language, but for the last few months
+I&amp;rsquo;ve spent more time in Groovy and Grails, and I felt it was time to
+revisit the language where whitespace matters. Most of my experience
+with Python up until this point revolves around scripts and utility
+code, such as install automation. I had made up my mind to try working
+on a web project this time, and naturally I started with the one web
+framework that I had heard most about, and had dabbled with before,
+Django.&lt;/p&gt;
+
+&lt;p&gt;Being a full stack framework similar to Grails, where
+I have spent a lot of time recently, I figured I would be comfortable
+here. Truth be told though I am not. Perhaps it is a phase, or maybe I&amp;rsquo;m
+just not cut out for full stack web frameworks, but it seems that every
+time I work in one I end up leaving for a less featured framework.
+Coldbox, Zend, CakePHP, Grails&amp;hellip; all of them are big and have
+everything you&amp;rsquo;d ever need, and if they don&amp;rsquo;t they support plugins for
+everything else. This is great, but in the end I always seem happier
+moving to the smaller frameworks. FW/1, Gaelyk (for GAE), and now Bottle
+for Python.&lt;/p&gt;
+
+&lt;p&gt;Bottle is a micro-framework for Python web development. We are talking a
+single, 128K file that supports URL routes, view templates, JSON
+serialization, built-in web server for development, and plugins. It&amp;rsquo;s
+super light weight and fast, and it doesn&amp;rsquo;t take a lot of heavy reading
+to get started. As an example here is a simple view definition.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;bottle&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;view,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;route,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;request&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;app.model.core.adampresley.Factory&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Factory&lt;/span&gt;
+
+&lt;span style=&#34;color: #a6e22e&#34;&gt;@route&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;/home&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;@view&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;home&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;home&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;viewData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;service&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Factory()&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;getVisitorService()&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;viewData[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;numVisits&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;service&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;getVisitorCount()&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;viewData&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The template engine is actually just a light wrapper around Python code
+itself with basic include ability. Compared to other template engines
+I&amp;rsquo;ve used it is pretty utilitarian yet it seems to serve my purposes so
+far. For example:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;h1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;Welcome!&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;h1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+% if numVisits &amp;gt; 0:
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;You are visitor number {{numVisits}}!&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+% else:
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;No visitors before you! You are the first!&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+%end
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I can honestly say I am enjoying Bottle, and look for more posts on
+this nifty framework soon. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adam&#39;s JSON Formatter</title>
+      <link>http://adampresley.com/post/adams-json-formatter/</link>
+      <pubDate>Mon, 19 Sep 2011 13:05:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/adams-json-formatter/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://jsonformatter.curiousconcept.com/&#34;&gt;Curious Concept&amp;rsquo;s JSON Formatter&lt;/a&gt;
+is a great JSON formatter and validator application. I found myself working
+with a JSON dataset that was larger than what this tool allowed, so naturally
+I set out and made my own. &lt;a href=&#34;http://jsonformatter.adampresley.com/&#34;&gt;Adam&amp;rsquo;s JSON Formatter&lt;/a&gt;
+runs on &lt;a href=&#34;http://www.cloudbees.com/&#34;&gt;CloudBees&lt;/a&gt;, a PaaS platform for running Java applications.
+This little tool is built on OpenBD and uses the excellent &lt;a href=&#34;http://json-lib.sourceforge.net/&#34;&gt;JSONlib&lt;/a&gt;
+tool for JSON beautification. For the front end stuff I&amp;rsquo;m using jQuery and jQuery UI.
+CloudBees was super easy to get started with, and super easy to deploy my application to.
+And of course the tiny footprint of OpenBD is perfect for the small, 128M slice
+you get for free with CloudBees. So I recommend you give them a try.
+That and OpenBD. :) Cheers, and happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nerdiest programming language ever!</title>
+      <link>http://adampresley.com/post/nerdiest-programming-language-ever/</link>
+      <pubDate>Mon, 09 Nov 2009 06:25:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/nerdiest-programming-language-ever/</guid>
+      <description>&lt;p&gt;Ok, this programming language I stumbled across has to be the nerdiest
+programming language ever conceived, sober or drunk! The creators of
+this language believe that humble whitespace characters have received a
+bad wrap, and as such pay homage to the lowest common characters,
+whitespace. For the nerdy programmer types such as myself, check it out
+at &lt;a href=&#34;http://compsoc.dur.ac.uk/whitespace/index.php&#34;&gt;http://compsoc.dur.ac.uk/whitespace/index.php&lt;/a&gt;. For the rest of
+you&amp;hellip; well, you&amp;rsquo;ll likely not &lt;strong&gt;SEE&lt;/strong&gt; anything of use. :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>&#39;ColdFusion Challenge: Footprint Optimization&#39;</title>
+      <link>http://adampresley.com/post/coldfusion-challenge-footprint-optimization/</link>
+      <pubDate>Fri, 27 Feb 2009 05:18:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/coldfusion-challenge-footprint-optimization/</guid>
+      <description>&lt;p&gt;The heat is on! (&lt;em&gt;note&lt;/em&gt; actually, I&amp;rsquo;m freezing right now, our office
+air is on, and it&amp;rsquo;s 50 degrees outside). But I digress&amp;hellip; The HEAT IS
+ON! I have initiated a code challenge at work this week. I work for a
+software company in Dallas that is in the medical field, and I serve as
+the Lead Software Architect. Part of my job, aside from governing coding
+standards and leading architectural design sessions, is education. Our
+business is very hectic and fast because the business rules are
+changing&amp;hellip; daily. So it&amp;rsquo;s pretty easy to get stuck in a rut doing the
+same types of coding tasks daily.&lt;/p&gt;
+
+&lt;p&gt;In an effort to spur a bit of creativity I have called for a code
+challenge. All too frequently we as web developers are handed a task to
+code, a server with TONS of RAM and hard drive space, a big-bad database
+server, and told &amp;ldquo;go to town&amp;rdquo;! If that&amp;rsquo;s all you know then you&amp;rsquo;ve never
+had the pleasure of dealing with coding for embedded systems, or mobile
+devices, or any other limited hardware device. So here&amp;rsquo;s the challenge.&lt;/p&gt;
+
+&lt;p&gt;I have presented our engineering team a scenario where they have a
+fictional device with limited memory and disk space. The device has
+ColdFusion and Apache embedded on it. No SQL database, no fancy Java
+components, just CF 8 and a web server. ColdFusion is configured to run
+JRUN at a maximum of 32MB of memory.&lt;/p&gt;
+
+&lt;p&gt;The engineer must create an application that allows the user (at a
+minimum) to view a list of contacts, add a contact, edit a contact, and
+remove a contact. The data that is stored/tracked must contain the
+contact&amp;rsquo;s first name, last name, address, city, state, zip code, phone
+number, and email address. All pages created must have a display space
+of 240px x 400px. The final criteria: you only have 32KB of disk space
+to store your application. Pages, database, components, whatever&amp;hellip;
+32KB.&lt;/p&gt;
+
+&lt;p&gt;Code will be judged on a number of factors. Code must be clean and well
+organized. It should demonstrate some type of re-usability. No, this is
+not an excercise in OOP, frameworks, or any other type of design
+pattern. You can use CFCs, custom tags, or good ole&amp;rsquo; functions, as long
+as the code is organized and thought out. The submission demonstrating
+that they meet the requirements, as well as creativity in solving the
+problem wins. Yes, there is a prize, but only if you work on our
+engineering team. If you don&amp;rsquo;t I&amp;rsquo;m not giving you a gift card, so don&amp;rsquo;t
+ask. :)&lt;/p&gt;
+
+&lt;p&gt;I have about 5 participants at this time, and hope more are interested.
+I look forward to submissions! (And yes, I&amp;rsquo;ve done it already).&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using ANT to Automate A Build</title>
+      <link>http://adampresley.com/post/using-ant-to-automate-a-build/</link>
+      <pubDate>Wed, 14 Jan 2009 06:24:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/using-ant-to-automate-a-build/</guid>
+      <description>&lt;p&gt;Last night I attended the Dallas/Fort Worth ColdFusion User Group
+meeting held at the &lt;a href=&#34;http://www.paladin-inc.com/&#34;&gt;Paladin Consulting&lt;/a&gt;
+offices, lead here locally by Dave Shuck. There were three presentations
+scheduled, though one was cancelled last minute, so we only got two.
+Although both presentations were good the one I got the most use of our was Dave Shuck&amp;rsquo;s
+introduction to ANT scripts.&lt;/p&gt;
+
+&lt;p&gt;I had heard of &lt;a href=&#34;http://ant.apache.org/&#34;&gt;ANT&lt;/a&gt;, and had already been curious about getting my
+hand dirty in it to see what it could do, but have never found the time
+to do it. After his presentation, however, I went home and decided it
+was time to at least play with it. I did have a real-world test to try
+it on. A little contract project I just worked needed a small
+modification on two of the PHP files, and then I needed to redistribute
+it to the client. What this involved, however, was more than just
+zipping it up.&lt;/p&gt;
+
+&lt;p&gt;First I had to make the modifications to the code and test it. Simple
+enough. Then I needed to copy only the PHP and CSS files I needed to a
+temporary directory, clean out my password information from the XML
+configuration files and copy THOSE over. THEN I had to regenerate my
+HTML documentation using the always wonderful &lt;a href=&#34;http://www.doxygen.org&#34;&gt;Doxygen&lt;/a&gt;,
+copy all THOSE files to the temporary directory, ZIP it all up, and THEN send it
+to the client. ANT to the rescue!&lt;/p&gt;
+
+&lt;p&gt;First things first, create an XML file. Let&amp;rsquo;s call it
+&lt;strong&gt;example-build.xml&lt;/strong&gt;. This is the actual script file. The very first
+things to put in there are the XML header, a project element, and a
+description. That will look like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;project&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Example Application&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;default=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;build&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;basedir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;.&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;
+		ANT build script for the example application.
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now what we want to do is consider what locations we need to work with.
+Firstly we need to know where our source files are coming from, and also
+where they are going to. For my needs I opted to have the end result go
+into a sub-folder named &lt;strong&gt;build&lt;/strong&gt;. Also consider I&amp;rsquo;m building
+documentation HTML files using Doxygen, so I&amp;rsquo;ll need to know where the
+Doxygen executable is at, as well as the source and target locations for
+those documents reside. We want a few *properties*then. Note that your
+paths will obviously vary, and will need to be changed. That will look
+like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;	&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Global properties --&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sourceDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;C:\code\example-application&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;buildDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}\build&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sourceDocDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}\documentation\html&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;targetDocDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\documentation&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;doxygen&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;C:\doxygen\doxygen-1.5.3.exe&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In ANT doing some SET of tasks is known as a &lt;strong&gt;target&lt;/strong&gt;. Programmers,
+think of it as a function, or method. At the simplest level a target has
+a name, and a series of tasks to execute. Let&amp;rsquo;s start by defining the
+target and telling ANT to get a current date and time stamp.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;target&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;build&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Get a current date/time stamp --&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;tstamp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now we would like to copy our code and supporting files to the build
+directory. In my case I wanted all the PHP files EXCEPT for one, all the
+CSS files, and a clean version of the XML configuration file for our
+application. The &lt;em&gt;copy&lt;/em&gt; task tells ANT to copy files and/or directories.
+Being versatile you can specify very exacting criteria, and in this
+example we will have three include patterns, and one exclude. Let&amp;rsquo;s look
+at that.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;	&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Copy our files to the build folder. --&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Copying files to build folder...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;copy&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;todir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;fileset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;include&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;*.php&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;include&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;*.css&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;include&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;baseSettings.xml&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;exclude&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;dBug.php&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/fileset&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/copy&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note, however, that our application doesn&amp;rsquo;t read &amp;ldquo;baseSettings.xml&amp;rdquo;
+which was clearly copied to the build directory. It expects
+&amp;ldquo;settings.xml&amp;rdquo;. &amp;ldquo;baseSettings.xml&amp;rdquo; is the clean version. What we want to
+do now is rename the file to &amp;ldquo;settings.xml&amp;rdquo; in the build directory.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;	&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		Get clean copies of our application configuration files. Basically&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		we have &amp;quot;base&amp;quot; versions, which are clean configuration files without&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		anything but base data in it. We want to copy those to the build&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		directory and then rename them to what they SHOULD be.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	--&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Building XML configuration files...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;move&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;file=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\baseSettings.xml&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;tofile=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\settings.xml&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Ok, now it&amp;rsquo;s time to build the documentation. In my source directory I
+have a &lt;em&gt;doxyfile&lt;/em&gt; that tells Doxygen how to build the documentation.
+Here what we want to do is remove the existing documentation files (if
+any), make a &lt;em&gt;documentation&lt;/em&gt; directory in the build location and have
+Doxygen build the docs in the source documentation folder. After that is
+done it needs to copy those files to the target documentation folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;	&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		Build the application documentation. My PHP apps use the JavaDoc&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		syntax, and a wonderful tool called Dogygen for document generation.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		Once it is built copy the generated HTML files to the target&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		documentation directory.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;	--&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Building documentation...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;delete&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;mkdir&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${targetDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;exec&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;executable=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${doxygen}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;arg&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;value=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}\example-application.doxyfile&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/exec&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;copy&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;todir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${targetDocDir}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;fileset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/copy&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now that we have all the code and documentation files necessary to give
+to the client I&amp;rsquo;d like to ZIP all that up into a nice, neat, date and
+time stamped file.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;	&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Zip up the contents. Date and timestamp the filename. --&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Zipping contents...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;zip&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;destfile=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\example-application-${DSTAMP}-${TSTAMP}.zip&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;basedir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Cool, so we have a ZIP file. Let&amp;rsquo;s clean up the mess. This involves
+deleting all the files in the build directory EXCEPT for the ZIP file,
+and deleting the target documentation directory. We&amp;rsquo;ll also close off
+our target and project.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;	&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Clean up our mess. --&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Cleaning up...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;delete&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;fileset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;excludes=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;*.zip&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/delete&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;delete&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${targetDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/target&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/project&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s the basics of using ANT to automate build and deployment!
+Following is the script in its entirity.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;project&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Example Application&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;default=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;build&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;basedir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;.&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;
+		ANT build script for the example application.
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Global properties --&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sourceDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;C:\code\example-application&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;buildDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}\build&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sourceDocDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}\documentation\html&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;targetDocDir&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\documentation&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;property&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;doxygen&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;location=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;C:\doxygen\doxygen-1.5.3.exe&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;target&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;build&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Get a current date/time stamp --&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;tstamp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Copy our files to the build folder. --&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Copying files to build folder...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;copy&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;todir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;fileset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+				&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;include&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;*.php&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+				&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;include&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;*.css&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+				&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;include&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;baseSettings.xml&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+				&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;exclude&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;dBug.php&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/fileset&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/copy&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			Get clean copies of our application configuration files. Basically&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			we have &amp;quot;base&amp;quot; versions, which are clean configuration files without&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			anything but base data in it. We want to copy those to the build&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			directory and then rename them to what they SHOULD be.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		--&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Building XML configuration files...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;move&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;file=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\baseSettings.xml&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;tofile=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\settings.xml&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			Build the application documentation. My PHP apps use the JavaDoc&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			syntax, and a wonderful tool called Dogygen for document generation.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			Once it is built copy the generated HTML files to the target&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;			documentation directory.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;		--&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Building documentation...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;delete&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;mkdir&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${targetDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;exec&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;executable=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${doxygen}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;arg&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;value=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDir}\example-application.doxyfile&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/exec&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;copy&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;todir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${targetDocDir}&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;fileset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${sourceDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/copy&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Zip up the contents. Date and timestamp the filename. --&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Zipping contents...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;zip&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;destfile=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}\example-application-${DSTAMP}-${TSTAMP}.zip&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;basedir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!-- Clean up our mess. --&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;echo&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;message=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Cleaning up...&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;delete&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;fileset&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${buildDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;excludes=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;*.zip&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/delete&amp;gt;&lt;/span&gt;
+
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;delete&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;dir=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;${targetDocDir}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/target&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/project&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

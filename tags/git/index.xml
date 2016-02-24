@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/git/</link>
+    <description>Recent content in Git on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Apr 2013 20:58:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How I Deployed a PHP App via FTP Using Fabric and Git</title>
+      <link>http://adampresley.com/post/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git/</link>
+      <pubDate>Sat, 20 Apr 2013 20:58:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git/</guid>
+      <description>&lt;p&gt;A project I&amp;rsquo;ve been working with for a bit now uses a popular hosting
+provider to host a PHP application I&amp;rsquo;m writing. My normal workflow with
+this project is to make changes, commit my code to my Git repository,
+push it to Github (a private account), then FTP the files manually to
+the hosting provider. This works fine most of the time though I&amp;rsquo;ll admit
+that there are moments when I forget a file or two. Of course the
+application blows up and I have to view my Git log to see what files I
+may have missed when uploading the code.&lt;/p&gt;
+
+&lt;!-- excerpt --&gt;
+
+&lt;p&gt;Today I decided to do something about this little problem. Having
+recently discovered Fabric, the deployment framework and library for
+Python, I started crafting a script to automate the tasks of deployment.
+There are a number of ways to approach this, but for now I decided that
+I have only a couple of simple requirements.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Need to upload files from my latest commit (HEAD)&lt;/li&gt;
+&lt;li&gt;A single command to do the upload&lt;/li&gt;
+&lt;li&gt;Upload is done via FTP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Based on these requirements I needed to learn two additional things: how
+to use FTP in Python, and how to get a log from Git in Python. I won&amp;rsquo;t
+go into great deal on how all this works but I will cover the basics.
+First I needed to be able to connect to an FTP server. Python has a
+library called &lt;a href=&#34;http://docs.python.org/2/library/ftplib.html&#34;&gt;ftplib&lt;/a&gt; which offers basic, fairly low-level FTP
+methods. Out of the gate the first method I write looks like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_connectToFTP&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to the server **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP(host&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ADDRESS,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;user&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_USER,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;passwd&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_PASSWORD)&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;As you can see the FTP class is simple enough to use. Provide an
+address, user name, and password and you are connected to an FTP server
+and are given an object to perform further tasks with. Naturally the
+next task would be to upload files, but before we can do that we have to
+know what we are uploading. This would be defined as one of the
+requirements listed above where I wanted to upload the files from my
+last commit.&lt;/p&gt;
+
+&lt;p&gt;To satisfy the requirement for uploading files from my last commit I
+installed the library &lt;a href=&#34;https://github.com/gitpython-developers/GitPython&#34;&gt;gitpython&lt;/a&gt;. GitPython, simply put, is a
+library used to allow your Python code to interact with Git
+repositories. Here I must admit that I had some struggles as some of the
+abstractions I failed to comprehend. As a result I had a hard time
+getting the results I wanted just using the pure library, so I ended up
+using their utility class that allows you to execute arbitrary Git
+commands on the command line and get the results back. This allowed me
+to get a list of files for a given commit hash.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_gitLatestFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to Git **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Git(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Repo(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;head&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;commit&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Head commit revision: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Message: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;message&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;execute([&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;git&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;diff-tree&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--no-commit-id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--name-only&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;-r&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;str(headCommit)])&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;files&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;split(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_filterForValidFiles(fileList&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;files)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_filterForValidFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(fileList):&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[f&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fileList&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;startswith((&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;components/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;www/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There are two methods here to get the results I want. The first is
+&lt;strong&gt;_gitLatestFiles()&lt;/strong&gt;. This method talks to my local Git repository and
+gets the HEAD commit entry. With it I have a commit hash that I can use
+to pull logs for. I then use the library&amp;rsquo;s &lt;strong&gt;execute()&lt;/strong&gt; method that
+allows me to run command line Git and store the results. In my case I
+wanted to run a &lt;em&gt;diff-tree&lt;/em&gt; and get only the names of the files modified
+for the specified commit hash. The result of the &lt;em&gt;diff-tree&lt;/em&gt; is a single
+string of the modified files, so I needed to split them into a list on a
+newline character.&lt;/p&gt;
+
+&lt;p&gt;The next method you&amp;rsquo;ll see is &lt;strong&gt;_filterForValidFiles()&lt;/strong&gt;. It is called
+by the &lt;strong&gt;_gitLatestFiles()&lt;/strong&gt; method. This piece of code ensures that
+the files modified are children of a specific set of directories. If
+they reside outside that directory I don&amp;rsquo;t want to deploy them.&lt;/p&gt;
+
+&lt;p&gt;The final step in this process is to put it all together. We need to
+connect to the FTP server, get a list of changed files from the HEAD
+revision in Git, then push those files to the server. Let&amp;rsquo;s see what
+that code looks like.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__future__&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;with_statement&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fabric&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;os&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fabric.api&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fabric.colors&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;yellow,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;red&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftplib&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;git&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# SECTION: Constants&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;DATABASE&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;local&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;userName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ADDRESS&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;ftp.something.com&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_USER&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_PASSWORD&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ROOT_DIR&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;/appDirectory&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;REPO_ROOT&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;../&amp;quot;&lt;/span&gt;
+
+
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# SECTION: Private methods&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_connectToFTP&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to the server **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP(host&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ADDRESS,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;user&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_USER,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;passwd&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_PASSWORD)&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_gitLatestFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to Git **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Git(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Repo(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;head&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;commit&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Head commit revision: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Message: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;message&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;execute([&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;git&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;diff-tree&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--no-commit-id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--name-only&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;-r&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;str(headCommit)])&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;files&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;split(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_filterForValidFiles(fileList&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;files)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_filterForValidFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(fileList):&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[f&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fileList&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;startswith((&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;components/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;www/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))]&lt;/span&gt;
+
+
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# SECTION: Actions&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;uploadLatest&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Upload latest changes **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_connectToFTP()&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;files&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_gitLatestFiles()&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;files:&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;yellow(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Uploading file %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;split&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;os&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;split(f)&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cwd(os&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;join(FTP_ROOT_DIR,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;split[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]))&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;storlines(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;STOR %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;split[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;open(os&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;join(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;../&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f),&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;r&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;quit()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The last method in the code, &lt;strong&gt;uploadLatest()&lt;/strong&gt; is the one that glues it
+all together. As mentioned before it first connects to the FTP server.
+Then it gets a list of files to upload from the latest Git commit. After
+this we iterate over the file names and split each of them into
+directory and file name. We do this so we can issues a CWD (current
+working directory) command to the FTP server, and have a file name to
+pass to the STOR FTP command.&lt;/p&gt;
+
+&lt;p&gt;The next steps actually change the directory on the FTP server to match
+the path of the changed file. From here we send the STOR command by
+calling the &lt;strong&gt;storlines&lt;/strong&gt; method on the FTP library. This method first
+takes the command to use, which is &lt;strong&gt;STOR&lt;/strong&gt; followed by the name of the
+file to upload. The second argument is an open file handle to the actual
+file to upload. In this case we are just using the built-in Python
+&lt;strong&gt;open()&lt;/strong&gt; method to open up the file in read mode. Finally when all is
+done we issue a QUIT command by calling the &lt;strong&gt;quit()&lt;/strong&gt; method.&lt;/p&gt;
+
+&lt;p&gt;All of this code is saved in my &lt;em&gt;/bin&lt;/em&gt; folder of the project in a file
+named &lt;em&gt;fabfile.py&lt;/em&gt;. To run this I open up my terminal and execute &lt;strong&gt;fab
+uploadLatest&lt;/strong&gt;. If you aren&amp;rsquo;t familiar with Fabric take a look at &lt;a href=&#34;http://docs.fabfile.org/en/1.6/&#34;&gt;the
+Fabric site&lt;/a&gt; and also
+&lt;a href=&#34;#post/2012/10/my-first-experience-with-fabric-and-amazon-ec2&#34;&gt;my previous blog entry&lt;/a&gt; on the subject.&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

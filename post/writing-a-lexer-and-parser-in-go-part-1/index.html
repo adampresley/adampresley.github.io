@@ -1,0 +1,315 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Adam.Blog()</title>
+        <meta name="author">
+        <meta name="description" content="I&#39;m bringin&#39; nerdy back">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.16-DEV" />
+          <link href="http://adampresley.com/post/index.xml" rel="alternate" type="application/rss+xml" title="Adam.Blog()" />
+          <link href="http://adampresley.com/post/index.xml" rel="feed" type="application/rss+xml" title="Adam.Blog()" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://adampresley.com/css/styles.css">
+        <link rel="icon" href="http://adampresley.com/favicon.ico">
+        <link rel="apple-touch-icon" href="http://adampresley.com/apple-touch-icon.png" />
+        <link rel="stylesheet" href="http://adampresley.com/css/highlightjs/monokai.css">
+        <script src="http://adampresley.com/js/vendor/modernizr-2.8.0.min.js"></script>
+        <style>
+        .site-header h2 .logo {
+        background: url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(http://adampresley.com/assets/images/code-background-screenshot.png);
+        }}
+       .site-header {
+         background: #2a373d url(http://adampresley.com/assets/images/code-background-screenshot.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Adam.Blog()</h2>
+          </div>
+        </header>
+
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <article class="post">
+            <a class="btn home" href="http://adampresley.com/" title="">&laquo; </a>
+            
+<h1><a href="http://adampresley.com/post/writing-a-lexer-and-parser-in-go-part-1/" title="Writing a Lexer and Parser in Go - Part 1">Writing a Lexer and Parser in Go - Part 1</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2015.04.12">2015.04.12</time>
+
+    &middot; 
+        
+        <a href="http://adampresley.com/tags/development">development</a>, 
+        
+        <a href="http://adampresley.com/tags/golang">golang</a>
+        
+    
+
+</span>
+</footer>
+
+            
+
+<p>In this three-part series I will talk about building a simple lexer and parser in <a href="http://golang.org">Go</a>. The work presented here is heavily based on a 2011 presentation by Rob Pike titled <a href="http://cuddle.googlecode.com/hg/talk/lex.html#landing-slide">Lexical Scanning in Go</a>. This series will conclude with a fully functional set of code that can parse INI files. The series breaks down into these three parts.</p>
+
+<ol>
+<li>Introduction to Lexing, Parsing, and Getting Started</li>
+<li><a href="{% post_url 2015-05-12-writing-a-lexer-and-parser-in-go-part-2 %}">Performing Lexical Analysis</a></li>
+<li><a href="{% post_url 2015-06-01-writing-a-lexer-and-parser-in-go-part-3 %}">Parsing the Results</a></li>
+</ol>
+
+<!-- excerpt -->
+
+<h2 id="introduction:44833e25d4f6f6fd258c060475f6d0f7">Introduction</h2>
+
+<p>Lexical analysis and parsing sound like complicated topics. They sound like complicated topics because they are! This does not mean that we can&rsquo;t break them down a little and grasp the basics, which I will attempt to do here in this three-part series. To do this we will build a simple, functional INI parser. This parser will read an input string of text and return a structure broken into arrays of sections and key/value pairs. We will write this in Go.</p>
+
+<p>INI files have been chosen due to their simple, easy to understand structure. In case you need a refresher an INI file has the following form.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">[SectionName]</span>
+<span style="color: #a6e22e">key1</span><span style="color: #f92672">=</span><span style="color: #e6db74">value 1</span>
+<span style="color: #a6e22e">key2</span><span style="color: #f92672">=</span><span style="color: #e6db74">value 2</span>
+</pre></div>
+
+
+<p>In the above sample we see three primary elements. Understanding these elements becomes critical to understand as we start to design our parser.</p>
+
+<ul>
+<li>Sections</li>
+<li>Keys</li>
+<li>Values</li>
+</ul>
+
+<p>Keys have values that are organized into sections. There may be more than one key/value pair per section, and there may be one or more sections per INI file. It is a simple, but effective structure for storing information such as settings and configuration. We will take this structure and parse it, coming out with structures of data. This JSON structure provides a visual of what our data structures will look like.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">{</span>
+  <span style="color: #e6db74">&quot;FileName&quot;</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&quot;sample.ini&quot;</span><span style="color: #f8f8f2">,</span>
+  <span style="color: #e6db74">&quot;Sections&quot;</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">[</span>
+    <span style="color: #f8f8f2">{</span>
+      <span style="color: #e6db74">&quot;Name&quot;</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&quot;SectionName&quot;</span><span style="color: #f8f8f2">,</span>
+      <span style="color: #e6db74">&quot;KeyValuePairs&quot;</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">[</span>
+        <span style="color: #f8f8f2">{</span>
+          <span style="color: #e6db74">&quot;Key&quot;</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&quot;key1&quot;</span><span style="color: #f8f8f2">,</span>
+          <span style="color: #e6db74">&quot;Value&quot;</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&quot;value 1&quot;</span>
+        <span style="color: #f8f8f2">},</span>
+        <span style="color: #f8f8f2">{</span>
+          <span style="color: #e6db74">&quot;Key&quot;</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&quot;key2&quot;</span><span style="color: #f8f8f2">,</span>
+          <span style="color: #e6db74">&quot;Value&quot;</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&quot;value 2&quot;</span>
+        <span style="color: #f8f8f2">}</span>
+      <span style="color: #f8f8f2">]</span>
+    <span style="color: #f8f8f2">}</span>
+  <span style="color: #f8f8f2">]</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+
+
+<h2 id="what-is-lexical-analysis:44833e25d4f6f6fd258c060475f6d0f7">What is Lexical Analysis?</h2>
+
+<p>Lexical Analysis, or <em>lexing</em>, is defined by <a href="http://en.wikipedia.org/wiki/Lexical_analysis">Wikipedia</a> as <em>&rdquo;&hellip;the process of converting characters into a sequence of tokens, i.e. meaningful character strings.&rdquo;</em> Lexing is often executed prior to executing or compiling code. For example, <a href="http://php.net">PHP</a> is an interpreted language. This means that when you visit a website that runs on PHP code the PHP interpreter runs the PHP code and sends the resulting HTML markup back to your browser. The PHP code first goes through a lexical analysis pass that turns the code into a sequence of tokens that are meaningful to the PHP interpreter. The interpreter then can do something meaningful with these tokens, such as cache for later, execution, etc&hellip;</p>
+
+<h2 id="what-is-a-token:44833e25d4f6f6fd258c060475f6d0f7">What is a Token?</h2>
+
+<p>A <em>token</em> is a structure that describes and categorizes an element from your text input. From the example INI file above the section could be categorized as <strong>TOKEN_SECTION</strong>, or keys categorized as <strong>TOKEN_KEY</strong>. This structure generally tracks the category of the element, and the value. As an example our section in the example is named `<code>SectionName</code>, and could be stored in a token like the structure below.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">{</span>
+  <span style="color: #e6db74">&quot;Type&quot;</span><span style="color: #f92672">:</span> <span style="color: #a6e22e">TOKEN_SECTION</span><span style="color: #f8f8f2">,</span>
+  <span style="color: #e6db74">&quot;Value&quot;</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&quot;SectionName&quot;</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+
+
+<p>With this a parser, interpreter or compiler can make decisions, execute code, or even generate data/code based on what is found in the token structure.</p>
+
+<h2 id="what-is-parsing:44833e25d4f6f6fd258c060475f6d0f7">What is Parsing?</h2>
+
+<p>A lexer breaks down the structure of a text input and returns streams of tokens. Having tokens by themselves, however, offers little value. This is where a parser comes in. <em>Parsing</em> is the process of performing a syntactic analysis on the stream of tokens provided by the lexer. This means that the parser ensures the input text form is valid and makes sense. For example, the sample below is not a valid INI section header.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #a6e22e">[SectionName]</span><span style="color: #f92672">=</span><span style="color: #e6db74">Hi there</span>
+</pre></div>
+
+
+<p>The lexer may return a series of tokens representing the section name, equal sign, and the string. This is ok, as that is what a lexer does. The parser&rsquo;s job is to determine if that <em>makes sense</em>. For an INI file, it does not. Our parser will take a stream of tokens from a Go channel and create data structures containing sections and key/value pairs.</p>
+
+<h2 id="breaking-it-down:44833e25d4f6f6fd258c060475f6d0f7">Breaking it Down</h2>
+
+<p>As we near the end of this entry we have one last task. Let&rsquo;s setup the foundation of our lexer by defining what a token is, our token names, and their types. First is a token structure. This structure will be used throughout our entire code and is what gets put into a channel for the parser to pick up. First let&rsquo;s decide on a directory structure. For those that like looking ahead I have this code in a <a href="https://github.com/adampresley/sample-ini-parser">Github repository</a>, and the directory structure on my Mac looks like <code>~/code/go/src/github.com/adampresley/sample-ini-parser</code>. I then have these components in a <strong>services</strong> folder under <strong>lexer</strong>, so the final path for our token structure will be <code>~/code/go/src/github.com/adampresley/sample-ini-parser/services/lexer/lexertoken</code>.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">lexertoken</span>
+
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">(</span>
+  <span style="color: #e6db74">&quot;fmt&quot;</span>
+<span style="color: #f8f8f2">)</span>
+
+<span style="color: #66d9ef">type</span> <span style="color: #a6e22e">Token</span> <span style="color: #66d9ef">struct</span> <span style="color: #f8f8f2">{</span>
+  <span style="color: #a6e22e">Type</span>  <span style="color: #a6e22e">TokenType</span>
+  <span style="color: #a6e22e">Value</span> <span style="color: #66d9ef">string</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+</p>
+
+<p>This structure cleanly represents a token by describing it as having a type and a value. You will observe that we are referencing a type <strong>TokenType</strong> that we haven&rsquo;t created yet. Let&rsquo;s do so now.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">lexertoken</span>
+
+<span style="color: #66d9ef">type</span> <span style="color: #a6e22e">TokenType</span> <span style="color: #66d9ef">int</span>
+
+<span style="color: #66d9ef">const</span> <span style="color: #f8f8f2">(</span>
+  <span style="color: #a6e22e">TOKEN_ERROR</span> <span style="color: #a6e22e">TokenType</span> <span style="color: #f8f8f2">=</span> <span style="color: #66d9ef">iota</span>
+  <span style="color: #a6e22e">TOKEN_EOF</span>
+
+  <span style="color: #a6e22e">TOKEN_LEFT_BRACKET</span>
+  <span style="color: #a6e22e">TOKEN_RIGHT_BRACKET</span>
+  <span style="color: #a6e22e">TOKEN_EQUAL_SIGN</span>
+  <span style="color: #a6e22e">TOKEN_NEWLINE</span>
+
+  <span style="color: #a6e22e">TOKEN_SECTION</span>
+  <span style="color: #a6e22e">TOKEN_KEY</span>
+  <span style="color: #a6e22e">TOKEN_VALUE</span>
+<span style="color: #f8f8f2">)</span>
+</pre></div>
+</p>
+
+<p>Simple enough! We are simply defining a new type named <strong>TokenType</strong> that is an integer, then we setup all the types of tokens we can expect. This is basically a breakdown of an INI file.</p>
+
+<ul>
+<li>We need a way to track errors, so <em>TOKEN_ERROR</em> represents that</li>
+<li>When we&rsquo;ve reached the end of our input string we&rsquo;ll use <em>TOKEN_EOF</em></li>
+<li>Sections are composed of a left bracket, text, then a closing right bracket.
+
+<ul>
+<li><em>TOKEN_LEFT_BRACKET</em></li>
+<li><em>TOKEN_SECTION</em></li>
+<li><em>TOKEN_RIGHT_BRACKET</em></li>
+</ul></li>
+<li>Key have values, and a separated by an equal sign
+
+<ul>
+<li><em>TOKEN_KEY</em></li>
+<li><em>TOKEN_EQUAL_SIGN</em></li>
+<li><em>TOKEN_VALUE</em></li>
+</ul></li>
+<li>The end of a section and key/value pairs must end in a newline character. <em>TOKEN_NEWLINE</em></li>
+</ul>
+
+<p>Finally we will need to know the textual representations for some of these. For example, when our lexer is looking for an equal sign between key/value pairs we&rsquo;ll need to look at the input text to see if the current position has an equal sign. It would be a good idea to keep variable representation of those.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">lexertoken</span>
+
+<span style="color: #66d9ef">const</span> <span style="color: #a6e22e">EOF</span> <span style="color: #66d9ef">rune</span> <span style="color: #f8f8f2">=</span> <span style="color: #ae81ff">0</span>
+
+<span style="color: #66d9ef">const</span> <span style="color: #a6e22e">LEFT_BRACKET</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">=</span> <span style="color: #e6db74">&quot;[&quot;</span>
+<span style="color: #66d9ef">const</span> <span style="color: #a6e22e">RIGHT_BRACKET</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">=</span> <span style="color: #e6db74">&quot;]&quot;</span>
+<span style="color: #66d9ef">const</span> <span style="color: #a6e22e">EQUAL_SIGN</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">=</span> <span style="color: #e6db74">&quot;=&quot;</span>
+<span style="color: #66d9ef">const</span> <span style="color: #a6e22e">NEWLINE</span> <span style="color: #66d9ef">string</span> <span style="color: #f8f8f2">=</span> <span style="color: #e6db74">&quot;\n&quot;</span>
+</pre></div>
+</p>
+
+<h2 id="what-s-next:44833e25d4f6f6fd258c060475f6d0f7">What&rsquo;s Next?</h2>
+
+<p><a href="{% post_url 2015-05-12-writing-a-lexer-and-parser-in-go-part-2 %}">Part 2</a> will dive into the lexical analysis portion, making use of the token structure we&rsquo;ve setup above.</p>
+
+            <ul class="share-buttons">
+    <li></li>
+    <li>
+        <a class="icon-facebook-squared" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fadampresley.com%2fpost%2fwriting-a-lexer-and-parser-in-go-part-1%2f" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-twitter" href="https://twitter.com/share?text=Writing%20a%20Lexer%20and%20Parser%20in%20Go%20-%20Part%201&amp;url=http%3a%2f%2fadampresley.com%2fpost%2fwriting-a-lexer-and-parser-in-go-part-1%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-gplus" href="https://plus.google.com/share?url=http%3a%2f%2fadampresley.com%2fpost%2fwriting-a-lexer-and-parser-in-go-part-1%2f" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2fadampresley.com%2fpost%2fwriting-a-lexer-and-parser-in-go-part-1%2f&title=Writing%20a%20Lexer%20and%20Parser%20in%20Go%20-%20Part%201" onclick="window.open(this.href, 'linkedin-share', 'width=600,height=494');return false;" title=""></a>
+    </li>
+</ul>
+
+        </article>
+        <div class="comments">
+            <h3></h3>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adampresleyblog';
+    var disqus_identifier = 'http:\/\/adampresley.com\/post\/writing-a-lexer-and-parser-in-go-part-1\/';
+    var disqus_title = 'Writing a Lexer and Parser in Go - Part 1';
+    var disqus_url = 'http:\/\/adampresley.com\/post\/writing-a-lexer-and-parser-in-go-part-1\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </main>
+    <aside class="author">
+  <img class="profile-image" src="http://adampresley.com/assets/adampresley/images/adam-bowtie.png" alt="Adam Presley" />
+  <p class="name"> 
+  <strong>Adam Presley</strong></p>
+  <p class="address">Texas, USA</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/adampresley" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/adampresley" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="http://adampresley.com/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="http://adampresley.com/post/index.xml" title="RSS"></a>
+        <p>&copy; 2016 &middot; Adam Presley. All Rights Reserved. Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="http:\/\/adampresley.com\/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="http://adampresley.com/js/plugins.js"></script>
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-44927419-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reflection on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/reflection/</link>
+    <description>Recent content in Reflection on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 27 Mar 2007 08:35:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/reflection/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Reflection in ColdFusion</title>
+      <link>http://adampresley.com/post/reflection-in-coldfusion/</link>
+      <pubDate>Tue, 27 Mar 2007 08:35:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/reflection-in-coldfusion/</guid>
+      <description>&lt;p&gt;So I was reading a blog entry on Ben Nadel&amp;rsquo;s site about him trying to do
+function pointers in ColdFusion. It seems that a solution was never
+presented to him, though I am not sure as the entry is nearly a month
+old. I decided to play with the concept and met with some success. Using
+reflection in Java I was able to dynamically bind to and call a
+ColdFusion function. I only had success with the functions that had only
+string parameters, and had failure with functions that had integer
+arguments. I suspect it is a problem with the class type. Not sure. But
+here is an example of using reflection in ColdFusion to call the COMPARE
+function.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: Code missing&lt;/p&gt;
+
+&lt;p&gt;Interesting, eh?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Reflection in ColdFusion Part 2</title>
+      <link>http://adampresley.com/post/reflection-in-coldfusion-part-2/</link>
+      <pubDate>Tue, 27 Mar 2007 03:26:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/reflection-in-coldfusion-part-2/</guid>
+      <description>&lt;p&gt;Yesterday I was working on using &lt;a href=&#34;http://blog.adampresley.com/2007/03/27/reflection-in-coldfusion/&#34;&gt;Java reflection to create function
+pointers in ColdFusion&lt;/a&gt; to native ColdFusion methods. I was able to
+get this to work on any function with only String parameters, but not
+integer. Well, I found out why.&lt;/p&gt;
+
+&lt;p&gt;The integer data type in Java is a primitive data type. There &lt;strong&gt;IS&lt;/strong&gt; a
+class representation but it still maps down to the primitive data type.
+This posed a problem trying to point to a ColdFusion function such as
+&lt;em&gt;FindNoCase&lt;/em&gt;. Why? Cause it takes two strings and one integer argument,
+and the &lt;em&gt;java.lang.Integer&lt;/em&gt; class wasn&amp;rsquo;t doing the trick.&lt;/p&gt;
+
+&lt;p&gt;Turns out that the primitive wrapper classes have a property called
+&lt;em&gt;TYPE&lt;/em&gt; that return an instance of the &lt;strong&gt;primitive type&lt;/strong&gt;. THIS was
+exactly what I needed. So, here is an example of creating a function
+pointer to &lt;em&gt;FindNoCase&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;stringFunc&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;coldfusion.runtime.StringFunc&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;stringClass&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java.lang.String&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;integerClass&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;createObject&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;java.lang.Integer&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--- Setup the argument types ---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentTypeArray[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;stringClass.getClass&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentTypeArray[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;stringClass.getClass&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentTypeArray[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;integerClass.TYPE&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;method&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;stringFunc.getClass&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getMethod&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;FindNoCase&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentTypeArray)&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--- Call the function. We must pass arguments as an array of objects. ---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;searchWhat&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;This is a test.&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;searchFor&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;is&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;startPos&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentArray&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;arrayNew&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentArray[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;searchFor&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentArray[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;searchWhat&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentArray[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;javaCast&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;int&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;startPos)&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;!--- Invoke the function, and show some results ---&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfset&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;method.invoke&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(stringFunc,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;argumentArray)&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;cfoutput&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;fieldset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;legend&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;FindNoCase Example&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;legend&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+Search What: &lt;span style=&#34;color: #f8f8f2&#34;&gt;#searchWhat#&lt;/span&gt;
+Search For: &lt;span style=&#34;color: #f8f8f2&#34;&gt;#searchFor#&lt;/span&gt;
+Start At: &lt;span style=&#34;color: #f8f8f2&#34;&gt;#startPos#&lt;/span&gt;
+
+result = &lt;span style=&#34;color: #f8f8f2&#34;&gt;#result#&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;fieldset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/cfoutput&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And voila! It works!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

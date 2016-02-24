@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Wordpress on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/wordpress/</link>
+    <description>Recent content in Wordpress on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Oct 2007 04:57:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/wordpress/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>My First Plugin</title>
+      <link>http://adampresley.com/post/my-first-plugin/</link>
+      <pubDate>Tue, 16 Oct 2007 04:57:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/my-first-plugin/</guid>
+      <description>&lt;p&gt;Yes, ladies and gentlemen, I have started learning how to write
+WordPress plugins. My first plugin is one that removes the word
+&amp;ldquo;Private: &amp;ldquo; from the beginning of blog and page titles (when they are
+saved with a status of private).&lt;/p&gt;
+
+&lt;p&gt;The way this works is by creating a function that takes one argument. I
+then used a regular expression to remove the offending words. The regex
+I used was */\^(private:\s*)/i*and then I simply replaced any match
+with a blank string, removing it from the source text. And in WordPress
+there are two types of plugins: Action hooks, and Filter hooks.&lt;/p&gt;
+
+&lt;p&gt;In this case I used a filter hook, since filter hooks alter text coming
+or going from the WordPress database. So to make my filter work you have
+to use the &lt;em&gt;add_filter&lt;/em&gt; function to register my function to handle the
+filter hook &amp;ldquo;&lt;em&gt;the_title&lt;/em&gt;&amp;rdquo;. This hook alters the title of posts and
+pages before they go out to the browser. Now, here&amp;rsquo;s the code.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Plugin Name: Hide &amp;quot;Private&amp;quot; In Title&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Plugin URI: http://blog.adampresley.com/?page_id=124&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Description: Removes the word &amp;quot;private:&amp;quot; from the beginning of blog entry and page titles.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Version: 1.0&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   author: &amp;quot;Adam Presley&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Author URI: http://www.adampresley.com&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   Copyright 2007  Adam Presley  (email : psykoprogrammer@yahoo.com)&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   This program is free software; you can redistribute it and/or modify&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   it under the terms of the GNU General Public License as published by&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   the Free Software Foundation; either version 2 of the License, or&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   (at your option) any later version.&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   This program is distributed in the hope that it will be useful,&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   GNU General Public License for more details.&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   You should have received a copy of the GNU General Public License&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   along with this program; if not, write to the Free Software&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;*/&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;//--------------------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Name: filter_hidePrivateInTitle&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Auth: Adam Presley&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Desc: Removes the word &amp;quot;private:&amp;quot; from blog and page titles.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;//--------------------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;filter_hidePrivateInTitle&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($content)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;preg_replace(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;/^(private:\s*)/i&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$content);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;//---------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Add the hook to WordPress.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;//---------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;add_filter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;the_title&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;filter_hidePrivateInTitle&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+</description>
+    </item>
+    
+  </channel>
+</rss>

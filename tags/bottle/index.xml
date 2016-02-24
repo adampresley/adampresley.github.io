@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bottle on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/bottle/</link>
+    <description>Recent content in Bottle on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 08 Sep 2012 10:55:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/bottle/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>First Experiences With Bottlepy</title>
+      <link>http://adampresley.com/post/first-experiences-with-bottlepy/</link>
+      <pubDate>Sat, 08 Sep 2012 10:55:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/first-experiences-with-bottlepy/</guid>
+      <description>&lt;p&gt;Here lately I&amp;rsquo;ve taken to writing a bit more code in Python. It isn&amp;rsquo;t my
+first time around in this lovely language, but for the last few months
+I&amp;rsquo;ve spent more time in Groovy and Grails, and I felt it was time to
+revisit the language where whitespace matters. Most of my experience
+with Python up until this point revolves around scripts and utility
+code, such as install automation. I had made up my mind to try working
+on a web project this time, and naturally I started with the one web
+framework that I had heard most about, and had dabbled with before,
+Django.&lt;/p&gt;
+
+&lt;p&gt;Being a full stack framework similar to Grails, where
+I have spent a lot of time recently, I figured I would be comfortable
+here. Truth be told though I am not. Perhaps it is a phase, or maybe I&amp;rsquo;m
+just not cut out for full stack web frameworks, but it seems that every
+time I work in one I end up leaving for a less featured framework.
+Coldbox, Zend, CakePHP, Grails&amp;hellip; all of them are big and have
+everything you&amp;rsquo;d ever need, and if they don&amp;rsquo;t they support plugins for
+everything else. This is great, but in the end I always seem happier
+moving to the smaller frameworks. FW/1, Gaelyk (for GAE), and now Bottle
+for Python.&lt;/p&gt;
+
+&lt;p&gt;Bottle is a micro-framework for Python web development. We are talking a
+single, 128K file that supports URL routes, view templates, JSON
+serialization, built-in web server for development, and plugins. It&amp;rsquo;s
+super light weight and fast, and it doesn&amp;rsquo;t take a lot of heavy reading
+to get started. As an example here is a simple view definition.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;bottle&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;view,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;route,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;request&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;app.model.core.adampresley.Factory&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Factory&lt;/span&gt;
+
+&lt;span style=&#34;color: #a6e22e&#34;&gt;@route&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;/home&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;@view&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;home&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;home&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;viewData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;service&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Factory()&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;getVisitorService()&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;viewData[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;numVisits&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;service&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;getVisitorCount()&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;viewData&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The template engine is actually just a light wrapper around Python code
+itself with basic include ability. Compared to other template engines
+I&amp;rsquo;ve used it is pretty utilitarian yet it seems to serve my purposes so
+far. For example:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;h1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;Welcome!&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;h1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+% if numVisits &amp;gt; 0:
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;You are visitor number {{numVisits}}!&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+% else:
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;No visitors before you! You are the first!&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;p&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+%end
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I can honestly say I am enjoying Bottle, and look for more posts on
+this nifty framework soon. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

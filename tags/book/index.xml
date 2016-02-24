@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Book on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/book/</link>
+    <description>Recent content in Book on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Jan 2013 10:43:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/book/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>A Good Resource on Web App Performance</title>
+      <link>http://adampresley.com/post/a-good-resource-on-web-app-performance/</link>
+      <pubDate>Fri, 04 Jan 2013 10:43:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/a-good-resource-on-web-app-performance/</guid>
+      <description>&lt;p&gt;Last night I came across an online, public domain license book by Stoyan
+Stefanov called &lt;a href=&#34;http://www.bookofspeed.com/index.html&#34;&gt;Book of Speed&lt;/a&gt;. Although it is incomplete the
+information found in this book is &lt;strong&gt;very&lt;/strong&gt; good.&lt;/p&gt;
+
+&lt;p&gt;In this book the author talks about many of the intricate details of web
+page optimization, such as minification, combining resources, sprites,
+and more. He also dives further down into the specifics of the TCP/IP
+protocol and how that affects you as a web application developer.&lt;/p&gt;
+
+&lt;p&gt;I really look forward to seeing this awesome resource continue to grow
+and highly recommend anyone who builds web applications and sites for a
+living give it a read.&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

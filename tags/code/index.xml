@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Code on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/code/</link>
+    <description>Recent content in Code on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 21 Sep 2011 11:13:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/code/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>&#39;Awesome Code Comment: 9/21/2011&#39;</title>
+      <link>http://adampresley.com/post/awesome-code-comment-9212011/</link>
+      <pubDate>Wed, 21 Sep 2011 11:13:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/awesome-code-comment-9212011/</guid>
+      <description>&lt;p&gt;Came across this code in a query where the programmer &lt;strong&gt;clearly&lt;/strong&gt;
+doesn&amp;rsquo;t want anyone to turn this feature on!&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;---&lt;/span&gt;   &lt;span style=&#34;color: #a6e22e&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;7&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;06&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;TF:&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;DO&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;NOT&lt;/span&gt; &lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;!!&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;EVER&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;!!&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;turn&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;workflow&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;on&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Lest&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ye&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;be&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;kicked&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;---&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Love it.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

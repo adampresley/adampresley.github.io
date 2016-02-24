@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Patterns on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/patterns/</link>
+    <description>Recent content in Patterns on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Jun 2013 07:43:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/patterns/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Making a Collection Object in PHP</title>
+      <link>http://adampresley.com/post/making-a-collection-object-in-php/</link>
+      <pubDate>Wed, 05 Jun 2013 07:43:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/making-a-collection-object-in-php/</guid>
+      <description>&lt;p&gt;Recently I was working on a bit of code where I had an array of
+structures (a map or dictionary) that was the result of a query to a
+database. This data represented a set of statuses, each record with an
+ID and a status. Imagine it looking something like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Active&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Inactive&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Terminated&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!-- excerpt --&gt;
+
+&lt;p&gt;I had been asked to create some UI elements that would filter a page
+based on a couple of specific statuses. Knowing in the past how these
+statuses had changed and how the list had grown over time (the list
+above being merely a sample) I did not want to hard code the IDs into
+button links. Instead I preferred to have a way to refer to the status
+by name and get the ID back.&lt;/p&gt;
+
+&lt;p&gt;This problem is simple enough to address. Simply do an
+&lt;strong&gt;array_search()&lt;/strong&gt; or &lt;strong&gt;array_filter()&lt;/strong&gt; and call it a day. In this
+case though there is a service class that has a method to return an
+array of those statuses. My first thought was to make a new method in
+this service class that would take this array of statuses and a status
+name and return the ID. However it occurred to me that I could create a
+new class to represent a &lt;em&gt;collection&lt;/em&gt; of status structures. Why would I
+do that? This actually affords me a couple of abilities.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The class could be created so I could iterate over it like a regular
+array&lt;/li&gt;
+&lt;li&gt;I could also make it so I could reference it like an array by index&lt;/li&gt;
+&lt;li&gt;Finally I could make a method to get the ID of a status by its name&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Basically I could create a class that I could reference by index,
+iterate over like an array in a &lt;strong&gt;foreach&lt;/strong&gt; loop, and attach methods to
+for working with a collection of statuses. At this point I had decided
+this was the course of action I wanted to take. To do this there are two
+interfaces in PHP you need to implement: &lt;strong&gt;ArrayAccess&lt;/strong&gt; and
+&lt;strong&gt;Iterator&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The first interface to implement is &lt;strong&gt;ArrayAccess&lt;/strong&gt;. This allows you to
+reference an instance of your class as an array. This means you can do
+something like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Active&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Inactive&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$id&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Notice how we can add to the object like an array, and we can reference
+by index just like an array. So how do we make a class to do this?
+Implement the &lt;strong&gt;ArrayAccess&lt;/strong&gt; interface. Let&amp;rsquo;s see how we would do that
+in our &lt;strong&gt;StatusCollection&lt;/strong&gt; class.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;implements&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ArrayAccess&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__construct&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statuses)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetExists&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetGet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset])&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetSet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(is_null($offset))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetUnset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;unset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;First and foremost refer to [&lt;a href=&#34;http://us2.php.net/manual/en/class.arrayaccess.php&#34;&gt;http://us2.php.net/manual/en/class.arrayaccess.php&lt;/a&gt;] as a reference to
+the &lt;strong&gt;ArrayAccess&lt;/strong&gt; interface. It dictates that your class needs to
+implement four methods: &lt;em&gt;offstExists()&lt;/em&gt;, &lt;em&gt;offsetGet()&lt;/em&gt;, &lt;em&gt;offsetSet()&lt;/em&gt;,
+and &lt;em&gt;offsetUnset&lt;/em&gt;. These methods are called when you perform array-like
+operations on your class instance variable.&lt;/p&gt;
+
+&lt;p&gt;Now we&amp;rsquo;d like to make it so we can easily iterate over our class
+instance variable much like any other array. Basically we want to be
+able to do this.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($statusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;option value=&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;gt;%s&amp;lt;/option&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;To do this we must implement the &lt;a href=&#34;http://php.net/manual/en/class.iterator.php&#34;&gt;&lt;strong&gt;Iterator&lt;/strong&gt; interface&lt;/a&gt;. This
+interface requires we implement five more methods: &lt;em&gt;current()&lt;/em&gt;, &lt;em&gt;key()&lt;/em&gt;,
+&lt;em&gt;next()&lt;/em&gt;, &lt;em&gt;rewind()&lt;/em&gt;, and &lt;em&gt;valid()&lt;/em&gt;. When you write code like above to
+iterate over an object that implements &lt;strong&gt;Iterator&lt;/strong&gt; these methods are
+called. The idea here is that we&amp;rsquo;ll keep an internal variable to track
+the current iterator position, so when a loop asks for another item we
+know which index to return. Here&amp;rsquo;s what that looks like.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;implements&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ArrayAccess&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Iterator&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__construct&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statuses)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;current&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;key&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;next&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetExists&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetGet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset])&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetSet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(is_null($offset))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetUnset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;unset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;rewind&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;valid&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Finally in my 3rd bullet point I said that I wanted a method to get the
+ID of a particular status by name. Here I will simply add a new method
+called &lt;em&gt;getIdByName()&lt;/em&gt; which will do a quick loop to find our status. If
+the ID can&amp;rsquo;t be located an exception is thrown.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;implements&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ArrayAccess&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Iterator&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__construct&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statuses)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;current&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;getIdByName&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statusName)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;count($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$i][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusName)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$i][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Exception&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Status &amp;#39;{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusName&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}&amp;#39; not found&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;key&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;next&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetExists&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetGet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset])&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetSet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(is_null($offset))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetUnset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;unset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;rewind&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;valid&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Cool, so now let&amp;rsquo;s see a contrived example of how one might use this.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;id&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;statusId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;statusId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($statusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;option value=&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;gt;%s&amp;lt;/option&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;select&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;button&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;btnShowActive&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;id&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;btnShowActive&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;onclick&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;window.location=&amp;#39;/?statusId=&amp;lt;?= $statusCollection.getIdByStatus(&amp;#39;Active&amp;#39;) ?&amp;gt;&amp;#39;;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Show&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Active&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;button&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tools on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/tools/</link>
+    <description>Recent content in Tools on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 Jul 2013 11:52:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Resizing Multiple Images Using ImageMagick in Ubuntu</title>
+      <link>http://adampresley.com/post/resizing-multiple-images-imagemagick-ubuntu/</link>
+      <pubDate>Fri, 05 Jul 2013 11:52:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/resizing-multiple-images-imagemagick-ubuntu/</guid>
+      <description>&lt;p&gt;Have you ever needed to resize a bunch of images in bulk? Most of us who do web development,
+image manipulation, or blogging probably have at some point. If you are running in Ubuntu here
+is a quick way to do this on the console.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;$ convert &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;*.JPG[800x&amp;gt;]&amp;#39;&lt;/span&gt; new-name-%03d.jpg
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The above script will take all files with a &lt;strong&gt;.JPG&lt;/strong&gt; extension and resize them to 800 pixels
+wide and name the new version of the file as &lt;em&gt;new-name-001.jpg&lt;/em&gt;. The &lt;strong&gt;%03d&lt;/strong&gt; tells
+ImageMagick to add numbers sequentially using 3 digits. Pretty cool eh?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>July Updates for Sublime Text View In Browser Plugin</title>
+      <link>http://adampresley.com/post/july-updates-for-sublime-text-view-in-browser-plugin/</link>
+      <pubDate>Tue, 02 Jul 2013 13:13:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/july-updates-for-sublime-text-view-in-browser-plugin/</guid>
+      <description>&lt;p&gt;As some of you may know I wrote and maintain a plugin for the popular
+and excellent &lt;a href=&#34;http://www.sublimetext.com/&#34;&gt;Sublime Text 2&lt;/a&gt; text editor
+called &lt;a href=&#34;http://adampresley.github.io/sublime-view-in-browser/&#34;&gt;View In Browser&lt;/a&gt;.
+To date this is my most popular plugin with 10 forks and 30 stars. Not
+much compared to some but I am proud that a few folks have found it
+useful.&lt;/p&gt;
+
+&lt;p&gt;So here is a quick blog blurb to say that I&amp;rsquo;ve created a wiki for this
+plugin. This wiki covers installation, how to configure the plugin to
+user your favorite browser and answers common questions on how to get it
+to use your local server environment. Also the home page has a facelift
+and is no longer just an HTML copy of the README. Just a little nicer,
+or at least I think so. :)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s3.amazonaws.com/www.adampresley.com/posts/view-in-browser-updates-07-01-2013.png&#34; alt=&#34;Screenshot&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Cheers!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Change Default Author Name for JavaDocs in Eclipse</title>
+      <link>http://adampresley.com/post/change-default-author-name-for-javadocs-in-eclipse/</link>
+      <pubDate>Thu, 19 Aug 2010 08:45:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/change-default-author-name-for-javadocs-in-eclipse/</guid>
+      <description>&lt;p&gt;Here is a quick way to change the default author name when using JavaDoc
+comments in your Eclipse projects. Simply edit your &lt;strong&gt;eclipse.ini&lt;/strong&gt;
+file found in the root directory where you placed Eclipse. I have
+Eclipse at &lt;strong&gt;/opt/eclipse&lt;/strong&gt;, so my path would be
+&lt;strong&gt;/opt/eclipse/eclipse.ini&lt;/strong&gt;. Once editing this file add the
+following line and save.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;-Duser.name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;Adam Presley&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;After saving restart Eclipse and when you do a JavaDoc comment and use
+the author attribute by typing &lt;strong&gt;@author&lt;/strong&gt; and pressing enter on the
+autocomplete you will see something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * Alert some message!&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; * @author Adam Presley&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;alertSomething&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;msg&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;alert&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;msg&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Simple yet useful. Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ColdFusion Builder Performance</title>
+      <link>http://adampresley.com/post/coldfusion-builder-performance/</link>
+      <pubDate>Thu, 19 Nov 2009 03:22:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/coldfusion-builder-performance/</guid>
+      <description>&lt;p&gt;I don&amp;rsquo;t know about you guys, but I run into horrible performance issues
+as I use ColdFusion Builder, or most other Eclipse-based IDEs, as I use
+them more over time, add more projects, etc&amp;hellip; After researching I&amp;rsquo;ve
+got a set of settings now that help a bit. These settings make garbage
+collection more aggressive, which is proving decent.&lt;/p&gt;
+
+&lt;p&gt;To modify your CF Builder settings you need to open your CFBuilder.ini
+file. In Windows this is located at &lt;strong&gt;C:\Program Files\Adobe\Adobe
+ColdFusion Builder&lt;/strong&gt; by default. If you open that up you can setup the
+parameters the Java Virtual Machine will run with for Eclipse. Here is
+what I use. Maybe someone will find it useful.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-startup&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;plugins\org.eclipse.equinox.launcher_1.0.101.R34x_v20081125.jar&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;--launcher.library&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-vmargs&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;-Dosgi.requiredJavaVersion&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;1.6&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-Xms128m&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-Xmx384m&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-Xss2m&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;-XX:PermSize&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;128m&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;-XX:MaxPermSize&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;128m&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;-XX:MaxGCPauseMillis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;10&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;-XX:MaxHeapFreeRatio&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;70&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-XX:+UseConcMarkSweepGC&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-XX:+CMSIncrementalMode&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-XX:+CMSIncrementalPacing&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;-XX:CompileThreshold&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;5&lt;/span&gt;
+&lt;span style=&#34;color: #960050; background-color: #1e0010&#34;&gt;-Dcom.sun.management.jmxremote&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+</description>
+    </item>
+    
+    <item>
+      <title>Free Linux and Windows Screen Sharing Software</title>
+      <link>http://adampresley.com/post/free-linux-and-windows-screen-sharing-software/</link>
+      <pubDate>Mon, 13 Jul 2009 18:27:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/free-linux-and-windows-screen-sharing-software/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m a sucker for cool applications. I also am a super-sucker for
+&lt;strong&gt;FREE&lt;/strong&gt; cool applications. I was working on some code with my friend
+Collin tonight and we had a need to take a look at some code together,
+but we aren&amp;rsquo;t anywhere near each other. To further complicate matters
+I&amp;rsquo;m running on Ubuntu Linux and he on Windows. After a quick search I
+came across &lt;a href=&#34;http://www.yuuguu.com/home&#34;&gt;Yuuguu Instant Screen Sharing&lt;/a&gt;. What a neat program!&lt;/p&gt;
+
+&lt;p&gt;A simple download of a Debian package, and moments later I get a sign-up
+screen. That too was painless, and before I knew it, I simply entered my
+MSN account information, I selected Collin from the list, and clicked
+Share. Kaboom!!! Awesomeness exploded onto my screen, and we were
+sharing desktops before I knew it! Go give it a go!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

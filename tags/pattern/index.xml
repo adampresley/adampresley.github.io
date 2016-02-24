@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pattern on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/pattern/</link>
+    <description>Recent content in Pattern on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 08 Feb 2010 16:27:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/pattern/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Dallas/Ft. Worth CFUG - Adapter and Facade Patterns</title>
+      <link>http://adampresley.com/post/dallasft-worth-cfug-adapter-and-facade-patterns/</link>
+      <pubDate>Mon, 08 Feb 2010 16:27:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/dallasft-worth-cfug-adapter-and-facade-patterns/</guid>
+      <description>&lt;p&gt;Join me tomorrow night at the Dallas/Ft. Worth ColdFusion User Group
+meeting where Dave Shuck will be presenting a beginner&amp;rsquo;s introduction to
+ColdSpring and dependency injection, following by yours truly presenting
+Chapter 7 of the &lt;strong&gt;Head First Design Patterns&lt;/strong&gt; book: Adapter and
+Facade patterns. There is usually food, nerds, and a chance to network
+and learn with the best ColdFusion peeps in Dallas!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://dfwcfug.org/blog/2010/02/05/February-Monthly-Meeting-The-Facade-and-Adapter-Patterns--HFDP-Chapter-7-Adam-Presley&#34;&gt;http://dfwcfug.org/blog/2010/02/05/February-Monthly-Meeting-The-Facade-and-Adapter-Patterns--HFDP-Chapter-7-Adam-Presley&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

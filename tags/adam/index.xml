@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Adam on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/adam/</link>
+    <description>Recent content in Adam on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 03 Sep 2010 11:37:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/adam/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ADAM Script Lives!</title>
+      <link>http://adampresley.com/post/adam-script-lives/</link>
+      <pubDate>Fri, 03 Sep 2010 11:37:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/adam-script-lives/</guid>
+      <description>&lt;p&gt;It&amp;rsquo;s been a &lt;strong&gt;long&lt;/strong&gt; time since I last talked about, let alone
+worked on ADAM script, or *A*dvanced *D*ata *A*cquisition and
+*M*anipulation script. But last night I finally revived this project
+that I haven&amp;rsquo;t worked on since 2006. Yes, nearly 4 years have passed
+since I last even &lt;strong&gt;considered&lt;/strong&gt; my little data manipulation
+language.&lt;/p&gt;
+
+&lt;p&gt;And now with &lt;a href=&#34;http://groovy.codehaus.org/&#34;&gt;Groovy&lt;/a&gt; being more powerful than ever, and me loving it
+more than ever, I decided once again to revisit and rework this idea.
+Groovy is a very powerful and versatile language on top of Java and the
+JVM, and has language elements to actually support writing DSL&amp;rsquo;s, or
+Domain Specific Languages, which is what ADAM is. Consider the following
+script.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;::groovy
+datasource ds1, {
+    type &amp;quot;mysql&amp;quot;
+    host &amp;quot;localhost&amp;quot;
+    userName &amp;quot;user&amp;quot;
+    password &amp;quot;password&amp;quot;
+    catalog &amp;quot;test&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This script demonstrates a sample of the language, and as you can see it
+flows fairly easily. With a brief glance it should be apparent you are
+setting up a data source. The neat thing about this script sample is
+that it is technically Groovy code. Here&amp;rsquo;s what it actually is.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;::groovy
+datasource(&amp;quot;ds1&amp;quot;, {
+    type(&amp;quot;mysql&amp;quot;)
+    host(&amp;quot;localhost&amp;quot;)
+    userName(&amp;quot;user&amp;quot;)
+    password(&amp;quot;password&amp;quot;)
+    catalog(&amp;quot;test&amp;quot;)
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since Groovy doesn&amp;rsquo;t require parenthesis or semicolons we can build a
+syntax that feels simpler and more natural. So the first argument is a
+string. I&amp;rsquo;m able to lose the quotes due to the nifty missingProperty
+method available, so when Groovy sees the word &amp;ldquo;ds1&amp;rdquo; without quotes, it
+assumes it is a property. And when Groovy doesn&amp;rsquo;t find the property in
+the class it asks for missingProperty.&lt;/p&gt;
+
+&lt;p&gt;The second argument is a closure. Each line after that is technically a
+method. The closure is executed in the context of the Datasource class
+using the &lt;strong&gt;with(closure)&lt;/strong&gt; syntax, which is uber-cool by the way.
+This means that each method executed inside the closure will execute
+within the context of the Datasource class.&lt;/p&gt;
+
+&lt;p&gt;So far Groovy DSLs are super cool and I think I may finally be on my way
+to getting a working first-draft of my ADAM script language! Happy
+coding!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

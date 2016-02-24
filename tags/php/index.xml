@@ -1,0 +1,1175 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Php on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/php/</link>
+    <description>Recent content in Php on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Jun 2013 07:43:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Making a Collection Object in PHP</title>
+      <link>http://adampresley.com/post/making-a-collection-object-in-php/</link>
+      <pubDate>Wed, 05 Jun 2013 07:43:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/making-a-collection-object-in-php/</guid>
+      <description>&lt;p&gt;Recently I was working on a bit of code where I had an array of
+structures (a map or dictionary) that was the result of a query to a
+database. This data represented a set of statuses, each record with an
+ID and a status. Imagine it looking something like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Active&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Inactive&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Terminated&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!-- excerpt --&gt;
+
+&lt;p&gt;I had been asked to create some UI elements that would filter a page
+based on a couple of specific statuses. Knowing in the past how these
+statuses had changed and how the list had grown over time (the list
+above being merely a sample) I did not want to hard code the IDs into
+button links. Instead I preferred to have a way to refer to the status
+by name and get the ID back.&lt;/p&gt;
+
+&lt;p&gt;This problem is simple enough to address. Simply do an
+&lt;strong&gt;array_search()&lt;/strong&gt; or &lt;strong&gt;array_filter()&lt;/strong&gt; and call it a day. In this
+case though there is a service class that has a method to return an
+array of those statuses. My first thought was to make a new method in
+this service class that would take this array of statuses and a status
+name and return the ID. However it occurred to me that I could create a
+new class to represent a &lt;em&gt;collection&lt;/em&gt; of status structures. Why would I
+do that? This actually affords me a couple of abilities.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The class could be created so I could iterate over it like a regular
+array&lt;/li&gt;
+&lt;li&gt;I could also make it so I could reference it like an array by index&lt;/li&gt;
+&lt;li&gt;Finally I could make a method to get the ID of a status by its name&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Basically I could create a class that I could reference by index,
+iterate over like an array in a &lt;strong&gt;foreach&lt;/strong&gt; loop, and attach methods to
+for working with a collection of statuses. At this point I had decided
+this was the course of action I wanted to take. To do this there are two
+interfaces in PHP you need to implement: &lt;strong&gt;ArrayAccess&lt;/strong&gt; and
+&lt;strong&gt;Iterator&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The first interface to implement is &lt;strong&gt;ArrayAccess&lt;/strong&gt;. This allows you to
+reference an instance of your class as an array. This means you can do
+something like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Active&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Inactive&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$id&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusCollection[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Notice how we can add to the object like an array, and we can reference
+by index just like an array. So how do we make a class to do this?
+Implement the &lt;strong&gt;ArrayAccess&lt;/strong&gt; interface. Let&amp;rsquo;s see how we would do that
+in our &lt;strong&gt;StatusCollection&lt;/strong&gt; class.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;implements&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ArrayAccess&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__construct&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statuses)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetExists&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetGet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset])&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetSet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(is_null($offset))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetUnset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;unset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;First and foremost refer to [&lt;a href=&#34;http://us2.php.net/manual/en/class.arrayaccess.php&#34;&gt;http://us2.php.net/manual/en/class.arrayaccess.php&lt;/a&gt;] as a reference to
+the &lt;strong&gt;ArrayAccess&lt;/strong&gt; interface. It dictates that your class needs to
+implement four methods: &lt;em&gt;offstExists()&lt;/em&gt;, &lt;em&gt;offsetGet()&lt;/em&gt;, &lt;em&gt;offsetSet()&lt;/em&gt;,
+and &lt;em&gt;offsetUnset&lt;/em&gt;. These methods are called when you perform array-like
+operations on your class instance variable.&lt;/p&gt;
+
+&lt;p&gt;Now we&amp;rsquo;d like to make it so we can easily iterate over our class
+instance variable much like any other array. Basically we want to be
+able to do this.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($statusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;option value=&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;gt;%s&amp;lt;/option&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;To do this we must implement the &lt;a href=&#34;http://php.net/manual/en/class.iterator.php&#34;&gt;&lt;strong&gt;Iterator&lt;/strong&gt; interface&lt;/a&gt;. This
+interface requires we implement five more methods: &lt;em&gt;current()&lt;/em&gt;, &lt;em&gt;key()&lt;/em&gt;,
+&lt;em&gt;next()&lt;/em&gt;, &lt;em&gt;rewind()&lt;/em&gt;, and &lt;em&gt;valid()&lt;/em&gt;. When you write code like above to
+iterate over an object that implements &lt;strong&gt;Iterator&lt;/strong&gt; these methods are
+called. The idea here is that we&amp;rsquo;ll keep an internal variable to track
+the current iterator position, so when a loop asks for another item we
+know which index to return. Here&amp;rsquo;s what that looks like.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;implements&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ArrayAccess&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Iterator&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__construct&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statuses)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;current&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;key&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;next&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetExists&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetGet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset])&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetSet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(is_null($offset))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetUnset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;unset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;rewind&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;valid&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Finally in my 3rd bullet point I said that I wanted a method to get the
+ID of a particular status by name. Here I will simply add a new method
+called &lt;em&gt;getIdByName()&lt;/em&gt; which will do a quick loop to find our status. If
+the ID can&amp;rsquo;t be located an exception is thrown.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;StatusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;implements&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ArrayAccess&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Iterator&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__construct&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statuses)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statuses;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;current&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;getIdByName&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($statusName)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;count($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$i][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusName)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$i][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Exception&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Status &amp;#39;{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$statusName&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}&amp;#39; not found&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;key&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;next&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetExists&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetGet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset])&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetSet&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(is_null($offset))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$value;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;offsetUnset&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($offset)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;unset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$offset]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;rewind&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;valid&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;isset($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;statuses&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;position&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Cool, so now let&amp;rsquo;s see a contrived example of how one might use this.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;id&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;statusId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;statusId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($statusCollection&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;option value=&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;gt;%s&amp;lt;/option&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$status[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;select&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;button&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;btnShowActive&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;id&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;btnShowActive&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;onclick&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;window.location=&amp;#39;/?statusId=&amp;lt;?= $statusCollection.getIdByStatus(&amp;#39;Active&amp;#39;) ?&amp;gt;&amp;#39;;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Show&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Active&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;button&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How I Deployed a PHP App via FTP Using Fabric and Git</title>
+      <link>http://adampresley.com/post/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git/</link>
+      <pubDate>Sat, 20 Apr 2013 20:58:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/how-i-deployed-a-php-app-via-ftp-using-fabric-and-git/</guid>
+      <description>&lt;p&gt;A project I&amp;rsquo;ve been working with for a bit now uses a popular hosting
+provider to host a PHP application I&amp;rsquo;m writing. My normal workflow with
+this project is to make changes, commit my code to my Git repository,
+push it to Github (a private account), then FTP the files manually to
+the hosting provider. This works fine most of the time though I&amp;rsquo;ll admit
+that there are moments when I forget a file or two. Of course the
+application blows up and I have to view my Git log to see what files I
+may have missed when uploading the code.&lt;/p&gt;
+
+&lt;!-- excerpt --&gt;
+
+&lt;p&gt;Today I decided to do something about this little problem. Having
+recently discovered Fabric, the deployment framework and library for
+Python, I started crafting a script to automate the tasks of deployment.
+There are a number of ways to approach this, but for now I decided that
+I have only a couple of simple requirements.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Need to upload files from my latest commit (HEAD)&lt;/li&gt;
+&lt;li&gt;A single command to do the upload&lt;/li&gt;
+&lt;li&gt;Upload is done via FTP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Based on these requirements I needed to learn two additional things: how
+to use FTP in Python, and how to get a log from Git in Python. I won&amp;rsquo;t
+go into great deal on how all this works but I will cover the basics.
+First I needed to be able to connect to an FTP server. Python has a
+library called &lt;a href=&#34;http://docs.python.org/2/library/ftplib.html&#34;&gt;ftplib&lt;/a&gt; which offers basic, fairly low-level FTP
+methods. Out of the gate the first method I write looks like this.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_connectToFTP&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to the server **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP(host&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ADDRESS,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;user&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_USER,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;passwd&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_PASSWORD)&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;As you can see the FTP class is simple enough to use. Provide an
+address, user name, and password and you are connected to an FTP server
+and are given an object to perform further tasks with. Naturally the
+next task would be to upload files, but before we can do that we have to
+know what we are uploading. This would be defined as one of the
+requirements listed above where I wanted to upload the files from my
+last commit.&lt;/p&gt;
+
+&lt;p&gt;To satisfy the requirement for uploading files from my last commit I
+installed the library &lt;a href=&#34;https://github.com/gitpython-developers/GitPython&#34;&gt;gitpython&lt;/a&gt;. GitPython, simply put, is a
+library used to allow your Python code to interact with Git
+repositories. Here I must admit that I had some struggles as some of the
+abstractions I failed to comprehend. As a result I had a hard time
+getting the results I wanted just using the pure library, so I ended up
+using their utility class that allows you to execute arbitrary Git
+commands on the command line and get the results back. This allowed me
+to get a list of files for a given commit hash.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_gitLatestFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to Git **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Git(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Repo(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;head&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;commit&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Head commit revision: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Message: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;message&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;execute([&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;git&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;diff-tree&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--no-commit-id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--name-only&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;-r&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;str(headCommit)])&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;files&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;split(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_filterForValidFiles(fileList&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;files)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_filterForValidFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(fileList):&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[f&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fileList&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;startswith((&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;components/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;www/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There are two methods here to get the results I want. The first is
+&lt;strong&gt;_gitLatestFiles()&lt;/strong&gt;. This method talks to my local Git repository and
+gets the HEAD commit entry. With it I have a commit hash that I can use
+to pull logs for. I then use the library&amp;rsquo;s &lt;strong&gt;execute()&lt;/strong&gt; method that
+allows me to run command line Git and store the results. In my case I
+wanted to run a &lt;em&gt;diff-tree&lt;/em&gt; and get only the names of the files modified
+for the specified commit hash. The result of the &lt;em&gt;diff-tree&lt;/em&gt; is a single
+string of the modified files, so I needed to split them into a list on a
+newline character.&lt;/p&gt;
+
+&lt;p&gt;The next method you&amp;rsquo;ll see is &lt;strong&gt;_filterForValidFiles()&lt;/strong&gt;. It is called
+by the &lt;strong&gt;_gitLatestFiles()&lt;/strong&gt; method. This piece of code ensures that
+the files modified are children of a specific set of directories. If
+they reside outside that directory I don&amp;rsquo;t want to deploy them.&lt;/p&gt;
+
+&lt;p&gt;The final step in this process is to put it all together. We need to
+connect to the FTP server, get a list of changed files from the HEAD
+revision in Git, then push those files to the server. Let&amp;rsquo;s see what
+that code looks like.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;__future__&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;with_statement&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fabric&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;os&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fabric.api&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fabric.colors&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;yellow,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;red&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftplib&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;git&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# SECTION: Constants&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;DATABASE&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;local&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;userName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+      &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ADDRESS&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;ftp.something.com&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_USER&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_PASSWORD&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ROOT_DIR&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;/appDirectory&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;REPO_ROOT&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;../&amp;quot;&lt;/span&gt;
+
+
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# SECTION: Private methods&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_connectToFTP&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to the server **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP(host&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_ADDRESS,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;user&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_USER,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;passwd&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;FTP_PASSWORD)&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_gitLatestFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Connecting to Git **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Git(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Repo(REPO_ROOT)&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;repo&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;head&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;commit&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Head commit revision: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Message: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;headCommit&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;message&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;g&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;execute([&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;git&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;diff-tree&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--no-commit-id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;--name-only&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;-r&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;str(headCommit)])&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;files&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;result&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;split(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_filterForValidFiles(fileList&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;files)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_filterForValidFiles&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(fileList):&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[f&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;fileList&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;startswith((&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;components/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;www/&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))]&lt;/span&gt;
+
+
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# SECTION: Actions&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;###############################################################################&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;uploadLatest&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;():&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;green(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;** Upload latest changes **&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_connectToFTP()&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;files&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;_gitLatestFiles()&lt;/span&gt;
+
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;files:&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;yellow(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Uploading file %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;split&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;os&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;split(f)&lt;/span&gt;
+
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;cwd(os&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;join(FTP_ROOT_DIR,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;split[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]))&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;storlines(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;STOR %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;split[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;open(os&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;join(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;../&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;f),&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;r&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;ftp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;quit()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The last method in the code, &lt;strong&gt;uploadLatest()&lt;/strong&gt; is the one that glues it
+all together. As mentioned before it first connects to the FTP server.
+Then it gets a list of files to upload from the latest Git commit. After
+this we iterate over the file names and split each of them into
+directory and file name. We do this so we can issues a CWD (current
+working directory) command to the FTP server, and have a file name to
+pass to the STOR FTP command.&lt;/p&gt;
+
+&lt;p&gt;The next steps actually change the directory on the FTP server to match
+the path of the changed file. From here we send the STOR command by
+calling the &lt;strong&gt;storlines&lt;/strong&gt; method on the FTP library. This method first
+takes the command to use, which is &lt;strong&gt;STOR&lt;/strong&gt; followed by the name of the
+file to upload. The second argument is an open file handle to the actual
+file to upload. In this case we are just using the built-in Python
+&lt;strong&gt;open()&lt;/strong&gt; method to open up the file in read mode. Finally when all is
+done we issue a QUIT command by calling the &lt;strong&gt;quit()&lt;/strong&gt; method.&lt;/p&gt;
+
+&lt;p&gt;All of this code is saved in my &lt;em&gt;/bin&lt;/em&gt; folder of the project in a file
+named &lt;em&gt;fabfile.py&lt;/em&gt;. To run this I open up my terminal and execute &lt;strong&gt;fab
+uploadLatest&lt;/strong&gt;. If you aren&amp;rsquo;t familiar with Fabric take a look at &lt;a href=&#34;http://docs.fabfile.org/en/1.6/&#34;&gt;the
+Fabric site&lt;/a&gt; and also
+&lt;a href=&#34;#post/2012/10/my-first-experience-with-fabric-and-amazon-ec2&#34;&gt;my previous blog entry&lt;/a&gt; on the subject.&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sorting a Complex Array of Products in PHP</title>
+      <link>http://adampresley.com/post/sorting-a-complex-array-of-products-in-php/</link>
+      <pubDate>Tue, 17 Nov 2009 04:39:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/sorting-a-complex-array-of-products-in-php/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve blogged twice recently about sorting an array of structures in
+ColdFusion, using both pure CF, and dipping into Groovy. This time we&amp;rsquo;ll
+look at how we can easily do the same task in PHP. In this post I will
+take the same problem, a complex array containing a structure (in PHP,
+an associative array), and sort it. The sort criteria in this case is
+that if the product IDs are the same, we compare the prices of the
+products and sort there. So we have a two-level sort: Product ID, then
+price.&lt;/p&gt;
+
+&lt;p&gt;To do this in PHP the method &lt;strong&gt;usort&lt;/strong&gt; will come in handy. The &lt;strong&gt;usort&lt;/strong&gt;
+method takes two parameters. The first parameter is the array to be
+sorted (passed by reference, so make sure you keep a copy if you need
+the original), and a function to compare two items.&lt;/p&gt;
+
+&lt;p&gt;The comparator function simply takes two items. It is up to us to
+compare them how we like, and return zero (0) for equal, one (1) for the
+first item being greater (or after) the second item, or negative one
+(-1) for the first item coming before the second item, or less than.
+Let&amp;rsquo;s take a look at how that function would work.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;comparator&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($a,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$a[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$a[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2)&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;As you can see, we compare item $a and item $b. If the the two product
+IDs are the same, we&amp;rsquo;ll compare prices. To use this is quite easy. You
+pass an array into the &lt;strong&gt;usort&lt;/strong&gt; method, and watch the magic happen.
+This is how that works.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;comparator&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($a,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$a[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$a[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2)&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$unsorted&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #3&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;6.95&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #4&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;6.75&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #1&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;10.95&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #2&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;11.95&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #3&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;5.95&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$sorted&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$unsorted;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;usort($sorted,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;comparator&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Notice how we create a copy of &lt;em&gt;$unsorted&lt;/em&gt; as a variable named
+&lt;em&gt;$sorted&lt;/em&gt; first. This is because the &lt;strong&gt;usort&lt;/strong&gt; method works by
+reference, and will modify the original array. So we need a copy first
+to preserver the original (unless of course you don&amp;rsquo;t care about the
+original).&lt;/p&gt;
+
+&lt;p&gt;And that is all! Below is the code sample in full. Cheers, and happy
+coding!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;comparator&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($a,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$a[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$a[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$b[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2)&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($price1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$price2)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($productId1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$productId2)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$unsorted&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #3&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;6.95&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #4&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;6.75&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #1&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;10.95&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #2&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;11.95&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Widget #3&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;5.95&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;discounted&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$sorted&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$unsorted;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;usort($sorted,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;comparator&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+
+&amp;lt;!DOCTYPE html PUBLIC &amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot; &amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&amp;gt;
+&amp;lt;html xmlns=&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+	&amp;lt;title&amp;gt;Sorting&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+	&amp;lt;h1&amp;gt;Sorting&amp;lt;/h1&amp;gt;
+
+	&amp;lt;strong&amp;gt;Unsorted:&amp;lt;/strong&amp;gt;
+	&amp;lt;ul&amp;gt;
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($unsorted&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$item)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;li&amp;gt;%s (%s) - %s&amp;lt;/li&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$item[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$item[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$item[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+		&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+	&amp;lt;/ul&amp;gt;
+
+	&amp;lt;strong&amp;gt;Sorted:&amp;lt;/strong&amp;gt;
+	&amp;lt;ul&amp;gt;
+		&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($sorted&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$item)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt;li&amp;gt;%s (%s) - %s&amp;lt;/li&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$item[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$item[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;productId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$item[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+		&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+	&amp;lt;/ul&amp;gt;
+
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Simple LRU Cache Class in PHP</title>
+      <link>http://adampresley.com/post/simple-lru-cache-class-in-php/</link>
+      <pubDate>Wed, 27 May 2009 12:58:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/simple-lru-cache-class-in-php/</guid>
+      <description>&lt;p&gt;In my ongoing effort to further enhance my PHP framework I started
+recently working on a caching mechanism. For the time being I am using
+the PEAR library&amp;rsquo;s &lt;a href=&#34;http://pear.php.net/package/Cache_Lite&#34;&gt;Cache_Lite&lt;/a&gt;
+(I&amp;rsquo;ve blogged on this before, so &lt;a href=&#34;#post/2007/05/caching-in-php-cache_lite&#34;&gt;check it out&lt;/a&gt;)
+to handle the details of persisting the cache data,
+locking, and all that fun jazz. Cache_Lite, however, is a pretty simple
+library and does not implement any particular algorithm regarding how
+much cache to keep, or what stays in cache and what goes. It offers an
+expiration mechanism, but that&amp;rsquo;s about it. So with that in mind I set off
+to learn about various caching and paging algorithms. They range, I
+found out, from simple to complex.&lt;/p&gt;
+
+&lt;p&gt;In this blog entry I will demonstrate the creation of a very simple LRU,
+or Least Recently Used, caching algorithm. I will provide downloads for
+PHP source code at the end of this entry.&lt;/p&gt;
+
+&lt;p&gt;First let&amp;rsquo;s talk about how the algorithm works. The concept behind LRU
+is that you have a finite set of &lt;em&gt;slots&lt;/em&gt; in some container. Our
+container will be an array for simplicity. The LRU algorithm works off
+the premise that you keep only the most recently used items in your
+container, and those that get accessed are moved to the top of the
+array. Adding a new item to the container will be put in at the top of
+the array, and all subsequent items are shifted down. Any item at the
+bottom of the array is dropped off from the container.&lt;/p&gt;
+
+&lt;p&gt;Items in the LRU array are going to be stored as a structure (array in
+PHP) consisting of a &lt;em&gt;key&lt;/em&gt; and &lt;em&gt;element&lt;/em&gt;, which we will call a &lt;em&gt;node&lt;/em&gt;.
+The &lt;em&gt;element&lt;/em&gt; is simply whatever data is to be stored. The &lt;em&gt;key&lt;/em&gt; is the
+identifier for the data element, and how we are able to insert and
+retrieve elements, or items, from the array.&lt;/p&gt;
+
+&lt;p&gt;There are two primary operations to supprt this: &lt;strong&gt;get&lt;/strong&gt; and &lt;strong&gt;put&lt;/strong&gt;.
+Let&amp;rsquo;s start with &lt;strong&gt;put&lt;/strong&gt; as it is the simplest in concept. The first
+thing the &lt;strong&gt;put&lt;/strong&gt; operation must do is &lt;em&gt;evict&lt;/em&gt; any element at the bottom
+of the array, then shift all of the elements above down one notch. So,
+for example, of you have an array of 5 slots, and you are adding a new
+element, you will remove the last item in the array (slot 4), then shift
+items in slots 0 through 3 down into slots 1 through 4. From here you
+then insert the new item into slot 0. Let&amp;rsquo;s take a look at how that
+works.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;put&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($key,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$element)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__evict&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__container&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__createNode&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($key,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$element);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__evict&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$index&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$newPosition&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;array_pop($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__container&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt; &lt;span style=&#34;color: #75715e&#34;&gt;// Drop off the element in the last slot.&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;array_unshift($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__container&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt; &lt;span style=&#34;color: #75715e&#34;&gt;// Shift every element down one, and insert blank at the top.&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__createNode&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($key,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$element)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;key&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$key,&lt;/span&gt;
+		&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;element&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$element&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Ok, that was easy enough. Now let&amp;rsquo;s talk about the &lt;strong&gt;get&lt;/strong&gt; operation.
+&lt;strong&gt;Get&lt;/strong&gt; starts with taking a single argument called &lt;em&gt;key&lt;/em&gt;. It then
+attempts to find the correct node by looping over the container array,
+retrieving a node each iteration, then comparing the node&amp;rsquo;s key to the
+argument key. If we have a match we want to MOVE this node to the
+&lt;strong&gt;top&lt;/strong&gt; of the array since it is the most recently used node. Once this
+is done we return the node. Here&amp;rsquo;s what that looks like.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($key)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$index&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$node&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($index&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$index&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__maxElements&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$index&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;$node&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__container&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[$index];&lt;/span&gt;
+
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(is_array($node))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($node[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;key&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;===&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$key)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__moveToHead&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($index);&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__stats&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;cacheHits&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+				&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$node[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;element&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__stats&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;cacheMisses&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;__moveToHead&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($index)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($index&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$element&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;array_splice($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__container&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$index,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;array_unshift($this&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;__container&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$element[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Using this class is pretty easy, so here is a simple test that provides
+a series of data items, and a comma-delimited pattern of indexes to
+those data items. The code then iterates over this list, simulating some
+part of a program that is being asked for some data, and it attempts to
+get the data from the cache. If it does not have it the code then puts
+the data into the cache.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;require_once&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;LRUCache.php&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$lru&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;LRUCache&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$db&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;This is item 0&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;This is item 1&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;This is item 2&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;This is item 3&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;This is item 4&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;This is item 5&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$testPattern&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;0,2,4,1,0,5,3,1,5,3,0,1,5,2,5,1,4&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;// Implement test pattern.&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(explode(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;,&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$testPattern)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$index)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;$item&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$lru&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($index);&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($item&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;!==&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Cache hit. - %s&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$item);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Cache miss for key %s. Adding %s to cache.&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$index,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$db[$index]);&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;$lru&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;put&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($index,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$db[$index]);&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$stats&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$lru&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;getCacheStats&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;();&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Hits: %s&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$stats[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;cacheHits&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;printf(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Misses: %s&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$stats[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;cacheMisses&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]);&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Go ahead, mess with the test pattern and see how many cache hits vs
+cache misses there are. Kinda neat.&lt;/p&gt;
+
+&lt;p&gt;Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Useful Date/Time Class for PHP</title>
+      <link>http://adampresley.com/post/useful-datetime-class-for-php/</link>
+      <pubDate>Sun, 01 Feb 2009 18:56:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/useful-datetime-class-for-php/</guid>
+      <description>&lt;p&gt;As programmers we should always strive to better ourselves by improving
+our craft by taking pride that what we build is not only useful, but can
+continue to be useful for a long time to come. Part of this strategy
+involves writing code that exhibits resuse, high cohesion, and loose
+coupling. Therefore every developer should, over time, develop, or at
+least acquire, sets of tools and code to help achive this goal.&lt;/p&gt;
+
+&lt;p&gt;Concepts like frameworks and design patterns help us achieve this. I
+have been working a few contract projects in &lt;a href=&#34;http://www.php.net&#34;&gt;PHP&lt;/a&gt; lately and have had
+many opportunities to tweak, fine tune, and improve my home-brewed PHP
+framework. One of these days I will share this work as a complete
+framework for download and use, but for now it will simply have to
+suffice to drop small pieces to the public.&lt;/p&gt;
+
+&lt;p&gt;One common task a developer will find themselves doing is manipulating
+dates. This could be for the purposes of display, SQL queries, or a
+plethora of other needs, but regardless of the reason having a useful
+set of classes and functions for manipulating dates and times is handy.&lt;/p&gt;
+
+&lt;p&gt;In my framework I have built a simple class to do the most common date
+tasks that I find myself repeating over and over. In my case I have
+opted for a class that implements all static methods, so this is not
+meant to be instantiated. And it is also only intended for PHP 5.2 and
+higher.&lt;/p&gt;
+
+&lt;p&gt;Most the of the functions are pretty simple to follow, and there is
+ample documentation attached. A couple of items worth noting are the
+&lt;a href=&#34;http://www.php.net/manual/en/function.date-parse.php&#34;&gt;date_parse&lt;/a&gt;
+and the &lt;a href=&#34;http://www.php.net/manual/en/function.mktime.php&#34;&gt;mktime&lt;/a&gt;
+functions. In PHP, the &lt;a href=&#34;http://www.php.net/manual/en/function.date.php&#34;&gt;date&lt;/a&gt;
+function is what allows us to format a date into whatever string we
+desire to craft. The &lt;strong&gt;mktime&lt;/strong&gt; function allows us to specify the values
+for each part of a date and time string, such as the day, month, year,
+hour, and so on.&lt;/p&gt;
+
+&lt;p&gt;What is usually tricky is making functions to format a date from various
+sources. For example, a SQL date string usually looks like &lt;em&gt;2009-02-01&lt;/em&gt;,
+where a user in the United States might enter a value on a form like
+&lt;em&gt;2/1/2009&lt;/em&gt;. This is where the &lt;strong&gt;date_parse&lt;/strong&gt; function comes in handy.
+It is smart enough to take these various types of input and split them
+into their appropriate parts. The end result is an array of its parts.
+For example.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;$date = &amp;quot;02/01/2009&amp;quot;;
+$split = date_parse($date);
+
+// $split[&amp;quot;month&amp;quot;] = &amp;quot;02&amp;quot;
+// $split[&amp;quot;day&amp;quot;] = &amp;quot;01&amp;quot;
+// $split[&amp;quot;year&amp;quot;] = &amp;quot;2009&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;As we can see the date has been split up into each of its parts. We can
+then take these parts and pass them to &lt;strong&gt;mktime&lt;/strong&gt; to build the value
+necessay to pass to the &lt;strong&gt;date&lt;/strong&gt; function for formatting.&lt;/p&gt;
+
+&lt;p&gt;I have linked to a download containing my date/time class, as well as
+the documentation for it. Enjoy, and happy coding!&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Link no longer available&lt;/em&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Parsing PHP-style Placeholders for SQL Scripts</title>
+      <link>http://adampresley.com/post/parsing-php-style-placeholders-for-sql-scripts/</link>
+      <pubDate>Thu, 04 Sep 2008 19:12:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/parsing-php-style-placeholders-for-sql-scripts/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;ve ever used PHP, you&amp;rsquo;ve probably used, or at least seen, the
+&lt;a href=&#34;http://us2.php.net/manual/en/function.printf.php&#34;&gt;PRINTF&lt;/a&gt; and/or
+&lt;a href=&#34;http://us2.php.net/manual/en/function.sprintf.php&#34;&gt;SPRINTF&lt;/a&gt; functions. These oldie, but goodie,
+functions are stolen&amp;hellip; err&amp;hellip; borrowed from the old &lt;a href=&#34;http://en.wikipedia.org/wiki/C_language&#34;&gt;C language&lt;/a&gt;
+world. Both functions support the abililty to have placeholders, which
+when evaluated, are replaced with the value in a comma-delimited list in
+the appropriate position. For example:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;printf(&amp;quot;My name is %s. I am %i years old&amp;quot;, $name, $age);
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This code, given that &lt;strong&gt;$name&lt;/strong&gt; equals &amp;ldquo;Adam&amp;rdquo;, and &lt;strong&gt;$age&lt;/strong&gt; equals
+&amp;ldquo;30&amp;rdquo; will output &amp;ldquo;My name is Adam. I am 30 years old&amp;rdquo;. A nifty feature.&lt;/p&gt;
+
+&lt;p&gt;Below is a bit of code that provides a class that will take a given
+input SQL string, an array of arguments, and spit out a parsed SQL
+string. An example of usage would look like so:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;$userId = 30;$parser = new SqlScriptParser(&amp;quot;SELECT name, email, active FROM users WHERE userId=%i&amp;quot;, array($userId));$result = $parser-&amp;gt;Parse();
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The resulting string would look like:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;SELECT name, email, active FROM users WHERE userId=30&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The code:
+&lt;a href=&#34;http://www.adampresley.com/downloads/code/php/sqlScriptParser.zip&#34;&gt;http://www.adampresley.com/downloads/code/php/sqlScriptParser.zip&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Note: This ZIP file got lost over time.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My First Plugin</title>
+      <link>http://adampresley.com/post/my-first-plugin/</link>
+      <pubDate>Tue, 16 Oct 2007 04:57:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/my-first-plugin/</guid>
+      <description>&lt;p&gt;Yes, ladies and gentlemen, I have started learning how to write
+WordPress plugins. My first plugin is one that removes the word
+&amp;ldquo;Private: &amp;ldquo; from the beginning of blog and page titles (when they are
+saved with a status of private).&lt;/p&gt;
+
+&lt;p&gt;The way this works is by creating a function that takes one argument. I
+then used a regular expression to remove the offending words. The regex
+I used was */\^(private:\s*)/i*and then I simply replaced any match
+with a blank string, removing it from the source text. And in WordPress
+there are two types of plugins: Action hooks, and Filter hooks.&lt;/p&gt;
+
+&lt;p&gt;In this case I used a filter hook, since filter hooks alter text coming
+or going from the WordPress database. So to make my filter work you have
+to use the &lt;em&gt;add_filter&lt;/em&gt; function to register my function to handle the
+filter hook &amp;ldquo;&lt;em&gt;the_title&lt;/em&gt;&amp;rdquo;. This hook alters the title of posts and
+pages before they go out to the browser. Now, here&amp;rsquo;s the code.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;/*&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Plugin Name: Hide &amp;quot;Private&amp;quot; In Title&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Plugin URI: http://blog.adampresley.com/?page_id=124&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Description: Removes the word &amp;quot;private:&amp;quot; from the beginning of blog entry and page titles.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Version: 1.0&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   author: &amp;quot;Adam Presley&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Author URI: http://www.adampresley.com&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   Copyright 2007  Adam Presley  (email : psykoprogrammer@yahoo.com)&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   This program is free software; you can redistribute it and/or modify&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   it under the terms of the GNU General Public License as published by&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   the Free Software Foundation; either version 2 of the License, or&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   (at your option) any later version.&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   This program is distributed in the hope that it will be useful,&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   GNU General Public License for more details.&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;   You should have received a copy of the GNU General Public License&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   along with this program; if not, write to the Free Software&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;*/&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;//--------------------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Name: filter_hidePrivateInTitle&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Auth: Adam Presley&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Desc: Removes the word &amp;quot;private:&amp;quot; from blog and page titles.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;//--------------------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;filter_hidePrivateInTitle&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($content)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;preg_replace(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;/^(private:\s*)/i&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$content);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;//---------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Add the hook to WordPress.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;//---------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #a6e22e&#34;&gt;add_filter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;the_title&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;filter_hidePrivateInTitle&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+</description>
+    </item>
+    
+    <item>
+      <title>&#39;Caching in PHP: Cache_Lite&#39;</title>
+      <link>http://adampresley.com/post/caching-in-php-cache_lite/</link>
+      <pubDate>Wed, 30 May 2007 11:28:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/caching-in-php-cache_lite/</guid>
+      <description>&lt;p&gt;For many web application developers the concept of caching is foreign.
+Most of us build our pages, query our databases, and spit out the
+results. This is usually sufficient as the content is entirely dynamic.
+There are times, however, when the data, although not static, doesn&amp;rsquo;t
+change very frequently, and can benefit from caching.&lt;/p&gt;
+
+&lt;p&gt;Caching can come in many complex flavors, but in this blog I will talk
+about a &lt;strong&gt;very simple&lt;/strong&gt; caching mechanism accomplished by using the PEAR
+library&amp;rsquo;s Cache_Lite class. Cache_Lite allows you to cache some
+specific piece of data, or page content, or whatever, and retrieve it
+quickly for reuse.&lt;/p&gt;
+
+&lt;p&gt;As an example let us say you have a database table with all of your
+customers and information about them. This table is not likely to change
+&lt;strong&gt;TOO&lt;/strong&gt; quickly, so perhaps a web page that allows you to search and
+manage these customers would benefit from caching. Let us also say that
+this table is named &lt;em&gt;customers&lt;/em&gt;, and you have one on 2 different
+database servers, because you have several clusters. Lets also assume
+you have an XML file that is the &lt;strong&gt;master&lt;/strong&gt; list of all customers across
+all clusters.&lt;/p&gt;
+
+&lt;p&gt;If you are building a web page that can search for customer by providing
+information in a search criteria, you would have to read the XML file,
+and then go to the customer table for each cluster to find the
+information you want. Well, perhaps there is a better way. In this
+example I am using an imaginary XML file which would look like this:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;customer&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;customername&amp;gt;&lt;/span&gt;customerA&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/customerName&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;server&amp;gt;&lt;/span&gt;DB100&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/server&amp;gt;&lt;/span&gt;
+   &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;active&amp;gt;&lt;/span&gt;1&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/active&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;/customer&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;With this information we can then go the customer table on the database
+server that each customer is on to retrieve additional information.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;require_once&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Cache/Lite.php&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheId&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;UniqueCacheId&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheXmlGroup&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;xmlGroup&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheCustomerGroup&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;customerGroup&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheOptions&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;array&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+   &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lifeTime&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3600&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;
+   &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;automaticSerialization&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$cache&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Cache_Lite&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($cacheOptions);&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;//--------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Read the XML master customer file. If the data is already in the&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// cache use that.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;//--------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($cacheData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cache&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($cacheId,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheXmlGroup))&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;$xmlCustomerList&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheData;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;$xmlCustomerList&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;simplexml_load_file(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;customerXmlFile.xml&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;);&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cache&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;save&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($xmlCustomerList,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheId,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheXmlGroup);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;//----------------------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Get the detail information from the database server/cluster this customer is on.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// Assume we are already connected to each cluster database, and get all the&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// data. We&amp;#39;ll pretend we have an array of mysql connections. If this data&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;// is already cached, use that.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;//----------------------------------------------------------------------------&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($cacheData&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cache&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($cacheId,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheCustomerGroup))&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;$customerArray&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheData;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($connectionArray&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$connection)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;$qry&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;mysql_query(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SELECT * FROM customers&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$connection);&lt;/span&gt;
+
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;($row&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;mysql_fetch_object($qry))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$customerArray[$row&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;customerName&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;additionalInfo1&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$row&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;additionalInfo1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+         &lt;span style=&#34;color: #f8f8f2&#34;&gt;$customerArray[$row&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;customerName&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;additionalInfo2&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$row&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;additionalInfo2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cache&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;save&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;($customerArray,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheId,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$cacheCustomerGroup);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In this example we are loading two pieces of data. The first is an XML
+file with a master customer list, containing all customers across
+multiple clusters. Each cluster has a database server with a customer
+table that has detailed information about customer on IT&amp;rsquo;S cluster. With
+this data retrieved you can then do just about anything with that data.
+Search on it&amp;hellip; Manipulate it&amp;hellip; Data mining&amp;hellip; whatever.&lt;/p&gt;
+
+&lt;p&gt;The COOL thing about this is the caching. While the cache file is still
+valid the XML and customer information data is pulled from the cache
+file instead of reading the XML and querying the database EACH time.
+This is a significant speed boost.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

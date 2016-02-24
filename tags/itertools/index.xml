@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Itertools on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/itertools/</link>
+    <description>Recent content in Itertools on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 14 Feb 2013 07:52:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/itertools/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Python itertools - Display repeating permutations of a number set</title>
+      <link>http://adampresley.com/post/python-itertools-display-repeating-permutations-of-a-number-set/</link>
+      <pubDate>Thu, 14 Feb 2013 07:52:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/python-itertools-display-repeating-permutations-of-a-number-set/</guid>
+      <description>&lt;p&gt;Back in July of 2010 I blogged about &lt;a href=&#34;#post/2010/07/display-repeating-permutations-of-a-number-set-in-java&#34;&gt;displaying a set of repeating
+permutations of a number set&lt;/a&gt;.
+In this blog post I explained how my daughter had a kid&amp;rsquo;s &amp;ldquo;spy safe&amp;rdquo; that
+had four buttons on it that could be used to enter a passcode. At the time I
+crafted a bit of Java code to display all possible combinations that could be
+entered to unlock and open the safe.&lt;/p&gt;
+
+&lt;!-- excerpt --&gt;
+
+&lt;p&gt;Now in my quest to explore the Python &lt;strong&gt;itertools&lt;/strong&gt; module I wanted to
+try this exercise again. Turns out that Python&amp;rsquo;s &lt;strong&gt;itertools&lt;/strong&gt; module
+makes this easy with a method called &lt;a href=&#34;http://docs.python.org/2/library/itertools.html#itertools.product&#34;&gt;product()&lt;/a&gt;. A product &lt;a href=&#34;http://en.wikipedia.org/wiki/Cartesian_product&#34;&gt;is
+defined as&lt;/a&gt; &lt;em&gt;&amp;rdquo;&amp;hellip;a mathematical operation which returns a set (or
+product set) from multiple sets&amp;rdquo;&lt;/em&gt;. To do this the &lt;strong&gt;product()&lt;/strong&gt; method
+takes an argument that is an iterable and a range. Range in this case
+indicates how many time to repeat the product set. So in our example,
+since you have to enter in 4 numbers for a passcode we would repeat the
+product four times.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;itertools&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;combinations_with_replacement,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;product&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# Available numbers are 1 - 4&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;availableNumbers&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;range(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# Enumerate over a product of the available number range.&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;i,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;enumerate(product(availableNumbers,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;repeat&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)):&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Combination #%s: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(i,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;s)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This gives us an output that looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;Combination #0: (1, 1, 1, 1)
+Combination #1: (1, 1, 1, 2)
+Combination #2: (1, 1, 1, 3)
+Combination #3: (1, 1, 1, 4)
+Combination #4: (1, 1, 2, 1)
+Combination #5: (1, 1, 2, 2)
+Combination #6: (1, 1, 2, 3)
+Combination #7: (1, 1, 2, 4)
+Combination #8: (1, 1, 3, 1)
+Combination #9: (1, 1, 3, 2)
+Combination #10: (1, 1, 3, 3)
+Combination #11: (1, 1, 3, 4)
+Combination #12: (1, 1, 4, 1)
+Combination #13: (1, 1, 4, 2)
+Combination #14: (1, 1, 4, 3)
+Combination #15: (1, 1, 4, 4)
+Combination #16: (1, 2, 1, 1)
+Combination #17: (1, 2, 1, 2)
+Combination #18: (1, 2, 1, 3)
+Combination #19: (1, 2, 1, 4)
+Combination #20: (1, 2, 2, 1)
+Combination #21: (1, 2, 2, 2)
+Combination #22: (1, 2, 2, 3)
+Combination #23: (1, 2, 2, 4)
+Combination #24: (1, 2, 3, 1)
+Combination #25: (1, 2, 3, 2)
+Combination #26: (1, 2, 3, 3)
+Combination #27: (1, 2, 3, 4)
+Combination #28: (1, 2, 4, 1)
+Combination #29: (1, 2, 4, 2)
+Combination #30: (1, 2, 4, 3)
+Combination #31: (1, 2, 4, 4)
+Combination #32: (1, 3, 1, 1)
+Combination #33: (1, 3, 1, 2)
+Combination #34: (1, 3, 1, 3)
+Combination #35: (1, 3, 1, 4)
+Combination #36: (1, 3, 2, 1)
+Combination #37: (1, 3, 2, 2)
+Combination #38: (1, 3, 2, 3)
+Combination #39: (1, 3, 2, 4)
+Combination #40: (1, 3, 3, 1)
+Combination #41: (1, 3, 3, 2)
+Combination #42: (1, 3, 3, 3)
+Combination #43: (1, 3, 3, 4)
+Combination #44: (1, 3, 4, 1)
+Combination #45: (1, 3, 4, 2)
+Combination #46: (1, 3, 4, 3)
+Combination #47: (1, 3, 4, 4)
+Combination #48: (1, 4, 1, 1)
+Combination #49: (1, 4, 1, 2)
+Combination #50: (1, 4, 1, 3)
+Combination #51: (1, 4, 1, 4)
+Combination #52: (1, 4, 2, 1)
+Combination #53: (1, 4, 2, 2)
+Combination #54: (1, 4, 2, 3)
+Combination #55: (1, 4, 2, 4)
+Combination #56: (1, 4, 3, 1)
+Combination #57: (1, 4, 3, 2)
+Combination #58: (1, 4, 3, 3)
+Combination #59: (1, 4, 3, 4)
+Combination #60: (1, 4, 4, 1)
+Combination #61: (1, 4, 4, 2)
+Combination #62: (1, 4, 4, 3)
+Combination #63: (1, 4, 4, 4)
+Combination #64: (2, 1, 1, 1)
+Combination #65: (2, 1, 1, 2)
+Combination #66: (2, 1, 1, 3)
+Combination #67: (2, 1, 1, 4)
+Combination #68: (2, 1, 2, 1)
+Combination #69: (2, 1, 2, 2)
+Combination #70: (2, 1, 2, 3)
+Combination #71: (2, 1, 2, 4)
+Combination #72: (2, 1, 3, 1)
+Combination #73: (2, 1, 3, 2)
+Combination #74: (2, 1, 3, 3)
+Combination #75: (2, 1, 3, 4)
+Combination #76: (2, 1, 4, 1)
+Combination #77: (2, 1, 4, 2)
+Combination #78: (2, 1, 4, 3)
+Combination #79: (2, 1, 4, 4)
+Combination #80: (2, 2, 1, 1)
+Combination #81: (2, 2, 1, 2)
+Combination #82: (2, 2, 1, 3)
+Combination #83: (2, 2, 1, 4)
+Combination #84: (2, 2, 2, 1)
+Combination #85: (2, 2, 2, 2)
+Combination #86: (2, 2, 2, 3)
+Combination #87: (2, 2, 2, 4)
+Combination #88: (2, 2, 3, 1)
+Combination #89: (2, 2, 3, 2)
+Combination #90: (2, 2, 3, 3)
+Combination #91: (2, 2, 3, 4)
+Combination #92: (2, 2, 4, 1)
+Combination #93: (2, 2, 4, 2)
+Combination #94: (2, 2, 4, 3)
+Combination #95: (2, 2, 4, 4)
+Combination #96: (2, 3, 1, 1)
+Combination #97: (2, 3, 1, 2)
+Combination #98: (2, 3, 1, 3)
+Combination #99: (2, 3, 1, 4)
+Combination #100: (2, 3, 2, 1)
+Combination #101: (2, 3, 2, 2)
+Combination #102: (2, 3, 2, 3)
+Combination #103: (2, 3, 2, 4)
+Combination #104: (2, 3, 3, 1)
+Combination #105: (2, 3, 3, 2)
+Combination #106: (2, 3, 3, 3)
+Combination #107: (2, 3, 3, 4)
+Combination #108: (2, 3, 4, 1)
+Combination #109: (2, 3, 4, 2)
+Combination #110: (2, 3, 4, 3)
+Combination #111: (2, 3, 4, 4)
+Combination #112: (2, 4, 1, 1)
+Combination #113: (2, 4, 1, 2)
+Combination #114: (2, 4, 1, 3)
+Combination #115: (2, 4, 1, 4)
+Combination #116: (2, 4, 2, 1)
+Combination #117: (2, 4, 2, 2)
+Combination #118: (2, 4, 2, 3)
+Combination #119: (2, 4, 2, 4)
+Combination #120: (2, 4, 3, 1)
+Combination #121: (2, 4, 3, 2)
+Combination #122: (2, 4, 3, 3)
+Combination #123: (2, 4, 3, 4)
+Combination #124: (2, 4, 4, 1)
+Combination #125: (2, 4, 4, 2)
+Combination #126: (2, 4, 4, 3)
+Combination #127: (2, 4, 4, 4)
+Combination #128: (3, 1, 1, 1)
+Combination #129: (3, 1, 1, 2)
+Combination #130: (3, 1, 1, 3)
+Combination #131: (3, 1, 1, 4)
+Combination #132: (3, 1, 2, 1)
+Combination #133: (3, 1, 2, 2)
+Combination #134: (3, 1, 2, 3)
+Combination #135: (3, 1, 2, 4)
+Combination #136: (3, 1, 3, 1)
+Combination #137: (3, 1, 3, 2)
+Combination #138: (3, 1, 3, 3)
+Combination #139: (3, 1, 3, 4)
+Combination #140: (3, 1, 4, 1)
+Combination #141: (3, 1, 4, 2)
+Combination #142: (3, 1, 4, 3)
+Combination #143: (3, 1, 4, 4)
+Combination #144: (3, 2, 1, 1)
+Combination #145: (3, 2, 1, 2)
+Combination #146: (3, 2, 1, 3)
+Combination #147: (3, 2, 1, 4)
+Combination #148: (3, 2, 2, 1)
+Combination #149: (3, 2, 2, 2)
+Combination #150: (3, 2, 2, 3)
+Combination #151: (3, 2, 2, 4)
+Combination #152: (3, 2, 3, 1)
+Combination #153: (3, 2, 3, 2)
+Combination #154: (3, 2, 3, 3)
+Combination #155: (3, 2, 3, 4)
+Combination #156: (3, 2, 4, 1)
+Combination #157: (3, 2, 4, 2)
+Combination #158: (3, 2, 4, 3)
+Combination #159: (3, 2, 4, 4)
+Combination #160: (3, 3, 1, 1)
+Combination #161: (3, 3, 1, 2)
+Combination #162: (3, 3, 1, 3)
+Combination #163: (3, 3, 1, 4)
+Combination #164: (3, 3, 2, 1)
+Combination #165: (3, 3, 2, 2)
+Combination #166: (3, 3, 2, 3)
+Combination #167: (3, 3, 2, 4)
+Combination #168: (3, 3, 3, 1)
+Combination #169: (3, 3, 3, 2)
+Combination #170: (3, 3, 3, 3)
+Combination #171: (3, 3, 3, 4)
+Combination #172: (3, 3, 4, 1)
+Combination #173: (3, 3, 4, 2)
+Combination #174: (3, 3, 4, 3)
+Combination #175: (3, 3, 4, 4)
+Combination #176: (3, 4, 1, 1)
+Combination #177: (3, 4, 1, 2)
+Combination #178: (3, 4, 1, 3)
+Combination #179: (3, 4, 1, 4)
+Combination #180: (3, 4, 2, 1)
+Combination #181: (3, 4, 2, 2)
+Combination #182: (3, 4, 2, 3)
+Combination #183: (3, 4, 2, 4)
+Combination #184: (3, 4, 3, 1)
+Combination #185: (3, 4, 3, 2)
+Combination #186: (3, 4, 3, 3)
+Combination #187: (3, 4, 3, 4)
+Combination #188: (3, 4, 4, 1)
+Combination #189: (3, 4, 4, 2)
+Combination #190: (3, 4, 4, 3)
+Combination #191: (3, 4, 4, 4)
+Combination #192: (4, 1, 1, 1)
+Combination #193: (4, 1, 1, 2)
+Combination #194: (4, 1, 1, 3)
+Combination #195: (4, 1, 1, 4)
+Combination #196: (4, 1, 2, 1)
+Combination #197: (4, 1, 2, 2)
+Combination #198: (4, 1, 2, 3)
+Combination #199: (4, 1, 2, 4)
+Combination #200: (4, 1, 3, 1)
+Combination #201: (4, 1, 3, 2)
+Combination #202: (4, 1, 3, 3)
+Combination #203: (4, 1, 3, 4)
+Combination #204: (4, 1, 4, 1)
+Combination #205: (4, 1, 4, 2)
+Combination #206: (4, 1, 4, 3)
+Combination #207: (4, 1, 4, 4)
+Combination #208: (4, 2, 1, 1)
+Combination #209: (4, 2, 1, 2)
+Combination #210: (4, 2, 1, 3)
+Combination #211: (4, 2, 1, 4)
+Combination #212: (4, 2, 2, 1)
+Combination #213: (4, 2, 2, 2)
+Combination #214: (4, 2, 2, 3)
+Combination #215: (4, 2, 2, 4)
+Combination #216: (4, 2, 3, 1)
+Combination #217: (4, 2, 3, 2)
+Combination #218: (4, 2, 3, 3)
+Combination #219: (4, 2, 3, 4)
+Combination #220: (4, 2, 4, 1)
+Combination #221: (4, 2, 4, 2)
+Combination #222: (4, 2, 4, 3)
+Combination #223: (4, 2, 4, 4)
+Combination #224: (4, 3, 1, 1)
+Combination #225: (4, 3, 1, 2)
+Combination #226: (4, 3, 1, 3)
+Combination #227: (4, 3, 1, 4)
+Combination #228: (4, 3, 2, 1)
+Combination #229: (4, 3, 2, 2)
+Combination #230: (4, 3, 2, 3)
+Combination #231: (4, 3, 2, 4)
+Combination #232: (4, 3, 3, 1)
+Combination #233: (4, 3, 3, 2)
+Combination #234: (4, 3, 3, 3)
+Combination #235: (4, 3, 3, 4)
+Combination #236: (4, 3, 4, 1)
+Combination #237: (4, 3, 4, 2)
+Combination #238: (4, 3, 4, 3)
+Combination #239: (4, 3, 4, 4)
+Combination #240: (4, 4, 1, 1)
+Combination #241: (4, 4, 1, 2)
+Combination #242: (4, 4, 1, 3)
+Combination #243: (4, 4, 1, 4)
+Combination #244: (4, 4, 2, 1)
+Combination #245: (4, 4, 2, 2)
+Combination #246: (4, 4, 2, 3)
+Combination #247: (4, 4, 2, 4)
+Combination #248: (4, 4, 3, 1)
+Combination #249: (4, 4, 3, 2)
+Combination #250: (4, 4, 3, 3)
+Combination #251: (4, 4, 3, 4)
+Combination #252: (4, 4, 4, 1)
+Combination #253: (4, 4, 4, 2)
+Combination #254: (4, 4, 4, 3)
+Combination #255: (4, 4, 4, 4)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Python made this super easy, and I &lt;em&gt;almost&lt;/em&gt; feel guilty even taking the
+time to blog about this when I didn&amp;rsquo;t have to do any real work to make
+it happen! Just the same, I&amp;rsquo;ll still sign off with Happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Python itertools - Filtering items</title>
+      <link>http://adampresley.com/post/python-itertools-filtering-items/</link>
+      <pubDate>Tue, 12 Feb 2013 13:32:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/python-itertools-filtering-items/</guid>
+      <description>&lt;p&gt;Continuing my exploration of the &lt;strong&gt;itertools&lt;/strong&gt; module in Python I wanted
+to look at the &lt;strong&gt;ifilter()&lt;/strong&gt; method. &lt;strong&gt;ifilter()&lt;/strong&gt; is a method that
+returns an iterator of items that return true from a test function (or
+lambda expression). In this sample I have an array of products. I want
+to get a list of products that have inventory in stock and are allowed
+to be drop-shipped.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;json&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;itertools&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ifilter&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;products&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-BLU15&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Blue&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;large&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;125&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;dropship&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;25.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-BLU13&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Blue&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;small&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;105&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;20&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;dropship&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;23.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-RED15&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Red&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;large&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;145&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;20&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;26.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-RED13&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Red&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;small&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;25&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;75&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;20.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-GRN15&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Green&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;large&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;102&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;dropship&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;21.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-GRN13&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Green&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;small&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;dropship&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;21.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-PUR15&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Purple&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;large&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;25&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;60&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;27.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+   &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;SHIRT-PUR13&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;category&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;T-Shirt&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;color&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Purple&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;size&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;small&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;backorder&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;tostore&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;26.99&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# Give me all shirts that are in stock and allow drop-ship&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;matches&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[item&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;item&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ifilter(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;lambda&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;instock&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;dropship&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;shipTypes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;products)]&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;matches:&lt;/span&gt;
+   &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Item ID %s is in stock and available for drop-ship&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;i[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Much like most Python list and array manipulation methods I&amp;rsquo;m using a list comprehension here. The cool part is the call to &lt;strong&gt;ifilter()&lt;/strong&gt;. The first argument is a lambda expression that checks the current item to see if we have a value greater than zero for &lt;em&gt;instock&lt;/em&gt;, and if
+&lt;em&gt;dropship&lt;/em&gt; is an item in the &lt;em&gt;shipTypes&lt;/em&gt; array. The end result is an array of items that match, and I loop over that to show what&amp;rsquo;s
+available.&lt;/p&gt;
+
+&lt;p&gt;The more I use Python&amp;rsquo;s list comprehensions and the &lt;strong&gt;itertools&lt;/strong&gt; module the more I find I like it! Cheers, and happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Python itertools - Grouping an array by key</title>
+      <link>http://adampresley.com/post/python-itertools-grouping-an-array-by-key/</link>
+      <pubDate>Mon, 11 Feb 2013 23:13:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/python-itertools-grouping-an-array-by-key/</guid>
+      <description>&lt;p&gt;Have you ever had a flat dataset and you needed a portion of the data
+grouped into a sub-array? I came across such a need this weekend and
+thought I&amp;rsquo;d share my experience. In this code sample we&amp;rsquo;ll see how to
+take an array of dictionaries (similar to what might come out of a
+database), sort it, then perform a grouping. This data is a list of
+people and their phone numbers. The trick here is that each person can
+have one or more phone numbers of different types. For example Jessica
+Alba has a home, work and cell phone number. What I want to end up with
+a a single array entry for each person, with a sub-array of all their
+phone numbers. First let&amp;rsquo;s start with the code.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;itertools&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;groupby&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;people&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Adam&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Presley&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Home Phone&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;555-7844&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Jessica&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Alba&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Home Phone&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;555-7833&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Adam&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Presley&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Work Phone&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;555-1122&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Bob&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Hope&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Home Phone&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;555-9987&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Jessica&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Alba&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Cell Phone&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;555-0915&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;},&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Jessica&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Alba&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Work Phone&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;555-4821&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;people&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;sorted(people,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;key&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;lambda&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;])&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;groupedResult&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[]&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;key,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;person&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;groupby(people,&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;lambda&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]):&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;row&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;next(person)&lt;/span&gt;
+
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;newRow&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;dict([(k,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;v)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;row&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;items()&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;k&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)])&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;newRow[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumbers&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;row[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;row[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]}]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ph[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ph[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ph&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;person]&lt;/span&gt;
+
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;groupedResult&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;append(newRow)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;person&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;groupedResult:&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;%s %s:&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(person[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;firstName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;person[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;lastName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;])&lt;/span&gt;
+
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;phoneNumber&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;person[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumbers&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]:&lt;/span&gt;
+     &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;%s: %s&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(phoneNumber[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;phoneNumber[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;From the beginning you will see the array of dictionaries as I described above. There are multiple records for each person who has more than one phone number. The first thing I want to do with this array is to sort it, since our group method will need them sorted. This is accomplished using the &lt;strong&gt;sorted()&lt;/strong&gt; method. The first argument is the array to sort, and the &lt;em&gt;key&lt;/em&gt; argument is a function, or a lambda expression in this case that specifies what key to use in the sorting. In our case we are
+going to sort by first name.&lt;/p&gt;
+
+&lt;p&gt;Now it is time to loop over our collection. Notice the use of &lt;strong&gt;groupby()&lt;/strong&gt;. This is a nifty method from the &lt;em&gt;itertools&lt;/em&gt; module that
+returns a key and a grouper object. The grouper object is iterable and basically contains the current group of items as grouped by the current key. The next line retrieves our first item from the current group. This I use to seed the new row we are creating.&lt;/p&gt;
+
+&lt;p&gt;To create the row I am doing a bit of list comprehension. Using the &lt;strong&gt;dict()&lt;/strong&gt; method to create a dictionary from an array of lists I can
+create the resulting row, which should result in a dictionary (very similar to the rows in the people array). In this list comprehension
+though I am getting all the items from our current row &lt;em&gt;except&lt;/em&gt; for the &lt;em&gt;phoneType&lt;/em&gt; and &lt;em&gt;phoneNumber&lt;/em&gt; keys. I don&amp;rsquo;t want them until the next line.&lt;/p&gt;
+
+&lt;p&gt;From here I then create a new key called &lt;em&gt;phoneNumbers&lt;/em&gt; (notice the plural) that will house a sub-array of all phone numbers for the current person. We can break this line up into two parts, or list comprehension actually. The first creates an array of a single dictionary consisting of the first row we&amp;rsquo;ve already retrieved in the variable named &lt;em&gt;row&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;row[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;row[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]}]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The next list comprehension assembles an array of the remaining rows
+from the &lt;strong&gt;person&lt;/strong&gt; grouper iterable object.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;[{&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ph[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneType&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;],&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ph[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;phoneNumber&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;]}&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ph&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;person]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Then you&amp;rsquo;ll notice that we are using an addition operation to combine the two arrays into one. Finally the new row is added to the
+&lt;strong&gt;groupedResult&lt;/strong&gt; array and we do a quick loop to show off our results.&lt;/p&gt;
+
+&lt;p&gt;I found the itertools to be not only useful, but very powerful. I have a lot more to learn about what they can do. Cheers, and happy coding!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

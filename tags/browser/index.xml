@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Browser on Adam.Blog()</title>
+    <link>http://adampresley.com/tags/browser/</link>
+    <description>Recent content in Browser on Adam.Blog()</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Feb 2013 09:17:00 +0000</lastBuildDate>
+    <atom:link href="http://adampresley.com/tags/browser/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Internet Explorer Testing VMs</title>
+      <link>http://adampresley.com/post/internet-explorer-testing-vms/</link>
+      <pubDate>Fri, 01 Feb 2013 09:17:00 +0000</pubDate>
+      
+      <guid>http://adampresley.com/post/internet-explorer-testing-vms/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m not sure how long this site has been up but I&amp;rsquo;m just now finding it.
+&lt;a href=&#34;http://www.modern.ie/&#34;&gt;http://www.modern.ie/&lt;/a&gt; is a developer site with tools and resources to
+help test and detect issues in older IE versions, as well as provide a
+cloud-based testing suite offering. The particular feature I find most
+cool is the ability to download VM appliances for IE versions 6-10. Not
+only are VMs available for Windows hosts but they also provide Linux
+hosts!&lt;/p&gt;
+
+&lt;!-- excerpt --&gt;
+
+&lt;p&gt;To start visit &lt;a href=&#34;http://www.modern.ie/virtualization-tools&#34;&gt;http://www.modern.ie/virtualization-tools&lt;/a&gt;. On the right
+hand side of the page you find a section named &lt;strong&gt;Local virtualization&lt;/strong&gt;.
+Let&amp;rsquo;s say you want to test your web application in IE 6 on a Linux host.
+In that section there is a box labelled &lt;strong&gt;Select Desired Testing OS&lt;/strong&gt;
+that you would click on and select &lt;em&gt;Linux&lt;/em&gt;. This opens up another box
+labelled &lt;strong&gt;Select Virtualization Platform&lt;/strong&gt; where you would select
+&lt;em&gt;VirtualBox for Linux&lt;/em&gt;. This will open up a whole list of IE versions
+you can download. In this example you would select &lt;strong&gt;IE6 - WinXP&lt;/strong&gt;. This
+will download a VM appliance that you can import into Oracle VirtualBox.
+To do that:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Extract the appliance file (.OVA) from the ZIP file you downloaded&lt;/li&gt;
+&lt;li&gt;Open VirtualBox&lt;/li&gt;
+&lt;li&gt;Go to File -&amp;gt; Import Appliance&lt;/li&gt;
+&lt;li&gt;In the dialog click on Choose&amp;hellip; and select the .OVA file then click Next&lt;/li&gt;
+&lt;li&gt;The settings for this appliance will be listed, then you can just click Import to continue&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once these steps are complete you will have a new VM called &lt;strong&gt;IE6 -
+WinXP&lt;/strong&gt;. If you start the VM now you might find that IE6 won&amp;rsquo;t be able
+to browse to any websites. This is most likely due to how the network
+adapter for this VM is setup. To address this follow these steps:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Right click on the VM named &lt;strong&gt;IE6 - WinXP&lt;/strong&gt; and select &lt;em&gt;Settings&amp;hellip;&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;In the setting dialog select &lt;em&gt;Network&lt;/em&gt; from the list on the left&lt;/li&gt;
+&lt;li&gt;In the tab labelled &lt;strong&gt;Adapter 1&lt;/strong&gt; you will find it&amp;rsquo;s &lt;em&gt;Attached to&lt;/em&gt; setting has &lt;strong&gt;NAT&lt;/strong&gt; selected. Change this to &lt;strong&gt;Bridged adapter&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Click &lt;strong&gt;OK&lt;/strong&gt; to accept your changes&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Now you are ready to start the VM appliance. Select it and click
+&lt;strong&gt;Start&lt;/strong&gt; to run the virtual machine. Once inside you can start running
+IE6 for awesome testing goodness! Cheers!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
