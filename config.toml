@@ -1,4 +1,4 @@
-baseurl = "http://adampresley.com/"
+baseurl = "https://adampresley.com/"
 languageCode = "en-us"
 title = "Adam.Blog()"
 # Define how many pages appear per site
@@ -6,6 +6,9 @@ paginate = 5
 # Enable comments powered by Disqus by entering your disqus shortname
 disqusShortname = "adampresleyblog"
 theme = "hugo-minimalist-theme"
+
+[permalinks]
+    post= "/:year/:month/:day/:slug"
 
 [params]
     site_author = "Adam Presley"
