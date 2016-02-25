@@ -4,7 +4,7 @@ comments: false
 date: 2015-10-26T00:00:00Z
 tags: ["development"]
 title: "MailSlurper 1.7 Released"
-slug: "mailslurper-1.7-released"
+slug: "mailslurper-1-7-released"
 ---
 
 MailSlurper 1.7 has been released. This version has a couple of bug fixes and a couple of new features. I also reworked a bit of the back-end server worker pool for better concurrency. Below are the release notes. Visit [MailSlurper.com](http://mailslurper.com) to download now.
