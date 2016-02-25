@@ -1,0 +1,6 @@
+https://adampresley.com, http://adampresley.com {
+	gzip
+	ext .html
+	root ./public
+	tls adam@adampresley.com
+}
