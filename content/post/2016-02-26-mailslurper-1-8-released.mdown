@@ -1,0 +1,14 @@
+---
+author: "Adam Presley"
+comments: false
+date: 2016-02-26T01:18:00Z
+tags: ["development"]
+title: "MailSlurper 1.8 Released"
+slug: "mailslurper-1-8-released"
+---
+
+MailSlurper 1.8 has been released. This version has a couple of bug fixes and a pretty significant performance enhancement. Below are the release notes. Visit [MailSlurper.com](http://mailslurper.com) to download now.
+
+* In some circumstances dates in headers that had no timezone information would not parse correctly. This is corrected
+* When the word **data** showed up in a recipient email address the server would fail to process correctly
+* Major rewrite of the database portion of the engine. Paging over larger datasets is now 99% faster!
